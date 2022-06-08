@@ -5,7 +5,7 @@
             <p class="text-gray-500 text-center mb-5">{{ __('Create your NFT collections.') }}</p>
 
             <p class="text-center mb-2 font-bold">{{ __('Select a blockchain') }}</p>
-            <x-link-button href="#" @click.prevent="switchBlockchain" class="bg-primary-200 w-28">Solana</x-link-button>
+            <x-link-button href="#" @click.prevent="switchBlockchain" class="w-28 !bg-primary-200">Solana</x-link-button>
             <x-link-button href="#" @click.prevent="switchBlockchain" class="w-28">Ethereum</x-link-button>
         </div>
 
@@ -30,7 +30,6 @@
                 </div>
             @endif
 
-            <?php dump(input($collection, 'royalties')); ?>
             <div class="flex items-start">
                 <div class="flex flex-wrap">
                     <div class="basis-full p-2">
@@ -47,11 +46,11 @@
                     </div>
                     <div class="basis-full mt-4 ml-2 grid grid-cols-2">
                         <div>
-                            <x-input id="whitelist" class="inline-block p-2 text-primary-600" type="checkbox" disabled="{{ $collection->deployed ?? false }}" name="whitelist" value="1" :checked="isset($collection->whitelist) && $collection->whitelist == 1 ?? old('whitelist')" />
+                            <x-input id="whitelist" class="inline-block !p-2 text-primary-600" type="checkbox" disabled="{{ $collection->deployed ?? false }}" name="whitelist" value="1" :checked="isset($collection->whitelist) && $collection->whitelist == 1 ?? old('whitelist')" />
                             <x-label for="whitelist" :value="__('Whitelist')" class="inline-block" />
                         </div>
                         <div>
-                            <x-input id="launched" class="inline-block p-2 text-primary-600" type="checkbox" disabled="{{ $collection->deployed ?? false }}" name="launched" value="1" :checked="isset($collection->launched) && $collection->launched == 1 ?? old('launched')" />
+                            <x-input id="launched" class="inline-block !p-2 text-primary-600" type="checkbox" disabled="{{ $collection->deployed ?? false }}" name="launched" value="1" :checked="isset($collection->launched) && $collection->launched == 1 ?? old('launched')" />
                             <x-label for="launched" :value="__('Launch collection later')" class="inline-block" />
                         </div>
                     </div>
@@ -73,8 +72,11 @@
                         <x-label for="mint_cost" :value="__('Mint cost (ETH)')" />
                         <x-input id="mint_cost" class="mt-1 w-full" step=".001" type="number" disabled="{{ $collection->deployed ?? false }}" name="mint_cost" :value="$collection->mint_cost ?? old('mint_cost', 0.05)" required />
                     </div>
-                    <div class="mt-8 basis-full p-2">
-                        <input type="file" @change="uploadCollection" id="image_collection" name="image_collection[]" accept="image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple>
+                    <div class="mt-9 basis-full px-2">
+                        <label class="block">
+                            <span class="sr-only">Choose File</span>
+                            <input type="file" @change="uploadCollection" id="image_collection" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700" name="image_collection[]" accept="image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                        </label>
                     </div>
                 </div>
             </div>
