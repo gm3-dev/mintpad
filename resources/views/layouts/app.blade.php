@@ -19,6 +19,13 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-white">
             @include('layouts.navigation')
+            @isset($header)
+                <div class="p-6 text-left w-full mx-auto bg-gray-100">
+                    <div class="px-10 w-full sm:max-w-7xl mx-auto">
+                        {{ $header }}
+                    </div>
+                </div>
+            @endisset
             @include('partials.messages')
 
             <!-- Page Content -->

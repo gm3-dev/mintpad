@@ -1,4 +1,8 @@
 <x-app-layout>
+    <x-slot:header>
+        <x-back-button href="{{ route('collections.index') }}">{{ __('Back') }}</x-back-button>
+    </x-slot:header>
+    
     <div class="bg-primary-700 text-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 bg-primary-700">
             

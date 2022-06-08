@@ -1,4 +1,8 @@
 <x-app-layout>
+    <x-slot:header>
+        <x-back-button href="{{ route('collections.index') }}">{{ __('Back') }}</x-back-button>
+    </x-slot:header>
+
     <div class="bg-white overflow-hidden">
         <div class="text-center mb-10">
             <h2 class="font-bold text-3xl text-center mb-1">{{ __('Create NFT collection') }}</h2>
