@@ -34,7 +34,7 @@
 
             <div class="text-center mt-10">
                 <h2 class="font-bold text-center mb-3">{{ __('Need help with your collection?') }}</h2>
-                <x-link-button href="{{ route('collections.create') }}">Join the discord</x-link-button>
+                <x-link-button href="#">Join the discord</x-link-button>
             </div>
         </div>
     </div>
