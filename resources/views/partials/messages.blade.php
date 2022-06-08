@@ -9,7 +9,7 @@
             @endif
             @if (session('status'))
                 <p class="font-bold text-xl">Yes!</p>
-                <p class="text-red-500 font-semibold">{{ session('status') }}</p>
+                <p class="text-green-500 font-semibold">{{ session('status') }}</p>
             @endif
             @if (session('error'))
                 <p class="font-bold text-xl">Whoops...</p>
