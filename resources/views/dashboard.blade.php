@@ -7,7 +7,7 @@
 
             <div v-if="!account">
                 <p class="text-center mb-4">We are not connected to your MetaMask account</p>
-                <p class="text-center"><x-link href="#" @click.prevent="connectWallet">Connect MetaMask</x-link></p>
+                <p class="text-center"><x-link href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-link></p>
             </div>
 
             <div v-else>

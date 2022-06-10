@@ -9,8 +9,8 @@
             <p class="text-gray-500 text-center mb-5">{{ __('Create your NFT collections.') }}</p>
 
             <p class="text-center mb-2 font-bold">{{ __('Select a blockchain') }}</p>
-            <x-link-button href="#" @click.prevent="switchBlockchain" class="w-28 !bg-primary-200">Solana</x-link-button>
-            <x-link-button href="#" @click.prevent="switchBlockchain" class="w-28">Ethereum</x-link-button>
+            <x-link-button href="#" class="w-28 !bg-primary-200">Solana</x-link-button>
+            <x-link-button href="#" class="w-28">Ethereum</x-link-button>
         </div>
 
         @if (isset($collection))

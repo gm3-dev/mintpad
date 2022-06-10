@@ -29,7 +29,7 @@
                 <div v-if="!account" class="p-6 text-center w-full sm:max-w-3xl mx-auto">
                     <h3 class="text-xl font-bold mb-4">Deploy smart contract</h3>
                     <p class="text-center mb-4">We are not connected to your MetaMask account</p>
-                    <p class="text-center"><x-link href="#" @click.prevent="connectWallet">Connect MetaMask</x-link></p>
+                    <p class="text-center"><x-link href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-link></p>
                 </div>
                 <div v-else class="p-6 text-center w-full sm:max-w-3xl mx-auto">
                     <p class="text-sm text-left">1) Smart contracts are immutable which means that once you create there is no way to alter them.</p>

@@ -26,7 +26,7 @@
                         <div class="p-2 basis-1/12">{!! $collection->deployed ? 'Yes' : 'No' !!}</div>
                         <div class="p-2 basis-3/12 lg:basis-2/12">
                             <x-link-button href="{{ route('collections.edit', $collection->id) }}">Manage</x-link-button>
-                            <x-link-button href="{{ route('collections.deploy', $collection->id) }}">Deploy</x-link-button>
+                            <x-link-button href="{{ route('collections.deploy', $collection->id) }}" class="ml-2">Deploy</x-link-button>
                         </div>
                     </div>
                 @endforeach
