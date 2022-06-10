@@ -79,7 +79,7 @@
                     <div class="mt-9 basis-full px-2">
                         <label class="block">
                             <span class="sr-only">Choose File</span>
-                            <input type="file" @change="uploadCollection" id="image_collection" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700" name="image_collection[]" accept="image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                            <input type="file" id="image_collection" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700" name="image_collection[]" accept="image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                         </label>
                     </div>
                 </div>

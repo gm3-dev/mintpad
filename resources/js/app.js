@@ -1,6 +1,6 @@
 require('./bootstrap')
 window.$ = require('jquery')
-import { createApp } from 'vue/dist/vue.esm-bundler.js'
+import Vue from 'vue/dist/vue.js'
 import Alpine from 'alpinejs'
 // import { ethers } from "ethers"
 // import { ContractFactory } from 'ethers'
@@ -18,22 +18,21 @@ window.Alpine = Alpine
 Alpine.start()
 
 if (document.getElementById('app')) {
-    createApp({
-        data() {
-            return {
-                collectionID: false,
-                message: {
-                    error: false,
-                    success: false,
-                    info: false
-                },
-                provider: false,
-                account: false,
-                accounts: false,
-                sdk: false,
-                wallet: false,
-                agreeConditions: false
-            }
+    new Vue({
+        el: '#app',
+        data: {
+            collectionID: false,
+            message: {
+                error: false,
+                success: false,
+                info: false
+            },
+            provider: false,
+            account: false,
+            accounts: false,
+            sdk: false,
+            wallet: false,
+            agreeConditions: false
         },
 
         async mounted() {
@@ -41,20 +40,17 @@ if (document.getElementById('app')) {
     
             // if (this.wallet !== false && this.wallet.name == 'metamask') {
                 this.wallet = await initMetaMask(false)
-                console.log(this.wallet)
             // }
 
-            this.collectionID = this.$el.getAttribute('data-id')
+            // this.collectionID = this.$el.getAttribute('data-id')
         },
     
         methods: {
             connectMetaMask: async function() {
-                console.log(this.wallet.account)
                 if (this.wallet.account === false) {
                     this.wallet = await initMetaMask(true)
-                    console.log(this.wallet)
                 }
             }
         }
-    }).mount('#app')
+    })
 }
