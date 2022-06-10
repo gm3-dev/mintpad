@@ -17,7 +17,7 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-white">
+        <div class="main-container min-h-screen bg-white">
             @include('layouts.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">

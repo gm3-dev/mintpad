@@ -28,6 +28,7 @@
         "@metamask/detect-provider": "^1.2.0",
         "ethers": "^5.5.4",
         "jquery": "^3.6.0",
+        "tippy.js": "^6.3.7",
         "vue": "^2.6.14"
     }
 }

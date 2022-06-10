@@ -23,6 +23,8 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <button href="#" id="user-address" class="hidden border border-gray-200 hover:border-primary-600 px-3 py-2 rounded-md text-xs mr-3"></button>
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium hover:border-gray-300 hover:text-gray-500 focus:outline-none transition duration-150 ease-in-out">
