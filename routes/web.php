@@ -23,7 +23,11 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('dashboard');
 
     Route::resource('collections', CollectionController::class);
+    Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
+    Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
     Route::post('collections/{collection}/upload', [CollectionController::class, 'upload'])->name('collections.upload');
+    Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
+    // Route::post('collections/{collection}/upload', [CollectionController::class, 'upload'])->name('collections.upload');
     Route::get('collections/{collection}/deploy', [CollectionController::class, 'deploy'])->name('collections.deploy');
     Route::post('collections/{collection}/deployed', [CollectionController::class, 'deployed'])->name('collections.deployed');
 });

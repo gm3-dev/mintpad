@@ -5,14 +5,13 @@
             <h2 class="font-bold text-3xl text-center mb-1">{{ __('Dashboard') }}</h2>
             <p v-if="message.error" class="border-l-2 border-red-500 text-red-500 pl-3 text-left mb-2">@{{ message.error }}</p>
 
-            <div v-if="!account">
+            <div v-if="!wallet.account">
                 <p class="text-center mb-4">We are not connected to your MetaMask account</p>
-                <p class="text-center"><x-link href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-link></p>
+                <p class="text-center"><x-link-button href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-link-button></p>
             </div>
 
             <div v-else>
-                <p class="mb-4"><x-link href="" @click.prevent="deployContract">Deploy Smart Contract</x-link> as user with address <b>@{{ account }}</b></p>
-                <p><x-input type="text" v-model="form.baseURI" /> <x-link href="" @click.prevent="setBaseURI">Update Base URI</x-link> OR <x-link href="" @click.prevent="getBaseURI">Get Base URI</x-link></p>
+                <p class="mb-4">Connected with address <b>@{{ wallet.account }}</b></p>
             </div>
         </div>
     </div>

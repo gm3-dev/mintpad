@@ -26,7 +26,7 @@
             @endif
 
             @if (isset($collection) && !$collection->deployed)
-                <div v-if="!account" class="p-6 text-center w-full sm:max-w-3xl mx-auto">
+                <div v-if="!wallet.account" class="p-6 text-center w-full sm:max-w-3xl mx-auto">
                     <h3 class="text-xl font-bold mb-4">Deploy smart contract</h3>
                     <p class="text-center mb-4">We are not connected to your MetaMask account</p>
                     <p class="text-center"><x-link href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-link></p>
@@ -36,7 +36,7 @@
                     <p class="text-sm text-left">2) Deploying a smart contract costs ETH which is a transaction fee for using the network.</p>
                     <p class="text-sm text-left mb-4">3) The smart contracts owner will be your current wallet account. Mintpad is NOT the smart contract owner.</p>
 
-                    <x-input id="accept-conditions" v-model="agreeConditions" class="inline-block p-2 text-primary-600" type="checkbox" name="accept-conditions" value="1" />
+                    <x-input id="accept-conditions" v-model="agreeConditions" class="inline-block !p-2 text-primary-600" type="checkbox" name="accept-conditions" value="1" />
                     <x-label for="accept-conditions" :value="__('I agree to the privacy policy and terms of conditions.')" class="inline-block" /><br/>
                     <x-button href="#" class="ml-4 mt-4" @click.prevent="deployContract" v-bind:disabled="!agreeConditions">{{ __('Deploy smart contract') }}</x-button>
                 </div>

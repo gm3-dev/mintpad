@@ -29,11 +29,15 @@
             @include('partials.messages')
 
             <!-- Page Content -->
-            <main id="app" data-id="{{ $collection->id ?? '' }}">
+            <main id="app" data-page="{{ Route::currentRouteName() }}">
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         {{ $slot }}
                     </div>
+                </div>
+                <div v-if="errorMessage" class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-red-100 border-t-4 border-red-500 dark:bg-red-200" role="alert">
+                    <i class="fas fa-info-circle text-red-700"></i>
+                    <div class="ml-3 text-sm font-medium text-red-700" v-html="errorMessage"></div>
                 </div>
             </main>
 

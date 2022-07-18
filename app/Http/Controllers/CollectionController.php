@@ -3,11 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use Collator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use Image;
 
 class CollectionController extends Controller
 {
+    public $blockchains = [
+        'ethereum' => 'Ethereum (ETH)',
+        'polygon' => 'Polygon (MATIC)',
+        'fantom' => 'Fantom (FTM)',
+        'avalanche' => 'Avalanche (AVAX)',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +38,8 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        return view('collections.manage');
+        $blockchains = $this->blockchains;
+        return view('collections.create')->with(compact('blockchains'));
     }
 
     /**
@@ -42,7 +55,24 @@ class CollectionController extends Controller
 
         $this->save($request, $collection);
 
-        return redirect()->route('collections.index')->with('status', 'Collection added!');
+        return response()->json($collection, 200);
+
+        // return redirect()->route('collections.index')->with('status', 'Collection added!');
+    }
+
+    /**
+     * Manage NFT collection
+     *
+     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function collection(Request $request, Collection $collection)
+    {
+        $this->authorize('view', $collection);
+
+        $images = File::glob(storage_path('app/collections/'.$collection->id.'/').'*.{png,gif,jpg,jpeg}', GLOB_BRACE);
+        return view('collections.collection')->with(compact('collection', 'images'));
     }
 
     /**
@@ -56,19 +86,57 @@ class CollectionController extends Controller
     {
         $this->authorize('view', $collection);
 
-        $files = $request->file('files');
-
-        if ($request->hasFile('files')) {
-            foreach ($files as $file_key => $file) {
-                $path = $request->get('paths')[$file_key];
-                $file->storeAs(
-                    'collections/' . $collection->id . '/',
-                    $path
-                );
-            }
+        if (! Storage::exists('collections')) {
+            Storage::makeDirectory('collections', 0775, true);
         }
 
-        return response()->json($request->get('paths'), 200);
+        $output = ['counter' => 0, 'images' => []];
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            $path = 'collections/' . $collection->id;
+
+            if (! Storage::exists($path . '/thumbs')) {
+                Storage::makeDirectory($path . '/thumbs', 0775, true);
+            }
+
+            foreach ($files as $file_key => $file) {
+                $filename = $file->getClientOriginalName();
+                // $path = $request->get('paths')[$file_key];
+                $file->storeAs(
+                    $path,
+                    strtolower($filename)
+                );
+                if ($file->extension() != 'json') {
+                    $image = Image::make($file->path());
+                    $image->resize(100, 100, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(storage_path('app/' . $path . '/thumbs/' . strtolower($filename)));
+                    $output['images'][] = url(route('collections.image', [$collection->id, strtolower($filename)]));
+                }
+                $output['counter']++;
+            }
+        }
+        $output['files'] = count($files);
+
+        return response()->json($output, 200);
+    }
+
+    public function image(Request $request, Collection $collection, $filename)
+    {
+        $this->authorize('view', $collection);
+
+        $path = storage_path('app/collections/'.$collection->id.'/thumbs/' . $filename);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+
+        return $response;
     }
 
     /**
@@ -92,7 +160,21 @@ class CollectionController extends Controller
     {
         $this->authorize('view', $collection);
 
-        return view('collections.manage')->with(compact('collection'));
+        $blockchains = $this->blockchains;
+        return view('collections.edit')->with(compact('collection', 'blockchains'));
+    }
+
+    /**
+     * Fetch collection data
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function fetch(Collection $collection)
+    {
+        $this->authorize('view', $collection);
+
+        return response()->json($collection, 200);
     }
 
     /**
@@ -183,22 +265,20 @@ class CollectionController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'mint_cost' => 'required|numeric|between:0,99999',
             'royalties' => 'required|numeric|between:0,100',
-            'contract_name' => 'required|alpha',
+            'description' => 'required',
             'symbol' => 'required',
-            'base_name' => 'required',
-            'collection_size' => 'required|numeric',
+            'blockchain' => 'required',
+            'address' => 'required'
         ]);
 
         $collection->name  = $request->get('name');
-        $collection->contract_name  = $request->get('contract_name');
+        $collection->description  = $request->get('description');
         $collection->symbol  = $request->get('symbol');
-        $collection->whitelist  = $request->get('whitelist') ?? false;
-        $collection->collection_size  = $request->get('collection_size');
-        $collection->base_name  = $request->get('base_name');
-        $collection->mint_cost  = $request->get('mint_cost');
         $collection->royalties  = $request->get('royalties');
+        $collection->blockchain  = $request->get('blockchain');
+        $collection->address  = $request->get('address');
+        $collection->deployed = true;
         $collection->save();
     }
 }

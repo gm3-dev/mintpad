@@ -22,6 +22,7 @@ mix.webpackConfig ({
  */
 // mix.webpackConfig({ resolve: { fallback: { fs: false, os: require.resolve("os-browserify/browser"), path: require.resolve("path-browserify") } } });
 mix.js('resources/js/app.js', 'public/js')
+    .vue()
     .sass('resources/sass/app.scss', 'public/css')
     .postCss('resources/css/app.css', 'public/css', [
     require('postcss-import'),
