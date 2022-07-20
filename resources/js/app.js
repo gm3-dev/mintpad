@@ -4,9 +4,11 @@ import Vue from 'vue/dist/vue.js'
 import Alpine from 'alpinejs'
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
-import { ThirdwebSDK } from "@thirdweb-dev/sdk"
-// import { ethers } from "ethers"
-import { initMetaMask } from "./MetaMask"
+import { ThirdwebSDK } from '@thirdweb-dev/sdk'
+import { BigNumber } from "ethers"
+import { initMetaMask } from './MetaMask'
+import helpers from './Helpers.js'
+import { times } from 'lodash';
 // import detectEthereumProvider from '@metamask/detect-provider'
 const axios = require('axios')
 axios.defaults.headers.common = {
@@ -21,6 +23,7 @@ if (document.getElementById('app')) {
     // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default);
     new Vue({
         el: '#app',
+        mixins: [helpers],
         data: {
             ipfs: {
                 gateway: false,
@@ -42,17 +45,16 @@ if (document.getElementById('app')) {
             wallet: false,
             agreeConditions: false,
             upload: false,
-            collection: [],
-            forms: {
-                collection: {
-                    name: '',
-                    blockchain: 'ethereum',
-                    symbol: '',
-                    fee_recipient: 0,
-                    royalties: 0,
-                    description: ''
-                }
+            collection: {
+                name: '',
+                blockchain: 'ethereum',
+                token: 'ETH',
+                symbol: '',
+                fee_recipient: 0,
+                royalties: 0,
+                description: ''
             },
+            claimPhases: [],
             loader: {
                 button: {
                     label: '',
@@ -86,44 +88,54 @@ if (document.getElementById('app')) {
         methods: {
             setPage: function() {
                 this.page.name = this.$el.getAttribute('data-page')
-                console.log(this.page.name)
             },
-            setPageData: function() {
+            setPageData: async function() {
                 // Collection edit page
-                if (this.page.name == 'collections.edit') {
+                if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
 
                         this.contractAddress = response.data.address
-                        this.sdk = await ThirdwebSDK.fromSigner(this.wallet.signer, 'polygon', {})
-                        const contract = await this.sdk.getNFTDrop(this.contractAddress)
+                        this.collection.blockchain = response.data.blockchain
+                        this.collection.token = response.data.token
+                        this.setSDK()
+                        const contract = await this.getSmartContract()
 
-                        console.log(contract)
-
-                        // Create embed code
-                        try {
-                            this.ipfs.gateway = contract.drop.storage.gatewayUrl
-                            const embedUrl = this.buildEmbedUrl()
-                            console.log('embedUrl', embedUrl)
-                            this.ipfs.embed = this.buildEmbedCode(embedUrl)
-                        } catch (e) {
-                            console.log('Failed to build embed code', e)
-                            this.setErrorMessage('Could not create embed code')
-                        }
-
-                        // Set form data
-                        try {
-                            const metadata = await contract.metadata.get()
-                            const royalties = await contract.royalties.getDefaultRoyaltyInfo()
-                            this.forms.collection.name = metadata.name
-                            this.forms.collection.description = metadata.description
-                            this.forms.collection.fee_recipient = royalties.fee_recipient
-                            this.forms.collection.royalties = royalties.seller_fee_basis_points / 100
-                        } catch (e) {
-                            console.log('Failed to load metadata', e)
-                            this.setErrorMessage('Contract could not be loaded...')
+                        if (this.page.name == 'collections.edit') {
+                            // Create embed code
+                            try {
+                                this.ipfs.gateway = contract.drop.storage.gatewayUrl
+                                const embedUrl = this.buildEmbedUrl()
+                                this.ipfs.embed = this.buildEmbedCode(embedUrl)
+                            } catch (e) {
+                                console.log('Failed to build embed code', e)
+                                this.setErrorMessage('Could not create embed code')
+                            }
+    
+                            // Set form data
+                            try {
+                                const metadata = await contract.metadata.get()
+                                const royalties = await contract.royalties.getDefaultRoyaltyInfo()
+                                this.collection.name = metadata.name
+                                this.collection.description = metadata.description
+                                this.collection.fee_recipient = royalties.fee_recipient
+                                this.collection.royalties = royalties.seller_fee_basis_points / 100
+                            } catch (e) {
+                                console.log('Failed to load metadata', e)
+                                this.setErrorMessage('Contract could not be loaded...')
+                            }
+                        } else if(this.page.name == 'collections.claim') {
+                            var claimConditions = await contract.claimConditions.getAll()
+                            console.log(claimConditions)
+                            this.claimPhases = this.parseClaimConditions(claimConditions)
                         }
                     })
                 }
+            },
+            setSDK: function(e) {
+                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, this.collection.blockchain, {})
+            },
+            getSmartContract: async function(e) {
+                return await this.sdk.getNFTDrop(this.contractAddress)
             },
             buildEmbedUrl: function() {
                 return this.ipfs.gateway+this.ipfs.hash+'/nft-drop.html?contract='+this.contractAddress+'&chainId=80001'
@@ -162,16 +174,84 @@ if (document.getElementById('app')) {
                 var buttonWidth = button.outerWidth()
                 button.css('width', buttonWidth+'px').prop('disabled', false).html(this.loader.button.label)
             },
+            updateClaimPhases: async function(e) {
+                this.setButtonLoader(e)
+
+                var claimPhases = []
+                for (var i = 0; i < this.claimPhases.length; i++) {
+                    var claimPhase = this.claimPhases[i]
+                    claimPhases.push({
+                        startTime: new Date(claimPhase.startTime),
+                        price: claimPhase.price,
+                        maxQuantity: claimPhase.maxQuantity,
+                        quantityLimitPerTransaction: claimPhase.quantityLimitPerTransaction,
+                        waitInSeconds: 120,
+                        snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
+                    })
+                }
+
+                const contract = await this.getSmartContract()
+                var claimConditions = await contract.claimConditions.set(claimPhases)
+
+                this.resetButtonLoader()
+            },
+            addClaimPhase: function(e) {
+                this.claimPhases.push({
+                    startTime: this.formateDatetimeLocal(new Date(Date.now())),
+                    price: 0,
+                    maxQuantity: 0,
+                    quantityLimitPerTransaction: 0,
+                    whitelist: 0,
+                    snapshot: [],
+                    modal: false
+                })
+            },
+            deleteClaimPhase: function(index) {
+                if (index > -1) {
+                    this.claimPhases.splice(index, 1)
+                }
+            },
+            parseClaimConditions: function(claimConditions) {
+                var output = []
+
+                for (var i = 0; i < claimConditions.length; i++) {
+                    var claimCondition = claimConditions[i]
+                    output.push({
+                        startTime: this.formateDatetimeLocal(claimCondition.startTime),
+                        price: this.hexToValue(claimCondition.price._hex),
+                        maxQuantity: parseInt(claimCondition.maxQuantity),
+                        quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
+                        whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
+                        snapshot: claimCondition.snapshot ?? [],
+                        modal: false
+                    })
+                }
+                return output
+            },
+            uploadWhitelist: async function(e, index) {
+                var files = e.target.files
+                var formData = new FormData()
+                formData.append('file', files[0])
+                await axios.post('/collections/'+this.collectionID+'/whitelist', formData).then((response) => {
+                    var data = response.data
+                    this.claimPhases[index].snapshot = data
+                    this.toggleWhitelistModal(index, false)
+                })
+            },
+            resetWhitelist: function(index) {
+                this.claimPhases[index].snapshot = []
+            },
+            toggleWhitelistModal: function(index, state) {
+                this.claimPhases[index].modal = state
+            },
             updateMetadata: async function(e) {
                 this.setButtonLoader(e)
 
-                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {})
-                const contract = this.sdk.getNFTDrop(this.contractAddress)
-
+                const contract = this.getSmartContract()
                 try {
                     await contract.metadata.set({
-                        name: this.forms.collection.name,
-                        description: this.forms.collection.description
+                        name: this.collection.name,
+                        description: this.collection.description
                     });
 
                 } catch(error) {
@@ -184,13 +264,11 @@ if (document.getElementById('app')) {
             updateRoyalties: async function(e) {
                 this.setButtonLoader(e)
 
-                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {})
-                const contract = this.sdk.getNFTDrop(this.contractAddress)
-
+                const contract = this.getSmartContract()
                 try {
                     await contract.royalties.setDefaultRoyaltyInfo({
-                        seller_fee_basis_points: this.forms.collection.royalties * 100, // 1% royalty fee
-                        fee_recipient: this.forms.collection.fee_recipient, // the fee recipient
+                        seller_fee_basis_points: this.collection.royalties * 100, // 1% royalty fee
+                        fee_recipient: this.collection.fee_recipient, // the fee recipient
                     });
 
                 } catch(error) {
@@ -203,22 +281,20 @@ if (document.getElementById('app')) {
             deployContract: async function(e) {
                 this.setButtonLoader(e)
 
-                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {})
-
                 // deploy contract
                 try {
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
-                        name: this.forms.collection.name,
-                        symbol: this.forms.collection.symbol,
-                        description: this.forms.collection.description,
+                        name: this.collection.name,
+                        symbol: this.collection.symbol,
+                        description: this.collection.description,
                         primary_sale_recipient: this.wallet.account, // primary sales
                         fee_recipient: this.wallet.account, // royalties address
-                        seller_fee_basis_points: this.forms.collection.royalties * 100, // royalties address
+                        seller_fee_basis_points: this.collection.royalties * 100, // royalties address
                         platform_fee_recipient: '0x892a99573583c6490526739bA38BaeFae10a84D4', // platform fee address
                         platform_fee_basis_points: 250 // platform fee (2,5%)
                     })
 
-                    var formData = this.forms.collection
+                    var formData = this.collection
                     formData.address = contractAddress
                     await axios.post('/collections', formData).then((response) => {
                         console.log(response)
@@ -228,7 +304,7 @@ if (document.getElementById('app')) {
                     console.log('error deploying contract', error)
                 }
 
-                // const contract = this.sdk.getNFTDrop("0xdeAfA4be5b0Ca4cC2154A0B26C236CE0F9d1303F")
+                // const contract = this.getSmartContract()
                 // const rolesAndMembers = await contract.roles.getAll()
                 // console.log(rolesAndMembers)
                 // console.log('this.account', this.wallet.account)
@@ -281,8 +357,7 @@ if (document.getElementById('app')) {
                 //     }
                 // ];
 
-                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, 'polygon', {})
-                const contract = this.sdk.getNFTDrop("0xdeAfA4be5b0Ca4cC2154A0B26C236CE0F9d1303F")
+                const contract = this.getSmartContract()
                 try {
                     // const results = await contract.getAll({})
                     // const results = await contract.burn(1)

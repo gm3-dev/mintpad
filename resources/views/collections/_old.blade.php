@@ -15,23 +15,23 @@
             <div class="w-full flex flex-wrap">
                 <div class="basis-full p-2">
                     <x-label for="name" :value="__('Name')" />
-                    <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="forms.collection.name" required autofocus />
+                    <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                 </div>
                 <div class="basis-1/3 p-2">
                     <x-label for="symbol" :value="__('Blockchain')" />
-                    <x-select class="mt-1 !w-full" v-model="forms.collection.blockchain" :options="$blockchains"></x-select>
+                    <x-select class="mt-1 !w-full" v-model="collection.blockchain" :options="$blockchains"></x-select>
                 </div>
                 <div class="basis-1/3 p-2">
                     <x-label for="symbol" :value="__('Symbol')" />
-                    <x-input id="symbol" class="mt-1 w-full" type="text" name="symbol" v-model="forms.collection.symbol" />
+                    <x-input id="symbol" class="mt-1 w-full" type="text" name="symbol" v-model="collection.symbol" />
                 </div>
                 <div class="basis-1/3 p-2">
                     <x-label for="royalties" :value="__('Royalties (%)')" />
-                    <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="forms.collection.royalties" required />
+                    <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                 </div>
                 <div class="basis-full p-2">
                     <x-label for="description" :value="__('Description')" />
-                    <x-textarea id="description" class="mt-1 w-full" name="description" v-model="forms.collection.description"></x-textarea>
+                    <x-textarea id="description" class="mt-1 w-full" name="description" v-model="collection.description"></x-textarea>
                 </div>
             </div>
 

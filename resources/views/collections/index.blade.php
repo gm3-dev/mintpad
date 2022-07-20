@@ -26,6 +26,7 @@
                         </div>
                         <div class="p-2 basis-4/12 lg:basis-3/12 text-right">
                             <x-link-button href="{{ route('collections.edit', $collection->id) }}">Manage</x-link-button>
+                            <x-link-button href="{{ route('collections.claim', $collection->id) }}">Claim</x-link-button>
                             <x-link-button href="{{ route('collections.collection', $collection->id) }}">Collection</x-link-button>
                         </div>
                     </div>

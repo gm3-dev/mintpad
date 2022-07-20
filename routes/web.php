@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::post('collections/{collection}/upload', [CollectionController::class, 'upload'])->name('collections.upload');
     Route::get('collections/{collection}/deploy', [CollectionController::class, 'deploy'])->name('collections.deploy');
     Route::post('collections/{collection}/deployed', [CollectionController::class, 'deployed'])->name('collections.deployed');
+    Route::get('collections/{collection}/claim-phases', [CollectionController::class, 'claim'])->name('collections.claim');
+    Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
 });
 
 require __DIR__.'/auth.php';

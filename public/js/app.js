@@ -34992,6 +34992,48 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/Helpers.js":
+/*!*********************************!*\
+  !*** ./resources/js/Helpers.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    hexToNumber: function hexToNumber(hex) {
+      return parseInt(hex, 16);
+    },
+    WeiToValue: function WeiToValue(wei) {
+      return wei / 1000000000000000000;
+    },
+    hexToValue: function hexToValue(hex) {
+      return this.WeiToValue(parseInt(hex, 16));
+    },
+    formateDatetimeLocal: function formateDatetimeLocal(datetime) {
+      var d = new Date(datetime);
+      var year = d.getFullYear();
+      var month = this.getDoubleDigitNumber(d.getMonth() + 1);
+      var day = this.getDoubleDigitNumber(d.getDate());
+      var hours = this.getDoubleDigitNumber(d.getHours());
+      var minutes = this.getDoubleDigitNumber(d.getMinutes());
+      var seconds = this.getDoubleDigitNumber(d.getSeconds());
+      var date = year + '-' + month + '-' + day;
+      var time = hours + ':' + minutes + ':' + seconds;
+      return date + ' ' + time;
+    },
+    getDoubleDigitNumber: function getDoubleDigitNumber(number) {
+      return number < 10 ? '0' + number : number;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/MetaMask.js":
 /*!**********************************!*\
   !*** ./resources/js/MetaMask.js ***!
@@ -35171,13 +35213,16 @@ function _initMetaMask() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue/dist/vue.js */ "./node_modules/vue/dist/vue.js");
-/* harmony import */ var vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue/dist/vue.js */ "./node_modules/vue/dist/vue.js");
+/* harmony import */ var vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
-/* harmony import */ var tippy_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tippy.js */ "./node_modules/tippy.js/dist/tippy.esm.js");
+/* harmony import */ var tippy_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tippy.js */ "./node_modules/tippy.js/dist/tippy.esm.js");
 /* harmony import */ var tippy_js_dist_tippy_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tippy.js/dist/tippy.css */ "./node_modules/tippy.js/dist/tippy.css");
-/* harmony import */ var _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @thirdweb-dev/sdk */ "./node_modules/@thirdweb-dev/sdk/dist/browser/index.mjs");
+/* harmony import */ var _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @thirdweb-dev/sdk */ "./node_modules/@thirdweb-dev/sdk/dist/browser/index.mjs");
 /* harmony import */ var _MetaMask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MetaMask */ "./resources/js/MetaMask.js");
+/* harmony import */ var _Helpers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Helpers.js */ "./resources/js/Helpers.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -35191,7 +35236,9 @@ window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.
 
 
 
- // import { ethers } from "ethers"
+
+
+
 
  // import detectEthereumProvider from '@metamask/detect-provider'
 
@@ -35206,8 +35253,9 @@ alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
 
 if (document.getElementById('app')) {
   // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default);
-  new (vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_4___default())({
+  new (vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_6___default())({
     el: '#app',
+    mixins: [_Helpers_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
     data: {
       ipfs: {
         gateway: false,
@@ -35229,17 +35277,16 @@ if (document.getElementById('app')) {
       wallet: false,
       agreeConditions: false,
       upload: false,
-      collection: [],
-      forms: {
-        collection: {
-          name: '',
-          blockchain: 'ethereum',
-          symbol: '',
-          fee_recipient: 0,
-          royalties: 0,
-          description: ''
-        }
+      collection: {
+        name: '',
+        blockchain: 'ethereum',
+        token: 'ETH',
+        symbol: '',
+        fee_recipient: 0,
+        royalties: 0,
+        description: ''
       },
+      claimPhases: [],
       loader: {
         button: {
           label: '',
@@ -35294,84 +35341,153 @@ if (document.getElementById('app')) {
     methods: {
       setPage: function setPage() {
         this.page.name = this.$el.getAttribute('data-page');
-        console.log(this.page.name);
       },
-      setPageData: function setPageData() {
-        var _this2 = this;
+      setPageData: function () {
+        var _setPageData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+          var _this2 = this;
 
-        // Collection edit page
-        if (this.page.name == 'collections.edit') {
-          axios.get('/collections/' + this.collectionID + '/fetch').then( /*#__PURE__*/function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(response) {
-              var contract, embedUrl, metadata, royalties;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-                while (1) {
-                  switch (_context2.prev = _context2.next) {
-                    case 0:
-                      _this2.contractAddress = response.data.address;
-                      _context2.next = 3;
-                      return _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__.ThirdwebSDK.fromSigner(_this2.wallet.signer, 'polygon', {});
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  // Collection edit page
+                  if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
+                    axios.get('/collections/' + this.collectionID + '/fetch').then( /*#__PURE__*/function () {
+                      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(response) {
+                        var contract, embedUrl, metadata, royalties, claimConditions;
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                          while (1) {
+                            switch (_context2.prev = _context2.next) {
+                              case 0:
+                                _this2.contractAddress = response.data.address;
+                                _this2.collection.blockchain = response.data.blockchain;
+                                _this2.collection.token = response.data.token;
 
-                    case 3:
-                      _this2.sdk = _context2.sent;
-                      _context2.next = 6;
-                      return _this2.sdk.getNFTDrop(_this2.contractAddress);
+                                _this2.setSDK();
 
-                    case 6:
-                      contract = _context2.sent;
-                      console.log(contract); // Create embed code
+                                _context2.next = 6;
+                                return _this2.getSmartContract();
 
-                      try {
-                        _this2.ipfs.gateway = contract.drop.storage.gatewayUrl;
-                        embedUrl = _this2.buildEmbedUrl();
-                        console.log('embedUrl', embedUrl);
-                        _this2.ipfs.embed = _this2.buildEmbedCode(embedUrl);
-                      } catch (e) {
-                        console.log('Failed to build embed code', e);
+                              case 6:
+                                contract = _context2.sent;
 
-                        _this2.setErrorMessage('Could not create embed code');
-                      } // Set form data
+                                if (!(_this2.page.name == 'collections.edit')) {
+                                  _context2.next = 28;
+                                  break;
+                                }
+
+                                // Create embed code
+                                try {
+                                  _this2.ipfs.gateway = contract.drop.storage.gatewayUrl;
+                                  embedUrl = _this2.buildEmbedUrl();
+                                  _this2.ipfs.embed = _this2.buildEmbedCode(embedUrl);
+                                } catch (e) {
+                                  console.log('Failed to build embed code', e);
+
+                                  _this2.setErrorMessage('Could not create embed code');
+                                } // Set form data
 
 
-                      _context2.prev = 9;
-                      _context2.next = 12;
-                      return contract.metadata.get();
+                                _context2.prev = 9;
+                                _context2.next = 12;
+                                return contract.metadata.get();
 
-                    case 12:
-                      metadata = _context2.sent;
-                      _context2.next = 15;
-                      return contract.royalties.getDefaultRoyaltyInfo();
+                              case 12:
+                                metadata = _context2.sent;
+                                _context2.next = 15;
+                                return contract.royalties.getDefaultRoyaltyInfo();
 
-                    case 15:
-                      royalties = _context2.sent;
-                      _this2.forms.collection.name = metadata.name;
-                      _this2.forms.collection.description = metadata.description;
-                      _this2.forms.collection.fee_recipient = royalties.fee_recipient;
-                      _this2.forms.collection.royalties = royalties.seller_fee_basis_points / 100;
-                      _context2.next = 26;
-                      break;
+                              case 15:
+                                royalties = _context2.sent;
+                                _this2.collection.name = metadata.name;
+                                _this2.collection.description = metadata.description;
+                                _this2.collection.fee_recipient = royalties.fee_recipient;
+                                _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
+                                _context2.next = 26;
+                                break;
 
-                    case 22:
-                      _context2.prev = 22;
-                      _context2.t0 = _context2["catch"](9);
-                      console.log('Failed to load metadata', _context2.t0);
+                              case 22:
+                                _context2.prev = 22;
+                                _context2.t0 = _context2["catch"](9);
+                                console.log('Failed to load metadata', _context2.t0);
 
-                      _this2.setErrorMessage('Contract could not be loaded...');
+                                _this2.setErrorMessage('Contract could not be loaded...');
 
-                    case 26:
-                    case "end":
-                      return _context2.stop();
+                              case 26:
+                                _context2.next = 34;
+                                break;
+
+                              case 28:
+                                if (!(_this2.page.name == 'collections.claim')) {
+                                  _context2.next = 34;
+                                  break;
+                                }
+
+                                _context2.next = 31;
+                                return contract.claimConditions.getAll();
+
+                              case 31:
+                                claimConditions = _context2.sent;
+                                console.log(claimConditions);
+                                _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
+
+                              case 34:
+                              case "end":
+                                return _context2.stop();
+                            }
+                          }
+                        }, _callee2, null, [[9, 22]]);
+                      }));
+
+                      return function (_x) {
+                        return _ref.apply(this, arguments);
+                      };
+                    }());
                   }
-                }
-              }, _callee2, null, [[9, 22]]);
-            }));
 
-            return function (_x) {
-              return _ref.apply(this, arguments);
-            };
-          }());
+                case 1:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3, this);
+        }));
+
+        function setPageData() {
+          return _setPageData.apply(this, arguments);
         }
+
+        return setPageData;
+      }(),
+      setSDK: function setSDK(e) {
+        this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_7__.ThirdwebSDK.fromSigner(this.wallet.signer, this.collection.blockchain, {});
       },
+      getSmartContract: function () {
+        var _getSmartContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+            while (1) {
+              switch (_context4.prev = _context4.next) {
+                case 0:
+                  _context4.next = 2;
+                  return this.sdk.getNFTDrop(this.contractAddress);
+
+                case 2:
+                  return _context4.abrupt("return", _context4.sent);
+
+                case 3:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          }, _callee4, this);
+        }));
+
+        function getSmartContract(_x2) {
+          return _getSmartContract.apply(this, arguments);
+        }
+
+        return getSmartContract;
+      }(),
       buildEmbedUrl: function buildEmbedUrl() {
         return this.ipfs.gateway + this.ipfs.hash + '/nft-drop.html?contract=' + this.contractAddress + '&chainId=80001';
       },
@@ -35393,28 +35509,28 @@ if (document.getElementById('app')) {
         }, 5000);
       },
       connectMetaMask: function () {
-        var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
                   if (!(this.wallet.account === false)) {
-                    _context3.next = 4;
+                    _context5.next = 4;
                     break;
                   }
 
-                  _context3.next = 3;
+                  _context5.next = 3;
                   return (0,_MetaMask__WEBPACK_IMPORTED_MODULE_3__.initMetaMask)(true);
 
                 case 3:
-                  this.wallet = _context3.sent;
+                  this.wallet = _context5.sent;
 
                 case 4:
                 case "end":
-                  return _context3.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee5, this);
         }));
 
         function connectMetaMask() {
@@ -35437,117 +35553,238 @@ if (document.getElementById('app')) {
         var buttonWidth = button.outerWidth();
         button.css('width', buttonWidth + 'px').prop('disabled', false).html(this.loader.button.label);
       },
-      updateMetadata: function () {
-        var _updateMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e) {
-          var contract;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      updateClaimPhases: function () {
+        var _updateClaimPhases = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(e) {
+          var claimPhases, i, claimPhase, contract, claimConditions;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context6.prev = _context6.next) {
                 case 0:
                   this.setButtonLoader(e);
-                  this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__.ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {});
-                  contract = this.sdk.getNFTDrop(this.contractAddress);
-                  _context4.prev = 3;
-                  _context4.next = 6;
-                  return contract.metadata.set({
-                    name: this.forms.collection.name,
-                    description: this.forms.collection.description
-                  });
+                  claimPhases = [];
 
-                case 6:
-                  _context4.next = 12;
-                  break;
+                  for (i = 0; i < this.claimPhases.length; i++) {
+                    claimPhase = this.claimPhases[i];
+                    claimPhases.push({
+                      startTime: new Date(claimPhase.startTime),
+                      price: claimPhase.price,
+                      maxQuantity: claimPhase.maxQuantity,
+                      quantityLimitPerTransaction: claimPhase.quantityLimitPerTransaction,
+                      waitInSeconds: 120,
+                      snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot
+                    });
+                  }
+
+                  _context6.next = 5;
+                  return this.getSmartContract();
+
+                case 5:
+                  contract = _context6.sent;
+                  _context6.next = 8;
+                  return contract.claimConditions.set(claimPhases);
 
                 case 8:
-                  _context4.prev = 8;
-                  _context4.t0 = _context4["catch"](3);
-                  console.log('error updateMetadata', _context4.t0);
-                  this.setErrorMessage('error updateMetadata');
-
-                case 12:
+                  claimConditions = _context6.sent;
                   this.resetButtonLoader();
 
-                case 13:
+                case 10:
                 case "end":
-                  return _context4.stop();
+                  return _context6.stop();
               }
             }
-          }, _callee4, this, [[3, 8]]);
+          }, _callee6, this);
         }));
 
-        function updateMetadata(_x2) {
+        function updateClaimPhases(_x3) {
+          return _updateClaimPhases.apply(this, arguments);
+        }
+
+        return updateClaimPhases;
+      }(),
+      addClaimPhase: function addClaimPhase(e) {
+        this.claimPhases.push({
+          startTime: this.formateDatetimeLocal(new Date(Date.now())),
+          price: 0,
+          maxQuantity: 0,
+          quantityLimitPerTransaction: 0,
+          whitelist: 0,
+          snapshot: [],
+          modal: false
+        });
+      },
+      deleteClaimPhase: function deleteClaimPhase(index) {
+        if (index > -1) {
+          this.claimPhases.splice(index, 1);
+        }
+      },
+      parseClaimConditions: function parseClaimConditions(claimConditions) {
+        var output = [];
+
+        for (var i = 0; i < claimConditions.length; i++) {
+          var _claimCondition$snaps;
+
+          var claimCondition = claimConditions[i];
+          output.push({
+            startTime: this.formateDatetimeLocal(claimCondition.startTime),
+            price: this.hexToValue(claimCondition.price._hex),
+            maxQuantity: parseInt(claimCondition.maxQuantity),
+            quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
+            whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
+            snapshot: (_claimCondition$snaps = claimCondition.snapshot) !== null && _claimCondition$snaps !== void 0 ? _claimCondition$snaps : [],
+            modal: false
+          });
+        }
+
+        return output;
+      },
+      uploadWhitelist: function () {
+        var _uploadWhitelist = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(e, index) {
+          var _this4 = this;
+
+          var files, formData;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+            while (1) {
+              switch (_context7.prev = _context7.next) {
+                case 0:
+                  files = e.target.files;
+                  formData = new FormData();
+                  formData.append('file', files[0]);
+                  _context7.next = 5;
+                  return axios.post('/collections/' + this.collectionID + '/whitelist', formData).then(function (response) {
+                    var data = response.data;
+                    _this4.claimPhases[index].snapshot = data;
+
+                    _this4.toggleWhitelistModal(index, false);
+                  });
+
+                case 5:
+                case "end":
+                  return _context7.stop();
+              }
+            }
+          }, _callee7, this);
+        }));
+
+        function uploadWhitelist(_x4, _x5) {
+          return _uploadWhitelist.apply(this, arguments);
+        }
+
+        return uploadWhitelist;
+      }(),
+      resetWhitelist: function resetWhitelist(index) {
+        this.claimPhases[index].snapshot = [];
+      },
+      toggleWhitelistModal: function toggleWhitelistModal(index, state) {
+        this.claimPhases[index].modal = state;
+      },
+      updateMetadata: function () {
+        var _updateMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(e) {
+          var contract;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+            while (1) {
+              switch (_context8.prev = _context8.next) {
+                case 0:
+                  this.setButtonLoader(e);
+                  contract = this.getSmartContract();
+                  _context8.prev = 2;
+                  _context8.next = 5;
+                  return contract.metadata.set({
+                    name: this.collection.name,
+                    description: this.collection.description
+                  });
+
+                case 5:
+                  _context8.next = 11;
+                  break;
+
+                case 7:
+                  _context8.prev = 7;
+                  _context8.t0 = _context8["catch"](2);
+                  console.log('error updateMetadata', _context8.t0);
+                  this.setErrorMessage('error updateMetadata');
+
+                case 11:
+                  this.resetButtonLoader();
+
+                case 12:
+                case "end":
+                  return _context8.stop();
+              }
+            }
+          }, _callee8, this, [[2, 7]]);
+        }));
+
+        function updateMetadata(_x6) {
           return _updateMetadata.apply(this, arguments);
         }
 
         return updateMetadata;
       }(),
       updateRoyalties: function () {
-        var _updateRoyalties = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+        var _updateRoyalties = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(e) {
           var contract;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context9.prev = _context9.next) {
                 case 0:
                   this.setButtonLoader(e);
-                  this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__.ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {});
-                  contract = this.sdk.getNFTDrop(this.contractAddress);
-                  _context5.prev = 3;
-                  _context5.next = 6;
+                  contract = this.getSmartContract();
+                  _context9.prev = 2;
+                  _context9.next = 5;
                   return contract.royalties.setDefaultRoyaltyInfo({
-                    seller_fee_basis_points: this.forms.collection.royalties * 100,
+                    seller_fee_basis_points: this.collection.royalties * 100,
                     // 1% royalty fee
-                    fee_recipient: this.forms.collection.fee_recipient // the fee recipient
+                    fee_recipient: this.collection.fee_recipient // the fee recipient
 
                   });
 
-                case 6:
-                  _context5.next = 12;
+                case 5:
+                  _context9.next = 11;
                   break;
 
-                case 8:
-                  _context5.prev = 8;
-                  _context5.t0 = _context5["catch"](3);
-                  console.log('error updateRoyalties', _context5.t0);
+                case 7:
+                  _context9.prev = 7;
+                  _context9.t0 = _context9["catch"](2);
+                  console.log('error updateRoyalties', _context9.t0);
                   this.setErrorMessage('error updateRoyalties');
 
-                case 12:
+                case 11:
                   this.resetButtonLoader();
 
-                case 13:
+                case 12:
                 case "end":
-                  return _context5.stop();
+                  return _context9.stop();
               }
             }
-          }, _callee5, this, [[3, 8]]);
+          }, _callee9, this, [[2, 7]]);
         }));
 
-        function updateRoyalties(_x3) {
+        function updateRoyalties(_x7) {
           return _updateRoyalties.apply(this, arguments);
         }
 
         return updateRoyalties;
       }(),
       deployContract: function () {
-        var _deployContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(e) {
+        var _deployContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(e) {
           var contractAddress, formData;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
             while (1) {
-              switch (_context6.prev = _context6.next) {
+              switch (_context10.prev = _context10.next) {
                 case 0:
-                  this.setButtonLoader(e);
-                  this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__.ThirdwebSDK.fromSigner(this.wallet.signer, this.forms.collection.blockchain, {}); // deploy contract
+                  this.setButtonLoader(e); // deploy contract
 
-                  _context6.prev = 2;
-                  _context6.next = 5;
+                  _context10.prev = 1;
+                  _context10.next = 4;
                   return this.sdk.deployer.deployNFTDrop({
-                    name: this.forms.collection.name,
-                    symbol: this.forms.collection.symbol,
-                    description: this.forms.collection.description,
+                    name: this.collection.name,
+                    symbol: this.collection.symbol,
+                    description: this.collection.description,
                     primary_sale_recipient: this.wallet.account,
                     // primary sales
                     fee_recipient: this.wallet.account,
                     // royalties address
-                    seller_fee_basis_points: this.forms.collection.royalties * 100,
+                    seller_fee_basis_points: this.collection.royalties * 100,
                     // royalties address
                     platform_fee_recipient: '0x892a99573583c6490526739bA38BaeFae10a84D4',
                     // platform fee address
@@ -35555,26 +35792,26 @@ if (document.getElementById('app')) {
 
                   });
 
-                case 5:
-                  contractAddress = _context6.sent;
-                  formData = this.forms.collection;
+                case 4:
+                  contractAddress = _context10.sent;
+                  formData = this.collection;
                   formData.address = contractAddress;
-                  _context6.next = 10;
+                  _context10.next = 9;
                   return axios.post('/collections', formData).then(function (response) {
                     console.log(response);
                   });
 
-                case 10:
-                  _context6.next = 15;
+                case 9:
+                  _context10.next = 14;
                   break;
 
-                case 12:
-                  _context6.prev = 12;
-                  _context6.t0 = _context6["catch"](2);
-                  console.log('error deploying contract', _context6.t0);
+                case 11:
+                  _context10.prev = 11;
+                  _context10.t0 = _context10["catch"](1);
+                  console.log('error deploying contract', _context10.t0);
 
-                case 15:
-                  // const contract = this.sdk.getNFTDrop("0xdeAfA4be5b0Ca4cC2154A0B26C236CE0F9d1303F")
+                case 14:
+                  // const contract = this.getSmartContract()
                   // const rolesAndMembers = await contract.roles.getAll()
                   // console.log(rolesAndMembers)
                   // console.log('this.account', this.wallet.account)
@@ -35591,15 +35828,15 @@ if (document.getElementById('app')) {
                   // console.log(nfts);
                   window.location.href = "/collections";
 
-                case 16:
+                case 15:
                 case "end":
-                  return _context6.stop();
+                  return _context10.stop();
               }
             }
-          }, _callee6, this, [[2, 12]]);
+          }, _callee10, this, [[1, 11]]);
         }));
 
-        function deployContract(_x4) {
+        function deployContract(_x8) {
           return _deployContract.apply(this, arguments);
         }
 
@@ -35624,11 +35861,11 @@ if (document.getElementById('app')) {
         }
       },
       uploadCollection: function () {
-        var _uploadCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(event) {
+        var _uploadCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(event) {
           var contract;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
             while (1) {
-              switch (_context7.prev = _context7.next) {
+              switch (_context11.prev = _context11.next) {
                 case 0:
                   console.log('Uploaded collection'); // var files = event.target.files
                   // console.log('files', files)
@@ -35643,8 +35880,7 @@ if (document.getElementById('app')) {
                   //     }
                   // ];
 
-                  this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_5__.ThirdwebSDK.fromSigner(this.wallet.signer, 'polygon', {});
-                  contract = this.sdk.getNFTDrop("0xdeAfA4be5b0Ca4cC2154A0B26C236CE0F9d1303F");
+                  contract = this.getSmartContract();
 
                   try {// const results = await contract.getAll({})
                     // const results = await contract.burn(1)
@@ -35677,15 +35913,15 @@ if (document.getElementById('app')) {
 
                   this.upload = false;
 
-                case 5:
+                case 4:
                 case "end":
-                  return _context7.stop();
+                  return _context11.stop();
               }
             }
-          }, _callee7, this);
+          }, _callee11, this);
         }));
 
-        function uploadCollection(_x5) {
+        function uploadCollection(_x9) {
           return _uploadCollection.apply(this, arguments);
         }
 
@@ -35727,12 +35963,12 @@ if (document.getElementById('app')) {
   });
 }
 
-(0,tippy_js__WEBPACK_IMPORTED_MODULE_6__["default"])('[data-tippy-content]');
-(0,tippy_js__WEBPACK_IMPORTED_MODULE_6__["default"])('.transaction-button', {
+(0,tippy_js__WEBPACK_IMPORTED_MODULE_8__["default"])('[data-tippy-content]');
+(0,tippy_js__WEBPACK_IMPORTED_MODULE_8__["default"])('.transaction-button', {
   content: 'This action will trigger a transaction',
   placement: 'top'
 });
-(0,tippy_js__WEBPACK_IMPORTED_MODULE_6__["default"])('#user-address', {
+(0,tippy_js__WEBPACK_IMPORTED_MODULE_8__["default"])('#user-address', {
   content: 'Copy address',
   placement: 'left'
 });

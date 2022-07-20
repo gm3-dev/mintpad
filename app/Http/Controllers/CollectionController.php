@@ -19,6 +19,12 @@ class CollectionController extends Controller
         'fantom' => 'Fantom (FTM)',
         'avalanche' => 'Avalanche (AVAX)',
     ];
+    public $tokens = [
+        'ethereum' => 'ETH',
+        'polygon' => 'MATIC',
+        'fantom' => 'FTM',
+        'avalanche' => 'AVAX',
+    ];
 
     /**
      * Display a listing of the resource.
@@ -174,6 +180,8 @@ class CollectionController extends Controller
     {
         $this->authorize('view', $collection);
 
+        $collection->token = $this->tokens[$collection->blockchain];
+
         return response()->json($collection, 200);
     }
 
@@ -241,6 +249,44 @@ class CollectionController extends Controller
         $this->authorize('view', $collection);
 
         return view('collections.deploy')->with(compact('collection'));
+    }
+
+    /**
+     * Show the claim page
+     *
+     * @param Collection $collection
+     * @return Response
+     */
+    public function claim(Collection $collection)
+    {
+        $this->authorize('view', $collection);
+
+        return view('collections.claim')->with(compact('collection'));
+    }
+
+    /**
+     * Get whitelist data
+     *
+     * @param Request $request
+     * @param Collection $collection
+     * @return Response
+     */
+    public function whitelist(Request $request, Collection $collection)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $file_handle = fopen($file, 'r');
+            while (!feof($file_handle)) {
+                $row = fgetcsv($file_handle, 0, ',');
+                if (isset($row[0]) && strpos($row[0], '0x') === 0) {
+                    $line_of_text[] = ['address' => $row[0]];
+                }
+            }
+            fclose($file_handle);
+
+            return response()->json($line_of_text);
+        }
     }
 
     /**

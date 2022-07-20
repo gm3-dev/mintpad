@@ -19,11 +19,11 @@
             <div class="w-full flex flex-wrap">
                 <div class="basis-full p-2">
                     <x-label for="name" :value="__('Name')" />
-                    <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="forms.collection.name" required autofocus />
+                    <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                 </div>
                 <div class="basis-full p-2">
                     <x-label for="description" :value="__('Description')" />
-                    <x-textarea id="description" class="mt-1 w-full" name="description" v-model="forms.collection.description"></x-textarea>
+                    <x-textarea id="description" class="mt-1 w-full" name="description" v-model="collection.description"></x-textarea>
                 </div>
             </div>
             <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
@@ -34,11 +34,11 @@
             <div class="w-full flex flex-wrap">
                 <div class="basis-2/3 p-2">
                     <x-label for="fee_recipient" :value="__('Recipient Address')" />
-                    <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="forms.collection.fee_recipient" />
+                    <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                 </div>
                 <div class="basis-1/3 p-2">
                     <x-label for="royalties" :value="__('Royalties (%)')" />
-                    <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="forms.collection.royalties" required />
+                    <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                 </div>
             </div>
             <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
