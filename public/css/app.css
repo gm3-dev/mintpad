@@ -9442,6 +9442,9 @@ select {
 .p-1 {
   padding: 0.25rem;
 }
+.\!p-1 {
+  padding: 0.25rem !important;
+}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -9489,6 +9492,10 @@ select {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+.\!py-1 {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
 }
 .pt-8 {
   padding-top: 2rem;
