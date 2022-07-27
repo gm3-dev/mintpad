@@ -16,22 +16,20 @@
                         <div class="px-6 mb-1 text-xs text-gray-500 flex flex-row">
                             <div class="p-2 basis-3/12 lg:basis-4/12">{{ __('Collection name') }}</div>
                             <div class="p-2 basis-1/12">{{ __('Symbol') }}</div>
-                            <div class="p-2 basis-1/12">{{ __('Blockchain') }}</div>
+                            <div class="p-2 basis-2/12">{{ __('Blockchain') }}</div>
                             <div class="p-2 basis-3/12">{{ __('Contract address') }}</div>
-                            <div class="p-2 basis-4/12 lg:basis-3/12"></div>
+                            <div class="p-2 basis-4/12 lg:basis-2/12"></div>
                         </div>
                         @foreach ($collections as $collection)
                             <div class="px-6 py-3 mb-4 rounded-md border border-gray-200 flex flex-row text-left items-center">
                                 <div class="p-2 basis-3/12 lg:basis-4/12">{{ $collection->name }}</div>
                                 <div class="p-2 basis-1/12">{{ $collection->symbol }}</div>
-                                <div class="p-2 basis-1/12">{!! ucfirst($collection->blockchain) !!}</div>
+                                <div class="p-2 basis-2/12">{!! ucfirst($collection->blockchain) !!}</div>
                                 <div class="p-2 basis-3/12">
                                     <button href="#" data-tippy-content="Copy address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="border border-gray-200 hover:border-primary-600 px-3 py-2 rounded-md text-xs mr-3"><i class="far fa-copy mr-2"></i>{{ shorten_address($collection->address) }}</button>
                                 </div>
-                                <div class="p-2 basis-4/12 lg:basis-3/12 text-right">
+                                <div class="p-2 basis-4/12 lg:basis-2/12 text-right">
                                     <x-link-button href="{{ route('collections.edit', $collection->id) }}">Manage</x-link-button>
-                                    <x-link-button href="{{ route('collections.claim', $collection->id) }}">Claim</x-link-button>
-                                    <x-link-button href="{{ route('collections.collection', $collection->id) }}">Collection</x-link-button>
                                 </div>
                             </div>
                         @endforeach

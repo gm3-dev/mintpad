@@ -4,13 +4,14 @@
     </x-slot:header>
 
     <div class="bg-white overflow-hidden">
+        <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
+
         <div v-if="!wallet.account">
             @include('partials.connect')
         </div>
         <div v-else>
             <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                 @method('PUT')
-                <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
                 <div class="text-center mb-10">
                     <h2 class="font-bold text-3xl text-center mb-1">{{ __('Claim phases') }}</h2>
@@ -95,7 +96,7 @@
                     <x-d-button href="#" class="w-full" @click.prevent="addClaimPhase">Add claim phase</x-d-button>
                 </div>
                 <div class="px-6 text-center w-full mt-5 sm:max-w-3xl mx-auto">
-                    <x-button href="#" class="transaction-button w-1/2" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update claim phases') }}</x-button>
+                    <x-button href="#" class="transaction-button w-1/2" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Save claim phases') }}</x-button>
                 </div>
             </form>
         </div>

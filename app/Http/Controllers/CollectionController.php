@@ -223,35 +223,6 @@ class CollectionController extends Controller
     }
 
     /**
-     * Set deployed status
-     *
-     * @param Request $request
-     * @param Collection $collection
-     * @return Response
-     */
-    public function deployed(Request $request, Collection $collection)
-    {
-        $this->authorize('update', $collection);
-
-        $collection->deployed = true;
-        $collection->address = $request->get('address');
-        $collection->save();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function deploy(Collection $collection)
-    {
-        $this->authorize('view', $collection);
-
-        return view('collections.deploy')->with(compact('collection'));
-    }
-
-    /**
      * Show the claim page
      *
      * @param Collection $collection
@@ -324,7 +295,6 @@ class CollectionController extends Controller
         $collection->royalties  = $request->get('royalties');
         $collection->blockchain  = $request->get('blockchain');
         $collection->address  = $request->get('address');
-        $collection->deployed = true;
         $collection->save();
     }
 }

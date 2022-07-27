@@ -20,7 +20,7 @@ Alpine.start()
 
 if (document.getElementById('app')) {
 
-    // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default);
+    // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default)
     new Vue({
         el: '#app',
         mixins: [helpers],
@@ -33,6 +33,7 @@ if (document.getElementById('app')) {
             collectionID: false,
             contractAddress: false,
             errorMessage: false,
+            successMessage: false,
             message: {
                 error: false,
                 success: false,
@@ -52,7 +53,11 @@ if (document.getElementById('app')) {
                 symbol: '',
                 fee_recipient: 0,
                 royalties: 0,
-                description: ''
+                description: '',
+                nfts: [],
+                previews: [],
+                totalSupply: 0,
+                totalClaimedSupply: 0,
             },
             claimPhases: [],
             loader: {
@@ -62,7 +67,8 @@ if (document.getElementById('app')) {
                 }
             },
             page: {
-                name: ''
+                name: '',
+                tab: 1,
             }
         },
         computed: {
@@ -86,6 +92,16 @@ if (document.getElementById('app')) {
             }
         },
         methods: {
+            changeEditTab: async function(tab) {
+                this.page.tab = tab
+
+                if (this.page.tab == 3) {
+                    const contract = await this.getSmartContract()
+                    this.collection.totalSupply = await contract.totalSupply()
+                    this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
+                    this.collection.nfts = await contract.getAll()
+                }
+            },
             setPage: function() {
                 this.page.name = this.$el.getAttribute('data-page')
             },
@@ -100,34 +116,32 @@ if (document.getElementById('app')) {
                         this.setSDK()
                         const contract = await this.getSmartContract()
 
-                        if (this.page.name == 'collections.edit') {
-                            // Create embed code
-                            try {
-                                this.ipfs.gateway = contract.drop.storage.gatewayUrl
-                                const embedUrl = this.buildEmbedUrl()
-                                this.ipfs.embed = this.buildEmbedCode(embedUrl)
-                            } catch (e) {
-                                console.log('Failed to build embed code', e)
-                                this.setErrorMessage('Could not create embed code')
-                            }
-    
-                            // Set form data
-                            try {
-                                const metadata = await contract.metadata.get()
-                                const royalties = await contract.royalties.getDefaultRoyaltyInfo()
-                                this.collection.name = metadata.name
-                                this.collection.description = metadata.description
-                                this.collection.fee_recipient = royalties.fee_recipient
-                                this.collection.royalties = royalties.seller_fee_basis_points / 100
-                            } catch (e) {
-                                console.log('Failed to load metadata', e)
-                                this.setErrorMessage('Contract could not be loaded...')
-                            }
-                        } else if(this.page.name == 'collections.claim') {
-                            var claimConditions = await contract.claimConditions.getAll()
-                            console.log(claimConditions)
-                            this.claimPhases = this.parseClaimConditions(claimConditions)
+                        // Create embed code
+                        try {
+                            this.ipfs.gateway = contract.drop.storage.gatewayUrl
+                            const embedUrl = this.buildEmbedUrl()
+                            this.ipfs.embed = this.buildEmbedCode(embedUrl)
+                        } catch (e) {
+                            // console.log('Failed to build embed code', e)
+                            // this.setErrorMessage('Could not create embed code')
                         }
+
+                        // Set form data
+                        try {
+                            const metadata = await contract.metadata.get()
+                            const royalties = await contract.royalties.getDefaultRoyaltyInfo()
+                            this.collection.name = metadata.name
+                            this.collection.description = metadata.description
+                            this.collection.fee_recipient = royalties.fee_recipient
+                            this.collection.royalties = royalties.seller_fee_basis_points / 100
+                        } catch (e) {
+                            // console.log('Failed to load metadata', e)
+                            this.setErrorMessage('Contract could not be loaded...')
+                        }
+
+                        var claimConditions = await contract.claimConditions.getAll()
+                        this.claimPhases = this.parseClaimConditions(claimConditions)
+                        
                     })
                 }
             },
@@ -153,6 +167,12 @@ if (document.getElementById('app')) {
                 this.errorMessage = message
                 setTimeout(() => {
                     this.errorMessage = false
+                }, 5000)
+            },
+            setSuccessMessage: function(message) {
+                this.successMessage = message
+                setTimeout(() => {
+                    this.successMessage = false
                 }, 5000)
             },
             connectMetaMask: async function() {
@@ -190,9 +210,16 @@ if (document.getElementById('app')) {
                     })
                 }
 
-                const contract = await this.getSmartContract()
-                var claimConditions = await contract.claimConditions.set(claimPhases)
-
+                try {
+                    const contract = await this.getSmartContract()
+                    var claimConditions = await contract.claimConditions.set(claimPhases)
+                    
+                    this.setSuccessMessage('Claim phases updated')
+                } catch(error) {
+                    console.log('error updateMetadata', error)
+                    this.setErrorMessage('error updateMetadata')
+                }
+                
                 this.resetButtonLoader()
             },
             addClaimPhase: function(e) {
@@ -247,33 +274,37 @@ if (document.getElementById('app')) {
             updateMetadata: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = this.getSmartContract()
+                const contract = await this.getSmartContract()
                 try {
                     await contract.metadata.set({
                         name: this.collection.name,
                         description: this.collection.description
-                    });
+                    })
+
+                    this.setSuccessMessage('General settings updated')
 
                 } catch(error) {
-                    console.log('error updateMetadata', error)
-                    this.setErrorMessage('error updateMetadata')
+                    // console.log('error updateMetadata', error)
+                    this.setErrorMessage('General settings not updated')
                 }
+
 
                 this.resetButtonLoader()
             },
             updateRoyalties: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = this.getSmartContract()
+                const contract = await this.getSmartContract()
                 try {
                     await contract.royalties.setDefaultRoyaltyInfo({
                         seller_fee_basis_points: this.collection.royalties * 100, // 1% royalty fee
                         fee_recipient: this.collection.fee_recipient, // the fee recipient
-                    });
+                    })
 
+                    this.setSuccessMessage('Royalties updated')
                 } catch(error) {
-                    console.log('error updateRoyalties', error)
-                    this.setErrorMessage('error updateRoyalties')
+                    // console.log('error updateRoyalties', error)
+                    this.setErrorMessage('Royalties not updated')
                 }
 
                 this.resetButtonLoader()
@@ -297,11 +328,12 @@ if (document.getElementById('app')) {
                     var formData = this.collection
                     formData.address = contractAddress
                     await axios.post('/collections', formData).then((response) => {
-                        console.log(response)
+                        window.location.href = "/collections"
                     })
 
                 } catch(error) {
-                    console.log('error deploying contract', error)
+                    // console.log('error deploying contract', error)
+                    this.setErrorMessage('Smart contract deployment failed')
                 }
 
                 // const contract = this.getSmartContract()
@@ -319,54 +351,46 @@ if (document.getElementById('app')) {
                 //     "seller_fee_basis_points": 500
                 // })
                 // const nfts = await contract.getAllUnclaimed()
-                // console.log(nfts);
-
-                window.location.href = "/collections";
-            },
-            validateUpload: function(uploads) {
-                var images = []
-                var json = []
-
-                for (var i = 0; i < uploads.length; i++) {
-                    var upload = uploads[i]
-                    // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
-                    const filename = upload.name.replace(/\.[^/.]+$/, "")
-                    if (upload.type == 'application/json') {
-                        json.push(upload)
-                    } else {
-                        images.push(upload)
-                        console.log('filename', filename)
-                        console.log('filename', isInteger(filename))
-                    }
-                }
+                // console.log(nfts)
             },
             uploadCollection: async function(event) {
-                console.log('Uploaded collection')
-                // var files = event.target.files
+                var files = event.target.files
                 // console.log('files', files)
-                // console.log('files', Array.from(files))
 
-                // this.validateUpload(files)
+                this.collection.previews = await this.prepareFiles(files)
 
-                // const metadatas = [
-                //     {
-                //       name: "Cool NFT",
-                //       description: "This is a cool NFT",
-                //       image: files[0], // This can be an image url or file
-                //     //   properties: files[0], // This can be an image url or file
-                //     }
-                // ];
+                this.setSuccessMessage('Collection deployed')
 
-                const contract = this.getSmartContract()
-                try {
-                    // const results = await contract.getAll({})
-                    // const results = await contract.burn(1)
-                    // const results = await contract.claim(1)
-                    // console.log('results', results)
-                } catch(error) {
-                    console.log(error)
-                }
+                // const contract = await this.getSmartContract()
+                // try {
+                //     // Custom metadata of the NFTs to create
+                //     const metadatas = [{
+                //         name: "The Boys NFT!",
+                //         description: "Awesome show",
+                //         image: files[0],
+                //         attributes: [{
+                //                 "trait_type": "Blood",
+                //                 "value": "10"
+                //             },
+                //             {
+                //                 "trait_type": "Chicks",
+                //                 "value": "8"
+                //             },{
+                //                 "trait_type": "Realism",
+                //                 "value": "1"
+                //         }]
+                //     }]
+                    
+                //     const results = await contract.createBatch(metadatas)
+                //     // const results = await contract.getAll({})
+                //     // const results = await contract.burn(1)
+                //     // const results = await contract.claim(1)
+                // } catch(error) {
+                //     console.log(error)
+                // }
 
+
+                // FOR BACK USE ONLY
                 // const result = await contract.storage.uploadBatch({
                 //     files: files,
                 //     contractAddress: "0xF2b19FFce4BF4271acE2C3e4c352b2a12e8A9Eb1"
@@ -393,27 +417,97 @@ if (document.getElementById('app')) {
 
                 this.upload = false
             },
-            createUploadChunks: function(files, chunkSize) {
-                var output = []
-                for (let i = 0; i < files.length; i += chunkSize) {
-                    const chunk = files.slice(i, i + chunkSize)
-                    output.push(chunk)
-                }
-                return output
-            },
-            prepareCollectionForUpload: function(files) {
-                var formData = new FormData() 
+            prepareFiles: async function(files) {
+                var images = {}
+                var json = []
+
                 for (var i = 0; i < files.length; i++) {
-                    var file = files[i]
-                    formData.append('files[' + i + ']', file)
+                    var upload = files[i]
+                    // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
+                    const filename = upload.name.replace(/\.[^/.]+$/, "")
+                    if (upload.type == 'application/json') {
+                        json.push(upload)
+                    } else if(this.validFileType(upload)) {
+                        upload.id = filename
+                        upload.src = URL.createObjectURL(upload)
+                        images[filename] = upload
+                        // console.log('filename', filename)
+                        // console.log('filename', isInteger(filename))
+                    }
                 }
-                return formData
+
+                if (json.length != images.length && json.length != 1) {
+                    return {
+                        status: 'error',
+                        message: 'Images and JSON data combination is not correct'
+                    }
+                }
+                const metadata = await this.createMetadata(images, json)
+
+                return metadata
             },
+            createMetadata: async function(images, json) {
+                if (json.length == 1) {
+                    var jsonList = await this.getJsonData(json[0])
+                } else {
+                    var jsonList = [];
+                    for (var i = 0; i < json.length; i++) {
+                        jsonList.push(await this.getJsonData(json[0]))
+                    }
+                }
+                var metadata = []
+                for (var i = 0; i < jsonList.length; i++) {
+                    var nft = jsonList[i]
+                    metadata.push({
+                        name: nft.name,
+                        description: nft.description,
+                        image: images[nft.name] !== undefined ? images[nft.name] : '',
+                        attributes: nft.attributes
+                    })
+                }
+
+                return metadata
+            },
+            getJsonData: async (file) => {
+                return new Promise((res,rej)=>{
+                    let reader = new FileReader()
+                    reader.onload = function(){
+                        res(JSON.parse(reader.result))
+                    }
+                    reader.readAsText(file)
+                })
+            },
+            validFileType: function(file) {
+                switch(file.type) {
+                    case 'image/jpeg':
+                    case 'image/jpg':
+                    case 'image/png':
+                    case 'image/gif':
+                       return true;
+                    default:
+                        return false;
+                }
+            },
+            // createUploadChunks: function(files, chunkSize) {
+            //     var output = []
+            //     for (let i = 0; i < files.length; i += chunkSize) {
+            //         const chunk = files.slice(i, i + chunkSize)
+            //         output.push(chunk)
+            //     }
+            //     return output
+            // },
+            // prepareCollectionForUpload: function(files) {
+            //     var formData = new FormData() 
+            //     for (var i = 0; i < files.length; i++) {
+            //         var file = files[i]
+            //         formData.append('files[' + i + ']', file)
+            //     }
+            //     return formData
+            // },
             copyContractAddress: function(e) {
                 console.log(e)
                 var button = $(e.target)
                 var buttonWidth = button.outerWidth()
-                console.log(buttonWidth);
                 var buttonText = button.text()
                 button.css('width', buttonWidth+'px').text('Copied')
                 setTimeout(function() {
@@ -424,15 +518,15 @@ if (document.getElementById('app')) {
         }
     })
 }
-tippy('[data-tippy-content]');
+tippy('[data-tippy-content]')
 tippy('.transaction-button', {
     content: 'This action will trigger a transaction',
     placement: 'top',
-});
+})
 tippy('#user-address', {
     content: 'Copy address',
     placement: 'left',
-});
+})
 $('.main-container').on('click', '#user-address', function(e) {
     e.preventDefault()
     var button = $(this)

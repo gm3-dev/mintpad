@@ -35252,7 +35252,7 @@ window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
 
 if (document.getElementById('app')) {
-  // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default);
+  // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default)
   new (vue_dist_vue_js__WEBPACK_IMPORTED_MODULE_6___default())({
     el: '#app',
     mixins: [_Helpers_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
@@ -35265,6 +35265,7 @@ if (document.getElementById('app')) {
       collectionID: false,
       contractAddress: false,
       errorMessage: false,
+      successMessage: false,
       message: {
         error: false,
         success: false,
@@ -35284,7 +35285,11 @@ if (document.getElementById('app')) {
         symbol: '',
         fee_recipient: 0,
         royalties: 0,
-        description: ''
+        description: '',
+        nfts: [],
+        previews: [],
+        totalSupply: 0,
+        totalClaimedSupply: 0
       },
       claimPhases: [],
       loader: {
@@ -35294,7 +35299,8 @@ if (document.getElementById('app')) {
         }
       },
       page: {
-        name: ''
+        name: '',
+        tab: 1
       }
     },
     computed: {
@@ -35339,25 +35345,74 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
+      changeEditTab: function () {
+        var _changeEditTab = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(tab) {
+          var contract;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  this.page.tab = tab;
+
+                  if (!(this.page.tab == 3)) {
+                    _context2.next = 14;
+                    break;
+                  }
+
+                  _context2.next = 4;
+                  return this.getSmartContract();
+
+                case 4:
+                  contract = _context2.sent;
+                  _context2.next = 7;
+                  return contract.totalSupply();
+
+                case 7:
+                  this.collection.totalSupply = _context2.sent;
+                  _context2.next = 10;
+                  return contract.totalClaimedSupply();
+
+                case 10:
+                  this.collection.totalClaimedSupply = _context2.sent;
+                  _context2.next = 13;
+                  return contract.getAll();
+
+                case 13:
+                  this.collection.nfts = _context2.sent;
+
+                case 14:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, this);
+        }));
+
+        function changeEditTab(_x) {
+          return _changeEditTab.apply(this, arguments);
+        }
+
+        return changeEditTab;
+      }(),
       setPage: function setPage() {
         this.page.name = this.$el.getAttribute('data-page');
       },
       setPageData: function () {
-        var _setPageData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _setPageData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
           var _this2 = this;
 
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
                   // Collection edit page
                   if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     axios.get('/collections/' + this.collectionID + '/fetch').then( /*#__PURE__*/function () {
-                      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(response) {
+                      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
                         var contract, embedUrl, metadata, royalties, claimConditions;
-                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                           while (1) {
-                            switch (_context2.prev = _context2.next) {
+                            switch (_context3.prev = _context3.next) {
                               case 0:
                                 _this2.contractAddress = response.data.address;
                                 _this2.collection.blockchain = response.data.blockchain;
@@ -35365,81 +35420,64 @@ if (document.getElementById('app')) {
 
                                 _this2.setSDK();
 
-                                _context2.next = 6;
+                                _context3.next = 6;
                                 return _this2.getSmartContract();
 
                               case 6:
-                                contract = _context2.sent;
-
-                                if (!(_this2.page.name == 'collections.edit')) {
-                                  _context2.next = 28;
-                                  break;
-                                }
+                                contract = _context3.sent;
 
                                 // Create embed code
                                 try {
                                   _this2.ipfs.gateway = contract.drop.storage.gatewayUrl;
                                   embedUrl = _this2.buildEmbedUrl();
                                   _this2.ipfs.embed = _this2.buildEmbedCode(embedUrl);
-                                } catch (e) {
-                                  console.log('Failed to build embed code', e);
-
-                                  _this2.setErrorMessage('Could not create embed code');
+                                } catch (e) {// console.log('Failed to build embed code', e)
+                                  // this.setErrorMessage('Could not create embed code')
                                 } // Set form data
 
 
-                                _context2.prev = 9;
-                                _context2.next = 12;
+                                _context3.prev = 8;
+                                _context3.next = 11;
                                 return contract.metadata.get();
 
-                              case 12:
-                                metadata = _context2.sent;
-                                _context2.next = 15;
+                              case 11:
+                                metadata = _context3.sent;
+                                _context3.next = 14;
                                 return contract.royalties.getDefaultRoyaltyInfo();
 
-                              case 15:
-                                royalties = _context2.sent;
+                              case 14:
+                                royalties = _context3.sent;
                                 _this2.collection.name = metadata.name;
                                 _this2.collection.description = metadata.description;
                                 _this2.collection.fee_recipient = royalties.fee_recipient;
                                 _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                                _context2.next = 26;
+                                _context3.next = 24;
                                 break;
 
-                              case 22:
-                                _context2.prev = 22;
-                                _context2.t0 = _context2["catch"](9);
-                                console.log('Failed to load metadata', _context2.t0);
+                              case 21:
+                                _context3.prev = 21;
+                                _context3.t0 = _context3["catch"](8);
 
+                                // console.log('Failed to load metadata', e)
                                 _this2.setErrorMessage('Contract could not be loaded...');
 
-                              case 26:
-                                _context2.next = 34;
-                                break;
-
-                              case 28:
-                                if (!(_this2.page.name == 'collections.claim')) {
-                                  _context2.next = 34;
-                                  break;
-                                }
-
-                                _context2.next = 31;
+                              case 24:
+                                _context3.next = 26;
                                 return contract.claimConditions.getAll();
 
-                              case 31:
-                                claimConditions = _context2.sent;
-                                console.log(claimConditions);
+                              case 26:
+                                claimConditions = _context3.sent;
                                 _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
 
-                              case 34:
+                              case 28:
                               case "end":
-                                return _context2.stop();
+                                return _context3.stop();
                             }
                           }
-                        }, _callee2, null, [[9, 22]]);
+                        }, _callee3, null, [[8, 21]]);
                       }));
 
-                      return function (_x) {
+                      return function (_x2) {
                         return _ref.apply(this, arguments);
                       };
                     }());
@@ -35447,10 +35485,10 @@ if (document.getElementById('app')) {
 
                 case 1:
                 case "end":
-                  return _context3.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee4, this);
         }));
 
         function setPageData() {
@@ -35463,26 +35501,26 @@ if (document.getElementById('app')) {
         this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_7__.ThirdwebSDK.fromSigner(this.wallet.signer, this.collection.blockchain, {});
       },
       getSmartContract: function () {
-        var _getSmartContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e) {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        var _getSmartContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
-                  _context4.next = 2;
+                  _context5.next = 2;
                   return this.sdk.getNFTDrop(this.contractAddress);
 
                 case 2:
-                  return _context4.abrupt("return", _context4.sent);
+                  return _context5.abrupt("return", _context5.sent);
 
                 case 3:
                 case "end":
-                  return _context4.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee4, this);
+          }, _callee5, this);
         }));
 
-        function getSmartContract(_x2) {
+        function getSmartContract(_x3) {
           return _getSmartContract.apply(this, arguments);
         }
 
@@ -35508,29 +35546,37 @@ if (document.getElementById('app')) {
           _this3.errorMessage = false;
         }, 5000);
       },
+      setSuccessMessage: function setSuccessMessage(message) {
+        var _this4 = this;
+
+        this.successMessage = message;
+        setTimeout(function () {
+          _this4.successMessage = false;
+        }, 5000);
+      },
       connectMetaMask: function () {
-        var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context6.prev = _context6.next) {
                 case 0:
                   if (!(this.wallet.account === false)) {
-                    _context5.next = 4;
+                    _context6.next = 4;
                     break;
                   }
 
-                  _context5.next = 3;
+                  _context6.next = 3;
                   return (0,_MetaMask__WEBPACK_IMPORTED_MODULE_3__.initMetaMask)(true);
 
                 case 3:
-                  this.wallet = _context5.sent;
+                  this.wallet = _context6.sent;
 
                 case 4:
                 case "end":
-                  return _context5.stop();
+                  return _context6.stop();
               }
             }
-          }, _callee5, this);
+          }, _callee6, this);
         }));
 
         function connectMetaMask() {
@@ -35554,11 +35600,11 @@ if (document.getElementById('app')) {
         button.css('width', buttonWidth + 'px').prop('disabled', false).html(this.loader.button.label);
       },
       updateClaimPhases: function () {
-        var _updateClaimPhases = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(e) {
+        var _updateClaimPhases = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(e) {
           var claimPhases, i, claimPhase, contract, claimConditions;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
             while (1) {
-              switch (_context6.prev = _context6.next) {
+              switch (_context7.prev = _context7.next) {
                 case 0:
                   this.setButtonLoader(e);
                   claimPhases = [];
@@ -35575,27 +35621,39 @@ if (document.getElementById('app')) {
                     });
                   }
 
-                  _context6.next = 5;
+                  _context7.prev = 3;
+                  _context7.next = 6;
                   return this.getSmartContract();
 
-                case 5:
-                  contract = _context6.sent;
-                  _context6.next = 8;
+                case 6:
+                  contract = _context7.sent;
+                  _context7.next = 9;
                   return contract.claimConditions.set(claimPhases);
 
-                case 8:
-                  claimConditions = _context6.sent;
+                case 9:
+                  claimConditions = _context7.sent;
+                  this.setSuccessMessage('Claim phases updated');
+                  _context7.next = 17;
+                  break;
+
+                case 13:
+                  _context7.prev = 13;
+                  _context7.t0 = _context7["catch"](3);
+                  console.log('error updateMetadata', _context7.t0);
+                  this.setErrorMessage('error updateMetadata');
+
+                case 17:
                   this.resetButtonLoader();
 
-                case 10:
+                case 18:
                 case "end":
-                  return _context6.stop();
+                  return _context7.stop();
               }
             }
-          }, _callee6, this);
+          }, _callee7, this, [[3, 13]]);
         }));
 
-        function updateClaimPhases(_x3) {
+        function updateClaimPhases(_x4) {
           return _updateClaimPhases.apply(this, arguments);
         }
 
@@ -35638,34 +35696,34 @@ if (document.getElementById('app')) {
         return output;
       },
       uploadWhitelist: function () {
-        var _uploadWhitelist = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7(e, index) {
-          var _this4 = this;
+        var _uploadWhitelist = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(e, index) {
+          var _this5 = this;
 
           var files, formData;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
             while (1) {
-              switch (_context7.prev = _context7.next) {
+              switch (_context8.prev = _context8.next) {
                 case 0:
                   files = e.target.files;
                   formData = new FormData();
                   formData.append('file', files[0]);
-                  _context7.next = 5;
+                  _context8.next = 5;
                   return axios.post('/collections/' + this.collectionID + '/whitelist', formData).then(function (response) {
                     var data = response.data;
-                    _this4.claimPhases[index].snapshot = data;
+                    _this5.claimPhases[index].snapshot = data;
 
-                    _this4.toggleWhitelistModal(index, false);
+                    _this5.toggleWhitelistModal(index, false);
                   });
 
                 case 5:
                 case "end":
-                  return _context7.stop();
+                  return _context8.stop();
               }
             }
-          }, _callee7, this);
+          }, _callee8, this);
         }));
 
-        function uploadWhitelist(_x4, _x5) {
+        function uploadWhitelist(_x5, _x6) {
           return _uploadWhitelist.apply(this, arguments);
         }
 
@@ -35678,59 +35736,68 @@ if (document.getElementById('app')) {
         this.claimPhases[index].modal = state;
       },
       updateMetadata: function () {
-        var _updateMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8(e) {
-          var contract;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
-            while (1) {
-              switch (_context8.prev = _context8.next) {
-                case 0:
-                  this.setButtonLoader(e);
-                  contract = this.getSmartContract();
-                  _context8.prev = 2;
-                  _context8.next = 5;
-                  return contract.metadata.set({
-                    name: this.collection.name,
-                    description: this.collection.description
-                  });
-
-                case 5:
-                  _context8.next = 11;
-                  break;
-
-                case 7:
-                  _context8.prev = 7;
-                  _context8.t0 = _context8["catch"](2);
-                  console.log('error updateMetadata', _context8.t0);
-                  this.setErrorMessage('error updateMetadata');
-
-                case 11:
-                  this.resetButtonLoader();
-
-                case 12:
-                case "end":
-                  return _context8.stop();
-              }
-            }
-          }, _callee8, this, [[2, 7]]);
-        }));
-
-        function updateMetadata(_x6) {
-          return _updateMetadata.apply(this, arguments);
-        }
-
-        return updateMetadata;
-      }(),
-      updateRoyalties: function () {
-        var _updateRoyalties = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(e) {
+        var _updateMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9(e) {
           var contract;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
             while (1) {
               switch (_context9.prev = _context9.next) {
                 case 0:
                   this.setButtonLoader(e);
-                  contract = this.getSmartContract();
-                  _context9.prev = 2;
-                  _context9.next = 5;
+                  _context9.next = 3;
+                  return this.getSmartContract();
+
+                case 3:
+                  contract = _context9.sent;
+                  _context9.prev = 4;
+                  _context9.next = 7;
+                  return contract.metadata.set({
+                    name: this.collection.name,
+                    description: this.collection.description
+                  });
+
+                case 7:
+                  this.setSuccessMessage('General settings updated');
+                  _context9.next = 13;
+                  break;
+
+                case 10:
+                  _context9.prev = 10;
+                  _context9.t0 = _context9["catch"](4);
+                  // console.log('error updateMetadata', error)
+                  this.setErrorMessage('General settings not updated');
+
+                case 13:
+                  this.resetButtonLoader();
+
+                case 14:
+                case "end":
+                  return _context9.stop();
+              }
+            }
+          }, _callee9, this, [[4, 10]]);
+        }));
+
+        function updateMetadata(_x7) {
+          return _updateMetadata.apply(this, arguments);
+        }
+
+        return updateMetadata;
+      }(),
+      updateRoyalties: function () {
+        var _updateRoyalties = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(e) {
+          var contract;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+            while (1) {
+              switch (_context10.prev = _context10.next) {
+                case 0:
+                  this.setButtonLoader(e);
+                  _context10.next = 3;
+                  return this.getSmartContract();
+
+                case 3:
+                  contract = _context10.sent;
+                  _context10.prev = 4;
+                  _context10.next = 7;
                   return contract.royalties.setDefaultRoyaltyInfo({
                     seller_fee_basis_points: this.collection.royalties * 100,
                     // 1% royalty fee
@@ -35738,44 +35805,45 @@ if (document.getElementById('app')) {
 
                   });
 
-                case 5:
-                  _context9.next = 11;
+                case 7:
+                  this.setSuccessMessage('Royalties updated');
+                  _context10.next = 13;
                   break;
 
-                case 7:
-                  _context9.prev = 7;
-                  _context9.t0 = _context9["catch"](2);
-                  console.log('error updateRoyalties', _context9.t0);
-                  this.setErrorMessage('error updateRoyalties');
+                case 10:
+                  _context10.prev = 10;
+                  _context10.t0 = _context10["catch"](4);
+                  // console.log('error updateRoyalties', error)
+                  this.setErrorMessage('Royalties not updated');
 
-                case 11:
+                case 13:
                   this.resetButtonLoader();
 
-                case 12:
+                case 14:
                 case "end":
-                  return _context9.stop();
+                  return _context10.stop();
               }
             }
-          }, _callee9, this, [[2, 7]]);
+          }, _callee10, this, [[4, 10]]);
         }));
 
-        function updateRoyalties(_x7) {
+        function updateRoyalties(_x8) {
           return _updateRoyalties.apply(this, arguments);
         }
 
         return updateRoyalties;
       }(),
       deployContract: function () {
-        var _deployContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(e) {
+        var _deployContract = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(e) {
           var contractAddress, formData;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
             while (1) {
-              switch (_context10.prev = _context10.next) {
+              switch (_context11.prev = _context11.next) {
                 case 0:
                   this.setButtonLoader(e); // deploy contract
 
-                  _context10.prev = 1;
-                  _context10.next = 4;
+                  _context11.prev = 1;
+                  _context11.next = 4;
                   return this.sdk.deployer.deployNFTDrop({
                     name: this.collection.name,
                     symbol: this.collection.symbol,
@@ -35793,102 +35861,80 @@ if (document.getElementById('app')) {
                   });
 
                 case 4:
-                  contractAddress = _context10.sent;
+                  contractAddress = _context11.sent;
                   formData = this.collection;
                   formData.address = contractAddress;
-                  _context10.next = 9;
+                  _context11.next = 9;
                   return axios.post('/collections', formData).then(function (response) {
-                    console.log(response);
+                    window.location.href = "/collections";
                   });
 
                 case 9:
-                  _context10.next = 14;
+                  _context11.next = 14;
                   break;
 
                 case 11:
-                  _context10.prev = 11;
-                  _context10.t0 = _context10["catch"](1);
-                  console.log('error deploying contract', _context10.t0);
+                  _context11.prev = 11;
+                  _context11.t0 = _context11["catch"](1);
+                  // console.log('error deploying contract', error)
+                  this.setErrorMessage('Smart contract deployment failed');
 
                 case 14:
-                  // const contract = this.getSmartContract()
-                  // const rolesAndMembers = await contract.roles.getAll()
-                  // console.log(rolesAndMembers)
-                  // console.log('this.account', this.wallet.account)
-                  // await contract.roles.revoke("admin", this.wallet.account)
-                  // const files = [fs.readFileSync("1.png"), fs.readFileSync("2.png")]
-                  // const result = await contract.storage.upload(files)
-                  // console.log('result', result)
-                  // const royaltyInfo = await contract.royalties.getDefaultRoyaltyInfo()
-                  // console.log(royaltyInfo)
-                  // await contract.royalties.setDefaultRoyaltyInfo({
-                  //     "seller_fee_basis_points": 500
-                  // })
-                  // const nfts = await contract.getAllUnclaimed()
-                  // console.log(nfts);
-                  window.location.href = "/collections";
-
-                case 15:
                 case "end":
-                  return _context10.stop();
+                  return _context11.stop();
               }
             }
-          }, _callee10, this, [[1, 11]]);
+          }, _callee11, this, [[1, 11]]);
         }));
 
-        function deployContract(_x8) {
+        function deployContract(_x9) {
           return _deployContract.apply(this, arguments);
         }
 
         return deployContract;
       }(),
-      validateUpload: function validateUpload(uploads) {
-        var images = [];
-        var json = [];
-
-        for (var i = 0; i < uploads.length; i++) {
-          var upload = uploads[i]; // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
-
-          var filename = upload.name.replace(/\.[^/.]+$/, "");
-
-          if (upload.type == 'application/json') {
-            json.push(upload);
-          } else {
-            images.push(upload);
-            console.log('filename', filename);
-            console.log('filename', isInteger(filename));
-          }
-        }
-      },
       uploadCollection: function () {
-        var _uploadCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee11(event) {
-          var contract;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee11$(_context11) {
+        var _uploadCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(event) {
+          var files;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
             while (1) {
-              switch (_context11.prev = _context11.next) {
+              switch (_context12.prev = _context12.next) {
                 case 0:
-                  console.log('Uploaded collection'); // var files = event.target.files
-                  // console.log('files', files)
-                  // console.log('files', Array.from(files))
-                  // this.validateUpload(files)
-                  // const metadatas = [
-                  //     {
-                  //       name: "Cool NFT",
-                  //       description: "This is a cool NFT",
-                  //       image: files[0], // This can be an image url or file
-                  //     //   properties: files[0], // This can be an image url or file
-                  //     }
-                  // ];
+                  files = event.target.files; // console.log('files', files)
 
-                  contract = this.getSmartContract();
+                  _context12.next = 3;
+                  return this.prepareFiles(files);
 
-                  try {// const results = await contract.getAll({})
-                    // const results = await contract.burn(1)
-                    // const results = await contract.claim(1)
-                    // console.log('results', results)
-                  } catch (error) {
-                    console.log(error);
-                  } // const result = await contract.storage.uploadBatch({
+                case 3:
+                  this.collection.previews = _context12.sent;
+                  this.setSuccessMessage('Collection deployed'); // const contract = await this.getSmartContract()
+                  // try {
+                  //     // Custom metadata of the NFTs to create
+                  //     const metadatas = [{
+                  //         name: "The Boys NFT!",
+                  //         description: "Awesome show",
+                  //         image: files[0],
+                  //         attributes: [{
+                  //                 "trait_type": "Blood",
+                  //                 "value": "10"
+                  //             },
+                  //             {
+                  //                 "trait_type": "Chicks",
+                  //                 "value": "8"
+                  //             },{
+                  //                 "trait_type": "Realism",
+                  //                 "value": "1"
+                  //         }]
+                  //     }]
+                  //     const results = await contract.createBatch(metadatas)
+                  //     // const results = await contract.getAll({})
+                  //     // const results = await contract.burn(1)
+                  //     // const results = await contract.claim(1)
+                  // } catch(error) {
+                  //     console.log(error)
+                  // }
+                  // FOR BACK USE ONLY
+                  // const result = await contract.storage.uploadBatch({
                   //     files: files,
                   //     contractAddress: "0xF2b19FFce4BF4271acE2C3e4c352b2a12e8A9Eb1"
                   // })
@@ -35910,48 +35956,214 @@ if (document.getElementById('app')) {
                   //     })
                   // }
 
-
                   this.upload = false;
 
-                case 4:
+                case 6:
                 case "end":
-                  return _context11.stop();
+                  return _context12.stop();
               }
             }
-          }, _callee11, this);
+          }, _callee12, this);
         }));
 
-        function uploadCollection(_x9) {
+        function uploadCollection(_x10) {
           return _uploadCollection.apply(this, arguments);
         }
 
         return uploadCollection;
       }(),
-      createUploadChunks: function createUploadChunks(files, chunkSize) {
-        var output = [];
+      prepareFiles: function () {
+        var _prepareFiles = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(files) {
+          var images, json, i, upload, filename, metadata;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
+            while (1) {
+              switch (_context13.prev = _context13.next) {
+                case 0:
+                  images = {};
+                  json = [];
 
-        for (var i = 0; i < files.length; i += chunkSize) {
-          var chunk = files.slice(i, i + chunkSize);
-          output.push(chunk);
+                  for (i = 0; i < files.length; i++) {
+                    upload = files[i]; // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
+
+                    filename = upload.name.replace(/\.[^/.]+$/, "");
+
+                    if (upload.type == 'application/json') {
+                      json.push(upload);
+                    } else if (this.validFileType(upload)) {
+                      upload.id = filename;
+                      upload.src = URL.createObjectURL(upload);
+                      images[filename] = upload; // console.log('filename', filename)
+                      // console.log('filename', isInteger(filename))
+                    }
+                  }
+
+                  if (!(json.length != images.length && json.length != 1)) {
+                    _context13.next = 5;
+                    break;
+                  }
+
+                  return _context13.abrupt("return", {
+                    status: 'error',
+                    message: 'Images and JSON data combination is not correct'
+                  });
+
+                case 5:
+                  _context13.next = 7;
+                  return this.createMetadata(images, json);
+
+                case 7:
+                  metadata = _context13.sent;
+                  return _context13.abrupt("return", metadata);
+
+                case 9:
+                case "end":
+                  return _context13.stop();
+              }
+            }
+          }, _callee13, this);
+        }));
+
+        function prepareFiles(_x11) {
+          return _prepareFiles.apply(this, arguments);
         }
 
-        return output;
-      },
-      prepareCollectionForUpload: function prepareCollectionForUpload(files) {
-        var formData = new FormData();
+        return prepareFiles;
+      }(),
+      createMetadata: function () {
+        var _createMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(images, json) {
+          var jsonList, i, metadata, nft;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+            while (1) {
+              switch (_context14.prev = _context14.next) {
+                case 0:
+                  if (!(json.length == 1)) {
+                    _context14.next = 6;
+                    break;
+                  }
 
-        for (var i = 0; i < files.length; i++) {
-          var file = files[i];
-          formData.append('files[' + i + ']', file);
+                  _context14.next = 3;
+                  return this.getJsonData(json[0]);
+
+                case 3:
+                  jsonList = _context14.sent;
+                  _context14.next = 17;
+                  break;
+
+                case 6:
+                  jsonList = [];
+                  i = 0;
+
+                case 8:
+                  if (!(i < json.length)) {
+                    _context14.next = 17;
+                    break;
+                  }
+
+                  _context14.t0 = jsonList;
+                  _context14.next = 12;
+                  return this.getJsonData(json[0]);
+
+                case 12:
+                  _context14.t1 = _context14.sent;
+
+                  _context14.t0.push.call(_context14.t0, _context14.t1);
+
+                case 14:
+                  i++;
+                  _context14.next = 8;
+                  break;
+
+                case 17:
+                  metadata = [];
+
+                  for (i = 0; i < jsonList.length; i++) {
+                    nft = jsonList[i];
+                    metadata.push({
+                      name: nft.name,
+                      description: nft.description,
+                      image: images[nft.name] !== undefined ? images[nft.name] : '',
+                      attributes: nft.attributes
+                    });
+                  }
+
+                  return _context14.abrupt("return", metadata);
+
+                case 20:
+                case "end":
+                  return _context14.stop();
+              }
+            }
+          }, _callee14, this);
+        }));
+
+        function createMetadata(_x12, _x13) {
+          return _createMetadata.apply(this, arguments);
         }
 
-        return formData;
+        return createMetadata;
+      }(),
+      getJsonData: function () {
+        var _getJsonData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(file) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
+            while (1) {
+              switch (_context15.prev = _context15.next) {
+                case 0:
+                  return _context15.abrupt("return", new Promise(function (res, rej) {
+                    var reader = new FileReader();
+
+                    reader.onload = function () {
+                      res(JSON.parse(reader.result));
+                    };
+
+                    reader.readAsText(file);
+                  }));
+
+                case 1:
+                case "end":
+                  return _context15.stop();
+              }
+            }
+          }, _callee15);
+        }));
+
+        function getJsonData(_x14) {
+          return _getJsonData.apply(this, arguments);
+        }
+
+        return getJsonData;
+      }(),
+      validFileType: function validFileType(file) {
+        switch (file.type) {
+          case 'image/jpeg':
+          case 'image/jpg':
+          case 'image/png':
+          case 'image/gif':
+            return true;
+
+          default:
+            return false;
+        }
       },
+      // createUploadChunks: function(files, chunkSize) {
+      //     var output = []
+      //     for (let i = 0; i < files.length; i += chunkSize) {
+      //         const chunk = files.slice(i, i + chunkSize)
+      //         output.push(chunk)
+      //     }
+      //     return output
+      // },
+      // prepareCollectionForUpload: function(files) {
+      //     var formData = new FormData() 
+      //     for (var i = 0; i < files.length; i++) {
+      //         var file = files[i]
+      //         formData.append('files[' + i + ']', file)
+      //     }
+      //     return formData
+      // },
       copyContractAddress: function copyContractAddress(e) {
         console.log(e);
         var button = $(e.target);
         var buttonWidth = button.outerWidth();
-        console.log(buttonWidth);
         var buttonText = button.text();
         button.css('width', buttonWidth + 'px').text('Copied');
         setTimeout(function () {
