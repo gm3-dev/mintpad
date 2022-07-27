@@ -26,7 +26,7 @@
                                 <div class="p-2 basis-1/12">{{ $collection->symbol }}</div>
                                 <div class="p-2 basis-2/12">{!! ucfirst($collection->blockchain) !!}</div>
                                 <div class="p-2 basis-3/12">
-                                    <button href="#" data-tippy-content="Copy address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="border border-gray-200 hover:border-primary-600 px-3 py-2 rounded-md text-xs mr-3"><i class="far fa-copy mr-2"></i>{{ shorten_address($collection->address) }}</button>
+                                    <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="border border-gray-200 hover:border-primary-600 px-3 py-2 rounded-md text-xs mr-3" v-tippy><i class="far fa-copy mr-2"></i>{{ shorten_address($collection->address) }}</button>
                                 </div>
                                 <div class="p-2 basis-4/12 lg:basis-2/12 text-right">
                                     <x-link-button href="{{ route('collections.edit', $collection->id) }}">Manage</x-link-button>

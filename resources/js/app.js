@@ -2,8 +2,7 @@ require('./bootstrap')
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.js'
 import Alpine from 'alpinejs'
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
+import VueTippy, { TippyComponent } from "vue-tippy";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import { BigNumber } from "ethers"
 import { initMetaMask } from './MetaMask'
@@ -17,10 +16,27 @@ axios.defaults.headers.common = {
 }
 window.Alpine = Alpine
 Alpine.start()
+Vue.use(VueTippy)
+Vue.component("tippy", TippyComponent)
 
-if (document.getElementById('app')) {
+// User address in navigation
+new Vue({
+    el: '#user-address',
+    methods: {
+        copyAddress: function(e) {
+            var button = $(e.target)
+            var buttonWidth = button.outerWidth()
+            var shortAddress = button.text()
+            button.css('width', buttonWidth+'px').text('Copied')
+            setTimeout(function() {
+                button.text(shortAddress)
+            }, 1000)
+            navigator.clipboard.writeText(button.data('address'))
+        }
+    }
+})
 
-    // Vue.component('blockchain-selector', require('./components/BlockchainSelector.vue').default)
+if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
         mixins: [helpers],
@@ -88,7 +104,7 @@ if (document.getElementById('app')) {
     
             this.wallet = await initMetaMask(false)
             if (this.wallet.account) {
-                $('#user-address').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
+                $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
             }
         },
         methods: {
@@ -504,8 +520,10 @@ if (document.getElementById('app')) {
             //     }
             //     return formData
             // },
+            /**
+             * Should be rewritten in 1 method together with wallet copier
+             */
             copyContractAddress: function(e) {
-                console.log(e)
                 var button = $(e.target)
                 var buttonWidth = button.outerWidth()
                 var buttonText = button.text()
@@ -518,23 +536,3 @@ if (document.getElementById('app')) {
         }
     })
 }
-tippy('[data-tippy-content]')
-tippy('.transaction-button', {
-    content: 'This action will trigger a transaction',
-    placement: 'top',
-})
-tippy('#user-address', {
-    content: 'Copy address',
-    placement: 'left',
-})
-$('.main-container').on('click', '#user-address', function(e) {
-    e.preventDefault()
-    var button = $(this)
-    var buttonWidth = button.outerWidth()
-    var shortAddress = button.text()
-    button.css('width', buttonWidth+'px').text('Copied')
-    setTimeout(function() {
-        button.text(shortAddress)
-    }, 1000)
-    navigator.clipboard.writeText(button.data('address'))
-})

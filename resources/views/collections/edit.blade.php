@@ -50,7 +50,9 @@
                         </div>
                     </div>
                     <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
-                        <x-button href="#" class="transaction-button ml-4 w-1/2" @click.prevent="updateMetadata"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update general settings') }}</x-button>
+                        <span content="This action will trigger a transaction" v-tippy>
+                            <x-button href="#" class="w-1/2" @click.prevent="updateMetadata"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update general settings') }}</x-button>
+                        </span>
                     </div>   
 
                     <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('Royalties') }}</h3>
@@ -65,7 +67,9 @@
                         </div>
                     </div>
                     <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
-                        <x-button href="#" class="transaction-button ml-4 mt-1 w-1/2" @click.prevent="updateRoyalties"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update royalty settings') }}</x-button>
+                        <span content="This action will trigger a transaction" v-tippy>
+                            <x-button href="#" class="mt-1 w-1/2" @click.prevent="updateRoyalties"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update royalty settings') }}</x-button>
+                        </span>
                     </div>
                 </form>
             </div>
@@ -151,7 +155,9 @@
                         <x-d-button href="#" class="w-full" @click.prevent="addClaimPhase">Add claim phase</x-d-button>
                     </div>
                     <div class="px-6 text-center w-full mt-5 sm:max-w-3xl mx-auto">
-                        <x-button href="#" class="transaction-button w-1/2" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update claim phases') }}</x-button>
+                        <span content="This action will trigger a transaction" v-tippy>
+                            <x-button href="#" class="w-1/2" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update claim phases') }}</x-button>
+                        </span>
                     </div>
                 </form>
             </div>
