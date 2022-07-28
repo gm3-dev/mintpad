@@ -32722,7 +32722,8 @@ if (document.getElementById('app')) {
                   this.setButtonLoader(e); // deploy contract
 
                   _context11.prev = 1;
-                  _context11.next = 4;
+                  this.setSDK();
+                  _context11.next = 5;
                   return this.sdk.deployer.deployNFTDrop({
                     name: this.collection.name,
                     symbol: this.collection.symbol,
@@ -32739,31 +32740,31 @@ if (document.getElementById('app')) {
 
                   });
 
-                case 4:
+                case 5:
                   contractAddress = _context11.sent;
                   formData = this.collection;
                   formData.address = contractAddress;
-                  _context11.next = 9;
+                  _context11.next = 10;
                   return axios.post('/collections', formData).then(function (response) {
                     window.location.href = "/collections";
                   });
 
-                case 9:
-                  _context11.next = 14;
+                case 10:
+                  _context11.next = 16;
                   break;
 
-                case 11:
-                  _context11.prev = 11;
+                case 12:
+                  _context11.prev = 12;
                   _context11.t0 = _context11["catch"](1);
-                  // console.log('error deploying contract', error)
+                  console.log('error deploying contract', _context11.t0);
                   this.setErrorMessage('Smart contract deployment failed');
 
-                case 14:
+                case 16:
                 case "end":
                   return _context11.stop();
               }
             }
-          }, _callee11, this, [[1, 11]]);
+          }, _callee11, this, [[1, 12]]);
         }));
 
         function deployContract(_x9) {

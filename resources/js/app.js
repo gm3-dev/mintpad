@@ -330,6 +330,7 @@ if (document.getElementById('app')) {
 
                 // deploy contract
                 try {
+                    this.setSDK()
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
                         name: this.collection.name,
                         symbol: this.collection.symbol,
@@ -348,7 +349,7 @@ if (document.getElementById('app')) {
                     })
 
                 } catch(error) {
-                    // console.log('error deploying contract', error)
+                    console.log('error deploying contract', error)
                     this.setErrorMessage('Smart contract deployment failed')
                 }
 
