@@ -40,7 +40,9 @@
                 </div>
 
                 <div class="p-6 text-center w-full sm:max-w-3xl mx-auto">
-                    <x-button href="#" class="ml-4 mt-4" @click.prevent="deployContract" content="This action will trigger a transaction" v-tippy><i class="fas fa-exchange-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
+                    <span content="This action will trigger a transaction" v-tippy>
+                        <x-button href="#" class="ml-4 mt-4" @click.prevent="deployContract"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
+                    </span>
                 </div>            
             </form>
         </div>
