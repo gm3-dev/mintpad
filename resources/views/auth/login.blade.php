@@ -1,8 +1,8 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-auto h-10 fill-current" />
+            <a href="/" class="text-4xl font-jpegdev">
+                Mintpad
             </a>
         </x-slot>
 
@@ -16,8 +16,8 @@
             @csrf
 
             <div>
-                <h2 class="text-center mb-1 font-bold text-xl">{{ __('Welcome back') }}</h2>
-                <p class="text-gray-500 text-xs text-center mb-4">{{ __('Enter your credentials to access your account.') }}</p>
+                <h2 class="text-center mb-1 text-xl">{{ __('Login') }}</h2>
+                <p class="text-mintpad-300 text-xs text-center mb-4">{{ __('Enter your credentials to access your account.') }}</p>
             </div>
 
             <!-- Email Address -->

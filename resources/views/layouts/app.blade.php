@@ -45,9 +45,9 @@
                 </div>
             </main>
 
-            <div class="p-6 mt-10 text-center w-full mx-auto bg-gray-100">
+            <!-- <div class="p-6 mt-10 text-center w-full mx-auto bg-gray-100">
                 <h3 class="text-lg font-bold">Need help? <x-link href="#" class="sm:text-lg">Click here</x-link></h3>
-            </div>
+            </div> -->
         </div>
     </body>
 </html>

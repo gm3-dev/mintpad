@@ -70,6 +70,7 @@ if (document.getElementById('app')) {
                 fee_recipient: 0,
                 royalties: 0,
                 description: '',
+                metadata: [],
                 nfts: [],
                 previews: [],
                 totalSupply: 0,
@@ -85,7 +86,8 @@ if (document.getElementById('app')) {
             page: {
                 name: '',
                 tab: 1,
-            }
+            },
+            Testsrc: ''
         },
         computed: {
             userAddressShort: function() {
@@ -133,14 +135,14 @@ if (document.getElementById('app')) {
                         const contract = await this.getSmartContract()
 
                         // Create embed code
-                        try {
-                            this.ipfs.gateway = contract.drop.storage.gatewayUrl
-                            const embedUrl = this.buildEmbedUrl()
-                            this.ipfs.embed = this.buildEmbedCode(embedUrl)
-                        } catch (e) {
+                        // try {
+                        //     this.ipfs.gateway = contract.drop.storage.gatewayUrl
+                        //     const embedUrl = this.buildEmbedUrl()
+                        //     this.ipfs.embed = this.buildEmbedCode(embedUrl)
+                        // } catch (e) {
                             // console.log('Failed to build embed code', e)
                             // this.setErrorMessage('Could not create embed code')
-                        }
+                        // }
 
                         // Set form data
                         try {
@@ -278,7 +280,7 @@ if (document.getElementById('app')) {
                 await axios.post('/collections/'+this.collectionID+'/whitelist', formData).then((response) => {
                     var data = response.data
                     this.claimPhases[index].snapshot = data
-                    this.toggleWhitelistModal(index, false)
+                    // this.toggleWhitelistModal(index, false)
                 })
             },
             resetWhitelist: function(index) {
@@ -372,80 +374,112 @@ if (document.getElementById('app')) {
             },
             uploadCollection: async function(event) {
                 var files = event.target.files
-                // console.log('files', files)
+                var metadata = await this.prepareFiles(files)
+                // var metadata = await this.prepareFiles2(files)
 
-                this.collection.previews = await this.prepareFiles(files)
+                if (metadata.status == 'error') {
+                    this.setErrorMessage('Invalid collection data')
+                    return;
+                }
 
-                this.setSuccessMessage('Collection deployed')
-
-                // const contract = await this.getSmartContract()
-                // try {
-                //     // Custom metadata of the NFTs to create
-                //     const metadatas = [{
-                //         name: "The Boys NFT!",
-                //         description: "Awesome show",
-                //         image: files[0],
-                //         attributes: [{
-                //                 "trait_type": "Blood",
-                //                 "value": "10"
-                //             },
-                //             {
-                //                 "trait_type": "Chicks",
-                //                 "value": "8"
-                //             },{
-                //                 "trait_type": "Realism",
-                //                 "value": "1"
-                //         }]
-                //     }]
-                    
-                //     const results = await contract.createBatch(metadatas)
-                //     // const results = await contract.getAll({})
-                //     // const results = await contract.burn(1)
-                //     // const results = await contract.claim(1)
-                // } catch(error) {
-                //     console.log(error)
-                // }
-
-
-                // FOR BACK USE ONLY
-                // const result = await contract.storage.uploadBatch({
-                //     files: files,
-                //     contractAddress: "0xF2b19FFce4BF4271acE2C3e4c352b2a12e8A9Eb1"
-                // })
-                // console.log('result', result)
-
-                // this.uploadToPinata(files)
-
-                // const chunks = this.createUploadChunks(Array.from(files), 50)
-                // const width = 100 / chunks.length
-                // this.upload = {
-                //     width: 0
-                // }
-                // for (var i = 0; i < chunks.length; i++) {
-                //     await axios.post('/collections/'+this.collectionID+'/upload', 
-                //         this.prepareCollectionForUpload(chunks[i])
-                //     ).then((response) => {
-                //         this.collection = response.data.images
-                //         this.upload = {
-                //             width: width * (i+1)
-                //         }
-                //     })
-                // }
-
+                this.collection.metadata = metadata.data
+                this.collection.previews = this.collection.metadata.slice(0, 10)
+                console.log(this.collection.previews)
                 this.upload = false
+
+                this.setSuccessMessage('NFTs uploaded')
+            },
+            updateCollection: async function(e) {
+                this.setButtonLoader(e)
+
+                const contract = await this.getSmartContract()
+                try {                    
+                    await contract.createBatch(this.collection.metadata)
+
+                    this.setSuccessMessage('NFTs added to the collection!')
+                } catch(error) {
+                    console.log('error updateCollection', error)
+                    this.setErrorMessage('Error while uploading your collection')
+                }
+
+                this.resetButtonLoader()
+            },
+            prepareFiles2: async function(files) {
+                var jsonCounter = 0;
+                var imageCounter = 0;
+                var fileList = {}
+                var firstJsonFile = false
+
+                for (var i = 0; i < files.length; i++) {
+                    var upload = files[i]
+                    var filename = upload.name.replace(/\.[^/.]+$/, "")
+                    if (upload.type == 'application/json') {
+                        if (isNaN(filename) == false && fileList[filename] == undefined) fileList[filename] = {}
+                        if (firstJsonFile == false) firstJsonFile = upload
+                        if (isNaN(filename) == false) fileList[filename]['json'] = upload
+                        jsonCounter++
+                    } else if(this.validFileType(upload)) {
+                        if (fileList[filename] == undefined) fileList[filename] = {}
+
+                        fileList[filename]['image'] = upload
+                        imageCounter++
+                    }
+                }
+
+                // Valite file numbers
+                var fileListLength = Object.keys(fileList).length
+                if (fileListLength != imageCounter || (jsonCounter != imageCounter && jsonCounter !== 1) || jsonCounter == 0) {
+                    return {
+                        status: 'error',
+                        message: 'Your images and JSON data combination is not correct',
+                        data: []
+                    }
+                }
+
+                // Validate JSON if its only 1 file
+                if (jsonCounter == 1) {
+                    var jsonList = await this.getJsonData(firstJsonFile)
+                    if (jsonList.length != fileListLength) {
+                        return {
+                            status: 'error',
+                            message: 'Your JSON file does not match the number of images',
+                            data: []
+                        }
+                    }
+                    console.log(fileList)
+                }
+                
+                // const metadata = await this.createMetadata2(fileList, jsonCounter)
+                // metadata.sort((a,b) => a.name - b.name);
+
+                return 'passed'
+            },
+            createMetadata2: async function(fileList, jsonCounter) {
+                // var firstJsonKey = Object.keys(fileList)[0]
+                // var firstJsonFile = fileList[firstJsonKey]
+
+                if (jsonCounter == 1) {
+                    var jsonList = await this.getJsonData(firstJsonFile)
+                } else {
+                    var jsonList = [];
+                    for (var i = parseInt(firstJsonKey); i < jsonLength; i++) {
+                        jsonList.push(await this.getJsonData(json[i]))
+                    }
+                }
             },
             prepareFiles: async function(files) {
                 var images = {}
-                var json = []
+                var json = {}
 
                 for (var i = 0; i < files.length; i++) {
                     var upload = files[i]
                     // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
                     const filename = upload.name.replace(/\.[^/.]+$/, "")
                     if (upload.type == 'application/json') {
-                        json.push(upload)
+                        json[filename] = upload
                     } else if(this.validFileType(upload)) {
                         upload.id = filename
+                        // upload.src = i < 10 ? URL.createObjectURL(upload) : false
                         upload.src = URL.createObjectURL(upload)
                         images[filename] = upload
                         // console.log('filename', filename)
@@ -453,25 +487,42 @@ if (document.getElementById('app')) {
                     }
                 }
 
-                if (json.length != images.length && json.length != 1) {
+                var imagesLength = Object.keys(images).length
+                var jsonLength = Object.keys(json).length
+                if (jsonLength != imagesLength && jsonLength !== 1) {
                     return {
                         status: 'error',
-                        message: 'Images and JSON data combination is not correct'
+                        message: 'Images and JSON data combination is not correct',
+                        data: []
                     }
                 }
-                const metadata = await this.createMetadata(images, json)
 
-                return metadata
+                const metadata = await this.createMetadata(images, json)
+                metadata.sort((a,b) => a.name - b.name);
+
+                return {
+                    status: 'success',
+                    message: 'Images and JSON data combination',
+                    data: metadata
+                }
             },
             createMetadata: async function(images, json) {
-                if (json.length == 1) {
-                    var jsonList = await this.getJsonData(json[0])
+                var imagesLength = Object.keys(images).length
+                var jsonLength = Object.keys(json).length
+                var firstJsonKey = Object.keys(json)[0]
+                var firstJsonFile = json[firstJsonKey]
+                console.log(firstJsonKey)
+                console.log(firstJsonFile)
+
+                if (jsonLength == 1) {
+                    var jsonList = await this.getJsonData(firstJsonFile)
                 } else {
                     var jsonList = [];
-                    for (var i = 0; i < json.length; i++) {
-                        jsonList.push(await this.getJsonData(json[0]))
+                    for (var i = parseInt(firstJsonKey); i < jsonLength; i++) {
+                        jsonList.push(await this.getJsonData(json[i]))
                     }
                 }
+                console.log(jsonList)
                 var metadata = []
                 for (var i = 0; i < jsonList.length; i++) {
                     var nft = jsonList[i]

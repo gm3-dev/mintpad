@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot:header>
-        <x-back-button href="{{ route('collections.index') }}">{{ __('Back') }}</x-back-button>
-    </x-slot:header>
-
     <div class="bg-white overflow-hidden">
         <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
         
@@ -12,23 +8,21 @@
         <div v-else>
 
             <div class="text-center mb-10">
-                <h2 class="font-bold text-3xl text-center mb-1">{{ __('Manage NFT collection') }}</h2>
-                <p class="text-gray-500 text-center mb-5">{{ __('Manage your NFT collections.') }}</p>
+                <x-gray-button href="{{ route('collections.index') }}" class="float-left mt-1">{{ __('Back') }}</x-gray-button>
+                <h2 class="text-3xl text-center mb-1">{{ __('Manage NFT collection') }}</h2>
+                <p class="text-mintpad-300 text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
             </div>
 
             <div class="w-full mx-auto mb-3 pb-3">
-                <div class="flex items-center text-sm font-bold border-b border-gray-200">
-                    <a href="#" @click.prevent="changeEditTab(1)" class="p-2 px-6 text-gray-700 hover:text-primary-600" :class="{'text-primary-600 border-b-2 border-primary-600': page.tab == 1}">
+                <div class="flex items-center font-semibold border-b-2 border-mintpad-200">
+                    <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 1}">
                         {{ __('Settings') }}
                     </a>
-                    <a href="#" @click.prevent="changeEditTab(2)" class="p-2 px-6 text-gray-700 hover:text-primary-600" :class="{'text-primary-600 border-b-2 border-primary-600': page.tab == 2}">
-                        {{ __('Claim phases') }}
+                    <a href="#" @click.prevent="changeEditTab(2)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 2}">
+                        {{ __('Mint phases') }}
                     </a>
-                    <a href="#" @click.prevent="changeEditTab(3)" class="p-2 px-6 text-gray-700 hover:text-primary-600" :class="{'text-primary-600 border-b-2 border-primary-600': page.tab == 3}">
-                        {{ __('Collection') }}
-                    </a>
-                    <a href="#" @click.prevent="changeEditTab(4)" class="p-2 px-6 text-gray-700 hover:text-primary-600" :class="{'text-primary-600 border-b-2 border-primary-600': page.tab == 4}">
-                        {{ __('Embed') }}
+                    <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 3}">
+                        {{ __('Upload collection') }}
                     </a>
                 </div>
             </div>
@@ -38,37 +32,39 @@
 
                     <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
 
-                    <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('General Settings') }}</h3>
+                    <h3 class="text-2xl mb-4 mt-6 font-semibold">{{ __('General Settings') }}</h3>
                     <div class="w-full flex flex-wrap">
-                        <div class="basis-full p-2">
-                            <x-label for="name" :value="__('Name')" />
+                        <div class="basis-full mb-4">
+                            <x-label for="name" :value="__('Collection name')" />
                             <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                         </div>
-                        <div class="basis-full p-2">
-                            <x-label for="description" :value="__('Description')" />
+                        <div class="basis-full mb-4">
+                            <x-label for="description" :value="__('Collection description')" />
                             <x-textarea id="description" class="mt-1 w-full" name="description" v-model="collection.description"></x-textarea>
                         </div>
                     </div>
-                    <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
+                    <div class="w-full">
                         <span content="This action will trigger a transaction" v-tippy>
-                            <x-button href="#" class="w-1/2" @click.prevent="updateMetadata"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update general settings') }}</x-button>
+                            <x-button href="#" @click.prevent="updateMetadata"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update settings') }}</x-button>
                         </span>
                     </div>   
 
-                    <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('Royalties') }}</h3>
+                    <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
                     <div class="w-full flex flex-wrap">
-                        <div class="basis-2/3 p-2">
+                        <div class="basis-2/3 mb-4 pr-2">
                             <x-label for="fee_recipient" :value="__('Recipient Address')" />
+                            <p class="text-mintpad-300 font-regular text-sm mb-1">A recipient address is the wallet address of the recipient of the royalties.</p>
                             <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                         </div>
-                        <div class="basis-1/3 p-2">
+                        <div class="basis-1/3">
                             <x-label for="royalties" :value="__('Royalties (%)')" />
+                            <p class="text-mintpad-300 font-regular text-sm mb-1">What percentage you want to receive in royalties.</p>
                             <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                         </div>
                     </div>
-                    <div class="px-6 text-center w-full sm:max-w-3xl mx-auto">
+                    <div class="w-full">
                         <span content="This action will trigger a transaction" v-tippy>
-                            <x-button href="#" class="mt-1 w-1/2" @click.prevent="updateRoyalties"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update royalty settings') }}</x-button>
+                            <x-button href="#" @click.prevent="updateRoyalties"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update royalties') }}</x-button>
                         </span>
                     </div>
                 </form>
@@ -79,68 +75,75 @@
 
                     <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
 
-                    <div v-for="(phase, index) in claimPhases" class="w-full flex flex-wrap mb-5">
-                        <div class="basis-2/3 p-2">
-                            <h3 class="basis-full font-bold text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
+                    <h3 class="text-2xl mb-4 mt-6">{{ __('Mint phases') }}</h3>
+                    <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can set mint phases for, for example, a whitelist only mint.') }} <b>{{ __('You must have set at least one mint phase.') }}</b></p>
+                    <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('When you have set only one mint phase, this will be the date and time that people can mint your collection.') }}</p>
+
+                    <div v-for="(phase, index) in claimPhases" class="w-full flex flex-wrap mb-6">
+                        <div class="basis-2/3">
+                            <h3 class="basis-full text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
                         </div>
-                        <div class="basis-1/3 p-2 text-right">
-                            <x-button href="#" class="ml-3" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash"></i></x-button>
+                        <div class="basis-1/3 text-right">
+                            <x-gray-button href="#" class="ml-3 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
                         </div>
-                        <div class="basis-1/3 p-2">
+                        <div class="basis-1/3 mb-4">
                             <x-label for="start" :value="__('When will this phase start?')" />
                             <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                         </div>
-                        <div class="basis-1/3 p-2">
+                        <div class="basis-1/3 mb-4 px-2">
                             <x-label for="max-quantity" :value="__('Number of NFTs in this phase? (0 = unlimited)')" />
                             <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                         </div>
-                        <div class="basis-1/3 p-2 relative">
+                        <div class="basis-1/3 mb-4 relative">
                             <x-label for="price" :value="__('NFT price?')" />
                             <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
-                            <label v-html="collection.token" class="text-xs absolute right-0 mr-5 mt-4 text-primary-600"></label>
+                            <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500"></label>
                         </div>
-                        <div class="basis-1/3 p-2">
+                        <div class="basis-1/3">
                             <x-label for="max-quantity-transaction" :value="__('Claims per transaction? (0 = unlimited)')" />
                             <x-input id="max-quantity-transaction" class="mt-1 w-full" type="number" v-model="phase.quantityLimitPerTransaction" required />
                         </div>
-                        <div class="basis-1/3 p-2">
+                        <div class="basis-1/3 px-2">
                             <x-label for="whitelist" :value="__('Who can claim NFTs during this phase?')" />
                             <x-select class="mt-1 !w-full" v-model="phase.whitelist" :options="['Any wallet', 'Only specific wallets']"></x-select>
                         </div>
-                        <div v-if="phase.whitelist == 1" class="basis-1/3 p-2">
+                        <div v-if="phase.whitelist == 1" class="basis-1/3">
                             <x-label :value="__('Whitelist')" />
-                            <p class="text-sm mt-1"><x-button href="#" class="!text-sm" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-button><span class="font-bold ml-3" v-html="phase.snapshot.length"></span> addresses in whitelist</p>
+                            <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!text-sm" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses in whitelist</p>
                         </div>
 
                         <div v-if="phase.modal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
                             <div class="fixed z-10 inset-0 overflow-y-auto">
-                                <div class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+                                <div class="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0">
                                     <div class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-5xl sm:w-full">
-                                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                            <table v-if="phase.snapshot != 0" class="w-full">
-                                                <tr>
-                                                    <th>Address</th>
-                                                    <th>Max claimable</th>
-                                                </tr>
-                                                <tr v-for="wallet in phase.snapshot">
-                                                    <td>@{{ wallet.address }}</td>
-                                                    <td>@{{ phase.quantityLimitPerTransaction }}</td>
-                                                </tr>
-                                            </table>
-                                            <div v-else class="text-center">
-                                                <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('Upload whitelist') }}</h3>
-                                                <p>Upload a .csv file with a list of addresses. Each row should contain a single address.</p>
-                                                <label class="block my-5 text-center">
-                                                    <span class="sr-only">Choose File</span>
-                                                    <input type="file" @change="uploadWhitelist($event, index)" class="inline-block text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700" name="whitelist_file" />
-                                                </label>
+                                        <div class="bg-white p-14">
+                                            <a href="#" class="absolute right-4 top-3 text-3xl text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="toggleWhitelistModal(index, false)"><i class="fas fa-times"></i></a>
+                                            <div class="overflow-y-auto" v-bind:class="{'h-96': phase.snapshot != 0}">
+                                                <table v-if="phase.snapshot != 0" class="w-full font-medium">
+                                                    <tr>
+                                                        <th class="font-semibold">Address</th>
+                                                        <th class="font-semibold">Max claimable</th>
+                                                    </tr>
+                                                    <tr v-for="wallet in phase.snapshot">
+                                                        <td class="font-medium">@{{ wallet.address }}</td>
+                                                        <td class="font-medium">@{{ phase.quantityLimitPerTransaction }}</td>
+                                                    </tr>
+                                                </table>
+                                                <div v-else>
+                                                    <h3 class="text-2xl mb-1">{{ __('Upload whitelist') }}</h3>
+                                                    <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload a .CSV file. One wallet address per row.') }}</b></p>
+                        
+                                                    <label class="block my-5 text-mintpad-300">
+                                                        <span class="sr-only">Choose File</span>
+                                                        <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="whitelist_file" />
+                                                    </label>
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                            <x-button href="#" class="ml-3" @click.prevent="toggleWhitelistModal(index, false)">Close</x-button>
-                                            <x-d-button v-if="phase.snapshot != 0" href="#" class="ml-3" @click.prevent="resetWhitelist(index)">Reset list</x-d-button>
+                                            <div v-if="phase.snapshot != 0" class="w-full text-right mt-4">
+                                                <x-gray-button href="#" @click.prevent="resetWhitelist(index)">Reset list</x-gray-button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -148,15 +151,14 @@
                         </div>
                     </div>
                     <div v-if="claimPhases.length == 0">
-                        <p class="text-center font-bold">{{ __('No claim phases set yet') }}</p>
-                        <p class="text-center">{{ __('Without a claim phase no-one will be able to claim this drop') }}</p>
+                        <p class="">{{ __('No mint phases set yet.') }}</p>
                     </div>
-                    <div class="text-center w-full mt-5 mx-auto p-2">
-                        <x-d-button href="#" class="w-full" @click.prevent="addClaimPhase">Add claim phase</x-d-button>
+                    <div class="w-full mt-10">
+                        <x-default-button href="#" class="w-full" @click.prevent="addClaimPhase">Add claim phase</x-default-button>
                     </div>
-                    <div class="px-6 text-center w-full mt-5 sm:max-w-3xl mx-auto">
+                    <div class="w-full mt-10">
                         <span content="This action will trigger a transaction" v-tippy>
-                            <x-button href="#" class="w-1/2" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update claim phases') }}</x-button>
+                            <x-button href="#" @click.prevent="updateClaimPhases"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update claim phases') }}</x-button>
                         </span>
                     </div>
                 </form>
@@ -167,11 +169,14 @@
 
                     <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
 
-                    <div class="text-center w-full sm:max-w-3xl mx-auto">
-                        <h3 class="font-bold text-2xl mb-1 mt-6 mb-3">{{ __('Add NFTs to your collection') }}</h3>
-                        <label class="block mb-5">
+                    <div class="w-full">
+                        <h3 class="text-2xl mb-4 mt-6">{{ __('Add images to your collection') }}</h3>
+                        <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you upload the images of your collection. This must contain images and one JSON file.') }}</b></p>
+                        <p class="text-mintpad-300 font-semibold text-sm mb-4"><a href="/examples/snapshot.csv">{{ __('Download an example file.') }}</a></p>
+
+                        <label class="block my-10 text-mintpad-300">
                             <span class="sr-only">Choose File</span>
-                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                         </label>
 
                         <div v-if="upload">
@@ -181,37 +186,33 @@
                             </div>
                         </div>
                     </div>
-
-                    <div v-if="collection.previews.length > 0" class="text-center">
-                        <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('Preview') }}</h3>
-                        <div class="grid grid-cols-5">
+                    <div v-if="collection.previews.length > 0">
+                        <h3 class="text-2xl mb-4 mt-6">{{ __('Preview of your collection') }}</h3>
+                        <div class="grid grid-cols-4">
                             <div v-for="preview in collection.previews">
-                                <div class="p-1 text-sm">
-                                    <img class="w-full max-w-max transition-all duration-500" :src="preview.image.src" />
+                                <div class="p-1 text-sm rounded-lg">
+                                    <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="preview.image.src" />
                                 </div>
                             </div>
-                        </div> 
+                        </div>
+                        <div class="w-full mt-5">
+                            <span content="This action will trigger a transaction" v-tippy>
+                                <x-button href="#" @click.prevent="updateCollection"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update collection') }}</x-button>
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="text-center">
-                        <h3 class="font-bold text-2xl mb-1 mt-6">{{ __('Your collection') }}</h3>
-                        <p v-if="collection.nfts.length == 0">{{ __('Your collection is still empty :(') }}</p>
-                        <p v-else>You collection contains <span class="font-bold" v-html="collection.totalSupply"></span> NFTs and <span class="font-bold" v-html="collection.totalClaimedSupply"></span> of them are claimed.</p>
-                        <div class="grid grid-cols-5 mt-2">
+                    <div class="text-sm">
+                        <h3 class="text-2xl mb-1 mt-6">{{ __('Your collection') }}</h3>
+                        <p v-if="collection.nfts.length == 0" class="text-mintpad-300 font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
+                        <p v-else class="text-mintpad-300 font-regular text-sm">You collection contains <span class="font-semibold" v-html="collection.totalSupply"></span> NFTs and <span class="font-semibold" v-html="collection.totalClaimedSupply"></span> of them are claimed.</p>
+                        <div class="grid grid-cols-4 mt-2">
                             <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
-                                <img class="w-full max-w-max transition-all duration-500" :src="nft.metadata.image" />
+                                <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="nft.metadata.image" />
                             </div>
                         </div> 
                     </div> 
                 </form>
-            </div>
-            <div v-if="page.tab == 4">
-                <h3 class="font-bold text-2xl mt-6 mb-1">{{ __('Embed mint page') }}</h3>
-                <div class="w-full flex flex-wrap">
-                    <div class="basis-1/2 mx-auto p-2" v-html="ipfs.embed">
-
-                    </div>
-                </div>
             </div>
         </div>
     </div>

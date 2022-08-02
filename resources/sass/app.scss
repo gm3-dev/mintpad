@@ -1,6 +1,32 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 @import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '@fortawesome/fontawesome-free/scss/solid.scss';
 @import '@fortawesome/fontawesome-free/scss/regular.scss';
+
+@font-face { 
+    font-family: Graphik-Bold; src: url('/fonts/Graphik-Bold.woff2');
+}
+@font-face { 
+    font-family: Graphik-Semibold; src: url('/fonts/Graphik-Semibold.woff2');
+}
+@font-face { 
+    font-family: Graphik-Medium; src: url('/fonts/Graphik-Medium.woff2');
+}
+@font-face { 
+    font-family: Graphik-Regular; src: url('/fonts/Graphik-Regular.woff2');
+}
+@font-face { 
+    font-family: JPEGDEVFONTBlack; src: url('/fonts/JPEGDEVFONTBlack.woff2');
+}
+
+@layer base {
+    html {
+        @apply text-mintpad-500;
+    } 
+}
 
 // .btn-primary {
 //     @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;

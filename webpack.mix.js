@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const tailwindcss = require('tailwindcss');
 /*const webpack = require('webpack')
 
 mix.webpackConfig ({
@@ -21,11 +22,19 @@ mix.webpackConfig ({
  |
  */
 // mix.webpackConfig({ resolve: { fallback: { fs: false, os: require.resolve("os-browserify/browser"), path: require.resolve("path-browserify") } } });
+// mix.js('resources/js/app.js', 'public/js')
+//     .vue()
+//     .sass('resources/sass/app.scss', 'public/css')
+//     .postCss('resources/css/app.css', 'public/css', [
+//     require('postcss-import'),
+//     require('tailwindcss'),
+//     require('autoprefixer'),
+// ]);
 mix.js('resources/js/app.js', 'public/js')
     .vue()
     .sass('resources/sass/app.scss', 'public/css')
-    .postCss('resources/css/app.css', 'public/css', [
-    require('postcss-import'),
-    require('tailwindcss'),
-    require('autoprefixer'),
-]);
+    .options({
+        postCss: [ tailwindcss('./tailwind.config.js') ],
+    })
+    .version();
+mix.copyDirectory('resources/fonts', 'public/fonts');

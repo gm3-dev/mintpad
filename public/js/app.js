@@ -32165,6 +32165,7 @@ if (document.getElementById('app')) {
         fee_recipient: 0,
         royalties: 0,
         description: '',
+        metadata: [],
         nfts: [],
         previews: [],
         totalSupply: 0,
@@ -32180,7 +32181,8 @@ if (document.getElementById('app')) {
       page: {
         name: '',
         tab: 1
-      }
+      },
+      Testsrc: ''
     },
     computed: {
       userAddressShort: function userAddressShort() {
@@ -32288,7 +32290,7 @@ if (document.getElementById('app')) {
                   if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     axios.get('/collections/' + this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
-                        var contract, embedUrl, metadata, royalties, claimConditions;
+                        var contract, metadata, royalties, claimConditions;
                         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                           while (1) {
                             switch (_context3.prev = _context3.next) {
@@ -32304,56 +32306,45 @@ if (document.getElementById('app')) {
 
                               case 6:
                                 contract = _context3.sent;
-
-                                // Create embed code
-                                try {
-                                  _this2.ipfs.gateway = contract.drop.storage.gatewayUrl;
-                                  embedUrl = _this2.buildEmbedUrl();
-                                  _this2.ipfs.embed = _this2.buildEmbedCode(embedUrl);
-                                } catch (e) {// console.log('Failed to build embed code', e)
-                                  // this.setErrorMessage('Could not create embed code')
-                                } // Set form data
-
-
-                                _context3.prev = 8;
-                                _context3.next = 11;
+                                _context3.prev = 7;
+                                _context3.next = 10;
                                 return contract.metadata.get();
 
-                              case 11:
+                              case 10:
                                 metadata = _context3.sent;
-                                _context3.next = 14;
+                                _context3.next = 13;
                                 return contract.royalties.getDefaultRoyaltyInfo();
 
-                              case 14:
+                              case 13:
                                 royalties = _context3.sent;
                                 _this2.collection.name = metadata.name;
                                 _this2.collection.description = metadata.description;
                                 _this2.collection.fee_recipient = royalties.fee_recipient;
                                 _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                                _context3.next = 24;
+                                _context3.next = 23;
                                 break;
 
-                              case 21:
-                                _context3.prev = 21;
-                                _context3.t0 = _context3["catch"](8);
+                              case 20:
+                                _context3.prev = 20;
+                                _context3.t0 = _context3["catch"](7);
 
                                 // console.log('Failed to load metadata', e)
                                 _this2.setErrorMessage('Contract could not be loaded...');
 
-                              case 24:
-                                _context3.next = 26;
+                              case 23:
+                                _context3.next = 25;
                                 return contract.claimConditions.getAll();
 
-                              case 26:
+                              case 25:
                                 claimConditions = _context3.sent;
                                 _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
 
-                              case 28:
+                              case 27:
                               case "end":
                                 return _context3.stop();
                             }
                           }
-                        }, _callee3, null, [[8, 21]]);
+                        }, _callee3, null, [[7, 20]]);
                       }));
 
                       return function (_x2) {
@@ -32589,9 +32580,7 @@ if (document.getElementById('app')) {
                   _context8.next = 5;
                   return axios.post('/collections/' + this.collectionID + '/whitelist', formData).then(function (response) {
                     var data = response.data;
-                    _this5.claimPhases[index].snapshot = data;
-
-                    _this5.toggleWhitelistModal(index, false);
+                    _this5.claimPhases[index].snapshot = data; // this.toggleWhitelistModal(index, false)
                   });
 
                 case 5:
@@ -32775,70 +32764,34 @@ if (document.getElementById('app')) {
       }(),
       uploadCollection: function () {
         var _uploadCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee12(event) {
-          var files;
+          var files, metadata;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee12$(_context12) {
             while (1) {
               switch (_context12.prev = _context12.next) {
                 case 0:
-                  files = event.target.files; // console.log('files', files)
-
+                  files = event.target.files;
                   _context12.next = 3;
                   return this.prepareFiles(files);
 
                 case 3:
-                  this.collection.previews = _context12.sent;
-                  this.setSuccessMessage('Collection deployed'); // const contract = await this.getSmartContract()
-                  // try {
-                  //     // Custom metadata of the NFTs to create
-                  //     const metadatas = [{
-                  //         name: "The Boys NFT!",
-                  //         description: "Awesome show",
-                  //         image: files[0],
-                  //         attributes: [{
-                  //                 "trait_type": "Blood",
-                  //                 "value": "10"
-                  //             },
-                  //             {
-                  //                 "trait_type": "Chicks",
-                  //                 "value": "8"
-                  //             },{
-                  //                 "trait_type": "Realism",
-                  //                 "value": "1"
-                  //         }]
-                  //     }]
-                  //     const results = await contract.createBatch(metadatas)
-                  //     // const results = await contract.getAll({})
-                  //     // const results = await contract.burn(1)
-                  //     // const results = await contract.claim(1)
-                  // } catch(error) {
-                  //     console.log(error)
-                  // }
-                  // FOR BACK USE ONLY
-                  // const result = await contract.storage.uploadBatch({
-                  //     files: files,
-                  //     contractAddress: "0xF2b19FFce4BF4271acE2C3e4c352b2a12e8A9Eb1"
-                  // })
-                  // console.log('result', result)
-                  // this.uploadToPinata(files)
-                  // const chunks = this.createUploadChunks(Array.from(files), 50)
-                  // const width = 100 / chunks.length
-                  // this.upload = {
-                  //     width: 0
-                  // }
-                  // for (var i = 0; i < chunks.length; i++) {
-                  //     await axios.post('/collections/'+this.collectionID+'/upload', 
-                  //         this.prepareCollectionForUpload(chunks[i])
-                  //     ).then((response) => {
-                  //         this.collection = response.data.images
-                  //         this.upload = {
-                  //             width: width * (i+1)
-                  //         }
-                  //     })
-                  // }
+                  metadata = _context12.sent;
 
+                  if (!(metadata.status == 'error')) {
+                    _context12.next = 7;
+                    break;
+                  }
+
+                  this.setErrorMessage('Invalid collection data');
+                  return _context12.abrupt("return");
+
+                case 7:
+                  this.collection.metadata = metadata.data;
+                  this.collection.previews = this.collection.metadata.slice(0, 10);
+                  console.log(this.collection.previews);
                   this.upload = false;
+                  this.setSuccessMessage('NFTs uploaded');
 
-                case 6:
+                case 12:
                 case "end":
                   return _context12.stop();
               }
@@ -32852,15 +32805,203 @@ if (document.getElementById('app')) {
 
         return uploadCollection;
       }(),
-      prepareFiles: function () {
-        var _prepareFiles = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(files) {
-          var images, json, i, upload, filename, metadata;
+      updateCollection: function () {
+        var _updateCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee13(e) {
+          var contract;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee13$(_context13) {
             while (1) {
               switch (_context13.prev = _context13.next) {
                 case 0:
+                  this.setButtonLoader(e);
+                  _context13.next = 3;
+                  return this.getSmartContract();
+
+                case 3:
+                  contract = _context13.sent;
+                  _context13.prev = 4;
+                  _context13.next = 7;
+                  return contract.createBatch(this.collection.metadata);
+
+                case 7:
+                  this.setSuccessMessage('NFTs added to the collection!');
+                  _context13.next = 14;
+                  break;
+
+                case 10:
+                  _context13.prev = 10;
+                  _context13.t0 = _context13["catch"](4);
+                  console.log('error updateCollection', _context13.t0);
+                  this.setErrorMessage('Error while uploading your collection');
+
+                case 14:
+                  this.resetButtonLoader();
+
+                case 15:
+                case "end":
+                  return _context13.stop();
+              }
+            }
+          }, _callee13, this, [[4, 10]]);
+        }));
+
+        function updateCollection(_x11) {
+          return _updateCollection.apply(this, arguments);
+        }
+
+        return updateCollection;
+      }(),
+      prepareFiles2: function () {
+        var _prepareFiles = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(files) {
+          var jsonCounter, imageCounter, fileList, firstJsonFile, i, upload, filename, fileListLength, jsonList;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+            while (1) {
+              switch (_context14.prev = _context14.next) {
+                case 0:
+                  jsonCounter = 0;
+                  imageCounter = 0;
+                  fileList = {};
+                  firstJsonFile = false;
+
+                  for (i = 0; i < files.length; i++) {
+                    upload = files[i];
+                    filename = upload.name.replace(/\.[^/.]+$/, "");
+
+                    if (upload.type == 'application/json') {
+                      if (isNaN(filename) == false && fileList[filename] == undefined) fileList[filename] = {};
+                      if (firstJsonFile == false) firstJsonFile = upload;
+                      if (isNaN(filename) == false) fileList[filename]['json'] = upload;
+                      jsonCounter++;
+                    } else if (this.validFileType(upload)) {
+                      if (fileList[filename] == undefined) fileList[filename] = {};
+                      fileList[filename]['image'] = upload;
+                      imageCounter++;
+                    }
+                  } // Valite file numbers
+
+
+                  fileListLength = Object.keys(fileList).length;
+
+                  if (!(fileListLength != imageCounter || jsonCounter != imageCounter && jsonCounter !== 1 || jsonCounter == 0)) {
+                    _context14.next = 8;
+                    break;
+                  }
+
+                  return _context14.abrupt("return", {
+                    status: 'error',
+                    message: 'Your images and JSON data combination is not correct',
+                    data: []
+                  });
+
+                case 8:
+                  if (!(jsonCounter == 1)) {
+                    _context14.next = 15;
+                    break;
+                  }
+
+                  _context14.next = 11;
+                  return this.getJsonData(firstJsonFile);
+
+                case 11:
+                  jsonList = _context14.sent;
+
+                  if (!(jsonList.length != fileListLength)) {
+                    _context14.next = 14;
+                    break;
+                  }
+
+                  return _context14.abrupt("return", {
+                    status: 'error',
+                    message: 'Your JSON file does not match the number of images',
+                    data: []
+                  });
+
+                case 14:
+                  console.log(fileList);
+
+                case 15:
+                  return _context14.abrupt("return", 'passed');
+
+                case 16:
+                case "end":
+                  return _context14.stop();
+              }
+            }
+          }, _callee14, this);
+        }));
+
+        function prepareFiles2(_x12) {
+          return _prepareFiles.apply(this, arguments);
+        }
+
+        return prepareFiles2;
+      }(),
+      createMetadata2: function () {
+        var _createMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(fileList, jsonCounter) {
+          var jsonList, i;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
+            while (1) {
+              switch (_context15.prev = _context15.next) {
+                case 0:
+                  if (!(jsonCounter == 1)) {
+                    _context15.next = 6;
+                    break;
+                  }
+
+                  _context15.next = 3;
+                  return this.getJsonData(firstJsonFile);
+
+                case 3:
+                  jsonList = _context15.sent;
+                  _context15.next = 17;
+                  break;
+
+                case 6:
+                  jsonList = [];
+                  i = parseInt(firstJsonKey);
+
+                case 8:
+                  if (!(i < jsonLength)) {
+                    _context15.next = 17;
+                    break;
+                  }
+
+                  _context15.t0 = jsonList;
+                  _context15.next = 12;
+                  return this.getJsonData(json[i]);
+
+                case 12:
+                  _context15.t1 = _context15.sent;
+
+                  _context15.t0.push.call(_context15.t0, _context15.t1);
+
+                case 14:
+                  i++;
+                  _context15.next = 8;
+                  break;
+
+                case 17:
+                case "end":
+                  return _context15.stop();
+              }
+            }
+          }, _callee15, this);
+        }));
+
+        function createMetadata2(_x13, _x14) {
+          return _createMetadata.apply(this, arguments);
+        }
+
+        return createMetadata2;
+      }(),
+      prepareFiles: function () {
+        var _prepareFiles2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee16(files) {
+          var images, json, i, upload, filename, imagesLength, jsonLength, metadata;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee16$(_context16) {
+            while (1) {
+              switch (_context16.prev = _context16.next) {
+                case 0:
                   images = {};
-                  json = [];
+                  json = {};
 
                   for (i = 0; i < files.length; i++) {
                     upload = files[i]; // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
@@ -32868,92 +33009,112 @@ if (document.getElementById('app')) {
                     filename = upload.name.replace(/\.[^/.]+$/, "");
 
                     if (upload.type == 'application/json') {
-                      json.push(upload);
+                      json[filename] = upload;
                     } else if (this.validFileType(upload)) {
-                      upload.id = filename;
+                      upload.id = filename; // upload.src = i < 10 ? URL.createObjectURL(upload) : false
+
                       upload.src = URL.createObjectURL(upload);
                       images[filename] = upload; // console.log('filename', filename)
                       // console.log('filename', isInteger(filename))
                     }
                   }
 
-                  if (!(json.length != images.length && json.length != 1)) {
-                    _context13.next = 5;
+                  imagesLength = Object.keys(images).length;
+                  jsonLength = Object.keys(json).length;
+
+                  if (!(jsonLength != imagesLength && jsonLength !== 1)) {
+                    _context16.next = 7;
                     break;
                   }
 
-                  return _context13.abrupt("return", {
+                  return _context16.abrupt("return", {
                     status: 'error',
-                    message: 'Images and JSON data combination is not correct'
+                    message: 'Images and JSON data combination is not correct',
+                    data: []
                   });
 
-                case 5:
-                  _context13.next = 7;
+                case 7:
+                  _context16.next = 9;
                   return this.createMetadata(images, json);
 
-                case 7:
-                  metadata = _context13.sent;
-                  return _context13.abrupt("return", metadata);
-
                 case 9:
+                  metadata = _context16.sent;
+                  metadata.sort(function (a, b) {
+                    return a.name - b.name;
+                  });
+                  return _context16.abrupt("return", {
+                    status: 'success',
+                    message: 'Images and JSON data combination',
+                    data: metadata
+                  });
+
+                case 12:
                 case "end":
-                  return _context13.stop();
+                  return _context16.stop();
               }
             }
-          }, _callee13, this);
+          }, _callee16, this);
         }));
 
-        function prepareFiles(_x11) {
-          return _prepareFiles.apply(this, arguments);
+        function prepareFiles(_x15) {
+          return _prepareFiles2.apply(this, arguments);
         }
 
         return prepareFiles;
       }(),
       createMetadata: function () {
-        var _createMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee14(images, json) {
-          var jsonList, i, metadata, nft;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee14$(_context14) {
+        var _createMetadata2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee17(images, json) {
+          var imagesLength, jsonLength, firstJsonKey, firstJsonFile, jsonList, i, metadata, nft;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee17$(_context17) {
             while (1) {
-              switch (_context14.prev = _context14.next) {
+              switch (_context17.prev = _context17.next) {
                 case 0:
-                  if (!(json.length == 1)) {
-                    _context14.next = 6;
+                  imagesLength = Object.keys(images).length;
+                  jsonLength = Object.keys(json).length;
+                  firstJsonKey = Object.keys(json)[0];
+                  firstJsonFile = json[firstJsonKey];
+                  console.log(firstJsonKey);
+                  console.log(firstJsonFile);
+
+                  if (!(jsonLength == 1)) {
+                    _context17.next = 12;
                     break;
                   }
 
-                  _context14.next = 3;
-                  return this.getJsonData(json[0]);
+                  _context17.next = 9;
+                  return this.getJsonData(firstJsonFile);
 
-                case 3:
-                  jsonList = _context14.sent;
-                  _context14.next = 17;
+                case 9:
+                  jsonList = _context17.sent;
+                  _context17.next = 23;
                   break;
-
-                case 6:
-                  jsonList = [];
-                  i = 0;
-
-                case 8:
-                  if (!(i < json.length)) {
-                    _context14.next = 17;
-                    break;
-                  }
-
-                  _context14.t0 = jsonList;
-                  _context14.next = 12;
-                  return this.getJsonData(json[0]);
 
                 case 12:
-                  _context14.t1 = _context14.sent;
-
-                  _context14.t0.push.call(_context14.t0, _context14.t1);
+                  jsonList = [];
+                  i = parseInt(firstJsonKey);
 
                 case 14:
+                  if (!(i < jsonLength)) {
+                    _context17.next = 23;
+                    break;
+                  }
+
+                  _context17.t0 = jsonList;
+                  _context17.next = 18;
+                  return this.getJsonData(json[i]);
+
+                case 18:
+                  _context17.t1 = _context17.sent;
+
+                  _context17.t0.push.call(_context17.t0, _context17.t1);
+
+                case 20:
                   i++;
-                  _context14.next = 8;
+                  _context17.next = 14;
                   break;
 
-                case 17:
+                case 23:
+                  console.log(jsonList);
                   metadata = [];
 
                   for (i = 0; i < jsonList.length; i++) {
@@ -32966,29 +33127,29 @@ if (document.getElementById('app')) {
                     });
                   }
 
-                  return _context14.abrupt("return", metadata);
+                  return _context17.abrupt("return", metadata);
 
-                case 20:
+                case 27:
                 case "end":
-                  return _context14.stop();
+                  return _context17.stop();
               }
             }
-          }, _callee14, this);
+          }, _callee17, this);
         }));
 
-        function createMetadata(_x12, _x13) {
-          return _createMetadata.apply(this, arguments);
+        function createMetadata(_x16, _x17) {
+          return _createMetadata2.apply(this, arguments);
         }
 
         return createMetadata;
       }(),
       getJsonData: function () {
-        var _getJsonData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(file) {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
+        var _getJsonData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee18(file) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee18$(_context18) {
             while (1) {
-              switch (_context15.prev = _context15.next) {
+              switch (_context18.prev = _context18.next) {
                 case 0:
-                  return _context15.abrupt("return", new Promise(function (res, rej) {
+                  return _context18.abrupt("return", new Promise(function (res, rej) {
                     var reader = new FileReader();
 
                     reader.onload = function () {
@@ -33000,13 +33161,13 @@ if (document.getElementById('app')) {
 
                 case 1:
                 case "end":
-                  return _context15.stop();
+                  return _context18.stop();
               }
             }
-          }, _callee15);
+          }, _callee18);
         }));
 
-        function getJsonData(_x14) {
+        function getJsonData(_x18) {
           return _getJsonData.apply(this, arguments);
         }
 
@@ -63861,19 +64022,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/css/app.css":
-/*!*******************************!*\
-  !*** ./resources/css/app.css ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
 /***/ "./node_modules/minimalistic-assert/index.js":
 /*!***************************************************!*\
   !*** ./node_modules/minimalistic-assert/index.js ***!
@@ -89133,8 +89281,7 @@ var mod = /*#__PURE__*/Object.freeze({
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
