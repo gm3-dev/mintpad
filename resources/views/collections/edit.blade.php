@@ -203,7 +203,7 @@
                     </div>
 
                     <div class="text-sm">
-                        <h3 class="text-2xl mb-1 mt-6">{{ __('Your collection') }}</h3>
+                        <h3 class="text-2xl mb-4 mt-6">{{ __('Your collection') }}</h3>
                         <p v-if="collection.nfts.length == 0" class="text-mintpad-300 font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
                         <p v-else class="text-mintpad-300 font-regular text-sm">You collection contains <span class="font-semibold" v-html="collection.totalSupply"></span> NFTs and <span class="font-semibold" v-html="collection.totalClaimedSupply"></span> of them are claimed.</p>
                         <div class="grid grid-cols-4 mt-2">
