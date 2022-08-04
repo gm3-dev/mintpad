@@ -25,18 +25,18 @@
                             Price <span class="text-primary-600" v-html="phase.price"></span> 
                             <span class="text-primary-600" v-html="collection.token"></span>
                         </p>
-                        <p v-if="phase.countdown" class="text-sm">
-                            <span class="mr-1"><span v-html="phase.countdown.state"></span> in</span>
-                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="phase.countdown.days">00</span>
-                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="phase.countdown.hours">00</span>
-                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="phase.countdown.minutes">00</span>
-                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="phase.countdown.seconds">00</span>
+                        <p v-if="timers[index]" class="text-sm">
+                            <span class="mr-1"><span v-html="timers[index].state"></span> in</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].days">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].hours">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].minutes">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
                         </p>
                         <p v-else class="text-sm">{{ __('Mint phase ended') }}</p>
                     </div>
                 </div>
-                <div class="rounded-xl">
-                    <img v-bind:src="collection.image[0].metadata.image" class="rounded-xl" />
+                <div class="bg-white rounded-xl">
+                    <img v-if="collection.image" v-bind:src="collection.image.metadata.image" class="rounded-xl" />
                 </div>
                 <div class="bg-white rounded-xl p-8">
                     <h2 class="text-xl font-semibold text-center mb-1">{{ __('Mint an NFT') }}</h2>

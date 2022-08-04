@@ -62283,6 +62283,11 @@ if (document.getElementById('app')) {
       wallet: false,
       collection: {},
       claimPhases: [],
+      timers: {
+        0: {},
+        1: {},
+        2: {}
+      },
       mintAmount: 1
     },
     mounted: function mounted() {
@@ -62320,84 +62325,76 @@ if (document.getElementById('app')) {
 
                           case 6:
                             _context.prev = 6;
-                            console.log('this.contractAddress', _this.contractAddress);
-                            console.log('this.contract', _this.contract);
-                            _context.next = 11;
+                            _context.next = 9;
                             return _this.contract.metadata.get();
 
-                          case 11:
+                          case 9:
                             metadata = _context.sent;
-                            console.log('metadata', metadata);
-                            _context.next = 15;
+                            _context.next = 12;
                             return _this.contract.royalties.getDefaultRoyaltyInfo();
 
-                          case 15:
+                          case 12:
                             royalties = _context.sent;
-                            console.log('royalties', royalties);
                             _this.collection.name = metadata.name;
                             _this.collection.description = metadata.description;
                             _this.collection.fee_recipient = royalties.fee_recipient;
                             _this.collection.royalties = royalties.seller_fee_basis_points / 100;
-                            _context.next = 23;
+                            _context.next = 19;
                             return _this.contract.totalSupply();
 
-                          case 23:
+                          case 19:
                             _this.collection.totalSupply = _context.sent;
-                            _context.next = 26;
+                            _context.next = 22;
                             return _this.contract.totalClaimedSupply();
 
-                          case 26:
+                          case 22:
                             _this.collection.totalClaimedSupply = _context.sent;
                             _this.collection.totalRatio = Math.round(_this.collection.totalClaimedSupply / _this.collection.totalSupply * 100);
                             _this.collection.buttons = _this.createButtonList(response.data);
                             _this.collection.about = response.data.about;
+                            _this.collection.image = _this.setCollectionImage();
                             _context.next = 32;
-                            return _this.contract.getAll({
-                              count: 1
-                            });
-
-                          case 32:
-                            _this.collection.image = _context.sent;
-                            _context.next = 38;
                             break;
 
-                          case 35:
-                            _context.prev = 35;
+                          case 29:
+                            _context.prev = 29;
                             _context.t0 = _context["catch"](6);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 38:
-                            _context.prev = 38;
-                            _context.next = 41;
+                          case 32:
+                            _context.prev = 32;
+                            _context.next = 35;
                             return _this.contract.claimConditions.getAll();
 
-                          case 41:
+                          case 35:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 49;
+                            _context.next = 43;
                             break;
 
-                          case 46:
-                            _context.prev = 46;
-                            _context.t1 = _context["catch"](38);
+                          case 40:
+                            _context.prev = 40;
+                            _context.t1 = _context["catch"](32);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 49:
-                            _this.loading = false;
+                          case 43:
+                            setTimeout(function () {
+                              _this.loading = false;
+                            }, 1000);
 
-                          case 50:
+                          case 44:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 35], [38, 46]]);
+                    }, _callee, null, [[6, 29], [32, 40]]);
                   }));
 
                   return function (_x) {
@@ -62427,6 +62424,39 @@ if (document.getElementById('app')) {
           this.setCountDown(2);
         }
       },
+      setCollectionImage: function () {
+        var _setCollectionImage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+          var images;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  _context3.next = 2;
+                  return this.contract.getAll({
+                    count: 1
+                  });
+
+                case 2:
+                  images = _context3.sent;
+
+                  if (images.length) {
+                    this.collection.image = images[0];
+                  }
+
+                case 4:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3, this);
+        }));
+
+        function setCollectionImage() {
+          return _setCollectionImage.apply(this, arguments);
+        }
+
+        return setCollectionImage;
+      }(),
       setCountDown: function setCountDown(i) {
         var _this2 = this;
 
@@ -62438,7 +62468,7 @@ if (document.getElementById('app')) {
         var distance = endDate - now;
 
         if (distance < 0 && endDate != claimPhase.endTime) {
-          this.claimPhases[i].countdown = false;
+          this.timers[i] = false;
         } else {
           var x = setInterval(function () {
             var now = new Date().getTime();
@@ -62452,13 +62482,13 @@ if (document.getElementById('app')) {
 
             if (distance < 0) {
               clearInterval(x);
-              _this2.claimPhases[i].countdown = false;
+              _this2.timers[i] = false;
             } else {
               var days = Math.floor(distance / (1000 * 60 * 60 * 24));
               var hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
               var minutes = Math.floor(distance % (1000 * 60 * 60) / (1000 * 60));
               var seconds = Math.floor(distance % (1000 * 60) / 1000);
-              _this2.claimPhases[i].countdown = {
+              _this2.timers[i] = {
                 state: state,
                 days: _this2.getDoubleDigitNumber(days),
                 hours: _this2.getDoubleDigitNumber(hours),
@@ -62507,36 +62537,36 @@ if (document.getElementById('app')) {
         return output;
       },
       mintNFT: function () {
-        var _mintNFT = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        var _mintNFT = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
                   this.setButtonLoader(e);
-                  _context3.prev = 1;
-                  _context3.next = 4;
+                  _context4.prev = 1;
+                  _context4.next = 4;
                   return this.contract.claim(this.mintAmount);
 
                 case 4:
                   this.setSuccessMessage('NFT minted!');
-                  _context3.next = 10;
+                  _context4.next = 10;
                   break;
 
                 case 7:
-                  _context3.prev = 7;
-                  _context3.t0 = _context3["catch"](1);
+                  _context4.prev = 7;
+                  _context4.t0 = _context4["catch"](1);
                   // console.log(e)
-                  this.setErrorMessage(_context3.t0);
+                  this.setErrorMessage(_context4.t0);
 
                 case 10:
                   this.resetButtonLoader();
 
                 case 11:
                 case "end":
-                  return _context3.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee3, this, [[1, 7]]);
+          }, _callee4, this, [[1, 7]]);
         }));
 
         function mintNFT(_x2) {

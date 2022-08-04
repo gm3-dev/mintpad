@@ -18,6 +18,7 @@ if (document.getElementById('app')) {
             wallet: false,
             collection: {},
             claimPhases: [],
+            timers: {0: {}, 1: {}, 2: {}},
             mintAmount: 1
         },
         async mounted() {
@@ -34,16 +35,9 @@ if (document.getElementById('app')) {
                 this.setSDK(this.wallet.signer, this.collection.blockchain)
                 await this.setSmartContract(this.contractAddress)
 
-
-
                 try {
-                    console.log ('this.contractAddress', this.contractAddress)
-                    console.log ('this.contract', this.contract)
-
                     const metadata = await this.contract.metadata.get()
-                    console.log('metadata', metadata)
                     const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
-                    console.log('royalties', royalties)
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
                     this.collection.fee_recipient = royalties.fee_recipient
@@ -53,7 +47,7 @@ if (document.getElementById('app')) {
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                     this.collection.buttons = this.createButtonList(response.data)
                     this.collection.about = response.data.about
-                    this.collection.image = await this.contract.getAll({count: 1})
+                    this.collection.image = this.setCollectionImage()
 
                 } catch (e) {
                     // console.log('Failed to load metadata', e)
@@ -69,7 +63,9 @@ if (document.getElementById('app')) {
                     this.setErrorMessage('Claim phases could not be loaded...')
                 }
 
-                this.loading = false
+                setTimeout(() => {
+                    this.loading = false
+                }, 1000)
             });
         },
         methods: {
@@ -84,6 +80,12 @@ if (document.getElementById('app')) {
                     this.setCountDown(2)
                 }
             },
+            setCollectionImage: async function() {
+                var images = await this.contract.getAll({count: 1})
+                if (images.length) {
+                    this.collection.image = images[0]
+                }
+            },
             setCountDown: function(i) {
                 var claimPhase = this.claimPhases[i]
                 var countDownDate = new Date(claimPhase.startTime).getTime();
@@ -93,7 +95,7 @@ if (document.getElementById('app')) {
                 var now = new Date().getTime()
                 var distance = endDate - now
                 if (distance < 0 && endDate != claimPhase.endTime) {
-                    this.claimPhases[i].countdown = false
+                    this.timers[i] = false
                 } else {
                     var x = setInterval(() => {
                         var now = new Date().getTime()
@@ -108,7 +110,7 @@ if (document.getElementById('app')) {
     
                         if (distance < 0) {
                             clearInterval(x)
-                            this.claimPhases[i].countdown = false
+                            this.timers[i] = false
                         } else {
     
                             var days = Math.floor(distance / (1000 * 60 * 60 * 24))
@@ -116,7 +118,7 @@ if (document.getElementById('app')) {
                             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
                             var seconds = Math.floor((distance % (1000 * 60)) / 1000)
             
-                            this.claimPhases[i].countdown = {
+                            this.timers[i] = {
                                 state: state,
                                 days: this.getDoubleDigitNumber(days),
                                 hours: this.getDoubleDigitNumber(hours),
