@@ -47,7 +47,7 @@ if (document.getElementById('app')) {
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                     this.collection.buttons = this.createButtonList(response.data)
                     this.collection.about = response.data.about
-                    this.collection.image = this.setCollectionImage()
+                    this.collection.image = await this.setCollectionImage()
 
                 } catch (e) {
                     // console.log('Failed to load metadata', e)
@@ -83,8 +83,9 @@ if (document.getElementById('app')) {
             setCollectionImage: async function() {
                 var images = await this.contract.getAll({count: 1})
                 if (images.length) {
-                    this.collection.image = images[0]
+                    return images[0].metadata.image
                 }
+                return false
             },
             setCountDown: function(i) {
                 var claimPhase = this.claimPhases[i]

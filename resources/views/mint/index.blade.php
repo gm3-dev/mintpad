@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="bg-white rounded-xl">
-                    <img v-if="collection.image" v-bind:src="collection.image.metadata.image" class="rounded-xl" />
+                    <img v-if="collection.image" v-bind:src="collection.image" class="rounded-xl" />
                 </div>
                 <div class="bg-white rounded-xl p-8">
                     <h2 class="text-xl font-semibold text-center mb-1">{{ __('Mint an NFT') }}</h2>

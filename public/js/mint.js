@@ -62352,49 +62352,53 @@ if (document.getElementById('app')) {
                             _this.collection.totalRatio = Math.round(_this.collection.totalClaimedSupply / _this.collection.totalSupply * 100);
                             _this.collection.buttons = _this.createButtonList(response.data);
                             _this.collection.about = response.data.about;
-                            _this.collection.image = _this.setCollectionImage();
-                            _context.next = 32;
+                            _context.next = 28;
+                            return _this.setCollectionImage();
+
+                          case 28:
+                            _this.collection.image = _context.sent;
+                            _context.next = 34;
                             break;
 
-                          case 29:
-                            _context.prev = 29;
+                          case 31:
+                            _context.prev = 31;
                             _context.t0 = _context["catch"](6);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 32:
-                            _context.prev = 32;
-                            _context.next = 35;
+                          case 34:
+                            _context.prev = 34;
+                            _context.next = 37;
                             return _this.contract.claimConditions.getAll();
 
-                          case 35:
+                          case 37:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 43;
+                            _context.next = 45;
                             break;
 
-                          case 40:
-                            _context.prev = 40;
-                            _context.t1 = _context["catch"](32);
+                          case 42:
+                            _context.prev = 42;
+                            _context.t1 = _context["catch"](34);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 43:
+                          case 45:
                             setTimeout(function () {
                               _this.loading = false;
                             }, 1000);
 
-                          case 44:
+                          case 46:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 29], [32, 40]]);
+                    }, _callee, null, [[6, 31], [34, 42]]);
                   }));
 
                   return function (_x) {
@@ -62439,11 +62443,17 @@ if (document.getElementById('app')) {
                 case 2:
                   images = _context3.sent;
 
-                  if (images.length) {
-                    this.collection.image = images[0];
+                  if (!images.length) {
+                    _context3.next = 5;
+                    break;
                   }
 
-                case 4:
+                  return _context3.abrupt("return", images[0].metadata.image);
+
+                case 5:
+                  return _context3.abrupt("return", false);
+
+                case 6:
                 case "end":
                   return _context3.stop();
               }
