@@ -34,7 +34,12 @@ if (document.getElementById('app')) {
                 this.setSDK(this.wallet.signer, this.collection.blockchain)
                 await this.setSmartContract(this.contractAddress)
 
+
+
                 try {
+                    console.log ('this.contractAddress', this.contractAddress)
+                    console.log ('this.contract', this.contract)
+
                     const metadata = await this.contract.metadata.get()
                     const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                     this.collection.name = metadata.name

@@ -62320,80 +62320,82 @@ if (document.getElementById('app')) {
 
                           case 6:
                             _context.prev = 6;
-                            _context.next = 9;
+                            console.log('this.contractAddress', _this.contractAddress);
+                            console.log('this.contract', _this.contract);
+                            _context.next = 11;
                             return _this.contract.metadata.get();
 
-                          case 9:
+                          case 11:
                             metadata = _context.sent;
-                            _context.next = 12;
+                            _context.next = 14;
                             return _this.contract.royalties.getDefaultRoyaltyInfo();
 
-                          case 12:
+                          case 14:
                             royalties = _context.sent;
                             _this.collection.name = metadata.name;
                             _this.collection.description = metadata.description;
                             _this.collection.fee_recipient = royalties.fee_recipient;
                             _this.collection.royalties = royalties.seller_fee_basis_points / 100;
-                            _context.next = 19;
+                            _context.next = 21;
                             return _this.contract.totalSupply();
 
-                          case 19:
+                          case 21:
                             _this.collection.totalSupply = _context.sent;
-                            _context.next = 22;
+                            _context.next = 24;
                             return _this.contract.totalClaimedSupply();
 
-                          case 22:
+                          case 24:
                             _this.collection.totalClaimedSupply = _context.sent;
                             _this.collection.totalRatio = Math.round(_this.collection.totalClaimedSupply / _this.collection.totalSupply * 100);
                             _this.collection.buttons = _this.createButtonList(response.data);
                             _this.collection.about = response.data.about;
-                            _context.next = 28;
+                            _context.next = 30;
                             return _this.contract.getAll({
                               count: 1
                             });
 
-                          case 28:
+                          case 30:
                             _this.collection.image = _context.sent;
-                            _context.next = 34;
+                            _context.next = 36;
                             break;
 
-                          case 31:
-                            _context.prev = 31;
+                          case 33:
+                            _context.prev = 33;
                             _context.t0 = _context["catch"](6);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 34:
-                            _context.prev = 34;
-                            _context.next = 37;
+                          case 36:
+                            _context.prev = 36;
+                            _context.next = 39;
                             return _this.contract.claimConditions.getAll();
 
-                          case 37:
+                          case 39:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 45;
+                            _context.next = 47;
                             break;
 
-                          case 42:
-                            _context.prev = 42;
-                            _context.t1 = _context["catch"](34);
+                          case 44:
+                            _context.prev = 44;
+                            _context.t1 = _context["catch"](36);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 45:
+                          case 47:
                             _this.loading = false;
 
-                          case 46:
+                          case 48:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 31], [34, 42]]);
+                    }, _callee, null, [[6, 33], [36, 44]]);
                   }));
 
                   return function (_x) {
