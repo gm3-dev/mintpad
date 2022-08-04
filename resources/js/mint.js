@@ -48,7 +48,6 @@ if (document.getElementById('app')) {
                     this.collection.buttons = this.createButtonList(response.data)
                     this.collection.about = response.data.about
                     this.collection.image = await this.setCollectionImage()
-
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
@@ -136,16 +135,16 @@ if (document.getElementById('app')) {
             },
             createButtonList: function(data) {
                 var output = [];
-                if (data.website != '') {
+                if (data.website != '' && data.website != null) {
                     output.push({name: 'Visit the website', url: data.website})
                 }
-                if (data.roadmap != '') {
+                if (data.roadmap != '' && data.roadmap != null) {
                     output.push({name: 'Roadmap', url: data.roadmap})
                 }
-                if (data.twitter != '') {
+                if (data.twitter != '' && data.twitter != null) {
                     output.push({name: 'Twitter', url: data.twitter})
                 }
-                if (data.discord != '') {
+                if (data.discord != '' && data.discord != null) {
                     output.push({name: 'Discord', url: data.discord})
                 }
 

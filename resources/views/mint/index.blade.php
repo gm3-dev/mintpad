@@ -8,7 +8,7 @@
         
         <div class="text-center mt-4">
             <a href="/" class="text-4xl font-jpegdev">
-                Mintpad
+                mintpad
             </a>
         </div>
         <div v-if="loading" class="text-center mt-12">
