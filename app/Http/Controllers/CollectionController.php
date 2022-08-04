@@ -197,11 +197,11 @@ class CollectionController extends Controller
         $this->authorize('update', $collection);
 
         $data = $request->all();
-        $collection->website = $data['website'];
-        $collection->roadmap = $data['roadmap'];
-        $collection->twitter = $data['twitter'];
-        $collection->discord = $data['discord'];
-        $collection->about = $data['about'];
+        $collection->website = $data['website'] ?? '';
+        $collection->roadmap = $data['roadmap'] ?? '';
+        $collection->twitter = $data['twitter'] ?? '';
+        $collection->discord = $data['discord'] ?? '';
+        $collection->about = $data['about'] ?? '';
         $collection->save();
 
         return response()->json($collection, 200);
