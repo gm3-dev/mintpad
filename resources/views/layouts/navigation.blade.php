@@ -16,7 +16,7 @@
                         {{ __('Collections') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tutorials')" :active="request()->routeIs('tutorials')">
-                        {{ __('Turorials') }}
+                        {{ __('Tutorials') }}
                     </x-nav-link>
                     <x-nav-link :href="route('support')" :active="request()->routeIs('support')">
                         {{ __('Support') }}
@@ -76,7 +76,7 @@
                 {{ __('Collections') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tutorials')" :active="request()->routeIs('tutorials')">
-                {{ __('Turorials') }}
+                {{ __('Tutorials') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('support')" :active="request()->routeIs('support')">
                 {{ __('Support') }}
