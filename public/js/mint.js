@@ -62420,6 +62420,37 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
+      connectMetaMask: function () {
+        var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  if (!(this.wallet.account === false)) {
+                    _context3.next = 4;
+                    break;
+                  }
+
+                  _context3.next = 3;
+                  return (0,_metamask__WEBPACK_IMPORTED_MODULE_1__.initMetaMask)(true);
+
+                case 3:
+                  this.wallet = _context3.sent;
+
+                case 4:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3, this);
+        }));
+
+        function connectMetaMask() {
+          return _connectMetaMask.apply(this, arguments);
+        }
+
+        return connectMetaMask;
+      }(),
       setClaimPhaseCounters: function setClaimPhaseCounters() {
         if (this.claimPhases[0]) {
           this.setCountDown(0);
@@ -62434,36 +62465,36 @@ if (document.getElementById('app')) {
         }
       },
       setCollectionImage: function () {
-        var _setCollectionImage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _setCollectionImage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
           var images;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
-                  _context3.next = 2;
+                  _context4.next = 2;
                   return this.contract.getAll({
                     count: 1
                   });
 
                 case 2:
-                  images = _context3.sent;
+                  images = _context4.sent;
 
                   if (!images.length) {
-                    _context3.next = 5;
+                    _context4.next = 5;
                     break;
                   }
 
-                  return _context3.abrupt("return", images[0].metadata.image);
+                  return _context4.abrupt("return", images[0].metadata.image);
 
                 case 5:
-                  return _context3.abrupt("return", false);
+                  return _context4.abrupt("return", false);
 
                 case 6:
                 case "end":
-                  return _context3.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee4, this);
         }));
 
         function setCollectionImage() {
@@ -62552,36 +62583,36 @@ if (document.getElementById('app')) {
         return output;
       },
       mintNFT: function () {
-        var _mintNFT = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(e) {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        var _mintNFT = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context4.prev = _context4.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
                   this.setButtonLoader(e);
-                  _context4.prev = 1;
-                  _context4.next = 4;
+                  _context5.prev = 1;
+                  _context5.next = 4;
                   return this.contract.claim(this.mintAmount);
 
                 case 4:
                   this.setSuccessMessage('NFT minted!');
-                  _context4.next = 10;
+                  _context5.next = 10;
                   break;
 
                 case 7:
-                  _context4.prev = 7;
-                  _context4.t0 = _context4["catch"](1);
+                  _context5.prev = 7;
+                  _context5.t0 = _context5["catch"](1);
                   // console.log(e)
-                  this.setErrorMessage(_context4.t0);
+                  this.setErrorMessage(_context5.t0);
 
                 case 10:
                   this.resetButtonLoader();
 
                 case 11:
                 case "end":
-                  return _context4.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee4, this, [[1, 7]]);
+          }, _callee5, this, [[1, 7]]);
         }));
 
         function mintNFT(_x2) {

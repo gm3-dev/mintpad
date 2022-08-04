@@ -72,6 +72,11 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
+            connectMetaMask: async function() {
+                if (this.wallet.account === false) {
+                    this.wallet = await initMetaMask(true)
+                }
+            },
             setClaimPhaseCounters: function() {
                 if (this.claimPhases[0]) {
                     this.setCountDown(0)
