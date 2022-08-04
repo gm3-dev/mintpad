@@ -62357,48 +62357,53 @@ if (document.getElementById('app')) {
 
                           case 28:
                             _this.collection.image = _context.sent;
-                            _context.next = 34;
+
+                            if (isNaN(_this.collection.totalRatio)) {
+                              _this.collection.totalRatio = 0;
+                            }
+
+                            _context.next = 35;
                             break;
 
-                          case 31:
-                            _context.prev = 31;
+                          case 32:
+                            _context.prev = 32;
                             _context.t0 = _context["catch"](6);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 34:
-                            _context.prev = 34;
-                            _context.next = 37;
+                          case 35:
+                            _context.prev = 35;
+                            _context.next = 38;
                             return _this.contract.claimConditions.getAll();
 
-                          case 37:
+                          case 38:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 45;
+                            _context.next = 46;
                             break;
 
-                          case 42:
-                            _context.prev = 42;
-                            _context.t1 = _context["catch"](34);
+                          case 43:
+                            _context.prev = 43;
+                            _context.t1 = _context["catch"](35);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 45:
+                          case 46:
                             setTimeout(function () {
                               _this.loading = false;
                             }, 1000);
 
-                          case 46:
+                          case 47:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 31], [34, 42]]);
+                    }, _callee, null, [[6, 32], [35, 43]]);
                   }));
 
                   return function (_x) {

@@ -49,6 +49,10 @@ if (document.getElementById('app')) {
                     this.collection.about = response.data.about
                     this.collection.image = await this.setCollectionImage()
 
+                    if (isNaN(this.collection.totalRatio)) {
+                        this.collection.totalRatio = 0
+                    }
+
                 } catch (e) {
                     // console.log('Failed to load metadata', e)
                     this.setErrorMessage('Contract could not be loaded...')
