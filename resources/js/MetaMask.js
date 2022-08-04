@@ -70,7 +70,7 @@ export async function initMetaMask(triggerRequest) {
                 accounts = await ethereum.request({method: 'eth_requestAccounts'})
             } catch(e) {
                 if (e.code == -32002) {
-                    // this.message.error = 'A connect request is already pending, open your wallet and confirm the request.'
+                    //
                 }
             }
             if (accounts.length > 0) {

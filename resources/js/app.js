@@ -1,14 +1,10 @@
-require('./bootstrap')
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.js'
 import Alpine from 'alpinejs'
-import VueTippy, { TippyComponent } from "vue-tippy";
-import { ThirdwebSDK } from '@thirdweb-dev/sdk'
-import { BigNumber } from "ethers"
-import { initMetaMask } from './MetaMask'
-import helpers from './Helpers.js'
-import { times } from 'lodash';
-// import detectEthereumProvider from '@metamask/detect-provider'
+import VueTippy, { TippyComponent } from "vue-tippy"
+import { initMetaMask } from './metamask'
+import helpers from './helpers.js'
+import thirdweb from './thirdweb.js'
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -39,7 +35,7 @@ new Vue({
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [helpers],
+        mixins: [helpers,thirdweb],
         data: {
             ipfs: {
                 gateway: false,
@@ -47,20 +43,10 @@ if (document.getElementById('app')) {
                 embed: ''
             },
             collectionID: false,
-            contractAddress: false,
-            errorMessage: false,
-            successMessage: false,
-            message: {
-                error: false,
-                success: false,
-                info: false
-            },
-            provider: false,
-            account: false,
-            accounts: false,
             sdk: false,
+            contract: false,
+            contractAddress: false,
             wallet: false,
-            agreeConditions: false,
             upload: false,
             collection: {
                 name: '',
@@ -75,19 +61,17 @@ if (document.getElementById('app')) {
                 previews: [],
                 totalSupply: 0,
                 totalClaimedSupply: 0,
+                website: '',
+                roadmap: '',
+                twitter: '',
+                discord: '',
+                about: '',
             },
             claimPhases: [],
-            loader: {
-                button: {
-                    label: '',
-                    target: null
-                }
-            },
             page: {
                 name: '',
                 tab: 1,
-            },
-            Testsrc: ''
+            }
         },
         computed: {
             userAddressShort: function() {
@@ -95,8 +79,6 @@ if (document.getElementById('app')) {
             }
         },
         async mounted() {
-            console.log('App mounted')
-
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
@@ -112,13 +94,6 @@ if (document.getElementById('app')) {
         methods: {
             changeEditTab: async function(tab) {
                 this.page.tab = tab
-
-                if (this.page.tab == 3) {
-                    const contract = await this.getSmartContract()
-                    this.collection.totalSupply = await contract.totalSupply()
-                    this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
-                    this.collection.nfts = await contract.getAll()
-                }
             },
             setPage: function() {
                 this.page.name = this.$el.getAttribute('data-page')
@@ -131,12 +106,12 @@ if (document.getElementById('app')) {
                         this.contractAddress = response.data.address
                         this.collection.blockchain = response.data.blockchain
                         this.collection.token = response.data.token
-                        this.setSDK()
-                        const contract = await this.getSmartContract()
+                        this.setSDK(this.wallet.signer, this.collection.blockchain)
+                        await this.setSmartContract(this.contractAddress)
 
                         // Create embed code
                         // try {
-                        //     this.ipfs.gateway = contract.drop.storage.gatewayUrl
+                        //     this.ipfs.gateway = this.contract.drop.storage.gatewayUrl
                         //     const embedUrl = this.buildEmbedUrl()
                         //     this.ipfs.embed = this.buildEmbedCode(embedUrl)
                         // } catch (e) {
@@ -144,10 +119,10 @@ if (document.getElementById('app')) {
                             // this.setErrorMessage('Could not create embed code')
                         // }
 
-                        // Set form data
+                        // Global settings
                         try {
-                            const metadata = await contract.metadata.get()
-                            const royalties = await contract.royalties.getDefaultRoyaltyInfo()
+                            const metadata = await this.contract.metadata.get()
+                            const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                             this.collection.name = metadata.name
                             this.collection.description = metadata.description
                             this.collection.fee_recipient = royalties.fee_recipient
@@ -157,17 +132,33 @@ if (document.getElementById('app')) {
                             this.setErrorMessage('Contract could not be loaded...')
                         }
 
-                        var claimConditions = await contract.claimConditions.getAll()
-                        this.claimPhases = this.parseClaimConditions(claimConditions)
-                        
+                        // Claim phases
+                        try {
+                            var claimConditions = await this.contract.claimConditions.getAll()
+                            this.claimPhases = this.parseClaimConditions(claimConditions)
+                        } catch (e) {
+                            // console.log('Failed to load metadata', e)
+                            // this.setErrorMessage('Claim phases could not be loaded...')
+                        }
+
+                        // Collection
+                        try {
+                            this.collection.totalSupply = await this.contract.totalSupply()
+                            this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                            this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                            this.collection.nfts = await this.contract.getAll({count: 8})
+                        } catch(e) {
+                            // this.setErrorMessage('Claim phases could not be loaded...')
+                        }
+
+                        // Mint settings
+                        this.collection.website = response.data.website
+                        this.collection.roadmap = response.data.roadmap
+                        this.collection.twitter = response.data.twitter
+                        this.collection.discord = response.data.discord
+                        this.collection.about = response.data.about
                     })
                 }
-            },
-            setSDK: function(e) {
-                this.sdk = ThirdwebSDK.fromSigner(this.wallet.signer, this.collection.blockchain, {})
-            },
-            getSmartContract: async function(e) {
-                return await this.sdk.getNFTDrop(this.contractAddress)
             },
             buildEmbedUrl: function() {
                 return this.ipfs.gateway+this.ipfs.hash+'/nft-drop.html?contract='+this.contractAddress+'&chainId=80001'
@@ -181,36 +172,10 @@ if (document.getElementById('app')) {
                 frameborder="0"\
                 ></iframe>'
             },
-            setErrorMessage: function(message) {
-                this.errorMessage = message
-                setTimeout(() => {
-                    this.errorMessage = false
-                }, 5000)
-            },
-            setSuccessMessage: function(message) {
-                this.successMessage = message
-                setTimeout(() => {
-                    this.successMessage = false
-                }, 5000)
-            },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
                     this.wallet = await initMetaMask(true)
                 }
-            },
-            setButtonLoader: function(e) {
-                var button = $(e.target)
-                var buttonWidth = button.outerWidth()
-                this.loader.button = {
-                    target: button,
-                    label: button.text()
-                }
-                button.css('width', buttonWidth+'px').prop('disabled', true).html('Processing...')
-            },
-            resetButtonLoader: function(e) {
-                var button = this.loader.button.target
-                var buttonWidth = button.outerWidth()
-                button.css('width', buttonWidth+'px').prop('disabled', false).html(this.loader.button.label)
             },
             updateClaimPhases: async function(e) {
                 this.setButtonLoader(e)
@@ -218,19 +183,19 @@ if (document.getElementById('app')) {
                 var claimPhases = []
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
-                    claimPhases.push({
+                    var newClaimPhase = {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
                         maxQuantity: claimPhase.maxQuantity,
                         quantityLimitPerTransaction: claimPhase.quantityLimitPerTransaction,
                         waitInSeconds: 120,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
-                    })
+                    }
+                    claimPhases.push(newClaimPhase)
                 }
 
                 try {
-                    const contract = await this.getSmartContract()
-                    var claimConditions = await contract.claimConditions.set(claimPhases)
+                    await this.contract.claimConditions.set(claimPhases)
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {
@@ -241,6 +206,10 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             },
             addClaimPhase: function(e) {
+                if (this.claimPhases.length >= 3) {
+                    this.setErrorMessage('You can only have 3 mint phases')
+                    return
+                }
                 this.claimPhases.push({
                     startTime: this.formateDatetimeLocal(new Date(Date.now())),
                     price: 0,
@@ -255,23 +224,6 @@ if (document.getElementById('app')) {
                 if (index > -1) {
                     this.claimPhases.splice(index, 1)
                 }
-            },
-            parseClaimConditions: function(claimConditions) {
-                var output = []
-
-                for (var i = 0; i < claimConditions.length; i++) {
-                    var claimCondition = claimConditions[i]
-                    output.push({
-                        startTime: this.formateDatetimeLocal(claimCondition.startTime),
-                        price: this.hexToValue(claimCondition.price._hex),
-                        maxQuantity: parseInt(claimCondition.maxQuantity),
-                        quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
-                        whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
-                        snapshot: claimCondition.snapshot ?? [],
-                        modal: false
-                    })
-                }
-                return output
             },
             uploadWhitelist: async function(e, index) {
                 var files = e.target.files
@@ -292,9 +244,8 @@ if (document.getElementById('app')) {
             updateMetadata: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = await this.getSmartContract()
                 try {
-                    await contract.metadata.set({
+                    await this.contract.metadata.set({
                         name: this.collection.name,
                         description: this.collection.description
                     })
@@ -312,9 +263,8 @@ if (document.getElementById('app')) {
             updateRoyalties: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = await this.getSmartContract()
                 try {
-                    await contract.royalties.setDefaultRoyaltyInfo({
+                    await this.contract.royalties.setDefaultRoyaltyInfo({
                         seller_fee_basis_points: this.collection.royalties * 100, // 1% royalty fee
                         fee_recipient: this.collection.fee_recipient, // the fee recipient
                     })
@@ -327,12 +277,29 @@ if (document.getElementById('app')) {
 
                 this.resetButtonLoader()
             },
+            updateMintSettings: async function(e) {
+                this.setButtonLoader(e)
+
+                var data = {
+                    website: this.collection.website,
+                    roadmap: this.collection.roadmap,
+                    twitter: this.collection.twitter,
+                    discord: this.collection.discord,
+                    about: this.collection.about,
+                }
+
+                await axios.put('/collections/'+this.collectionID, data).then((response) => {
+                    console.log(response)
+                })
+
+                this.resetButtonLoader()
+            },
             deployContract: async function(e) {
                 this.setButtonLoader(e)
 
                 // deploy contract
                 try {
-                    this.setSDK()
+                    this.setSDK(this.wallet.signer, this.collection.blockchain)
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
                         name: this.collection.name,
                         symbol: this.collection.symbol,
@@ -355,27 +322,11 @@ if (document.getElementById('app')) {
                     this.setErrorMessage('Smart contract deployment failed')
                 }
 
-                // const contract = this.getSmartContract()
-                // const rolesAndMembers = await contract.roles.getAll()
-                // console.log(rolesAndMembers)
-                // console.log('this.account', this.wallet.account)
-                // await contract.roles.revoke("admin", this.wallet.account)
-                // const files = [fs.readFileSync("1.png"), fs.readFileSync("2.png")]
-                // const result = await contract.storage.upload(files)
-                // console.log('result', result)
-
-                // const royaltyInfo = await contract.royalties.getDefaultRoyaltyInfo()
-                // console.log(royaltyInfo)
-                // await contract.royalties.setDefaultRoyaltyInfo({
-                //     "seller_fee_basis_points": 500
-                // })
-                // const nfts = await contract.getAllUnclaimed()
-                // console.log(nfts)
+                this.resetButtonLoader()
             },
             uploadCollection: async function(event) {
                 var files = event.target.files
                 var metadata = await this.prepareFiles(files)
-                // var metadata = await this.prepareFiles2(files)
 
                 if (metadata.status == 'error') {
                     this.setErrorMessage('Invalid collection data')
@@ -383,8 +334,7 @@ if (document.getElementById('app')) {
                 }
 
                 this.collection.metadata = metadata.data
-                this.collection.previews = this.collection.metadata.slice(0, 10)
-                console.log(this.collection.previews)
+                this.collection.previews = this.collection.metadata.slice(0, 8)
                 this.upload = false
 
                 this.setSuccessMessage('NFTs uploaded')
@@ -392,9 +342,8 @@ if (document.getElementById('app')) {
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = await this.getSmartContract()
                 try {                    
-                    await contract.createBatch(this.collection.metadata)
+                    await this.contract.createBatch(this.collection.metadata)
 
                     this.setSuccessMessage('NFTs added to the collection!')
                 } catch(error) {
@@ -403,69 +352,6 @@ if (document.getElementById('app')) {
                 }
 
                 this.resetButtonLoader()
-            },
-            prepareFiles2: async function(files) {
-                var jsonCounter = 0;
-                var imageCounter = 0;
-                var fileList = {}
-                var firstJsonFile = false
-
-                for (var i = 0; i < files.length; i++) {
-                    var upload = files[i]
-                    var filename = upload.name.replace(/\.[^/.]+$/, "")
-                    if (upload.type == 'application/json') {
-                        if (isNaN(filename) == false && fileList[filename] == undefined) fileList[filename] = {}
-                        if (firstJsonFile == false) firstJsonFile = upload
-                        if (isNaN(filename) == false) fileList[filename]['json'] = upload
-                        jsonCounter++
-                    } else if(this.validFileType(upload)) {
-                        if (fileList[filename] == undefined) fileList[filename] = {}
-
-                        fileList[filename]['image'] = upload
-                        imageCounter++
-                    }
-                }
-
-                // Valite file numbers
-                var fileListLength = Object.keys(fileList).length
-                if (fileListLength != imageCounter || (jsonCounter != imageCounter && jsonCounter !== 1) || jsonCounter == 0) {
-                    return {
-                        status: 'error',
-                        message: 'Your images and JSON data combination is not correct',
-                        data: []
-                    }
-                }
-
-                // Validate JSON if its only 1 file
-                if (jsonCounter == 1) {
-                    var jsonList = await this.getJsonData(firstJsonFile)
-                    if (jsonList.length != fileListLength) {
-                        return {
-                            status: 'error',
-                            message: 'Your JSON file does not match the number of images',
-                            data: []
-                        }
-                    }
-                    console.log(fileList)
-                }
-                
-                // const metadata = await this.createMetadata2(fileList, jsonCounter)
-                // metadata.sort((a,b) => a.name - b.name);
-
-                return 'passed'
-            },
-            createMetadata2: async function(fileList, jsonCounter) {
-                // var firstJsonKey = Object.keys(fileList)[0]
-                // var firstJsonFile = fileList[firstJsonKey]
-
-                if (jsonCounter == 1) {
-                    var jsonList = await this.getJsonData(firstJsonFile)
-                } else {
-                    var jsonList = [];
-                    for (var i = parseInt(firstJsonKey); i < jsonLength; i++) {
-                        jsonList.push(await this.getJsonData(json[i]))
-                    }
-                }
             },
             prepareFiles: async function(files) {
                 var images = {}
@@ -479,11 +365,8 @@ if (document.getElementById('app')) {
                         json[filename] = upload
                     } else if(this.validFileType(upload)) {
                         upload.id = filename
-                        // upload.src = i < 10 ? URL.createObjectURL(upload) : false
                         upload.src = URL.createObjectURL(upload)
                         images[filename] = upload
-                        // console.log('filename', filename)
-                        // console.log('filename', isInteger(filename))
                     }
                 }
 
@@ -511,8 +394,6 @@ if (document.getElementById('app')) {
                 var jsonLength = Object.keys(json).length
                 var firstJsonKey = Object.keys(json)[0]
                 var firstJsonFile = json[firstJsonKey]
-                console.log(firstJsonKey)
-                console.log(firstJsonFile)
 
                 if (jsonLength == 1) {
                     var jsonList = await this.getJsonData(firstJsonFile)
@@ -522,15 +403,16 @@ if (document.getElementById('app')) {
                         jsonList.push(await this.getJsonData(json[i]))
                     }
                 }
-                console.log(jsonList)
+
                 var metadata = []
-                for (var i = 0; i < jsonList.length; i++) {
-                    var nft = jsonList[i]
+                for (var i = 0; i < imagesLength; i++) {
+                    var image = images[i]
+                    var json = jsonList[image.id]
                     metadata.push({
-                        name: nft.name,
-                        description: nft.description,
-                        image: images[nft.name] !== undefined ? images[nft.name] : '',
-                        attributes: nft.attributes
+                        name: json.name,
+                        description: json.description != null && json.description != false ? json.description : '',
+                        image: image,
+                        attributes: json.attributes
                     })
                 }
 
@@ -556,22 +438,6 @@ if (document.getElementById('app')) {
                         return false;
                 }
             },
-            // createUploadChunks: function(files, chunkSize) {
-            //     var output = []
-            //     for (let i = 0; i < files.length; i += chunkSize) {
-            //         const chunk = files.slice(i, i + chunkSize)
-            //         output.push(chunk)
-            //     }
-            //     return output
-            // },
-            // prepareCollectionForUpload: function(files) {
-            //     var formData = new FormData() 
-            //     for (var i = 0; i < files.length; i++) {
-            //         var file = files[i]
-            //         formData.append('files[' + i + ']', file)
-            //     }
-            //     return formData
-            // },
             /**
              * Should be rewritten in 1 method together with wallet copier
              */

@@ -11,8 +11,6 @@
                     <p class="text-mintpad-300 text-center mb-5">{{ __('Create your NFT collections.') }}</p>
                 </div>
 
-                <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
-
                 <div class="w-full flex flex-wrap">
                     <div class="basis-full mb-4">
                         <x-label for="name" :value="__('Name')" />

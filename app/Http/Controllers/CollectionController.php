@@ -196,30 +196,15 @@ class CollectionController extends Controller
     {
         $this->authorize('update', $collection);
 
-        if ($collection->deployed) {
-            return redirect()->back()->with('error', 'This smart contract is already deployed to the blockchain and cannot be changed anymore!');
-        }
-        
-        $files = $request->file('image_collection');
-        $files2 = $request->get('image_collection');
+        $data = $request->all();
+        $collection->website = $data['website'];
+        $collection->roadmap = $data['roadmap'];
+        $collection->twitter = $data['twitter'];
+        $collection->discord = $data['discord'];
+        $collection->about = $data['about'];
+        $collection->save();
 
-        // dump($files);
-        // dump($files2);
-        // dump($_FILES);
-
-        // if ($request->hasFile('files')) {
-        //     foreach ($files as $file_key => $file) {
-        //         $path = $request->get('paths')[$file_key];
-        //         $file->storeAs(
-        //             'collections/' . $collection->id . '/',
-        //             $path
-        //         );
-        //     }
-        // }
-
-        $this->save($request, $collection);
-
-        return redirect()->route('collections.index')->with('status', 'Collection updated!');
+        return response()->json($collection, 200);
     }
 
     /**

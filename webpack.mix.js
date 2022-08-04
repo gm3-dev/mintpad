@@ -31,6 +31,7 @@ mix.webpackConfig ({
 //     require('autoprefixer'),
 // ]);
 mix.js('resources/js/app.js', 'public/js')
+    .js('resources/js/mint.js', 'public/js')
     .vue()
     .sass('resources/sass/app.scss', 'public/css')
     .options({

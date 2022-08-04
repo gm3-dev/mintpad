@@ -24,13 +24,14 @@
                     <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 3}">
                         {{ __('Upload collection') }}
                     </a>
+                    <a href="#" @click.prevent="changeEditTab(4)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 4}">
+                        {{ __('Mint settings') }}
+                    </a>
                 </div>
             </div>
             <div v-if="page.tab == 1">
                 <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                     @method('PUT')
-
-                    <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
 
                     <h3 class="text-2xl mb-4 mt-6 font-semibold">{{ __('General Settings') }}</h3>
                     <div class="w-full flex flex-wrap">
@@ -73,10 +74,8 @@
                 <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                     @method('PUT')
 
-                    <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
-
                     <h3 class="text-2xl mb-4 mt-6">{{ __('Mint phases') }}</h3>
-                    <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can set mint phases for, for example, a whitelist only mint.') }} <b>{{ __('You must have set at least one mint phase.') }}</b></p>
+                    <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can set mint phases for, for example, a whitelist only mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                     <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('When you have set only one mint phase, this will be the date and time that people can mint your collection.') }}</p>
 
                     <div v-for="(phase, index) in claimPhases" class="w-full flex flex-wrap mb-6">
@@ -109,7 +108,7 @@
                         </div>
                         <div v-if="phase.whitelist == 1" class="basis-1/3">
                             <x-label :value="__('Whitelist')" />
-                            <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!text-sm" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses in whitelist</p>
+                            <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses in whitelist</p>
                         </div>
 
                         <div v-if="phase.modal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -154,7 +153,7 @@
                         <p class="">{{ __('No mint phases set yet.') }}</p>
                     </div>
                     <div class="w-full mt-10">
-                        <x-default-button href="#" class="w-full" @click.prevent="addClaimPhase">Add claim phase</x-default-button>
+                        <x-default-button href="#" class="w-full !py-3" @click.prevent="addClaimPhase">Add claim phase</x-default-button>
                     </div>
                     <div class="w-full mt-10">
                         <span content="This action will trigger a transaction" v-tippy>
@@ -166,8 +165,6 @@
             <div v-if="page.tab == 3">
                 <form method="POST" action="{{ route('collections.upload', $collection->id) }}" enctype="multipart/form-data">
                     @csrf
-
-                    <p v-if="message.error" class="px-6 py-4 rounded-md border border-red-500 mb-4 text-center">@{{ message.error }}</p>
 
                     <div class="w-full">
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Add images to your collection') }}</h3>
@@ -205,7 +202,7 @@
                     <div class="text-sm">
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Your collection') }}</h3>
                         <p v-if="collection.nfts.length == 0" class="text-mintpad-300 font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
-                        <p v-else class="text-mintpad-300 font-regular text-sm">You collection contains <span class="font-semibold" v-html="collection.totalSupply"></span> NFTs and <span class="font-semibold" v-html="collection.totalClaimedSupply"></span> of them are claimed.</p>
+                        <p v-else class="text-mintpad-300 text-sm">Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
                         <div class="grid grid-cols-4 mt-2">
                             <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
                                 <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="nft.metadata.image" />
@@ -213,6 +210,40 @@
                         </div> 
                     </div> 
                 </form>
+            </div>
+            <div v-if="page.tab == 4">
+                <h3 class="text-2xl mb-4 mt-6">{{ __('Mint settings') }}</h3>
+                <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
+                <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('You can find the mint page for this collection') }} <a href="{{ route('mint', $collection->id) }}" target="_blank" class="font-semibold">here</a>.</p>
+
+                <div class="w-full grid grid-cols-2 gap-2 mb-6">
+                    <div>
+                        <div class="mb-4">
+                            <x-label for="socials-website" :value="__('Website')" />
+                            <x-input id="socials-website" class="mt-1 w-full" type="text" v-model="collection.website" />
+                        </div>
+                        <div class="mb-4">
+                            <x-label for="socials-roadmap" :value="__('Roadmap')" />
+                            <x-input id="socials-roadmap" class="mt-1 w-full" type="text" v-model="collection.roadmap" />
+                        </div>
+                        <div class="mb-4">
+                            <x-label for="socials-twitter" :value="__('Twitter')" />
+                            <x-input id="socials-twitter" class="mt-1 w-full" type="text" v-model="collection.twitter" />
+                        </div>
+                        <div>
+                            <x-label for="socials-discord" :value="__('Discord')" />
+                            <x-input id="socials-discord" class="mt-1 w-full" type="text" v-model="collection.discord" />
+                        </div>
+                    </div>
+                    <div>
+                        <x-label for="collection-about" :value="__('About the collection')" />
+                        <x-textarea id="collection-about" class="mt-1 w-full" :rows="12" v-model="collection.about"></x-textarea>
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <x-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-button>
+                </div>
             </div>
         </div>
     </div>
