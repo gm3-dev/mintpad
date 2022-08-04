@@ -2,7 +2,7 @@
     <x-auth-card>
         <x-slot name="logo">
             <a href="/" class="text-4xl font-jpegdev">
-                Mintpad
+                mintpad
             </a>
         </x-slot>
 

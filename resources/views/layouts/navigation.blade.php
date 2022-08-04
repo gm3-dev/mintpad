@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-4xl font-jpegdev">
                     <a href="{{ route('collections.index') }}">
-                        Mintpad
+                        mintpad
                     </a>
                 </div>
 
