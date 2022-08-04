@@ -41,7 +41,9 @@ if (document.getElementById('app')) {
                     console.log ('this.contract', this.contract)
 
                     const metadata = await this.contract.metadata.get()
+                    console.log('metadata', metadata)
                     const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                    console.log('royalties', royalties)
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
                     this.collection.fee_recipient = royalties.fee_recipient

@@ -62327,75 +62327,77 @@ if (document.getElementById('app')) {
 
                           case 11:
                             metadata = _context.sent;
-                            _context.next = 14;
+                            console.log('metadata', metadata);
+                            _context.next = 15;
                             return _this.contract.royalties.getDefaultRoyaltyInfo();
 
-                          case 14:
+                          case 15:
                             royalties = _context.sent;
+                            console.log('royalties', royalties);
                             _this.collection.name = metadata.name;
                             _this.collection.description = metadata.description;
                             _this.collection.fee_recipient = royalties.fee_recipient;
                             _this.collection.royalties = royalties.seller_fee_basis_points / 100;
-                            _context.next = 21;
+                            _context.next = 23;
                             return _this.contract.totalSupply();
 
-                          case 21:
+                          case 23:
                             _this.collection.totalSupply = _context.sent;
-                            _context.next = 24;
+                            _context.next = 26;
                             return _this.contract.totalClaimedSupply();
 
-                          case 24:
+                          case 26:
                             _this.collection.totalClaimedSupply = _context.sent;
                             _this.collection.totalRatio = Math.round(_this.collection.totalClaimedSupply / _this.collection.totalSupply * 100);
                             _this.collection.buttons = _this.createButtonList(response.data);
                             _this.collection.about = response.data.about;
-                            _context.next = 30;
+                            _context.next = 32;
                             return _this.contract.getAll({
                               count: 1
                             });
 
-                          case 30:
+                          case 32:
                             _this.collection.image = _context.sent;
-                            _context.next = 36;
+                            _context.next = 38;
                             break;
 
-                          case 33:
-                            _context.prev = 33;
+                          case 35:
+                            _context.prev = 35;
                             _context.t0 = _context["catch"](6);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 36:
-                            _context.prev = 36;
-                            _context.next = 39;
+                          case 38:
+                            _context.prev = 38;
+                            _context.next = 41;
                             return _this.contract.claimConditions.getAll();
 
-                          case 39:
+                          case 41:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 47;
+                            _context.next = 49;
                             break;
 
-                          case 44:
-                            _context.prev = 44;
-                            _context.t1 = _context["catch"](36);
+                          case 46:
+                            _context.prev = 46;
+                            _context.t1 = _context["catch"](38);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 47:
+                          case 49:
                             _this.loading = false;
 
-                          case 48:
+                          case 50:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 33], [36, 44]]);
+                    }, _callee, null, [[6, 35], [38, 46]]);
                   }));
 
                   return function (_x) {
