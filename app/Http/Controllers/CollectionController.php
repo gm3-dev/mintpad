@@ -19,12 +19,12 @@ class CollectionController extends Controller
         'fantom' => 'Fantom (FTM)',
         'avalanche' => 'Avalanche (AVAX)',
     ];
-    public $tokens = [
-        'ethereum' => 'ETH',
-        'polygon' => 'MATIC',
-        'fantom' => 'FTM',
-        'avalanche' => 'AVAX',
-    ];
+    public $tokens;
+
+    public function __construct()
+    {
+        $this->tokens = config('tokens');
+    }
 
     /**
      * Display a listing of the resource.

@@ -214,7 +214,7 @@
             <div v-if="page.tab == 4">
                 <h3 class="text-2xl mb-4 mt-6">{{ __('Mint settings') }}</h3>
                 <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
-                <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('You can find the mint page for this collection') }} <a href="{{ route('mint', $collection->id) }}" target="_blank" class="font-semibold">here</a>.</p>
+                <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('You can find the mint page for this collection') }} <a href="{{ route('mint.index', $collection->id) }}" target="_blank" class="font-semibold">here</a>.</p>
 
                 <div class="w-full grid grid-cols-2 gap-2 mb-6">
                     <div>

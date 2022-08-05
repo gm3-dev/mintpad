@@ -1,5 +1,5 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.js'
+import Vue from 'vue/dist/vue.min.js'
 import { initMetaMask } from './metamask'
 import helpers from './helpers.js'
 import thirdweb from './thirdweb.js'
@@ -28,7 +28,7 @@ if (document.getElementById('app')) {
 
             this.wallet = await initMetaMask(false)
 
-            axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
+            axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
                 this.collection.blockchain = response.data.blockchain
                 this.collection.token = response.data.token
