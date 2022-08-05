@@ -1,5 +1,5 @@
 window.$ = require('jquery')
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.min.js'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import { initMetaMask } from './metamask'
