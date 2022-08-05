@@ -15,6 +15,7 @@ if (document.getElementById('app')) {
         mixins: [helpers,thirdweb],
         data: {
             loading: true,
+            fatalError: false,
             wallet: false,
             collection: {},
             claimPhases: [],
@@ -22,8 +23,14 @@ if (document.getElementById('app')) {
             mintAmount: 1
         },
         async mounted() {
+            this.collectionID = false
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
+            }
+
+            if (!this.collectionID) {
+                this.setFatalError()
+                return
             }
 
             this.wallet = await initMetaMask(false)
@@ -61,6 +68,7 @@ if (document.getElementById('app')) {
                     var claimConditions = await this.contract.claimConditions.getAll()
                     this.claimPhases = this.parseClaimConditions(claimConditions)
                     this.setClaimPhaseCounters()
+                    this.setActiveClaimPhase()
                 } catch (e) {
                     // console.log('Failed to load metadata', e)
                     this.setErrorMessage('Claim phases could not be loaded...')
@@ -69,13 +77,39 @@ if (document.getElementById('app')) {
                 setTimeout(() => {
                     this.loading = false
                 }, 1000)
+            }).catch((error, asdf) => {
+                this.setFatalError()
             });
         },
         methods: {
+            setFatalError: function() {
+                this.loading = false
+                this.fatalError = true
+            },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
                     this.wallet = await initMetaMask(true)
                 }
+            },
+            setActiveClaimPhase: function() {
+                for (var i = 0; i < this.claimPhases.length; i++) {
+                    var claimPhase = this.claimPhases[i]
+                    var from = new Date(claimPhase.startTime).getTime()
+                    var to = new Date(claimPhase.endTime).getTime()
+                    var now = new Date().getTime()
+                    if (now <= to && now >= from) {
+                        this.claimPhases[i].active = true
+                    } else {
+                        this.claimPhases[i].active = false
+                    }
+                }
+            },
+            setCollectionImage: async function() {
+                var images = await this.contract.getAll({count: 1})
+                if (images.length) {
+                    return images[0].metadata.image
+                }
+                return false
             },
             setClaimPhaseCounters: function() {
                 if (this.claimPhases[0]) {
@@ -87,13 +121,6 @@ if (document.getElementById('app')) {
                 if (this.claimPhases[2]) {
                     this.setCountDown(2)
                 }
-            },
-            setCollectionImage: async function() {
-                var images = await this.contract.getAll({count: 1})
-                if (images.length) {
-                    return images[0].metadata.image
-                }
-                return false
             },
             setCountDown: function(i) {
                 var claimPhase = this.claimPhases[i]
@@ -166,9 +193,9 @@ if (document.getElementById('app')) {
                     await this.contract.claim(this.mintAmount)
 
                     this.setSuccessMessage('NFT minted!')
-                } catch (e) {
-                    // console.log(e)
-                    this.setErrorMessage(e)
+                } catch (error) {
+                    // console.log(error)
+                    this.setErrorMessage(error)
                 }
 
                 this.resetButtonLoader()

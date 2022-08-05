@@ -32064,59 +32064,60 @@ if (document.getElementById('app')) {
                                 _this2.collection.description = metadata.description;
                                 _this2.collection.fee_recipient = royalties.fee_recipient;
                                 _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                                _context3.next = 22;
+                                _context3.next = 23;
                                 break;
 
                               case 19:
                                 _context3.prev = 19;
                                 _context3.t0 = _context3["catch"](6);
+                                console.log(_context3.t0); // console.log('Failed to load metadata', e)
 
-                                // console.log('Failed to load metadata', e)
                                 _this2.setErrorMessage('Contract could not be loaded...');
 
-                              case 22:
-                                _context3.prev = 22;
-                                _context3.next = 25;
+                              case 23:
+                                _context3.prev = 23;
+                                _context3.next = 26;
                                 return _this2.contract.claimConditions.getAll();
 
-                              case 25:
+                              case 26:
                                 claimConditions = _context3.sent;
                                 _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
-                                _context3.next = 31;
+                                _context3.next = 33;
                                 break;
 
-                              case 29:
-                                _context3.prev = 29;
-                                _context3.t1 = _context3["catch"](22);
+                              case 30:
+                                _context3.prev = 30;
+                                _context3.t1 = _context3["catch"](23);
+                                console.log('Failed to load metadata', _context3.t1); // this.setErrorMessage('Claim phases could not be loaded...')
 
-                              case 31:
-                                _context3.prev = 31;
-                                _context3.next = 34;
+                              case 33:
+                                _context3.prev = 33;
+                                _context3.next = 36;
                                 return _this2.contract.totalSupply();
 
-                              case 34:
+                              case 36:
                                 _this2.collection.totalSupply = _context3.sent;
-                                _context3.next = 37;
+                                _context3.next = 39;
                                 return _this2.contract.totalClaimedSupply();
 
-                              case 37:
+                              case 39:
                                 _this2.collection.totalClaimedSupply = _context3.sent;
                                 _this2.collection.totalRatio = Math.round(_this2.collection.totalClaimedSupply / _this2.collection.totalSupply * 100);
-                                _context3.next = 41;
+                                _context3.next = 43;
                                 return _this2.contract.getAll({
                                   count: 8
                                 });
 
-                              case 41:
+                              case 43:
                                 _this2.collection.nfts = _context3.sent;
-                                _context3.next = 46;
+                                _context3.next = 48;
                                 break;
 
-                              case 44:
-                                _context3.prev = 44;
-                                _context3.t2 = _context3["catch"](31);
-
                               case 46:
+                                _context3.prev = 46;
+                                _context3.t2 = _context3["catch"](33);
+
+                              case 48:
                                 // Mint settings
                                 _this2.collection.website = response.data.website;
                                 _this2.collection.roadmap = response.data.roadmap;
@@ -32124,12 +32125,12 @@ if (document.getElementById('app')) {
                                 _this2.collection.discord = response.data.discord;
                                 _this2.collection.about = response.data.about;
 
-                              case 51:
+                              case 53:
                               case "end":
                                 return _context3.stop();
                             }
                           }
-                        }, _callee3, null, [[6, 19], [22, 29], [31, 44]]);
+                        }, _callee3, null, [[6, 19], [23, 30], [33, 46]]);
                       }));
 
                       return function (_x2) {
@@ -32211,8 +32212,8 @@ if (document.getElementById('app')) {
                       startTime: new Date(claimPhase.startTime),
                       price: claimPhase.price,
                       maxQuantity: claimPhase.maxQuantity,
-                      quantityLimitPerTransaction: claimPhase.quantityLimitPerTransaction,
-                      waitInSeconds: 120,
+                      quantityLimitPerTransaction: 1,
+                      waitInSeconds: 5,
                       snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot
                     };
                     claimPhases.push(newClaimPhase);
@@ -32260,7 +32261,7 @@ if (document.getElementById('app')) {
           startTime: this.formateDatetimeLocal(new Date(Date.now())),
           price: 0,
           maxQuantity: 0,
-          quantityLimitPerTransaction: 0,
+          // quantityLimitPerTransaction: 0,
           whitelist: 0,
           snapshot: [],
           modal: false
@@ -32817,7 +32818,12 @@ __webpack_require__.r(__webpack_exports__);
     setErrorMessage: function setErrorMessage(message) {
       var _this = this;
 
-      this.errorMessage = message;
+      if (message.code) {
+        this.errorMessage = message.message;
+      } else {
+        this.errorMessage = message;
+      }
+
       setTimeout(function () {
         _this.errorMessage = false;
       }, 5000);
@@ -32856,6 +32862,7 @@ __webpack_require__.r(__webpack_exports__);
           endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
           price: this.hexToValue(claimCondition.price._hex),
           maxQuantity: parseInt(claimCondition.maxQuantity),
+          waitInSeconds: 5,
           quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
           whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
           snapshot: (_claimCondition$snaps = claimCondition.snapshot) !== null && _claimCondition$snaps !== void 0 ? _claimCondition$snaps : [],

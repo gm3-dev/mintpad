@@ -59,7 +59,7 @@
                         </div>
                         <div class="basis-1/3">
                             <x-label for="royalties" :value="__('Royalties (%)')" />
-                            <p class="text-mintpad-300 font-regular text-sm mb-1">What percentage you want to receive in royalties.</p>
+                            <p class="text-mintpad-300 font-regular text-sm mb-1">What percentage you want to receive.</p>
                             <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                         </div>
                     </div>
@@ -78,37 +78,37 @@
                     <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you can set mint phases for, for example, a whitelist only mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                     <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('When you have set only one mint phase, this will be the date and time that people can mint your collection.') }}</p>
 
-                    <div v-for="(phase, index) in claimPhases" class="w-full flex flex-wrap mb-6">
-                        <div class="basis-2/3">
+                    <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="col-span-1 lg:col-span-2">
                             <h3 class="basis-full text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
                         </div>
-                        <div class="basis-1/3 text-right">
+                        <div class="text-right">
                             <x-gray-button href="#" class="ml-3 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
                         </div>
-                        <div class="basis-1/3 mb-4">
+                        <div>
                             <x-label for="start" :value="__('When will this phase start?')" />
                             <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                         </div>
-                        <div class="basis-1/3 mb-4 px-2">
+                        <div>
                             <x-label for="max-quantity" :value="__('Number of NFTs in this phase? (0 = unlimited)')" />
                             <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                         </div>
-                        <div class="basis-1/3 mb-4 relative">
+                        <div class="relative">
                             <x-label for="price" :value="__('NFT price?')" />
                             <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
                             <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500"></label>
                         </div>
-                        <div class="basis-1/3">
-                            <x-label for="max-quantity-transaction" :value="__('Claims per transaction? (0 = unlimited)')" />
-                            <x-input id="max-quantity-transaction" class="mt-1 w-full" type="number" v-model="phase.quantityLimitPerTransaction" required />
+                        <div>
+                            <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" />
+                            <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['unlimited' => '1 NFT per wallet', 5 => 'Unlimited']"></x-select>
                         </div>
-                        <div class="basis-1/3 px-2">
+                        <div>
                             <x-label for="whitelist" :value="__('Who can claim NFTs during this phase?')" />
                             <x-select class="mt-1 !w-full" v-model="phase.whitelist" :options="['Any wallet', 'Only specific wallets']"></x-select>
                         </div>
-                        <div v-if="phase.whitelist == 1" class="basis-1/3">
+                        <div v-if="phase.whitelist == 1">
                             <x-label :value="__('Whitelist')" />
-                            <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses in whitelist</p>
+                            <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Edit whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                         </div>
 
                         <div v-if="phase.modal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">

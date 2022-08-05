@@ -28433,7 +28433,12 @@ __webpack_require__.r(__webpack_exports__);
     setErrorMessage: function setErrorMessage(message) {
       var _this = this;
 
-      this.errorMessage = message;
+      if (message.code) {
+        this.errorMessage = message.message;
+      } else {
+        this.errorMessage = message;
+      }
+
       setTimeout(function () {
         _this.errorMessage = false;
       }, 5000);
@@ -28472,6 +28477,7 @@ __webpack_require__.r(__webpack_exports__);
           endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
           price: this.hexToValue(claimCondition.price._hex),
           maxQuantity: parseInt(claimCondition.maxQuantity),
+          waitInSeconds: 5,
           quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
           whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
           snapshot: (_claimCondition$snaps = claimCondition.snapshot) !== null && _claimCondition$snaps !== void 0 ? _claimCondition$snaps : [],
@@ -50272,6 +50278,7 @@ if (document.getElementById('app')) {
     mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_2__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
     data: {
       loading: true,
+      fatalError: false,
       wallet: false,
       collection: {},
       claimPhases: [],
@@ -50290,14 +50297,26 @@ if (document.getElementById('app')) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                _this.collectionID = false;
+
                 if ($('#collectionID').length) {
                   _this.collectionID = $('#collectionID').val();
                 }
 
-                _context2.next = 3;
+                if (_this.collectionID) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                _this.setFatalError();
+
+                return _context2.abrupt("return");
+
+              case 5:
+                _context2.next = 7;
                 return (0,_metamask__WEBPACK_IMPORTED_MODULE_1__.initMetaMask)(false);
 
-              case 3:
+              case 7:
                 _this.wallet = _context2.sent;
                 axios.get('/mint/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(response) {
@@ -50375,35 +50394,39 @@ if (document.getElementById('app')) {
 
                             _this.setClaimPhaseCounters();
 
-                            _context.next = 46;
+                            _this.setActiveClaimPhase();
+
+                            _context.next = 47;
                             break;
 
-                          case 43:
-                            _context.prev = 43;
+                          case 44:
+                            _context.prev = 44;
                             _context.t1 = _context["catch"](35);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 46:
+                          case 47:
                             setTimeout(function () {
                               _this.loading = false;
                             }, 1000);
 
-                          case 47:
+                          case 48:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 32], [35, 43]]);
+                    }, _callee, null, [[6, 32], [35, 44]]);
                   }));
 
                   return function (_x) {
                     return _ref.apply(this, arguments);
                   };
-                }());
+                }())["catch"](function (error, asdf) {
+                  _this.setFatalError();
+                });
 
-              case 5:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -50412,6 +50435,10 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
+      setFatalError: function setFatalError() {
+        this.loading = false;
+        this.fatalError = true;
+      },
       connectMetaMask: function () {
         var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
@@ -50443,17 +50470,18 @@ if (document.getElementById('app')) {
 
         return connectMetaMask;
       }(),
-      setClaimPhaseCounters: function setClaimPhaseCounters() {
-        if (this.claimPhases[0]) {
-          this.setCountDown(0);
-        }
+      setActiveClaimPhase: function setActiveClaimPhase() {
+        for (var i = 0; i < this.claimPhases.length; i++) {
+          var claimPhase = this.claimPhases[i];
+          var from = new Date(claimPhase.startTime).getTime();
+          var to = new Date(claimPhase.endTime).getTime();
+          var now = new Date().getTime();
 
-        if (this.claimPhases[1]) {
-          this.setCountDown(1);
-        }
-
-        if (this.claimPhases[2]) {
-          this.setCountDown(2);
+          if (now <= to && now >= from) {
+            this.claimPhases[i].active = true;
+          } else {
+            this.claimPhases[i].active = false;
+          }
         }
       },
       setCollectionImage: function () {
@@ -50495,6 +50523,19 @@ if (document.getElementById('app')) {
 
         return setCollectionImage;
       }(),
+      setClaimPhaseCounters: function setClaimPhaseCounters() {
+        if (this.claimPhases[0]) {
+          this.setCountDown(0);
+        }
+
+        if (this.claimPhases[1]) {
+          this.setCountDown(1);
+        }
+
+        if (this.claimPhases[2]) {
+          this.setCountDown(2);
+        }
+      },
       setCountDown: function setCountDown(i) {
         var _this2 = this;
 
@@ -50593,7 +50634,7 @@ if (document.getElementById('app')) {
                 case 7:
                   _context5.prev = 7;
                   _context5.t0 = _context5["catch"](1);
-                  // console.log(e)
+                  // console.log(error)
                   this.setErrorMessage(_context5.t0);
 
                 case 10:

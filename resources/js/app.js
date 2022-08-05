@@ -129,7 +129,8 @@ if (document.getElementById('app')) {
                             this.collection.description = metadata.description
                             this.collection.fee_recipient = royalties.fee_recipient
                             this.collection.royalties = royalties.seller_fee_basis_points / 100
-                        } catch (e) {
+                        } catch (error) {
+                            console.log(error)
                             // console.log('Failed to load metadata', e)
                             this.setErrorMessage('Contract could not be loaded...')
                         }
@@ -138,8 +139,8 @@ if (document.getElementById('app')) {
                         try {
                             var claimConditions = await this.contract.claimConditions.getAll()
                             this.claimPhases = this.parseClaimConditions(claimConditions)
-                        } catch (e) {
-                            // console.log('Failed to load metadata', e)
+                        } catch (error) {
+                            console.log('Failed to load metadata', error)
                             // this.setErrorMessage('Claim phases could not be loaded...')
                         }
 
@@ -149,7 +150,7 @@ if (document.getElementById('app')) {
                             this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                             this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                             this.collection.nfts = await this.contract.getAll({count: 8})
-                        } catch(e) {
+                        } catch(error) {
                             // this.setErrorMessage('Claim phases could not be loaded...')
                         }
 
@@ -189,8 +190,8 @@ if (document.getElementById('app')) {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
                         maxQuantity: claimPhase.maxQuantity,
-                        quantityLimitPerTransaction: claimPhase.quantityLimitPerTransaction,
-                        waitInSeconds: 120,
+                        quantityLimitPerTransaction: 1,
+                        waitInSeconds: 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
                     claimPhases.push(newClaimPhase)
@@ -216,7 +217,7 @@ if (document.getElementById('app')) {
                     startTime: this.formateDatetimeLocal(new Date(Date.now())),
                     price: 0,
                     maxQuantity: 0,
-                    quantityLimitPerTransaction: 0,
+                    // quantityLimitPerTransaction: 0,
                     whitelist: 0,
                     snapshot: [],
                     modal: false

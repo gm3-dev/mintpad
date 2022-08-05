@@ -17,7 +17,11 @@ export default {
          * @param {string} message 
          */
         setErrorMessage: function(message) {
-            this.errorMessage = message
+            if (message.code) {
+                this.errorMessage = message.message
+            } else {
+                this.errorMessage = message
+            }
             setTimeout(() => {
                 this.errorMessage = false
             }, 5000)
@@ -50,6 +54,7 @@ export default {
                     endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
                     price: this.hexToValue(claimCondition.price._hex),
                     maxQuantity: parseInt(claimCondition.maxQuantity),
+                    waitInSeconds: 5,
                     quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
                     whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
                     snapshot: claimCondition.snapshot ?? [],
