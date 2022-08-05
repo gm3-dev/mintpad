@@ -100,7 +100,7 @@
                         </div>
                         <div>
                             <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" />
-                            <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['unlimited' => '1 NFT per wallet', 5 => 'Unlimited']"></x-select>
+                            <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
                         </div>
                         <div>
                             <x-label for="whitelist" :value="__('Who can claim NFTs during this phase?')" />

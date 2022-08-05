@@ -4,6 +4,7 @@ import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import { initMetaMask } from './metamask'
 import helpers from './helpers.js'
+import { ethers } from 'ethers'
 import thirdweb from './thirdweb.js'
 const axios = require('axios')
 axios.defaults.headers.common = {
@@ -140,7 +141,7 @@ if (document.getElementById('app')) {
                             var claimConditions = await this.contract.claimConditions.getAll()
                             this.claimPhases = this.parseClaimConditions(claimConditions)
                         } catch (error) {
-                            console.log('Failed to load metadata', error)
+                            console.log('Failed to load claimConditions', error)
                             // this.setErrorMessage('Claim phases could not be loaded...')
                         }
 
@@ -186,14 +187,16 @@ if (document.getElementById('app')) {
                 var claimPhases = []
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
+                    console.log(claimPhase.waitInSeconds)
                     var newClaimPhase = {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
                         maxQuantity: claimPhase.maxQuantity,
                         quantityLimitPerTransaction: 1,
-                        waitInSeconds: 5,
+                        waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
+                    console.log(newClaimPhase.waitInSeconds)
                     claimPhases.push(newClaimPhase)
                 }
 

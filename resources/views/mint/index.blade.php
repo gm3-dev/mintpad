@@ -36,7 +36,7 @@
                             <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
                         </div>
                     </div>
-                    <p v-else class="text-sm">{{ __('Mint phase ended') }}</p>
+                    <p v-else class="text-sm">{{ __('Phase ended') }}</p>
                 </div>
             </div>
             <div class="bg-white rounded-xl">

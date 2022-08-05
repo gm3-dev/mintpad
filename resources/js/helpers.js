@@ -54,7 +54,7 @@ export default {
                     endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
                     price: this.hexToValue(claimCondition.price._hex),
                     maxQuantity: parseInt(claimCondition.maxQuantity),
-                    waitInSeconds: 5,
+                    waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0,
                     quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
                     whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
                     snapshot: claimCondition.snapshot ?? [],

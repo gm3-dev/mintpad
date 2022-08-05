@@ -31872,6 +31872,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_tippy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-tippy */ "./node_modules/vue-tippy/dist/vue-tippy.esm.js");
 /* harmony import */ var _metamask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./metamask */ "./resources/js/metamask.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./helpers.js */ "./resources/js/helpers.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/bignumbers.js");
 /* harmony import */ var _thirdweb_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./thirdweb.js */ "./resources/js/thirdweb.js");
 
 
@@ -31880,6 +31881,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
 
 
 
@@ -32088,7 +32090,7 @@ if (document.getElementById('app')) {
                               case 30:
                                 _context3.prev = 30;
                                 _context3.t1 = _context3["catch"](23);
-                                console.log('Failed to load metadata', _context3.t1); // this.setErrorMessage('Claim phases could not be loaded...')
+                                console.log('Failed to load claimConditions', _context3.t1); // this.setErrorMessage('Claim phases could not be loaded...')
 
                               case 33:
                                 _context3.prev = 33;
@@ -32208,14 +32210,16 @@ if (document.getElementById('app')) {
 
                   for (i = 0; i < this.claimPhases.length; i++) {
                     claimPhase = this.claimPhases[i];
+                    console.log(claimPhase.waitInSeconds);
                     newClaimPhase = {
                       startTime: new Date(claimPhase.startTime),
                       price: claimPhase.price,
                       maxQuantity: claimPhase.maxQuantity,
                       quantityLimitPerTransaction: 1,
-                      waitInSeconds: 5,
+                      waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers__WEBPACK_IMPORTED_MODULE_7__.MaxUint256 : 5,
                       snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot
                     };
+                    console.log(newClaimPhase.waitInSeconds);
                     claimPhases.push(newClaimPhase);
                   }
 
@@ -32862,7 +32866,7 @@ __webpack_require__.r(__webpack_exports__);
           endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
           price: this.hexToValue(claimCondition.price._hex),
           maxQuantity: parseInt(claimCondition.maxQuantity),
-          waitInSeconds: 5,
+          waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0,
           quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
           whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
           snapshot: (_claimCondition$snaps = claimCondition.snapshot) !== null && _claimCondition$snaps !== void 0 ? _claimCondition$snaps : [],
