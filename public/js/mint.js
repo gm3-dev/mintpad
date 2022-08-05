@@ -50299,7 +50299,7 @@ if (document.getElementById('app')) {
 
               case 3:
                 _this.wallet = _context2.sent;
-                axios.get('/collections/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
+                axios.get('/mint/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(response) {
                     var metadata, royalties, claimConditions;
                     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {

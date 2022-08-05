@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 // Mint layout
-Route::get('mint/{collection}', [MintController::class, 'mint'])->name('mint');
+Route::get('mint/{collection}', [MintController::class, 'mint'])->name('mint.index');
+Route::get('mint/{collection}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 
 require __DIR__.'/auth.php';
