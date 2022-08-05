@@ -1,5 +1,5 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.js'
+import Vue from 'vue'
 import { initMetaMask } from './metamask'
 import helpers from './helpers.js'
 import thirdweb from './thirdweb.js'

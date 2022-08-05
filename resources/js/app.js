@@ -1,5 +1,5 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.js'
+import Vue from 'vue'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import { initMetaMask } from './metamask'
@@ -16,21 +16,23 @@ Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
 
 // User address in navigation
-new Vue({
-    el: '#user-address',
-    methods: {
-        copyAddress: function(e) {
-            var button = $(e.target)
-            var buttonWidth = button.outerWidth()
-            var shortAddress = button.text()
-            button.css('width', buttonWidth+'px').text('Copied')
-            setTimeout(function() {
-                button.text(shortAddress)
-            }, 1000)
-            navigator.clipboard.writeText(button.data('address'))
+if (document.getElementById('user-address')) {  
+    new Vue({
+        el: '#user-address',
+        methods: {
+            copyAddress: function(e) {
+                var button = $(e.target)
+                var buttonWidth = button.outerWidth()
+                var shortAddress = button.text()
+                button.css('width', buttonWidth+'px').text('Copied')
+                setTimeout(function() {
+                    button.text(shortAddress)
+                }, 1000)
+                navigator.clipboard.writeText(button.data('address'))
+            }
         }
-    }
-})
+    })
+}
 
 if (document.getElementById('app')) {    
     new Vue({
