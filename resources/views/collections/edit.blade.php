@@ -163,7 +163,7 @@
                 </form>
             </div>
             <div v-if="page.tab == 3">
-                <form method="POST" action="{{ route('collections.upload', $collection->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="/" enctype="multipart/form-data">
                     @csrf
 
                     <div class="w-full">

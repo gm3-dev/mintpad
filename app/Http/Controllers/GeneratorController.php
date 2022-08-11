@@ -18,15 +18,21 @@ class GeneratorController extends Controller
         return view('generator.index');
     }
 
+    /**
+     * Create traits.json
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            if (! Storage::exists('users')) {
-                Storage::makeDirectory('users', 0775, true);
+            if (! Storage::exists('traits')) {
+                Storage::makeDirectory('traits', 0775, true);
             }
 
             if ($request->has('layers')) {
-                Storage::disk('local')->put('users/'.Auth::user()->id.'/traits.json', $request->get('layers'));
+                Storage::disk('local')->put('traits/'.Auth::user()->id.'/traits.json', $request->get('layers'));
 
                 return response()->json('success', 200);
             }
@@ -45,18 +51,17 @@ class GeneratorController extends Controller
     {
         if ($request->ajax()) {
             if (! Storage::exists('users')) {
-                Storage::makeDirectory('users', 0775, true);
+                Storage::makeDirectory('traits', 0775, true);
             }
 
             if ($request->hasFile('files')) {
                 $files = $request->file('files');
-                $path = 'users/' . Auth::user()->id;
+                $path = 'traits/' . Auth::user()->id;
 
                 foreach ($files as $file_key => $file) {
                     $dir_path = $_FILES['files']['full_path'][$file_key];
                     if ($full_path = $this->getFullPath($dir_path)) {
                         $filename = $file->getClientOriginalName();
-                        // $output[] = $file;
                         $file->storeAs($path.'/'.$full_path, $filename);
                     }
                 }

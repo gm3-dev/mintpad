@@ -41,7 +41,15 @@
                         <x-textarea id="generator-description" type="text" v-model="generator.description" :rows="12" class="w-full"></x-textarea>
                     </div>
                 </div>
-                <div class="text-center mt-10">
+
+                <div v-if="generator.loader.state != 'idle'" class="text-center w-1/2 mx-auto mt-8">
+                    <div class="mb-1 w-full rounded-lg bg-primary-300">
+                        <div class="w-1/2 p-1 bg-primary-600 rounded-lg transition-all" v-bind:style="{'width': generator.loader.progress+'%'}"></div>
+                    </div>
+                    <p v-html="generator.loader.state"></p>
+                </div>
+
+                <div class="text-center mt-8">
                     <x-button @click.prevent="generateCollection">Generate</x-button>
                 </div>
             </div>

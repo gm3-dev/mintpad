@@ -7,10 +7,10 @@ axios.defaults.headers.common = {
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
 
-// import { io } from "socket.io-client";
-// const socket = io("https://nft-generator.tnwebsolutions.nl", {
-//     withCredentials: true
-// });
+import { io } from "socket.io-client";
+const socket = io("https://nft-generator.tnwebsolutions.nl", {
+    withCredentials: true
+});
 
 export default {
     components: {
@@ -25,11 +25,29 @@ export default {
                 layers: [],
                 files: false,
                 currentLayer: 0,
-                uploadClasses: []
+                uploadClasses: [],
+                loader: {
+                    progress: 0,
+                    state: 'idle'
+                }
             }
         }
     },
+    mounted: function() {
+        socket.on('generate-nfts', (response) => {
+            this.handleSocketResponse(response)
+            // document.getElementById('progress').style.width = msg;
+        });
+    },
     methods: {
+        handleSocketResponse: function(response) {
+            if (response.state == undefined) {
+                console.log(response)
+            } else {
+                this.generator.loader.state = response.state
+                this.generator.loader.progress = response.value
+            }
+        },
         dragEnterUploader: function() {
             this.generator.uploadClasses = ['border-mintpad-300']
         },
@@ -49,11 +67,10 @@ export default {
         },
         generateCollection: function(e) {
             this.setButtonLoader(e)
-
             this.uploadTraitJSON()
             this.uploadTraitImages(this.generator.files)
-            
-            // socket.emit('generate-nfts', {userID: 1, prefix: 'NFT #', description: 'Awesome NFT collection', total: 10});
+
+            socket.emit('generate-nfts', {userID: 1, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             this.resetButtonLoader()
         },
         uploadTraitJSON: async function() {
@@ -117,9 +134,22 @@ export default {
         createLayerList: function(traits) {
             var output = []
             Object.entries(traits).forEach(trait => {
+                var options = trait[1]
+                options.sort((a, b) => {
+                    let fa = a.value.toLowerCase(),
+                        fb = b.value.toLowerCase();
+
+                    if (fa < fb) {
+                        return -1;
+                    }
+                    if (fa > fb) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 output.push({
                     'type': trait[0],
-                    'options': trait[1]
+                    'options': options
                 })
             })
             this.generator.layers = output
