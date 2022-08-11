@@ -73,6 +73,18 @@ class GeneratorController extends Controller
         }
     }
 
+    /**
+     * Download collection
+     *
+     * @return Response
+     */
+    public function download()
+    {
+        $file = storage_path(). '/app/archives/'.Auth::user()->id.'/collection.zip';
+
+        return response()->download($file, 'collection.zip', ['Content-Type' => 'application/zip']);
+    }
+
     public function getFullPath($path)
     {
         $structure = explode('/', $path);

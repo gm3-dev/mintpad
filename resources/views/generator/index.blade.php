@@ -43,10 +43,15 @@
                 </div>
 
                 <div v-if="generator.loader.state != 'idle'" class="text-center w-1/2 mx-auto mt-8">
-                    <div class="mb-1 w-full rounded-lg bg-primary-300">
-                        <div class="w-1/2 p-1 bg-primary-600 rounded-lg transition-all" v-bind:style="{'width': generator.loader.progress+'%'}"></div>
+                    <div v-if="generator.loader.state == 'finished'">
+                        <x-gray-button href="{{ route('generator.download') }}" class="w-full">Download</x-gray-button>
                     </div>
-                    <p v-html="generator.loader.state"></p>
+                    <div v-else>
+                        <div class="mb-1 w-full rounded-lg bg-primary-300">
+                            <div class="w-1/2 p-1 bg-primary-600 rounded-lg transition-all" v-bind:style="{'width': generator.loader.progress+'%'}"></div>
+                        </div>
+                        <p v-html="generator.loader.state"></p>
+                    </div>
                 </div>
 
                 <div class="text-center mt-8">
