@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('support')" :active="request()->routeIs('support')">
                         {{ __('Support') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">
+                        {{ __('NFT generator') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -80,6 +83,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('support')" :active="request()->routeIs('support')">
                 {{ __('Support') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">
+                {{ __('NFT generator') }}
             </x-responsive-nav-link>
         </div>
 

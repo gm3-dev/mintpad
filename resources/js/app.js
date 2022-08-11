@@ -6,6 +6,7 @@ import { initMetaMask } from './metamask'
 import helpers from './helpers.js'
 import { ethers } from 'ethers'
 import thirdweb from './thirdweb.js'
+import nftgenerator from './nft-generator.js'
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -38,7 +39,7 @@ if (document.getElementById('user-address')) {
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [helpers,thirdweb],
+        mixins: [helpers,thirdweb,nftgenerator],
         data: {
             ipfs: {
                 gateway: false,
@@ -187,7 +188,6 @@ if (document.getElementById('app')) {
                 var claimPhases = []
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
-                    console.log(claimPhase.waitInSeconds)
                     var newClaimPhase = {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
@@ -196,7 +196,6 @@ if (document.getElementById('app')) {
                         waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
-                    console.log(newClaimPhase.waitInSeconds)
                     claimPhases.push(newClaimPhase)
                 }
 

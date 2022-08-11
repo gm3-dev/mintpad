@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\MintController;
+use App\Http\Controllers\GeneratorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,20 +20,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
 Route::group(['middleware' => ['auth']], function () {
-    // App layout
+    // Collections
     Route::resource('collections', CollectionController::class);
     Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
     Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
-    Route::post('collections/{collection}/upload', [CollectionController::class, 'upload'])->name('collections.upload');
-    Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
+    // Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
     Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
 
+    // Tutorials
     Route::get('tutorials', function () {
         return view('tutorials.index');
     })->name('tutorials');
+
+    // Support
     Route::get('support', function () {
         return view('support.index');
     })->name('support');
+
+    // NFT generator
+    Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
+    Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
+    Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
 });
 
 // Mint layout

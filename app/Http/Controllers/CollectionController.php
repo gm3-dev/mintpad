@@ -81,51 +81,44 @@ class CollectionController extends Controller
         return view('collections.collection')->with(compact('collection', 'images'));
     }
 
-    /**
-     * upload NFT's for the specified resource
-     *
-     * @param  int  $id
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function upload(Request $request, Collection $collection)
-    {
-        $this->authorize('view', $collection);
+    // public function upload(Request $request, Collection $collection)
+    // {
+    //     $this->authorize('view', $collection);
 
-        if (! Storage::exists('collections')) {
-            Storage::makeDirectory('collections', 0775, true);
-        }
+    //     if (! Storage::exists('collections')) {
+    //         Storage::makeDirectory('collections', 0775, true);
+    //     }
 
-        $output = ['counter' => 0, 'images' => []];
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            $path = 'collections/' . $collection->id;
+    //     $output = ['counter' => 0, 'images' => []];
+    //     if ($request->hasFile('files')) {
+    //         $files = $request->file('files');
+    //         $path = 'collections/' . $collection->id;
 
-            if (! Storage::exists($path . '/thumbs')) {
-                Storage::makeDirectory($path . '/thumbs', 0775, true);
-            }
+    //         if (! Storage::exists($path . '/thumbs')) {
+    //             Storage::makeDirectory($path . '/thumbs', 0775, true);
+    //         }
 
-            foreach ($files as $file_key => $file) {
-                $filename = $file->getClientOriginalName();
-                // $path = $request->get('paths')[$file_key];
-                $file->storeAs(
-                    $path,
-                    strtolower($filename)
-                );
-                if ($file->extension() != 'json') {
-                    $image = Image::make($file->path());
-                    $image->resize(100, 100, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save(storage_path('app/' . $path . '/thumbs/' . strtolower($filename)));
-                    $output['images'][] = url(route('collections.image', [$collection->id, strtolower($filename)]));
-                }
-                $output['counter']++;
-            }
-        }
-        $output['files'] = count($files);
+    //         foreach ($files as $file_key => $file) {
+    //             $filename = $file->getClientOriginalName();
+    //             // $path = $request->get('paths')[$file_key];
+    //             $file->storeAs(
+    //                 $path,
+    //                 strtolower($filename)
+    //             );
+    //             if ($file->extension() != 'json') {
+    //                 $image = Image::make($file->path());
+    //                 $image->resize(100, 100, function ($constraint) {
+    //                     $constraint->aspectRatio();
+    //                 })->save(storage_path('app/' . $path . '/thumbs/' . strtolower($filename)));
+    //                 $output['images'][] = url(route('collections.image', [$collection->id, strtolower($filename)]));
+    //             }
+    //             $output['counter']++;
+    //         }
+    //     }
+    //     $output['files'] = count($files);
 
-        return response()->json($output, 200);
-    }
+    //     return response()->json($output, 200);
+    // }
 
     public function image(Request $request, Collection $collection, $filename)
     {
