@@ -20,7 +20,7 @@ export default {
         return {
             generator: {
                 total: 10,
-                base: '',
+                base: 'NFT #',
                 description: '',
                 layers: [],
                 files: false,

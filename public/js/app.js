@@ -33173,7 +33173,7 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
     return {
       generator: {
         total: 10,
-        base: '',
+        base: 'NFT #',
         description: '',
         layers: [],
         files: false,

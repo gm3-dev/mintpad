@@ -36,7 +36,7 @@
                         <x-label for="generator-total" :value="__('Number to generate')" class="mb-2 w-full" />
                         <x-input id="generator-total" type="number" v-model="generator.total" class="mb-9 w-full" />
                         <x-label for="generator-base" :value="__('The base name')" class="mb-2 w-full" />
-                        <x-input id="generator-base" type="text" v-model="generator.base" class="mb-9 w-full" placeholder="{{ __('NFT #') }}" />
+                        <x-input id="generator-base" type="text" v-model="generator.base" class="mb-9 w-full" />
                         <x-label for="generator-description" :value="__('Description')" class="mb-2 w-full" />
                         <x-textarea id="generator-description" type="text" v-model="generator.description" :rows="12" class="w-full"></x-textarea>
                     </div>
