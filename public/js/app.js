@@ -33196,8 +33196,7 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
   },
   methods: {
     handleSocketResponse: function handleSocketResponse(response) {
-      if (response.state == undefined) {
-        console.log(response);
+      if (response.state == undefined) {// console.log(response)
       } else {
         this.generator.loader.state = response.state;
         this.generator.loader.progress = response.value;
@@ -33220,32 +33219,30 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
       this.drag = true;
       this.generator.currentLayer = data.oldIndex;
     },
-    generateCollection: function generateCollection(e) {
-      this.setButtonLoader(e);
-      this.uploadTraitJSON();
-      this.uploadTraitImages(this.generator.files);
-      socket.emit('generate-nfts', {
-        userID: 1,
-        prefix: this.generator.base,
-        description: this.generator.description,
-        total: parseInt(this.generator.total)
-      });
-      this.resetButtonLoader();
-    },
-    uploadTraitJSON: function () {
-      var _uploadTraitJSON = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+    generateCollection: function () {
+      var _generateCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(e) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return axios.post('/generator/create', {
-                  layers: JSON.stringify(this.generator.layers)
-                }).then(function (response) {
-                  var data = response.data; // console.log(data)
-                });
+                this.setButtonLoader(e);
+                _context.next = 3;
+                return this.uploadTraitJSON();
 
-              case 2:
+              case 3:
+                _context.next = 5;
+                return this.uploadTraitImages(this.generator.files);
+
+              case 5:
+                socket.emit('generate-nfts', {
+                  userID: 1,
+                  prefix: this.generator.base,
+                  description: this.generator.description,
+                  total: parseInt(this.generator.total)
+                });
+                this.resetButtonLoader();
+
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -33253,12 +33250,19 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
         }, _callee, this);
       }));
 
-      function uploadTraitJSON() {
-        return _uploadTraitJSON.apply(this, arguments);
+      function generateCollection(_x) {
+        return _generateCollection.apply(this, arguments);
       }
 
-      return uploadTraitJSON;
+      return generateCollection;
     }(),
+    uploadTraitJSON: function uploadTraitJSON() {
+      return axios.post('/generator/create', {
+        layers: JSON.stringify(this.generator.layers)
+      }).then(function (response) {
+        var data = response.data; // console.log(data)
+      });
+    },
     uploadTraits: function () {
       var _uploadTraits = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(event) {
         var files, traits, i, file, options;
@@ -33307,47 +33311,26 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
         }, _callee2, this);
       }));
 
-      function uploadTraits(_x) {
+      function uploadTraits(_x2) {
         return _uploadTraits.apply(this, arguments);
       }
 
       return uploadTraits;
     }(),
-    uploadTraitImages: function () {
-      var _uploadTraitImages = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(files) {
-        var formData, i, file;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                formData = new FormData();
+    uploadTraitImages: function uploadTraitImages(files) {
+      var formData = new FormData();
 
-                for (i = 0; i < files.length; i++) {
-                  file = files[i];
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
 
-                  if (file.type == 'image/png') {
-                    formData.append('files[' + i + ']', file);
-                  }
-                }
-
-                _context3.next = 4;
-                return axios.post('/generator/upload', formData).then(function (response) {// console.log(response.data)
-                });
-
-              case 4:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }));
-
-      function uploadTraitImages(_x2) {
-        return _uploadTraitImages.apply(this, arguments);
+        if (file.type == 'image/png') {
+          formData.append('files[' + i + ']', file);
+        }
       }
 
-      return uploadTraitImages;
-    }(),
+      return axios.post('/generator/upload', formData).then(function (response) {// console.log(response.data)
+      });
+    },
     parseTraitFile: function parseTraitFile(file) {
       var structure = file.webkitRelativePath.split('/'); // Validate image
 

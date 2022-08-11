@@ -42,7 +42,7 @@ export default {
     methods: {
         handleSocketResponse: function(response) {
             if (response.state == undefined) {
-                console.log(response)
+                // console.log(response)
             } else {
                 this.generator.loader.state = response.state
                 this.generator.loader.progress = response.value
@@ -65,16 +65,17 @@ export default {
             this.drag = true
             this.generator.currentLayer = data.oldIndex
         },
-        generateCollection: function(e) {
+        generateCollection: async function(e) {
             this.setButtonLoader(e)
-            this.uploadTraitJSON()
-            this.uploadTraitImages(this.generator.files)
+
+            await this.uploadTraitJSON()
+            await this.uploadTraitImages(this.generator.files)
 
             socket.emit('generate-nfts', {userID: 1, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             this.resetButtonLoader()
         },
-        uploadTraitJSON: async function() {
-            await axios.post('/generator/create', {layers: JSON.stringify(this.generator.layers)}).then((response) => {
+        uploadTraitJSON: function() {
+            return axios.post('/generator/create', {layers: JSON.stringify(this.generator.layers)}).then((response) => {
                 var data = response.data
                 // console.log(data)
             })
@@ -93,7 +94,7 @@ export default {
             }
             this.createLayerList(traits)
         },
-        uploadTraitImages: async function(files) {
+        uploadTraitImages: function(files) {
             var formData = new FormData()
             for (var i = 0; i < files.length; i++) {
                 var file = files[i]
@@ -102,7 +103,7 @@ export default {
                 }
             }
 
-            await axios.post('/generator/upload', formData).then(function(response) {
+            return axios.post('/generator/upload', formData).then(function(response) {
                 // console.log(response.data)
             })
 
