@@ -39,7 +39,14 @@ if (document.getElementById('app')) {
                 this.contractAddress = response.data.address
                 this.collection.blockchain = response.data.blockchain
                 this.collection.token = response.data.token
-                this.setSDK(this.wallet.signer, this.collection.blockchain)
+
+                // Set SDK
+                if (this.wallet) {
+                    this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
+                } else {
+                    this.setSDK(this.collection.blockchain)
+                }
+
                 await this.setSmartContract(this.contractAddress)
 
                 try {

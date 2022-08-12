@@ -4,10 +4,17 @@ export default {
     methods: {
         /**
          * Set SDK object
+         * @param {string} blockchain blockchain name
+         */
+        setSDK: function(blockchain) {
+            this.sdk = new ThirdwebSDK(blockchain)
+        },
+        /**
+         * Set SDK object
          * @param {string} signer wallet signer
          * @param {string} blockchain blockchain name
          */
-        setSDK: function(signer, blockchain) {
+        setSDKFromSigner: function(signer, blockchain) {
             this.sdk = ThirdwebSDK.fromSigner(signer, blockchain, {})
         },
         /**

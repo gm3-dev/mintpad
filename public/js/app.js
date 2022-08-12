@@ -32047,7 +32047,7 @@ if (document.getElementById('app')) {
                                 _this2.collection.blockchain = response.data.blockchain;
                                 _this2.collection.token = response.data.token;
 
-                                _this2.setSDK(_this2.wallet.signer, _this2.collection.blockchain);
+                                _this2.setSDKFromSigner(_this2.wallet.signer, _this2.collection.blockchain);
 
                                 _context3.next = 6;
                                 return _this2.setSmartContract(_this2.contractAddress);
@@ -32444,7 +32444,7 @@ if (document.getElementById('app')) {
                   this.setButtonLoader(e); // deploy contract
 
                   _context11.prev = 1;
-                  this.setSDK(this.wallet.signer, this.collection.blockchain);
+                  this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain);
                   _context11.next = 5;
                   return this.sdk.deployer.deployNFTDrop({
                     name: this.collection.name,
@@ -33112,15 +33112,24 @@ function _initMetaMask() {
             output = {
               name: 'metamask'
             };
+
+            if (!(typeof window.ethereum === 'undefined')) {
+              _context2.next = 7;
+              break;
+            }
+
+            return _context2.abrupt("return", false);
+
+          case 7:
             provider = getProvider();
             loadWeb3();
-            _context2.next = 9;
+            _context2.next = 11;
             return loadAccount(triggerRequest);
 
-          case 9:
+          case 11:
             return _context2.abrupt("return", output);
 
-          case 10:
+          case 12:
           case "end":
             return _context2.stop();
         }
@@ -33482,10 +33491,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     /**
      * Set SDK object
+     * @param {string} blockchain blockchain name
+     */
+    setSDK: function setSDK(blockchain) {
+      this.sdk = new _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.ThirdwebSDK(blockchain);
+    },
+
+    /**
+     * Set SDK object
      * @param {string} signer wallet signer
      * @param {string} blockchain blockchain name
      */
-    setSDK: function setSDK(signer, blockchain) {
+    setSDKFromSigner: function setSDKFromSigner(signer, blockchain) {
       this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.ThirdwebSDK.fromSigner(signer, blockchain, {});
     },
 

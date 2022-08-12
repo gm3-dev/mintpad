@@ -28720,15 +28720,24 @@ function _initMetaMask() {
             output = {
               name: 'metamask'
             };
+
+            if (!(typeof window.ethereum === 'undefined')) {
+              _context2.next = 7;
+              break;
+            }
+
+            return _context2.abrupt("return", false);
+
+          case 7:
             provider = getProvider();
             loadWeb3();
-            _context2.next = 9;
+            _context2.next = 11;
             return loadAccount(triggerRequest);
 
-          case 9:
+          case 11:
             return _context2.abrupt("return", output);
 
-          case 10:
+          case 12:
           case "end":
             return _context2.stop();
         }
@@ -28765,10 +28774,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     /**
      * Set SDK object
+     * @param {string} blockchain blockchain name
+     */
+    setSDK: function setSDK(blockchain) {
+      this.sdk = new _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.ThirdwebSDK(blockchain);
+    },
+
+    /**
+     * Set SDK object
      * @param {string} signer wallet signer
      * @param {string} blockchain blockchain name
      */
-    setSDK: function setSDK(signer, blockchain) {
+    setSDKFromSigner: function setSDKFromSigner(signer, blockchain) {
       this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.ThirdwebSDK.fromSigner(signer, blockchain, {});
     },
 
@@ -50327,9 +50344,13 @@ if (document.getElementById('app')) {
                           case 0:
                             _this.contractAddress = response.data.address;
                             _this.collection.blockchain = response.data.blockchain;
-                            _this.collection.token = response.data.token;
+                            _this.collection.token = response.data.token; // Set SDK
 
-                            _this.setSDK(_this.wallet.signer, _this.collection.blockchain);
+                            if (_this.wallet) {
+                              _this.setSDKFromSigner(_this.wallet.signer, _this.collection.blockchain);
+                            } else {
+                              _this.setSDK(_this.collection.blockchain);
+                            }
 
                             _context.next = 6;
                             return _this.setSmartContract(_this.contractAddress);

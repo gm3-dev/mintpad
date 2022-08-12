@@ -5,6 +5,10 @@ export async function initMetaMask(triggerRequest) {
         name: 'metamask'
     }
 
+    if (typeof window.ethereum === 'undefined') {
+        return false
+    }
+
     function getProvider() {
         var provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         // this.provider = await detectEthereumProvider()

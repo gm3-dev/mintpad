@@ -110,7 +110,7 @@ if (document.getElementById('app')) {
                         this.contractAddress = response.data.address
                         this.collection.blockchain = response.data.blockchain
                         this.collection.token = response.data.token
-                        this.setSDK(this.wallet.signer, this.collection.blockchain)
+                        this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
                         await this.setSmartContract(this.contractAddress)
 
                         // Create embed code
@@ -302,7 +302,7 @@ if (document.getElementById('app')) {
 
                 // deploy contract
                 try {
-                    this.setSDK(this.wallet.signer, this.collection.blockchain)
+                    this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
                         name: this.collection.name,
                         symbol: this.collection.symbol,
