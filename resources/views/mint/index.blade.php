@@ -16,29 +16,27 @@
     <div v-else-if="!fatalError">
         <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="grid grid-cols-1 gap-4">
-                <div v-if="claimPhases.length > 0">
-                    <div v-for="(phase, index) in claimPhases" class="relative bg-white rounded-xl px-8 py-6">
-                        <i v-if="phase.active" class="far fa-check-circle text-primary-600 absolute right-3 top-3 text-xl"></i>
-                        <h2 class="text-lg font-semibold mb-1"><span v-if="phase.whitelist">{{ __('Whitelist') }}</span><span v-else>{{ __('Public') }}</span></h2>
-                        <p class="text-mintpad-300 text-sm mb-3">
-                            <span v-if="phase.whitelist">Whitelist <span class="text-primary-600" v-html="phase.snapshot.length"></span> • </span>
-                            Max <span class="text-primary-600" v-html="phase.quantityLimitPerTransaction"></span> tokens • 
-                            Price <span class="text-primary-600" v-html="phase.price"></span> 
-                            <span class="text-primary-600" v-html="collection.token"></span>
-                        </p>
-                        <div v-if="timers[index]" class="text-sm flex">
-                            <div class="w-1/5">
-                                <span class="mr-1"><span v-html="timers[index].state"></span> in</span>
-                            </div>
-                            <div class="w-4/5">
-                                <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].days">00</span>
-                                <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].hours">00</span>
-                                <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].minutes">00</span>
-                                <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
-                            </div>
+                <div v-if="claimPhases.length > 0" v-for="(phase, index) in claimPhases" class="relative bg-white rounded-xl px-8 py-6">
+                    <i v-if="phase.active" class="far fa-check-circle text-primary-600 absolute right-3 top-3 text-xl"></i>
+                    <h2 class="text-lg font-semibold mb-1"><span v-if="phase.whitelist">{{ __('Whitelist') }}</span><span v-else>{{ __('Public') }}</span></h2>
+                    <p class="text-mintpad-300 text-sm mb-3">
+                        <span v-if="phase.whitelist">Whitelist <span class="text-primary-600" v-html="phase.snapshot.length"></span> • </span>
+                        Max <span class="text-primary-600" v-html="phase.quantityLimitPerTransaction"></span> tokens • 
+                        Price <span class="text-primary-600" v-html="phase.price"></span> 
+                        <span class="text-primary-600" v-html="collection.token"></span>
+                    </p>
+                    <div v-if="timers[index]" class="text-sm flex">
+                        <div class="w-1/5">
+                            <span class="mr-1"><span v-html="timers[index].state"></span> in</span>
                         </div>
-                        <p v-else class="text-sm">{{ __('Phase ended') }}</p>
+                        <div class="w-4/5">
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].days">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].hours">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].minutes">00</span>
+                            <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
+                        </div>
                     </div>
+                    <p v-else class="text-sm">{{ __('Phase ended') }}</p>
                 </div>
                 <p v-else class="text-center mt-44 text-sm text-mintpad-300">No mint phases</p>
             </div>
