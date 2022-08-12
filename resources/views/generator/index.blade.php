@@ -22,22 +22,26 @@
                     </div>
                     <div>
                         <div class="flex mb-2">
-                            <div class="w-3/4 text-sm"><x-label>{{ __('Value') }}</x-label></div>
-                            <div class="w-1/4 text-sm"><x-label>{{ __('Weight') }}</x-label></div>
+                            <div class="w-2/3 text-sm"><x-label>{{ __('Value') }}</x-label></div>
+                            <div class="w-1/3 text-sm"><x-label>{{ __('Weight') }}</x-label></div>
                         </div>
                         <div v-for="(layer, index) in generator.layers" v-if="generator.currentLayer == index" class="w-full">
                             <div v-for="(option, index) in layer.options" class="flex gap-2">
-                                <x-input type="text" v-model="option.value" class="w-3/4 mb-2"/>
-                                <x-input type="number" v-model="option.weight" class="w-1/4 mb-2"/>
+                                <x-input type="text" v-model="option.value" class="w-12/3 mb-2"/>
+                                <x-input type="number" v-model="option.weight" pattern="[0-9]*" class="w-1/3 mb-2"/>
                             </div>
                         </div>
                     </div>
                     <div>
                         <x-label for="generator-total" :value="__('Number to generate')" class="mb-2 w-full" />
-                        <x-input id="generator-total" type="number" v-model="generator.total" class="mb-9 w-full" />
-                        <x-label for="generator-base" :value="__('The base name')" class="mb-2 w-full" />
-                        <x-input id="generator-base" type="text" v-model="generator.base" class="mb-9 w-full" />
-                        <x-label for="generator-description" :value="__('Description')" class="mb-2 w-full" />
+                        <x-input id="generator-total" type="number" v-model="generator.total" class="mb-4 w-full" />
+
+                        <x-label for="generator-base" :value="__('The base name')" class="w-full" />
+                        <p class="text-xs text-mintpad-300 mb-3">The NFT title will start with this base name</p>
+                        <x-input id="generator-base" type="text" v-model="generator.base" class="mb-4 w-full" />
+
+                        <x-label for="generator-description" :value="__('Description')" class="w-full" />
+                        <p class="text-xs text-mintpad-300 mb-3">The description of your NFTs</p>
                         <x-textarea id="generator-description" type="text" v-model="generator.description" :rows="12" class="w-full"></x-textarea>
                     </div>
                 </div>
