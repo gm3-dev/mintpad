@@ -132,8 +132,6 @@ if (document.getElementById('app')) {
                             this.collection.fee_recipient = royalties.fee_recipient
                             this.collection.royalties = royalties.seller_fee_basis_points / 100
                         } catch (error) {
-                            console.log(error)
-                            // console.log('Failed to load metadata', e)
                             this.setErrorMessage('Contract could not be loaded...')
                         }
 
@@ -142,7 +140,7 @@ if (document.getElementById('app')) {
                             var claimConditions = await this.contract.claimConditions.getAll()
                             this.claimPhases = this.parseClaimConditions(claimConditions)
                         } catch (error) {
-                            console.log('Failed to load claimConditions', error)
+                            // console.log('Failed to load claim conditions', error)
                             // this.setErrorMessage('Claim phases could not be loaded...')
                         }
 
@@ -204,7 +202,7 @@ if (document.getElementById('app')) {
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {
-                    console.log('error updateMetadata', error)
+                    // console.log('error updateMetadata', error)
                     this.setErrorMessage('error updateMetadata')
                 }
                 
@@ -294,7 +292,7 @@ if (document.getElementById('app')) {
                 }
 
                 await axios.put('/collections/'+this.collectionID, data).then((response) => {
-                    console.log(response)
+                    // console.log(response)
                 })
 
                 this.resetButtonLoader()
@@ -323,7 +321,7 @@ if (document.getElementById('app')) {
                     })
 
                 } catch(error) {
-                    console.log('error deploying contract', error)
+                    // console.log('error deploying contract', error)
                     this.setErrorMessage('Smart contract deployment failed')
                 }
 
@@ -332,8 +330,6 @@ if (document.getElementById('app')) {
             uploadCollection: async function(event) {
                 var files = event.target.files
                 var metadata = await this.prepareFiles(files)
-
-                console.log(metadata)
 
                 if (metadata.status == 'error') {
                     this.setErrorMessage('Invalid collection data')
@@ -354,7 +350,7 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('NFTs added to the collection!')
                 } catch(error) {
-                    console.log('error updateCollection', error)
+                    // console.log('error updateCollection', error)
                     this.setErrorMessage('Error while uploading your collection')
                 }
 

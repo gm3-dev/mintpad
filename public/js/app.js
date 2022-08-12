@@ -32068,60 +32068,58 @@ if (document.getElementById('app')) {
                                 _this2.collection.description = metadata.description;
                                 _this2.collection.fee_recipient = royalties.fee_recipient;
                                 _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                                _context3.next = 23;
+                                _context3.next = 22;
                                 break;
 
                               case 19:
                                 _context3.prev = 19;
                                 _context3.t0 = _context3["catch"](6);
-                                console.log(_context3.t0); // console.log('Failed to load metadata', e)
 
                                 _this2.setErrorMessage('Contract could not be loaded...');
 
-                              case 23:
-                                _context3.prev = 23;
-                                _context3.next = 26;
+                              case 22:
+                                _context3.prev = 22;
+                                _context3.next = 25;
                                 return _this2.contract.claimConditions.getAll();
 
-                              case 26:
+                              case 25:
                                 claimConditions = _context3.sent;
                                 _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
-                                _context3.next = 33;
+                                _context3.next = 31;
                                 break;
 
-                              case 30:
-                                _context3.prev = 30;
-                                _context3.t1 = _context3["catch"](23);
-                                console.log('Failed to load claimConditions', _context3.t1); // this.setErrorMessage('Claim phases could not be loaded...')
+                              case 29:
+                                _context3.prev = 29;
+                                _context3.t1 = _context3["catch"](22);
 
-                              case 33:
-                                _context3.prev = 33;
-                                _context3.next = 36;
+                              case 31:
+                                _context3.prev = 31;
+                                _context3.next = 34;
                                 return _this2.contract.totalSupply();
 
-                              case 36:
+                              case 34:
                                 _this2.collection.totalSupply = _context3.sent;
-                                _context3.next = 39;
+                                _context3.next = 37;
                                 return _this2.contract.totalClaimedSupply();
 
-                              case 39:
+                              case 37:
                                 _this2.collection.totalClaimedSupply = _context3.sent;
                                 _this2.collection.totalRatio = Math.round(_this2.collection.totalClaimedSupply / _this2.collection.totalSupply * 100);
-                                _context3.next = 43;
+                                _context3.next = 41;
                                 return _this2.contract.getAll({
                                   count: 8
                                 });
 
-                              case 43:
+                              case 41:
                                 _this2.collection.nfts = _context3.sent;
-                                _context3.next = 48;
+                                _context3.next = 46;
                                 break;
 
-                              case 46:
-                                _context3.prev = 46;
-                                _context3.t2 = _context3["catch"](33);
+                              case 44:
+                                _context3.prev = 44;
+                                _context3.t2 = _context3["catch"](31);
 
-                              case 48:
+                              case 46:
                                 // Mint settings
                                 _this2.collection.website = response.data.website;
                                 _this2.collection.roadmap = response.data.roadmap;
@@ -32129,12 +32127,12 @@ if (document.getElementById('app')) {
                                 _this2.collection.discord = response.data.discord;
                                 _this2.collection.about = response.data.about;
 
-                              case 53:
+                              case 51:
                               case "end":
                                 return _context3.stop();
                             }
                           }
-                        }, _callee3, null, [[6, 19], [23, 30], [33, 46]]);
+                        }, _callee3, null, [[6, 19], [22, 29], [31, 44]]);
                       }));
 
                       return function (_x2) {
@@ -32229,19 +32227,19 @@ if (document.getElementById('app')) {
 
                 case 6:
                   this.setSuccessMessage('Claim phases updated');
-                  _context6.next = 13;
+                  _context6.next = 12;
                   break;
 
                 case 9:
                   _context6.prev = 9;
                   _context6.t0 = _context6["catch"](3);
-                  console.log('error updateMetadata', _context6.t0);
+                  // console.log('error updateMetadata', error)
                   this.setErrorMessage('error updateMetadata');
 
-                case 13:
+                case 12:
                   this.resetButtonLoader();
 
-                case 14:
+                case 13:
                 case "end":
                   return _context6.stop();
               }
@@ -32416,8 +32414,7 @@ if (document.getElementById('app')) {
                     about: this.collection.about
                   };
                   _context10.next = 4;
-                  return axios.put('/collections/' + this.collectionID, data).then(function (response) {
-                    console.log(response);
+                  return axios.put('/collections/' + this.collectionID, data).then(function (response) {// console.log(response)
                   });
 
                 case 4:
@@ -32475,19 +32472,19 @@ if (document.getElementById('app')) {
                   });
 
                 case 10:
-                  _context11.next = 16;
+                  _context11.next = 15;
                   break;
 
                 case 12:
                   _context11.prev = 12;
                   _context11.t0 = _context11["catch"](1);
-                  console.log('error deploying contract', _context11.t0);
+                  // console.log('error deploying contract', error)
                   this.setErrorMessage('Smart contract deployment failed');
 
-                case 16:
+                case 15:
                   this.resetButtonLoader();
 
-                case 17:
+                case 16:
                 case "end":
                   return _context11.stop();
               }
@@ -32514,23 +32511,22 @@ if (document.getElementById('app')) {
 
                 case 3:
                   metadata = _context12.sent;
-                  console.log(metadata);
 
                   if (!(metadata.status == 'error')) {
-                    _context12.next = 8;
+                    _context12.next = 7;
                     break;
                   }
 
                   this.setErrorMessage('Invalid collection data');
                   return _context12.abrupt("return");
 
-                case 8:
+                case 7:
                   this.collection.metadata = metadata.data;
                   this.collection.previews = this.collection.metadata.slice(0, 8);
                   this.upload = false;
                   this.setSuccessMessage('NFTs uploaded');
 
-                case 12:
+                case 11:
                 case "end":
                   return _context12.stop();
               }
@@ -32557,19 +32553,19 @@ if (document.getElementById('app')) {
 
                 case 4:
                   this.setSuccessMessage('NFTs added to the collection!');
-                  _context13.next = 11;
+                  _context13.next = 10;
                   break;
 
                 case 7:
                   _context13.prev = 7;
                   _context13.t0 = _context13["catch"](1);
-                  console.log('error updateCollection', _context13.t0);
+                  // console.log('error updateCollection', error)
                   this.setErrorMessage('Error while uploading your collection');
 
-                case 11:
+                case 10:
                   this.resetButtonLoader();
 
-                case 12:
+                case 11:
                 case "end":
                   return _context13.stop();
               }
