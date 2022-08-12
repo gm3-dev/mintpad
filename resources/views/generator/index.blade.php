@@ -7,6 +7,10 @@
             </div>
 
             <div v-if="!generator.layers.length" class="mb-10">
+                <h3 class="text-2xl mb-4 mt-6">{{ __('Add your collection input') }}</h3>
+                <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you upload the input folder with images that we will use to generate NFTs.') }}</b></p>
+                <p class="text-mintpad-300 font-semibold text-sm mb-4"><a href="/examples/collection-example.zip">{{ __('Download an example file.') }}</a></p>
+
                 <label for="generator-traits" class="block my-10 text-mintpad-300">
                     <span class="sr-only">Choose File</span>
                     <input id="generator-traits" type="file" v-bind:class="generator.uploadClasses" @dragenter="dragEnterUploader" @dragleave="dragLeaveUploader" @change="uploadTraits" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
@@ -35,10 +39,10 @@
                         </div>
                     </div>
                     <div>
-                        <x-label for="generator-total" :value="__('The number of NFTs')" class="mb-2 w-full" />
+                        <x-label for="generator-total" :value="__('Number of NFTs')" class="mb-2 w-full" />
                         <x-input id="generator-total" type="number" v-model="generator.total" class="mb-4 w-full" />
 
-                        <x-label for="generator-base" :value="__('The base name')" class="w-full" />
+                        <x-label for="generator-base" :value="__('Base name')" class="w-full" />
                         <p class="text-xs text-mintpad-300 mb-3">The NFT title will start with this base name</p>
                         <x-input id="generator-base" type="text" v-model="generator.base" class="mb-4 w-full" />
 
