@@ -33234,7 +33234,9 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
                 return this.uploadTraitImages(this.generator.files);
 
               case 5:
-                socket.emit('generate-nfts', {
+                // Todo: userID is not dynamic
+                // Todo: not all emits trigger a generation, replace with POST request?
+                socket.emit('nft-generation', {
                   userID: 1,
                   prefix: this.generator.base,
                   description: this.generator.description,
@@ -33356,14 +33358,14 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
       Object.entries(traits).forEach(function (trait) {
         var options = trait[1];
         options.sort(function (a, b) {
-          var fa = a.value.toLowerCase(),
-              fb = b.value.toLowerCase();
+          var va = a.value.toLowerCase(),
+              vb = b.value.toLowerCase();
 
-          if (fa < fb) {
+          if (va < vb) {
             return -1;
           }
 
-          if (fa > fb) {
+          if (va > vb) {
             return 1;
           }
 

@@ -71,7 +71,9 @@ export default {
             await this.uploadTraitJSON()
             await this.uploadTraitImages(this.generator.files)
 
-            socket.emit('generate-nfts', {userID: 1, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
+            // Todo: userID is not dynamic
+            // Todo: not all emits trigger a generation, replace with POST request?
+            socket.emit('nft-generation', {userID: 1, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             this.resetButtonLoader()
         },
         uploadTraitJSON: function() {
@@ -129,7 +131,7 @@ export default {
                 folder: structure[0],
                 image: structure.join('/'),
                 weight: 1,
-                value: structure[1].replace(/\.[^/.]+$/, "")
+                value: structure[1].replace(/\.[^/.]+$/, ""),
             }
         },
         createLayerList: function(traits) {
@@ -137,13 +139,12 @@ export default {
             Object.entries(traits).forEach(trait => {
                 var options = trait[1]
                 options.sort((a, b) => {
-                    let fa = a.value.toLowerCase(),
-                        fb = b.value.toLowerCase();
-
-                    if (fa < fb) {
+                    let va = a.value.toLowerCase(),
+                        vb = b.value.toLowerCase();
+                    if (va < vb) {
                         return -1;
                     }
-                    if (fa > fb) {
+                    if (va > vb) {
                         return 1;
                     }
                     return 0;
