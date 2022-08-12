@@ -33397,7 +33397,8 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
 
         for (var i = 0; i < options.length; i++) {
           options[i].perc = Math.round(100 / trait[1].length);
-        }
+        } // Sort traits
+
 
         options.sort(function (a, b) {
           var va = a.value.toLowerCase(),
@@ -33417,6 +33418,21 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
           'type': trait[0],
           'options': options
         });
+      }); // Sort layers
+
+      output.sort(function (a, b) {
+        var ta = a.type.toLowerCase(),
+            tb = b.type.toLowerCase();
+
+        if (ta < tb) {
+          return -1;
+        }
+
+        if (ta > tb) {
+          return 1;
+        }
+
+        return 0;
       });
       this.generator.layers = output;
     } // createUploadChunks: function(files, chunkSize) {
