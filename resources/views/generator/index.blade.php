@@ -13,6 +13,7 @@
                 </label>
             </div>
             <div v-else>
+                <form>
                 <div class="grid grid-cols-3 gap-6">
                     <div>
                         <x-label class="mb-2">{{ __('Layer order') }}</x-label>
@@ -27,13 +28,13 @@
                         </div>
                         <div v-for="(layer, index) in generator.layers" v-if="generator.currentLayer == index" class="w-full">
                             <div v-for="(option, index) in layer.options" class="flex gap-2">
-                                <x-input type="text" v-model="option.value" class="w-12/3 mb-2"/>
+                                <x-input type="text" v-model="option.value" class="w-2/3 mb-2"/>
                                 <x-input type="number" v-model="option.weight" pattern="[0-9]*" class="w-1/3 mb-2"/>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <x-label for="generator-total" :value="__('Number to generate')" class="mb-2 w-full" />
+                        <x-label for="generator-total" :value="__('The number of NFTs')" class="mb-2 w-full" />
                         <x-input id="generator-total" type="number" v-model="generator.total" class="mb-4 w-full" />
 
                         <x-label for="generator-base" :value="__('The base name')" class="w-full" />
