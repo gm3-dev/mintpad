@@ -3,7 +3,7 @@
         <div class="bg-white">
             <div class="text-center mb-12">
                 <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('NFT generator') }}</h2>
-                <p class="text-mintpad-300 text-center text-lg">{{ __('Generate your NFT collection.') }}</p>
+                <p class="text-mintpad-300 text-center text-lg">{{ __('Generate your own NFT collection.') }}</p>
             </div>
 
             <div v-if="!generator.layers.length" class="mb-10">
