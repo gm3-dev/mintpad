@@ -33189,7 +33189,7 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
   mounted: function mounted() {
     var _this = this;
 
-    socket.on('generate-nfts', function (response) {
+    socket.on('nft-generation-status', function (response) {
       _this.handleSocketResponse(response); // document.getElementById('progress').style.width = msg;
 
     });

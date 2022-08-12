@@ -34,7 +34,7 @@ export default {
         }
     },
     mounted: function() {
-        socket.on('generate-nfts', (response) => {
+        socket.on('nft-generation-status', (response) => {
             this.handleSocketResponse(response)
             // document.getElementById('progress').style.width = msg;
         });
