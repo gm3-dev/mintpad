@@ -23,13 +23,14 @@
                     </div>
                     <div>
                         <div class="flex mb-2">
-                            <div class="w-2/3 text-sm"><x-label>{{ __('Value') }}</x-label></div>
-                            <div class="w-1/3 text-sm"><x-label>{{ __('Weight') }}</x-label></div>
+                            <div class="w-3/5 text-sm"><x-label>{{ __('Value') }}</x-label></div>
+                            <div class="w-2/5 text-sm"><x-label>{{ __('Weight') }}</x-label></div>
                         </div>
-                        <div v-for="(layer, index) in generator.layers" v-if="generator.currentLayer == index" class="w-full">
+                        <div v-for="(layer, layerIndex) in generator.layers" v-if="generator.currentLayer == layerIndex" class="w-full">
                             <div v-for="(option, index) in layer.options" class="flex gap-2">
-                                <x-input type="text" v-model="option.value" class="w-2/3 mb-2"/>
-                                <x-input type="number" v-model="option.weight" pattern="[0-9]*" class="w-1/3 mb-2"/>
+                                <x-input type="text" v-model="option.value" class="w-3/5 mb-2"/>
+                                <x-input type="number" v-model="option.weight" pattern="[0-9]*" class="w-1/5 mb-2 px-1 text-center" @change="weightChange(layerIndex)" />
+                                <p class="w-1/5 text-sm text-mintpad-300 pt-3"> ≈ <span v-html="option.perc"></span>%</p>
                             </div>
                         </div>
                     </div>

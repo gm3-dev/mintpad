@@ -67,6 +67,27 @@ export default {
             this.drag = true
             this.generator.currentLayer = data.oldIndex
         },
+        weightChange: function(layerIndex) {
+            var layer = this.generator.layers[layerIndex].options
+
+            var totalWeight = 0
+            for (var i = 0; i < layer.length; i++) {
+                var option = layer[i]
+                totalWeight += parseInt(option.weight)
+            }
+            if (totalWeight == 0) {
+                var percPerWeight = 0
+            } else {
+                var percPerWeight = 100 / totalWeight
+            }
+            var totalPerc = 0;
+            for (var i = 0; i < layer.length; i++) {
+                var option = layer[i]
+                var perc = Math.round((percPerWeight*parseInt(option.weight)) * 10) / 10
+                totalPerc += perc
+                option.perc = perc
+            }
+        },
         generateCollection: async function(e) {
             this.setButtonLoader(e)
 
@@ -144,6 +165,9 @@ export default {
             var output = []
             Object.entries(traits).forEach(trait => {
                 var options = trait[1]
+                for (var i = 0; i < options.length; i++) {
+                    options[i].perc = Math.round(100/trait[1].length)
+                }
                 options.sort((a, b) => {
                     let va = a.value.toLowerCase(),
                         vb = b.value.toLowerCase();

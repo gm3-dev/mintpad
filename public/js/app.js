@@ -33224,6 +33224,30 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
       this.drag = true;
       this.generator.currentLayer = data.oldIndex;
     },
+    weightChange: function weightChange(layerIndex) {
+      var layer = this.generator.layers[layerIndex].options;
+      var totalWeight = 0;
+
+      for (var i = 0; i < layer.length; i++) {
+        var option = layer[i];
+        totalWeight += parseInt(option.weight);
+      }
+
+      if (totalWeight == 0) {
+        var percPerWeight = 0;
+      } else {
+        var percPerWeight = 100 / totalWeight;
+      }
+
+      var totalPerc = 0;
+
+      for (var i = 0; i < layer.length; i++) {
+        var option = layer[i];
+        var perc = Math.round(percPerWeight * parseInt(option.weight) * 10) / 10;
+        totalPerc += perc;
+        option.perc = perc;
+      }
+    },
     generateCollection: function () {
       var _generateCollection = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(e) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -33370,6 +33394,11 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
       var output = [];
       Object.entries(traits).forEach(function (trait) {
         var options = trait[1];
+
+        for (var i = 0; i < options.length; i++) {
+          options[i].perc = Math.round(100 / trait[1].length);
+        }
+
         options.sort(function (a, b) {
           var va = a.value.toLowerCase(),
               vb = b.value.toLowerCase();

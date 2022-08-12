@@ -883,6 +883,15 @@ select {
 .w-2\/3 {
   width: 66.666667%;
 }
+.w-2\/4 {
+  width: 50%;
+}
+.w-2\/5 {
+  width: 40%;
+}
+.w-3\/5 {
+  width: 60%;
+}
 .max-w-xl {
   max-width: 36rem;
 }
@@ -1324,6 +1333,9 @@ select {
 }
 .pt-1 {
   padding-top: 0.25rem;
+}
+.pt-3 {
+  padding-top: 0.75rem;
 }
 .text-left {
   text-align: left;
