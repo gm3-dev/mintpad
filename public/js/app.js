@@ -32514,22 +32514,23 @@ if (document.getElementById('app')) {
 
                 case 3:
                   metadata = _context12.sent;
+                  console.log(metadata);
 
                   if (!(metadata.status == 'error')) {
-                    _context12.next = 7;
+                    _context12.next = 8;
                     break;
                   }
 
                   this.setErrorMessage('Invalid collection data');
                   return _context12.abrupt("return");
 
-                case 7:
+                case 8:
                   this.collection.metadata = metadata.data;
                   this.collection.previews = this.collection.metadata.slice(0, 8);
                   this.upload = false;
                   this.setSuccessMessage('NFTs uploaded');
 
-                case 11:
+                case 12:
                 case "end":
                   return _context12.stop();
               }
@@ -32651,57 +32652,63 @@ if (document.getElementById('app')) {
       }(),
       createMetadata: function () {
         var _createMetadata = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee15(images, json) {
-          var imagesLength, jsonLength, firstJsonKey, firstJsonFile, jsonList, i, metadata, image;
+          var imagesLength, jsonLength, firstImageKey, firstJsonKey, firstJsonFile, jsonList, jsonData, index, i, metadata, image;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee15$(_context15) {
             while (1) {
               switch (_context15.prev = _context15.next) {
                 case 0:
                   imagesLength = Object.keys(images).length;
                   jsonLength = Object.keys(json).length;
+                  firstImageKey = Object.keys(images)[0];
                   firstJsonKey = Object.keys(json)[0];
-                  firstJsonFile = json[firstJsonKey];
+                  firstJsonFile = json[firstJsonKey]; // Parse single JSON file
 
                   if (!(jsonLength == 1)) {
-                    _context15.next = 10;
+                    _context15.next = 14;
                     break;
                   }
 
-                  _context15.next = 7;
+                  jsonList = {};
+                  _context15.next = 9;
                   return this.getJsonData(firstJsonFile);
 
-                case 7:
-                  jsonList = _context15.sent;
-                  _context15.next = 21;
+                case 9:
+                  jsonData = _context15.sent;
+                  index = parseInt(firstImageKey);
+                  Object.entries(jsonData).forEach(function (nft) {
+                    jsonList[index] = nft[1];
+                    index++;
+                  }); // Parse multiple JSON files
+
+                  _context15.next = 23;
                   break;
 
-                case 10:
-                  jsonList = [];
+                case 14:
+                  jsonList = {};
                   i = parseInt(firstJsonKey);
 
-                case 12:
-                  if (!(i < jsonLength)) {
-                    _context15.next = 21;
+                case 16:
+                  if (!(i < jsonLength + parseInt(firstJsonKey))) {
+                    _context15.next = 23;
                     break;
                   }
 
-                  _context15.t0 = jsonList;
-                  _context15.next = 16;
+                  _context15.next = 19;
                   return this.getJsonData(json[i]);
 
-                case 16:
-                  _context15.t1 = _context15.sent;
+                case 19:
+                  jsonList[i] = _context15.sent;
 
-                  _context15.t0.push.call(_context15.t0, _context15.t1);
-
-                case 18:
+                case 20:
                   i++;
-                  _context15.next = 12;
+                  _context15.next = 16;
                   break;
 
-                case 21:
+                case 23:
+                  // Create metadata array
                   metadata = [];
 
-                  for (i = 0; i < imagesLength; i++) {
+                  for (i = parseInt(firstImageKey); i < imagesLength + parseInt(firstImageKey); i++) {
                     image = images[i];
                     json = jsonList[image.id];
                     metadata.push({
@@ -32714,7 +32721,7 @@ if (document.getElementById('app')) {
 
                   return _context15.abrupt("return", metadata);
 
-                case 24:
+                case 26:
                 case "end":
                   return _context15.stop();
               }
@@ -33182,7 +33189,8 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
         loader: {
           progress: 0,
           state: 'idle'
-        }
+        },
+        userID: false
       }
     };
   },
@@ -33190,13 +33198,14 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
     var _this = this;
 
     socket.on('nft-generation-status', function (response) {
-      _this.handleSocketResponse(response); // document.getElementById('progress').style.width = msg;
-
+      _this.handleSocketResponse(response);
     });
   },
   methods: {
     handleSocketResponse: function handleSocketResponse(response) {
-      if (response.state == undefined) {// console.log(response)
+      if (response.state == 'error') {
+        this.setErrorMessage(response.value);
+      } else if (response.state == undefined) {// console.log(response)
       } else {
         this.generator.loader.state = response.state;
         this.generator.loader.progress = response.value;
@@ -33235,13 +33244,17 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
 
               case 5:
                 // Todo: userID is not dynamic
-                // Todo: not all emits trigger a generation, replace with POST request?
-                socket.emit('nft-generation', {
-                  userID: 1,
-                  prefix: this.generator.base,
-                  description: this.generator.description,
-                  total: parseInt(this.generator.total)
-                });
+                if (this.generator.userID) {
+                  socket.emit('nft-generation', {
+                    userID: this.generator.userID,
+                    prefix: this.generator.base,
+                    description: this.generator.description,
+                    total: parseInt(this.generator.total)
+                  });
+                } else {
+                  this.setErrorMessage('Generation failed');
+                }
+
                 this.resetButtonLoader();
 
               case 7:
@@ -33259,10 +33272,14 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
       return generateCollection;
     }(),
     uploadTraitJSON: function uploadTraitJSON() {
+      var _this2 = this;
+
       return axios.post('/generator/create', {
         layers: JSON.stringify(this.generator.layers)
       }).then(function (response) {
-        var data = response.data; // console.log(data)
+        if (response.status == 200) {
+          _this2.generator.userID = response.data.user_id;
+        }
       });
     },
     uploadTraits: function () {

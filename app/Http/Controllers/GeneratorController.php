@@ -34,10 +34,10 @@ class GeneratorController extends Controller
             if ($request->has('layers')) {
                 Storage::disk('local')->put('traits/'.Auth::user()->id.'/traits.json', $request->get('layers'));
 
-                return response()->json('success', 200);
+                return response()->json(['user_id' => Auth::user()->id], 200);
             }
 
-            return response()->json('success', 409);
+            return response()->json('error', 409);
         }
     }
 
@@ -69,7 +69,7 @@ class GeneratorController extends Controller
                 return response()->json('success', 200);
             }
 
-            return response()->json('success', 409);
+            return response()->json('error', 409);
         }
     }
 

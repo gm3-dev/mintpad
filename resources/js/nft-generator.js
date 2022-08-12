@@ -29,19 +29,21 @@ export default {
                 loader: {
                     progress: 0,
                     state: 'idle'
-                }
+                },
+                userID: false
             }
         }
     },
     mounted: function() {
         socket.on('nft-generation-status', (response) => {
             this.handleSocketResponse(response)
-            // document.getElementById('progress').style.width = msg;
         });
     },
     methods: {
         handleSocketResponse: function(response) {
-            if (response.state == undefined) {
+            if (response.state == 'error') {
+                this.setErrorMessage(response.value)
+            } else if (response.state == undefined) {
                 // console.log(response)
             } else {
                 this.generator.loader.state = response.state
@@ -72,14 +74,18 @@ export default {
             await this.uploadTraitImages(this.generator.files)
 
             // Todo: userID is not dynamic
-            // Todo: not all emits trigger a generation, replace with POST request?
-            socket.emit('nft-generation', {userID: 1, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
+            if (this.generator.userID) {
+                socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
+            } else {
+                this.setErrorMessage('Generation failed')
+            }
             this.resetButtonLoader()
         },
         uploadTraitJSON: function() {
             return axios.post('/generator/create', {layers: JSON.stringify(this.generator.layers)}).then((response) => {
-                var data = response.data
-                // console.log(data)
+                if (response.status == 200) {
+                    this.generator.userID = response.data.user_id
+                }
             })
         },
         uploadTraits: async function(event) {

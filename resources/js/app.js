@@ -333,6 +333,8 @@ if (document.getElementById('app')) {
                 var files = event.target.files
                 var metadata = await this.prepareFiles(files)
 
+                console.log(metadata)
+
                 if (metadata.status == 'error') {
                     this.setErrorMessage('Invalid collection data')
                     return;
@@ -397,20 +399,30 @@ if (document.getElementById('app')) {
             createMetadata: async function(images, json) {
                 var imagesLength = Object.keys(images).length
                 var jsonLength = Object.keys(json).length
+                var firstImageKey = Object.keys(images)[0]
                 var firstJsonKey = Object.keys(json)[0]
                 var firstJsonFile = json[firstJsonKey]
 
+                // Parse single JSON file
                 if (jsonLength == 1) {
-                    var jsonList = await this.getJsonData(firstJsonFile)
+                    var jsonList = {};
+                    var jsonData = await this.getJsonData(firstJsonFile)
+                    var index = parseInt(firstImageKey)
+                    Object.entries(jsonData).forEach((nft) => {
+                        jsonList[index] = nft[1]
+                        index++
+                    })
+                // Parse multiple JSON files
                 } else {
-                    var jsonList = [];
-                    for (var i = parseInt(firstJsonKey); i < jsonLength; i++) {
-                        jsonList.push(await this.getJsonData(json[i]))
+                    var jsonList = {};
+                    for (var i = parseInt(firstJsonKey); i < (jsonLength + parseInt(firstJsonKey)); i++) {
+                        jsonList[i] = await this.getJsonData(json[i])
                     }
                 }
 
+                // Create metadata array
                 var metadata = []
-                for (var i = 0; i < imagesLength; i++) {
+                for (var i = parseInt(firstImageKey); i < (imagesLength + parseInt(firstImageKey)); i++) {
                     var image = images[i]
                     var json = jsonList[image.id]
                     metadata.push({
@@ -424,7 +436,7 @@ if (document.getElementById('app')) {
                 return metadata
             },
             getJsonData: async (file) => {
-                return new Promise((res,rej)=>{
+                return new Promise((res,rej) => {
                     let reader = new FileReader()
                     reader.onload = function(){
                         res(JSON.parse(reader.result))
