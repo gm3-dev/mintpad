@@ -194,7 +194,7 @@
                         </div>
                         <div class="w-full mt-5">
                             <span content="This action will trigger a transaction" v-tippy>
-                                <x-button href="#" @click.prevent="updateCollection"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Update collection') }}</x-button>
+                                <x-button href="#" @click.prevent="updateCollection"><i class="fas fa-exchange-alt mr-2"></i> {{ __('upload collection') }}</x-button>
                             </span>
                         </div>
                     </div>
