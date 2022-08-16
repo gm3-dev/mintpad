@@ -1,8 +1,8 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-mintpad-300" />
+            <a href="/" class="text-4xl font-jpegdev">
+                mintpad
             </a>
         </x-slot>
 
@@ -38,8 +38,8 @@
                                     name="password_confirmation" required />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
+            <div class="mt-4">
+                <x-button class="w-full">
                     {{ __('Reset Password') }}
                 </x-button>
             </div>

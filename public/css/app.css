@@ -903,6 +903,9 @@ select {
 .flex-1 {
   flex: 1 1 0%;
 }
+.flex-auto {
+  flex: 1 1 auto;
+}
 .shrink-0 {
   flex-shrink: 0;
 }
@@ -1040,6 +1043,9 @@ select {
 }
 .overflow-y-auto {
   overflow-y: auto;
+}
+.break-all {
+  word-break: break-all;
 }
 .rounded-md {
   border-radius: 0.375rem;

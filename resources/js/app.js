@@ -345,7 +345,7 @@ if (document.getElementById('app')) {
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
 
-                try {                    
+                try {
                     await this.contract.createBatch(this.collection.metadata)
 
                     this.setSuccessMessage('NFTs added to the collection!')
