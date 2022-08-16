@@ -14,10 +14,12 @@ if (document.getElementById('app')) {
         el: '#app',
         mixins: [helpers,thirdweb],
         data: {
-            loading: true,
-            fatalError: false,
             wallet: false,
-            collection: {},
+            collection: {
+                totalSupply: 0,
+                totalClaimedSupply: 0,
+                totalRatio: 0,
+            },
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
             mintAmount: 1
@@ -65,7 +67,6 @@ if (document.getElementById('app')) {
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
-
                 } catch (e) {
                     console.log('Failed to load metadata', e)
                     this.setErrorMessage('Contract could not be loaded...')
@@ -80,19 +81,11 @@ if (document.getElementById('app')) {
                     // console.log('Failed to load metadata', e)
                     this.setErrorMessage('Claim phases could not be loaded...')
                 }
-
-                setTimeout(() => {
-                    this.loading = false
-                }, 1000)
             }).catch((error, asdf) => {
-                this.setFatalError()
+                //
             });
         },
         methods: {
-            setFatalError: function() {
-                this.loading = false
-                this.fatalError = true
-            },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
                     this.wallet = await initMetaMask(true)

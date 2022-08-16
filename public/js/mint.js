@@ -50304,10 +50304,12 @@ if (document.getElementById('app')) {
     el: '#app',
     mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_2__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
     data: {
-      loading: true,
-      fatalError: false,
       wallet: false,
-      collection: {},
+      collection: {
+        totalSupply: 0,
+        totalClaimedSupply: 0,
+        totalRatio: 0
+      },
       claimPhases: [],
       timers: {
         0: {},
@@ -50438,11 +50440,6 @@ if (document.getElementById('app')) {
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
                           case 48:
-                            setTimeout(function () {
-                              _this.loading = false;
-                            }, 1000);
-
-                          case 49:
                           case "end":
                             return _context.stop();
                         }
@@ -50453,8 +50450,7 @@ if (document.getElementById('app')) {
                   return function (_x) {
                     return _ref.apply(this, arguments);
                   };
-                }())["catch"](function (error, asdf) {
-                  _this.setFatalError();
+                }())["catch"](function (error, asdf) {//
                 });
 
               case 9:
@@ -50466,10 +50462,6 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
-      setFatalError: function setFatalError() {
-        this.loading = false;
-        this.fatalError = true;
-      },
       connectMetaMask: function () {
         var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
