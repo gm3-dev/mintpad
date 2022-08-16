@@ -32400,6 +32400,8 @@ if (document.getElementById('app')) {
       }(),
       updateMintSettings: function () {
         var _updateMintSettings = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee10(e) {
+          var _this4 = this;
+
           var data;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee10$(_context10) {
             while (1) {
@@ -32414,7 +32416,8 @@ if (document.getElementById('app')) {
                     about: this.collection.about
                   };
                   _context10.next = 4;
-                  return axios.put('/collections/' + this.collectionID, data).then(function (response) {// console.log(response)
+                  return axios.put('/collections/' + this.collectionID, data).then(function (response) {
+                    _this4.setSuccessMessage('Mint settings updated');
                   });
 
                 case 4:

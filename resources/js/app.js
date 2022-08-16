@@ -292,7 +292,7 @@ if (document.getElementById('app')) {
                 }
 
                 await axios.put('/collections/'+this.collectionID, data).then((response) => {
-                    // console.log(response)
+                    this.setSuccessMessage('Mint settings updated')
                 })
 
                 this.resetButtonLoader()
