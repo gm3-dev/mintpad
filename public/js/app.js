@@ -32265,6 +32265,7 @@ if (document.getElementById('app')) {
           maxQuantity: 0,
           // quantityLimitPerTransaction: 0,
           whitelist: 0,
+          waitInSeconds: 1,
           snapshot: [],
           modal: false
         });

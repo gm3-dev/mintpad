@@ -50500,6 +50500,8 @@ if (document.getElementById('app')) {
 
           if (now <= to && now >= from) {
             this.claimPhases[i].active = true;
+          } else if (now >= from && to == 0) {
+            this.claimPhases[i].active = true;
           } else {
             this.claimPhases[i].active = false;
           }
@@ -50575,14 +50577,21 @@ if (document.getElementById('app')) {
             var distance = countDownDate - now;
 
             if (distance < 0) {
-              if (endDate) state = 'Ends';
+              if (endDate) {
+                state = 'Ends';
+              }
+
               countDownDate = endDate;
               var distance = countDownDate - now;
-            }
+            } // Last phase with no end date
 
-            if (distance < 0) {
+
+            if (endDate === 0 && distance < 0) {
               clearInterval(x);
-              _this2.timers[i] = false;
+              _this2.timers[i] = Infinity; // Past phases
+            } else if (distance < 0) {
+              clearInterval(x);
+              _this2.timers[i] = false; // Coming or runing phases
             } else {
               var days = Math.floor(distance / (1000 * 60 * 60 * 24));
               var hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));

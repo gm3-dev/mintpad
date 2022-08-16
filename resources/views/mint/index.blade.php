@@ -25,7 +25,7 @@
                         Price <span class="text-primary-600" v-html="phase.price"></span> 
                         <span class="text-primary-600" v-html="collection.token"></span>
                     </p>
-                    <div v-if="timers[index]" class="text-sm flex">
+                    <div v-if="typeof timers[index] === 'object'" class="text-sm flex">
                         <div class="w-1/5">
                             <span class="mr-1"><span v-html="timers[index].state"></span> in</span>
                         </div>
@@ -36,7 +36,7 @@
                             <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
                         </div>
                     </div>
-                    <p v-else class="text-sm">{{ __('Phase ended') }}</p>
+                    <p v-else-if="timers[index] !== Infinity" class="text-sm">{{ __('Phase ended') }}</p>
                 </div>
                 <p v-else class="text-center mt-44 text-sm text-mintpad-300">No mint phases</p>
             </div>

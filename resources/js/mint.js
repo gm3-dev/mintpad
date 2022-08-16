@@ -106,6 +106,8 @@ if (document.getElementById('app')) {
                     var now = new Date().getTime()
                     if (now <= to && now >= from) {
                         this.claimPhases[i].active = true
+                    } else if (now >= from && to == 0) {
+                        this.claimPhases[i].active = true
                     } else {
                         this.claimPhases[i].active = false
                     }
@@ -131,9 +133,9 @@ if (document.getElementById('app')) {
             },
             setCountDown: function(i) {
                 var claimPhase = this.claimPhases[i]
-                var countDownDate = new Date(claimPhase.startTime).getTime();
-                var endDate = new Date(claimPhase.endTime).getTime();
-                var state = 'Starts';
+                var countDownDate = new Date(claimPhase.startTime).getTime()
+                var endDate = new Date(claimPhase.endTime).getTime()
+                var state = 'Starts'
 
                 var now = new Date().getTime()
                 var distance = endDate - now
@@ -145,17 +147,24 @@ if (document.getElementById('app')) {
         
                         var distance = countDownDate - now
                         if (distance < 0) {
-                            if (endDate)
-                            state = 'Ends'
+                            if (endDate) {
+                                state = 'Ends'
+                            }
                             countDownDate = endDate
                             var distance = countDownDate - now
                         }
     
-                        if (distance < 0) {
+                        // Last phase with no end date
+                        if (endDate === 0 && distance < 0) {
+                            clearInterval(x)
+                            this.timers[i] = Infinity
+                        // Past phases
+                        } else if (distance < 0) {
                             clearInterval(x)
                             this.timers[i] = false
+                        
+                        // Coming or runing phases
                         } else {
-    
                             var days = Math.floor(distance / (1000 * 60 * 60 * 24))
                             var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
                             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
