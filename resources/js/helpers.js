@@ -43,7 +43,6 @@ export default {
          */
         parseClaimConditions: function(claimConditions) {
             var output = []
-
             for (var i = 0; i < claimConditions.length; i++) {
                 var claimCondition = claimConditions[i]
                 var nextIndex = i + 1
@@ -122,11 +121,11 @@ export default {
             var day = this.getDoubleDigitNumber(d.getDate())
             var hours = this.getDoubleDigitNumber(d.getHours())
             var minutes = this.getDoubleDigitNumber(d.getMinutes())
-            var seconds = this.getDoubleDigitNumber(d.getSeconds())
+            // var seconds = this.getDoubleDigitNumber(d.getSeconds())
             var date = year + '-' + month + '-' + day
-            var time = hours + ':' + minutes + ':' + seconds
+            var time = hours + ':' + minutes
 
-            return date + ' ' + time
+            return date + 'T' + time
         },
         /**
          * Format given number to number with a zero prefixed

@@ -28551,11 +28551,11 @@ __webpack_require__.r(__webpack_exports__);
       var month = this.getDoubleDigitNumber(d.getMonth() + 1);
       var day = this.getDoubleDigitNumber(d.getDate());
       var hours = this.getDoubleDigitNumber(d.getHours());
-      var minutes = this.getDoubleDigitNumber(d.getMinutes());
-      var seconds = this.getDoubleDigitNumber(d.getSeconds());
+      var minutes = this.getDoubleDigitNumber(d.getMinutes()); // var seconds = this.getDoubleDigitNumber(d.getSeconds())
+
       var date = year + '-' + month + '-' + day;
-      var time = hours + ':' + minutes + ':' + seconds;
-      return date + ' ' + time;
+      var time = hours + ':' + minutes;
+      return date + 'T' + time;
     },
 
     /**
