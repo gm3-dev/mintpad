@@ -22,7 +22,7 @@
                             <div class="px-6 py-1 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center">
                                 <div class="p-2 basis-3/12 lg:basis-4/12 font-semibold">{{ $collection->name }}</div>
                                 <div class="p-2 basis-1/12 font-semibold">{{ $collection->symbol }}</div>
-                                <div class="p-2 basis-2/12 font-semibold">{!! ucfirst($collection->blockchain) !!}</div>
+                                <div class="p-2 basis-2/12 font-semibold">{!! ucfirst($collection->blockchain) !!} ({{ config('tokens.'.$collection->blockchain) }})</div>
                                 <div class="p-2 basis-4/12 lg:basis-3/12">
                                     <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm border-2 border-mintpad-200 hover:border-primary-600 px-3 py-1 text-mintpad-400 rounded-lg mr-3" v-tippy><i class="fas fa-copy mr-2 text-mintpad-300"></i>{{ shorten_address($collection->address) }}</button>
                                 </div>

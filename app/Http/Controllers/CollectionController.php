@@ -19,6 +19,12 @@ class CollectionController extends Controller
         'fantom' => 'Fantom (FTM)',
         'avalanche' => 'Avalanche (AVAX)',
     ];
+    public $testnets = [
+        'goerli' => 'Goerli (ETH)',
+        'mumbai' => 'Mumbai (MATIC)',
+        'fantom-testnet' => 'Fantom Testnet (FTM)',
+        'avalanche-testnet' => 'Avalanche Fuji Testnet (AVAX)',
+    ];
     public $tokens;
 
     public function __construct()
@@ -44,7 +50,7 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        $blockchains = $this->blockchains;
+        $blockchains = ['Mainnets' => $this->blockchains, 'Testnets' => $this->testnets];
         return view('collections.create')->with(compact('blockchains'));
     }
 
@@ -58,6 +64,7 @@ class CollectionController extends Controller
     {
         $collection = new Collection();
         $collection->user_id = Auth::user()->id;
+        $collection->chain = Auth::user()->id;
 
         $this->save($request, $collection);
 
@@ -159,8 +166,7 @@ class CollectionController extends Controller
     {
         $this->authorize('view', $collection);
 
-        $blockchains = $this->blockchains;
-        return view('collections.edit')->with(compact('collection', 'blockchains'));
+        return view('collections.edit')->with(compact('collection'));
     }
 
     /**

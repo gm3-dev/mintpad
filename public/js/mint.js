@@ -28606,7 +28606,7 @@ function _initMetaMask() {
           case 0:
             _loadAccount = function _loadAccount3() {
               _loadAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(triggerRequest) {
-                var requestAccount, signer, account, accounts;
+                var requestAccount, signer, account, chainID, accounts;
                 return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
                   while (1) {
                     switch (_context.prev = _context.next) {
@@ -28614,62 +28614,72 @@ function _initMetaMask() {
                         requestAccount = false;
                         signer = false;
                         account = false;
+                        chainID = false;
                         accounts = [];
-                        _context.prev = 4;
+                        _context.prev = 5;
                         signer = output.provider.getSigner();
-                        _context.next = 8;
+                        _context.next = 9;
                         return signer.getAddress();
 
-                      case 8:
+                      case 9:
                         account = _context.sent;
-                        _context.next = 15;
+                        _context.next = 16;
                         break;
 
-                      case 11:
-                        _context.prev = 11;
-                        _context.t0 = _context["catch"](4);
+                      case 12:
+                        _context.prev = 12;
+                        _context.t0 = _context["catch"](5);
                         console.log('ERROR', _context.t0.message);
                         requestAccount = true;
 
-                      case 15:
-                        if (!(window.ethereum && requestAccount && triggerRequest)) {
-                          _context.next = 26;
+                      case 16:
+                        if (!window.ethereum) {
+                          _context.next = 29;
                           break;
                         }
 
-                        _context.prev = 16;
-                        _context.next = 19;
+                        if (!(requestAccount && triggerRequest)) {
+                          _context.next = 28;
+                          break;
+                        }
+
+                        _context.prev = 18;
+                        _context.next = 21;
                         return ethereum.request({
                           method: 'eth_requestAccounts'
                         });
 
-                      case 19:
+                      case 21:
                         accounts = _context.sent;
-                        _context.next = 25;
+                        _context.next = 27;
                         break;
 
-                      case 22:
-                        _context.prev = 22;
-                        _context.t1 = _context["catch"](16);
+                      case 24:
+                        _context.prev = 24;
+                        _context.t1 = _context["catch"](18);
 
                         if (_context.t1.code == -32002) {//
                         }
 
-                      case 25:
+                      case 27:
                         if (accounts.length > 0) {
                           account = accounts[0];
                         }
 
-                      case 26:
+                      case 28:
+                        chainID = window.ethereum.networkVersion;
+
+                      case 29:
                         output.signer = signer;
                         output.account = account;
+                        output.chainID = chainID;
 
-                      case 28:
+                      case 32:
                       case "end":
                         return _context.stop();
                     }
                   }
-                }, _callee, null, [[4, 11], [16, 22]]);
+                }, _callee, null, [[5, 12], [18, 24]]);
               }));
               return _loadAccount.apply(this, arguments);
             };
@@ -50394,22 +50404,22 @@ if (document.getElementById('app')) {
                               _this.collection.totalRatio = 0;
                             }
 
-                            _context.next = 35;
+                            _context.next = 36;
                             break;
 
                           case 32:
                             _context.prev = 32;
                             _context.t0 = _context["catch"](6);
+                            console.log('Failed to load metadata', _context.t0);
 
-                            // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Contract could not be loaded...');
 
-                          case 35:
-                            _context.prev = 35;
-                            _context.next = 38;
+                          case 36:
+                            _context.prev = 36;
+                            _context.next = 39;
                             return _this.contract.claimConditions.getAll();
 
-                          case 38:
+                          case 39:
                             claimConditions = _context.sent;
                             _this.claimPhases = _this.parseClaimConditions(claimConditions);
 
@@ -50417,27 +50427,27 @@ if (document.getElementById('app')) {
 
                             _this.setActiveClaimPhase();
 
-                            _context.next = 47;
+                            _context.next = 48;
                             break;
 
-                          case 44:
-                            _context.prev = 44;
-                            _context.t1 = _context["catch"](35);
+                          case 45:
+                            _context.prev = 45;
+                            _context.t1 = _context["catch"](36);
 
                             // console.log('Failed to load metadata', e)
                             _this.setErrorMessage('Claim phases could not be loaded...');
 
-                          case 47:
+                          case 48:
                             setTimeout(function () {
                               _this.loading = false;
                             }, 1000);
 
-                          case 48:
+                          case 49:
                           case "end":
                             return _context.stop();
                         }
                       }
-                    }, _callee, null, [[6, 32], [35, 44]]);
+                    }, _callee, null, [[6, 32], [36, 45]]);
                   }));
 
                   return function (_x) {

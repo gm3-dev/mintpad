@@ -67,7 +67,7 @@ if (document.getElementById('app')) {
                     }
 
                 } catch (e) {
-                    // console.log('Failed to load metadata', e)
+                    console.log('Failed to load metadata', e)
                     this.setErrorMessage('Contract could not be loaded...')
                 }
 

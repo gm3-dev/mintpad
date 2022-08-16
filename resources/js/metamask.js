@@ -59,6 +59,7 @@ export async function initMetaMask(triggerRequest) {
         var requestAccount = false
         var signer = false
         var account = false
+        var chainID = false
         var accounts = []
 
         try {
@@ -69,21 +70,26 @@ export async function initMetaMask(triggerRequest) {
             requestAccount = true
         }
 
-        if (window.ethereum && requestAccount && triggerRequest) {
-            try {
-                accounts = await ethereum.request({method: 'eth_requestAccounts'})
-            } catch(e) {
-                if (e.code == -32002) {
-                    //
+        if (window.ethereum) {
+            if (requestAccount && triggerRequest) {
+                try {
+                    accounts = await ethereum.request({method: 'eth_requestAccounts'})
+                } catch(e) {
+                    if (e.code == -32002) {
+                        //
+                    }
+                }
+                if (accounts.length > 0) {
+                    account = accounts[0]
                 }
             }
-            if (accounts.length > 0) {
-                account = accounts[0]
-            }
+            
+            chainID = window.ethereum.networkVersion
         }
 
         output.signer = signer
         output.account = account
+        output.chainID = chainID
     }
     await loadAccount(triggerRequest)
 
