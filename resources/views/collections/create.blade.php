@@ -36,7 +36,7 @@
 
                 <div class="w-full">
                     <span content="This action will trigger a transaction" v-tippy>
-                        <x-button href="#" @click.prevent="deployContract"><i class="fas fa-exchange-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
+                        <x-button href="#" @click.prevent="deployContract"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
                     </span>
                 </div>            
             </form>
