@@ -1,43 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-class RegisteredUserController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
+    public function profile()
     {
+        $user = Auth::user();
         $countries = config('countries');
-        return view('auth.register')->with(compact('countries'));
+
+        return view('users.profile')->with(compact('user', 'countries'));
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ];
 
         // Validate company info
@@ -53,10 +37,8 @@ class RegisteredUserController extends Controller
 
         $request->validate($rules);
 
-        $user = new User();
+        $user = User::find(Auth::user()->id);
         $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
         $user->is_company = $request->has('is_company');
         $user->company_name = $request->company_name ?? null;
         $user->vat_id = $request->vat_id ?? null;
@@ -68,10 +50,6 @@ class RegisteredUserController extends Controller
         $user->address2 = $request->address2 ?? null;
         $user->save();
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->back()->with('success', 'Profile saved');
     }
 }

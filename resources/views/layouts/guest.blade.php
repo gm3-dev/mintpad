@@ -14,10 +14,10 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="{{ mix('js/guest.js') }}" defer></script>
     </head>
     <body>
-        <div class="font-sans antialiased">
+        <div id="guest-container" class="font-sans antialiased">
             {{ $slot }}
         </div>
     </body>

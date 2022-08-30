@@ -69,7 +69,7 @@ if (document.getElementById('app')) {
                     }
                 } catch (e) {
                     console.log('Failed to load metadata', e)
-                    this.setErrorMessage('Contract could not be loaded...')
+                    this.setErrorMessage('Contract could not be loaded...', true)
                 }
 
                 try {
@@ -79,7 +79,7 @@ if (document.getElementById('app')) {
                     this.setActiveClaimPhase()
                 } catch (e) {
                     // console.log('Failed to load metadata', e)
-                    this.setErrorMessage('Claim phases could not be loaded...')
+                    // this.setErrorMessage('Claim phases could not be loaded...')
                 }
             }).catch((error, asdf) => {
                 //

@@ -671,6 +671,10 @@ select {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
 }
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 .my-10 {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
@@ -745,9 +749,6 @@ select {
 .mr-1 {
   margin-right: 0.25rem;
 }
-.mt-44 {
-  margin-top: 11rem;
-}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -784,6 +785,9 @@ select {
 .inline-block {
   display: inline-block;
 }
+.inline {
+  display: inline;
+}
 .flex {
   display: flex;
 }
@@ -807,9 +811,6 @@ select {
 }
 .h-16 {
   height: 4rem;
-}
-.h-10 {
-  height: 2.5rem;
 }
 .h-96 {
   height: 24rem;
@@ -856,14 +857,14 @@ select {
 .w-4\/5 {
   width: 80%;
 }
+.w-1\/2 {
+  width: 50%;
+}
 .w-3\/5 {
   width: 60%;
 }
 .w-2\/5 {
   width: 40%;
-}
-.w-1\/2 {
-  width: 50%;
 }
 .w-32 {
   width: 8rem;
@@ -951,22 +952,6 @@ select {
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-@-webkit-keyframes spin {
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin {
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin {
-  -webkit-animation: spin 1s linear infinite;
-          animation: spin 1s linear infinite;
 }
 .cursor-default {
   cursor: default;
@@ -1104,13 +1089,13 @@ select {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
-.border-red-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity));
-}
 .border-mintpad-200 {
   --tw-border-opacity: 1;
   border-color: rgb(225 229 232 / var(--tw-border-opacity));
+}
+.border-red-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity));
 }
 .border-transparent {
   border-color: transparent;
@@ -9987,6 +9972,16 @@ readers do not read off random characters that represent icons */
   font-family: JPEGDEVFONTBlack;
   src: url("/fonts/JPEGDEVFONTBlack.woff2");
 }
+.is-required:after {
+  position: absolute;
+  top: 5px;
+  margin-left: 5px;
+  width: 5px;
+  height: 5px;
+  background: #dc2626;
+  border-radius: 4px;
+  content: "";
+}
 .file\:mr-2::-webkit-file-upload-button {
   margin-right: 0.5rem;
 }
@@ -10254,9 +10249,17 @@ readers do not read off random characters that represent icons */
   --tw-bg-opacity: 1;
   background-color: rgb(225 229 232 / var(--tw-bg-opacity));
 }
+.disabled\:bg-mintpad-100:disabled {
+  --tw-bg-opacity: 1;
+  background-color: rgb(232 232 232 / var(--tw-bg-opacity));
+}
 .disabled\:text-mintpad-200:disabled {
   --tw-text-opacity: 1;
   color: rgb(225 229 232 / var(--tw-text-opacity));
+}
+.disabled\:text-mintpad-300:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(101 111 119 / var(--tw-text-opacity));
 }
 .disabled\:opacity-25:disabled {
   opacity: 0.25;
@@ -10323,6 +10326,10 @@ readers do not read off random characters that represent icons */
     max-width: 80rem;
   }
 
+  .sm\:max-w-xl {
+    max-width: 36rem;
+  }
+
   .sm\:max-w-5xl {
     max-width: 64rem;
   }
@@ -10333,6 +10340,10 @@ readers do not read off random characters that represent icons */
 
   .sm\:flex-1 {
     flex: 1 1 0%;
+  }
+
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .sm\:flex-row-reverse {

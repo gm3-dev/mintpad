@@ -8,6 +8,7 @@ export default {
                 }
             },
             errorMessage: false,
+            showRefreshButton: false,
             successMessage: false,
         }
     },
@@ -16,15 +17,19 @@ export default {
          * Set error message
          * @param {string} message 
          */
-        setErrorMessage: function(message) {
+        setErrorMessage: function(message, showRefreshButton) {
+            this.showRefreshButton = showRefreshButton == undefined ? false : showRefreshButton
             if (message.code) {
                 this.errorMessage = message.message
             } else {
                 this.errorMessage = message
             }
-            setTimeout(() => {
-                this.errorMessage = false
-            }, 5000)
+            if (!this.showRefreshButton) {
+                setTimeout(() => {
+                    this.errorMessage = false
+                    this.showRefreshButton = false
+                }, 5000)
+            }
         },
         /**
          * Set success message

@@ -32075,7 +32075,7 @@ if (document.getElementById('app')) {
                                 _context3.prev = 19;
                                 _context3.t0 = _context3["catch"](6);
 
-                                _this2.setErrorMessage('Contract could not be loaded...');
+                                _this2.setErrorMessage('Contract could not be loaded...', true);
 
                               case 22:
                                 _context3.prev = 22;
@@ -32818,6 +32818,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       errorMessage: false,
+      showRefreshButton: false,
       successMessage: false
     };
   },
@@ -32826,8 +32827,10 @@ __webpack_require__.r(__webpack_exports__);
      * Set error message
      * @param {string} message 
      */
-    setErrorMessage: function setErrorMessage(message) {
+    setErrorMessage: function setErrorMessage(message, showRefreshButton) {
       var _this = this;
+
+      this.showRefreshButton = showRefreshButton == undefined ? false : showRefreshButton;
 
       if (message.code) {
         this.errorMessage = message.message;
@@ -32835,9 +32838,12 @@ __webpack_require__.r(__webpack_exports__);
         this.errorMessage = message;
       }
 
-      setTimeout(function () {
-        _this.errorMessage = false;
-      }, 5000);
+      if (!this.showRefreshButton) {
+        setTimeout(function () {
+          _this.errorMessage = false;
+          _this.showRefreshButton = false;
+        }, 5000);
+      }
     },
 
     /**

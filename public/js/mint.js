@@ -28422,6 +28422,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       errorMessage: false,
+      showRefreshButton: false,
       successMessage: false
     };
   },
@@ -28430,8 +28431,10 @@ __webpack_require__.r(__webpack_exports__);
      * Set error message
      * @param {string} message 
      */
-    setErrorMessage: function setErrorMessage(message) {
+    setErrorMessage: function setErrorMessage(message, showRefreshButton) {
       var _this = this;
+
+      this.showRefreshButton = showRefreshButton == undefined ? false : showRefreshButton;
 
       if (message.code) {
         this.errorMessage = message.message;
@@ -28439,9 +28442,12 @@ __webpack_require__.r(__webpack_exports__);
         this.errorMessage = message;
       }
 
-      setTimeout(function () {
-        _this.errorMessage = false;
-      }, 5000);
+      if (!this.showRefreshButton) {
+        setTimeout(function () {
+          _this.errorMessage = false;
+          _this.showRefreshButton = false;
+        }, 5000);
+      }
     },
 
     /**
@@ -50414,7 +50420,7 @@ if (document.getElementById('app')) {
                             _context.t0 = _context["catch"](6);
                             console.log('Failed to load metadata', _context.t0);
 
-                            _this.setErrorMessage('Contract could not be loaded...');
+                            _this.setErrorMessage('Contract could not be loaded...', true);
 
                           case 36:
                             _context.prev = 36;
@@ -50429,17 +50435,14 @@ if (document.getElementById('app')) {
 
                             _this.setActiveClaimPhase();
 
-                            _context.next = 48;
+                            _context.next = 47;
                             break;
 
                           case 45:
                             _context.prev = 45;
                             _context.t1 = _context["catch"](36);
 
-                            // console.log('Failed to load metadata', e)
-                            _this.setErrorMessage('Claim phases could not be loaded...');
-
-                          case 48:
+                          case 47:
                           case "end":
                             return _context.stop();
                         }

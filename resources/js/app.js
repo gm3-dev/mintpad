@@ -132,7 +132,7 @@ if (document.getElementById('app')) {
                             this.collection.fee_recipient = royalties.fee_recipient
                             this.collection.royalties = royalties.seller_fee_basis_points / 100
                         } catch (error) {
-                            this.setErrorMessage('Contract could not be loaded...')
+                            this.setErrorMessage('Contract could not be loaded...', true)
                         }
 
                         // Claim phases

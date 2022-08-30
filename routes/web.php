@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\GeneratorController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
     // Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
     Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
+
+    // User
+    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::put('profile', [UserController::class, 'update'])->name('users.update');
 
     // Tutorials
     Route::get('tutorials', function () {
