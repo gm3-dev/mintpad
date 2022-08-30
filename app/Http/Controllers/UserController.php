@@ -52,4 +52,15 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Profile saved');
     }
+
+    public function invoices()
+    {
+        $invoices = [
+            ['invoice_id' => 'F2022-0001', 'amount' => 500, 'status' => 'Paid'],
+            ['invoice_id' => 'F2022-0002', 'amount' => 400, 'status' => 'Paid'],
+            ['invoice_id' => 'F2022-0003', 'amount' => 100, 'status' => 'Paid'],
+            ['invoice_id' => 'F2022-0004', 'amount' => 200, 'status' => 'Pending'],
+        ];
+        return view('users.invoices')->with(compact('invoices'));
+    }
 }
