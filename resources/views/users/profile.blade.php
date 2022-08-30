@@ -71,10 +71,8 @@
                         </div>
                     </div>
 
-                    <div class="w-1/2 mx-auto mt-8">
-                        <x-button class="w-full">
-                            {{ __('Update') }}
-                        </x-button>
+                    <div class="w-full text-center mt-8">
+                        <x-button>{{ __('Update') }}</x-button>
                     </div>
                 </form>
             </div>
