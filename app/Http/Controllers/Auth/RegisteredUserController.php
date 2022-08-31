@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Moneybird;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -66,9 +67,14 @@ class RegisteredUserController extends Controller
         $user->postalcode = $request->postalcode ?? null;
         $user->address = $request->address ?? null;
         $user->address2 = $request->address2 ?? null;
-        $user->save();
 
-        event(new Registered($user));
+        // Set Moneybird ID
+        $moneybird_id = Moneybird::createContact($user);
+        if ($moneybird_id !== false) {
+            $user->moneybird_id = $moneybird_id;
+        }
+
+        $user->save();
 
         Auth::login($user);
 

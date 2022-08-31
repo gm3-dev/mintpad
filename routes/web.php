@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [UserController::class, 'update'])->name('users.update');
     Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
+    Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
     // Tutorials
     Route::get('tutorials', function () {

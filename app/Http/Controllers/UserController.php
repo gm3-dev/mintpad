@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Moneybird;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
+    /**
+     * Profile page
+     *
+     * @return Response
+     */
     public function profile()
     {
         $user = Auth::user();
@@ -18,6 +25,12 @@ class UserController extends Controller
         return view('users.profile')->with(compact('user', 'countries'));
     }
 
+    /**
+     * Update profile information
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function update(Request $request)
     {
         $rules = [
@@ -50,17 +63,45 @@ class UserController extends Controller
         $user->address2 = $request->address2 ?? null;
         $user->save();
 
+        Moneybird::updateContact($user);
+
         return redirect()->back()->with('success', 'Profile saved');
     }
 
+    /**
+     * List all user sales invoices
+     *
+     * @return Response
+     */
     public function invoices()
     {
-        $invoices = [
-            ['invoice_id' => 'F2022-0001', 'amount' => 500, 'status' => 'Paid'],
-            ['invoice_id' => 'F2022-0002', 'amount' => 400, 'status' => 'Paid'],
-            ['invoice_id' => 'F2022-0003', 'amount' => 100, 'status' => 'Paid'],
-            ['invoice_id' => 'F2022-0004', 'amount' => 200, 'status' => 'Pending'],
-        ];
+        $user = User::find(1);
+        if ($invoices = Moneybird::getSalesInvoicesFromContact($user->moneybird_id)) {
+            $invoices = $invoices->collect();
+        } else {
+            $invoices = collect();
+        }
+
         return view('users.invoices')->with(compact('invoices'));
+    }
+
+    /**
+     * Download sales invoice
+     *
+     * @param string $invoice_id
+     * @return Response
+     */
+    public function download($invoice_id)
+    {
+        $invoice = Moneybird::downloadSalesInvoice($invoice_id);
+        if ($invoice !== false) {
+            $headers = [
+                'Content-Type: application/pdf',
+            ];
+  
+            return response()->streamDownload(function () use ($invoice) {
+                echo $invoice;
+            }, 'mintpad-'.$invoice_id.'.pdf', $headers);
+        }
     }
 }
