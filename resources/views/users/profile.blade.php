@@ -23,7 +23,7 @@
                     <!-- Is company -->
                     <div class="my-4">
                         <label for="is-company" class="w-1/2">
-                            <x-checkbox id="is-company" type="checkbox" name="is_company" value="1" checked="{{ old('is_company', $user->is_company) !== null ? true : false }}" />
+                            <x-checkbox id="is-company" type="checkbox" name="is_company" value="1" checked="{{ old('is_company', $user->is_company) ? true : false }}" />
                             <x-label for="is-company" class="inline ml-2">{{ __('I\'m a company') }}</x-label>
                         </label>
                     </div>
