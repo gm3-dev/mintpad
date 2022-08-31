@@ -53,7 +53,7 @@
                             {{ __('Invoices') }}
                         </x-dropdown-link>
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-200 bg-gray-100">
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
