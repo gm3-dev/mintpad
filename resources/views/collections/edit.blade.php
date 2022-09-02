@@ -171,13 +171,14 @@
 
                     <div class="w-full">
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Add images to your collection') }}</h3>
-                        <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection. Your upload must contain images and JSON files.') }}</b></p>
+                        <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection.') }}</b></p>
                         <p class="font-semibold text-sm mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a sample collection.') }}</x-link></p>
 
-                        <label class="block my-10 text-mintpad-300">
+                        <label class="block mt-10 text-mintpad-300">
                             <span class="sr-only">Choose Files</span>
                             <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                         </label>
+                        <p class="text-mintpad-300 font-regular text-sm mb-10 mt-2 ml-1">{{ __('Your upload must contain images and JSON files.') }}</p>
 
                         <div v-if="upload">
                             <p class="text-sm mb-2">We are uploading your collection, please don't close this page or the upload will fail!</p>
