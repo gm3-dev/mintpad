@@ -3,13 +3,13 @@
         <div class="bg-white">
             <div class="text-center mb-12">
                 <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('NFT generator') }}</h2>
-                <p class="text-mintpad-300 text-center text-lg">{{ __('Generate your own NFT collection.') }}</p>
+                <p class="text-mintpad-300 text-center text-lg">{{ __('Upload all your images here, edit the rarities, and generate your collection.') }}</p>
             </div>
 
             <div v-if="!generator.layers.length" class="mb-10">
                 <h3 class="text-2xl mb-4 mt-6">{{ __('Add your collection input') }}</h3>
-                <p class="text-mintpad-300 font-regular text-sm">{{ __('Here you upload the input folder with images that we will use to generate NFTs.') }}</b></p>
-                <p class="text-mintpad-300 font-semibold text-sm mb-4"><a href="/examples/collection-example.zip">{{ __('Download an example file.') }}</a></p>
+                <p class="text-mintpad-300 font-regular text-sm">{{ __('It is important that you use the correct folder structure.') }}</b></p>
+                <p class="text-mintpad-300 font-semibold text-sm mb-4"><x-link href="/examples/collection-example.zip">{{ __('Download our sample collection.') }}</x-link></p>
 
                 <label for="generator-traits" class="block my-10 text-mintpad-300">
                     <span class="sr-only">Choose File</span>
@@ -39,15 +39,16 @@
                         </div>
                     </div>
                     <div>
-                        <x-label for="generator-total" :value="__('Number of NFTs')" class="mb-2 w-full" />
+                        <x-label for="generator-total" :value="__('Number of NFTs')" class="w-full" />
+                        <p class="text-xs text-mintpad-300 mb-3">Set the number of NFTs you want to generate.</p>
                         <x-input id="generator-total" type="number" v-model="generator.total" class="mb-4 w-full" />
 
                         <x-label for="generator-base" :value="__('Base name')" class="w-full" />
-                        <p class="text-xs text-mintpad-300 mb-3">The NFT title will start with this base name</p>
+                        <p class="text-xs text-mintpad-300 mb-3">This is the name your NFT starts with.</p>
                         <x-input id="generator-base" type="text" v-model="generator.base" class="mb-4 w-full" />
 
                         <x-label for="generator-description" :value="__('Description')" class="w-full" />
-                        <p class="text-xs text-mintpad-300 mb-3">The description of your NFTs</p>
+                        <p class="text-xs text-mintpad-300 mb-3">A short description of your collection.</p>
                         <x-textarea id="generator-description" type="text" v-model="generator.description" :rows="12" class="w-full"></x-textarea>
                     </div>
                 </div>
