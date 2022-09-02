@@ -2,7 +2,11 @@
     <div class="bg-white overflow-hidden">
         <div class="bg-white">
             <div class="mb-12 px-2">
-                <h2 class="text-center  text-3xl mb-6 font-semibold">{{ __('My profile') }}</h2>
+                <div class="text-center mb-12">
+                    <h2 class="text-center text-3xl mb-1 font-semibold">{{ __('My profile') }}</h2>
+                    <p class="text-mintpad-300 text-center text-lg">{{ __('Enter your details here.') }}</p>
+                </div>
+
                 <form method="POST" action="{{ route('users.update') }}">
                     @csrf
                     @method('PUT')

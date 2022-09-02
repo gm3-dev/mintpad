@@ -3,6 +3,7 @@ import Vue from 'vue/dist/vue.min.js'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import { initMetaMask } from './metamask'
+import { initFastSigner } from './signer'
 import helpers from './helpers.js'
 import { ethers } from 'ethers'
 import thirdweb from './thirdweb.js'
@@ -72,14 +73,23 @@ if (document.getElementById('app')) {
                 about: '',
             },
             claimPhases: [],
+            claimPhaseInfo: [],
             page: {
                 name: '',
-                tab: 1,
+                tab: 0,
             }
         },
         computed: {
             userAddressShort: function() {
                 return this.wallet.account ? this.wallet.account.substring(0, 5)+'...'+this.wallet.account.substr(this.wallet.account.length - 3) : ''
+            },
+            collectionChain() {
+                return this.collection.blockchain
+            }
+        },
+        watch: {
+            collectionChain: async function(blockchain) {
+                // this.validateMatchingBlockchains(blockchain)
             }
         },
         async mounted() {
@@ -87,10 +97,12 @@ if (document.getElementById('app')) {
                 this.collectionID = $('#collectionID').val()
             }
 
+            this.setClaimPhasesInfo()
             this.setPage()
             this.setPageData()
     
             this.wallet = await initMetaMask(false)
+            // this.fastSigner = await initFastSigner()
             if (this.wallet.account) {
                 $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
             }
@@ -103,25 +115,24 @@ if (document.getElementById('app')) {
                 this.page.name = this.$el.getAttribute('data-page')
             },
             setPageData: async function() {
-                // Collection edit page
+                // Collection pages
                 if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
-
+                        // Set DB data
                         this.contractAddress = response.data.address
                         this.collection.blockchain = response.data.blockchain
                         this.collection.token = response.data.token
+
+                        // Check if wallet is connected to the correct blockchain
+                        if (!await this.validateMatchingBlockchains(response.data.blockchain)) {
+                            this.page.tab = -1
+                            return;
+                        } else {
+                            this.page.tab = 1
+                        }
+
                         this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
                         await this.setSmartContract(this.contractAddress)
-
-                        // Create embed code
-                        // try {
-                        //     this.ipfs.gateway = this.contract.drop.storage.gatewayUrl
-                        //     const embedUrl = this.buildEmbedUrl()
-                        //     this.ipfs.embed = this.buildEmbedCode(embedUrl)
-                        // } catch (e) {
-                            // console.log('Failed to build embed code', e)
-                            // this.setErrorMessage('Could not create embed code')
-                        // }
 
                         // Global settings
                         try {
@@ -163,22 +174,39 @@ if (document.getElementById('app')) {
                     })
                 }
             },
-            buildEmbedUrl: function() {
-                return this.ipfs.gateway+this.ipfs.hash+'/nft-drop.html?contract='+this.contractAddress+'&chainId=80001'
+            validateMatchingBlockchains: async function(blockchain) {
+                const chain = this.getChainInfo(blockchain)
+                if (chain.id != this.wallet.network.chainId) {
+                    return false
+                } else {
+                    return true
+                }
             },
-            buildEmbedCode: function(embedUrl) {
-                return '<iframe id="embed-iframe"\
-                src="'+embedUrl+'"\
-                width="600px"\
-                height="500px"\
-                style="max-width:100%;"\
-                frameborder="0"\
-                ></iframe>'
+            switchBlockchainTo: async function(blockchain) {
+                var blockchain = blockchain === false ? this.collection.blockchain : blockchain
+                const chain = this.getChainInfo(blockchain)
+
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: ethers.utils.hexValue(chain.id) }],
+                    })
+                } catch(error) {
+                    console.log('switchBlockchainTo', error)
+                    this.setErrorMessage('Failed to switch to the correct blockchain')
+                }
             },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
                     this.wallet = await initMetaMask(true)
                 }
+            },
+            setClaimPhasesInfo: function() {
+                this.claimPhaseInfo = [
+                    "You could use this phase as a whitelist only phase. This allows all whitelisted wallets to mint your NFT. <br/>If you don't want to set a whitelist phase. Then you only need to set this phase.",
+                    "You could use this phase as an extra whitelist only phase. This allows all additional whitelisted wallets to mint your NFT. <br/>If you don't want to set another whitelist phase, you can set this phase as the public mint.",
+                    "This phase becomes the public mint phase."
+                ]
             },
             updateClaimPhases: async function(e) {
                 this.setButtonLoader(e)
@@ -300,6 +328,8 @@ if (document.getElementById('app')) {
             },
             deployContract: async function(e) {
                 this.setButtonLoader(e)
+
+                console.log('this.collection.blockchain', this.collection.blockchain)
 
                 // deploy contract
                 try {

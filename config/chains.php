@@ -2,7 +2,6 @@
 
 // all major chains and testnets are supported (e.g. `mainnet`, `goerli`, `goerli`, 'polygon', 'mumbai', etc.)
 
-
 return [
     // Ethereum
     1 => 'mainnet',

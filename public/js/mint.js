@@ -28428,6 +28428,85 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     /**
+     * Get chain info
+     * @param {string} chain 
+     * @returns {object}
+     */
+    getChainInfo: function getChainInfo(chain) {
+      var chains = {
+        // Ethereum
+        'ethereum': {
+          name: 'Mainnet',
+          id: 1,
+          metamask: 'homestead'
+        },
+        'rinkeby': {
+          // deprecated
+          name: 'Rinkeby',
+          id: 4,
+          metamask: 'rinkeby'
+        },
+        'goerli': {
+          name: 'Goerli',
+          id: 5,
+          metamask: 'goerli'
+        },
+        // Polygon
+        'polygon': {
+          name: 'Polygon',
+          id: 137,
+          metamask: 'matic'
+        },
+        'mumbai': {
+          name: 'Mumbai',
+          id: 80001,
+          metamask: 'maticmum'
+        },
+        // Fantom
+        'fantom': {
+          name: 'Fantom',
+          id: 250,
+          metamask: 'unknown'
+        },
+        'fantom-testnet': {
+          name: 'Fantom testnet',
+          id: 4002,
+          metamask: 'unknown'
+        },
+        // Avalanche
+        'avalanche': {
+          name: 'Avalanche',
+          id: 43114,
+          metamask: 'unknown'
+        },
+        'avalanche-testnet': {
+          name: 'Avalanche testnet',
+          id: 43113,
+          metamask: 'unknown'
+        },
+        // Optimism
+        'optimism': {
+          name: 'Optimism',
+          id: 10
+        },
+        'optimism-testnet': {
+          name: 'Optimism testnet',
+          id: 69
+        },
+        // Arbitrum
+        'arbitrum': {
+          name: 'Arbitrum',
+          id: 42161
+        },
+        'arbitrum-testnet': {
+          name: 'Arbitrum testnet',
+          id: 421611
+        }
+      };
+      return chains[chain];
+    },
+
+    /**
      * Set error message
      * @param {string} message 
      */
@@ -28603,89 +28682,105 @@ function initMetaMask(_x) {
 }
 
 function _initMetaMask() {
-  _initMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(triggerRequest) {
-    var output, getProvider, provider, loadWeb3, loadAccount, _loadAccount;
+  _initMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(triggerRequest) {
+    var output, getProvider, _getProvider, loadWeb3, loadAccount, _loadAccount;
 
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             _loadAccount = function _loadAccount3() {
-              _loadAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(triggerRequest) {
+              _loadAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(triggerRequest) {
                 var requestAccount, signer, account, chainID, accounts;
-                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
                   while (1) {
-                    switch (_context.prev = _context.next) {
+                    switch (_context2.prev = _context2.next) {
                       case 0:
                         requestAccount = false;
                         signer = false;
                         account = false;
                         chainID = false;
                         accounts = [];
-                        _context.prev = 5;
+                        _context2.prev = 5;
                         signer = output.provider.getSigner();
-                        _context.next = 9;
-                        return signer.getAddress();
+                        _context2.next = 9;
+                        return ethereum.request({
+                          method: 'eth_accounts'
+                        });
 
                       case 9:
-                        account = _context.sent;
-                        _context.next = 16;
+                        accounts = _context2.sent;
+
+                        if (!(accounts.length > 0)) {
+                          _context2.next = 14;
+                          break;
+                        }
+
+                        account = accounts[0];
+                        _context2.next = 15;
                         break;
 
-                      case 12:
-                        _context.prev = 12;
-                        _context.t0 = _context["catch"](5);
-                        console.log('ERROR', _context.t0.message);
+                      case 14:
+                        throw Error('Not connected');
+
+                      case 15:
+                        _context2.next = 21;
+                        break;
+
+                      case 17:
+                        _context2.prev = 17;
+                        _context2.t0 = _context2["catch"](5);
+                        console.log('ERROR', _context2.t0.message);
                         requestAccount = true;
 
-                      case 16:
+                      case 21:
                         if (!window.ethereum) {
-                          _context.next = 29;
+                          _context2.next = 34;
                           break;
                         }
 
                         if (!(requestAccount && triggerRequest)) {
-                          _context.next = 28;
+                          _context2.next = 33;
                           break;
                         }
 
-                        _context.prev = 18;
-                        _context.next = 21;
+                        _context2.prev = 23;
+                        _context2.next = 26;
                         return ethereum.request({
                           method: 'eth_requestAccounts'
                         });
 
-                      case 21:
-                        accounts = _context.sent;
-                        _context.next = 27;
+                      case 26:
+                        accounts = _context2.sent;
+                        _context2.next = 32;
                         break;
 
-                      case 24:
-                        _context.prev = 24;
-                        _context.t1 = _context["catch"](18);
+                      case 29:
+                        _context2.prev = 29;
+                        _context2.t1 = _context2["catch"](23);
 
-                        if (_context.t1.code == -32002) {//
+                        if (_context2.t1.code == -32002) {//
                         }
 
-                      case 27:
+                      case 32:
                         if (accounts.length > 0) {
                           account = accounts[0];
                         }
 
-                      case 28:
+                      case 33:
                         chainID = window.ethereum.networkVersion;
 
-                      case 29:
+                      case 34:
                         output.signer = signer;
                         output.account = account;
                         output.chainID = chainID;
 
-                      case 32:
+                      case 37:
                       case "end":
-                        return _context.stop();
+                        return _context2.stop();
                     }
                   }
-                }, _callee, null, [[5, 12], [18, 24]]);
+                }, _callee2, null, [[5, 17], [23, 29]]);
               }));
               return _loadAccount.apply(this, arguments);
             };
@@ -28699,6 +28794,7 @@ function _initMetaMask() {
                 ethereum.on('accountsChanged', function (accounts) {
                   // Time to reload your interface with accounts[0]!
                   console.log('accountsChanged', accounts);
+                  window.location.reload();
                 });
                 ethereum.on('chainChanged', function () {
                   // Time to reload your interface with accounts[0]!
@@ -28717,20 +28813,46 @@ function _initMetaMask() {
               }
             };
 
-            getProvider = function _getProvider() {
-              var provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any"); // this.provider = await detectEthereumProvider()
+            _getProvider = function _getProvider3() {
+              _getProvider = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+                var provider, network;
+                return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any");
+                        _context.next = 3;
+                        return provider.getNetwork();
 
-              if (provider) {
-                // From now on, this should always be true:
-                // provider === window.ethereum
-                output.provider = provider;
-              } else {
-                console.log('Please install MetaMask!');
-              }
+                      case 3:
+                        network = _context.sent;
 
-              provider.on("pending", function (e) {
-                console.log(e);
-              });
+                        // this.provider = await detectEthereumProvider() // not used
+                        if (provider) {
+                          // From now on, this should always be true:
+                          // provider === window.ethereum
+                          output.provider = provider;
+                          output.network = network;
+                        } else {
+                          console.log('Please install MetaMask!');
+                        }
+
+                        provider.on("pending", function (e) {
+                          console.log(e);
+                        });
+
+                      case 6:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+              return _getProvider.apply(this, arguments);
+            };
+
+            getProvider = function _getProvider2() {
+              return _getProvider.apply(this, arguments);
             };
 
             output = {
@@ -28738,27 +28860,30 @@ function _initMetaMask() {
             };
 
             if (!(typeof window.ethereum === 'undefined')) {
-              _context2.next = 7;
+              _context3.next = 8;
               break;
             }
 
-            return _context2.abrupt("return", false);
+            return _context3.abrupt("return", false);
 
-          case 7:
-            provider = getProvider();
+          case 8:
+            _context3.next = 10;
+            return getProvider();
+
+          case 10:
             loadWeb3();
-            _context2.next = 11;
+            _context3.next = 13;
             return loadAccount(triggerRequest);
 
-          case 11:
-            return _context2.abrupt("return", output);
+          case 13:
+            return _context3.abrupt("return", output);
 
-          case 12:
+          case 14:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _initMetaMask.apply(this, arguments);
 }

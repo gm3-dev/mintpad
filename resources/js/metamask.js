@@ -9,14 +9,16 @@ export async function initMetaMask(triggerRequest) {
         return false
     }
 
-    function getProvider() {
-        var provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        // this.provider = await detectEthereumProvider()
+    async function getProvider() {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+        const network = await provider.getNetwork()
+        // this.provider = await detectEthereumProvider() // not used
 
         if (provider) {
             // From now on, this should always be true:
             // provider === window.ethereum
             output.provider = provider
+            output.network = network
         } else {
             console.log('Please install MetaMask!')
         }
@@ -25,13 +27,14 @@ export async function initMetaMask(triggerRequest) {
             console.log(e)
         })
     }
-    const provider = getProvider()
+    await getProvider()
 
     function loadWeb3() {
         if (window.ethereum) {        
             ethereum.on('accountsChanged', (accounts) => {
                 // Time to reload your interface with accounts[0]!
                 console.log('accountsChanged', accounts)
+                window.location.reload()
             })
 
             ethereum.on('chainChanged', () => {
@@ -64,7 +67,13 @@ export async function initMetaMask(triggerRequest) {
 
         try {
             signer = output.provider.getSigner()
-            account = await signer.getAddress()
+            accounts = await ethereum.request({method: 'eth_accounts'})
+            if (accounts.length > 0) {
+                account = accounts[0]
+            } else {
+                throw Error('Not connected')
+            }
+            // account = await signer.getAddress()
         } catch (e) {
             console.log('ERROR', e.message)
             requestAccount = true

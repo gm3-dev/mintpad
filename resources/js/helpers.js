@@ -14,6 +14,83 @@ export default {
     },
     methods: {
         /**
+         * Get chain info
+         * @param {string} chain 
+         * @returns {object}
+         */
+        getChainInfo: function(chain) {
+            const chains = {
+                // Ethereum
+                'ethereum': {
+                    name: 'Mainnet',
+                    id: 1,
+                    metamask: 'homestead'
+                },
+                'rinkeby': { // deprecated
+                    name: 'Rinkeby',
+                    id: 4,
+                    metamask: 'rinkeby'
+                },
+                'goerli': {
+                    name: 'Goerli',
+                    id: 5,
+                    metamask: 'goerli'
+                },
+                // Polygon
+                'polygon': {
+                    name: 'Polygon',
+                    id: 137,
+                    metamask: 'matic'
+                },
+                'mumbai': {
+                    name: 'Mumbai',
+                    id: 80001,
+                    metamask: 'maticmum'
+                },
+                // Fantom
+                'fantom': {
+                    name: 'Fantom',
+                    id: 250,
+                    metamask: 'unknown'
+                },
+                'fantom-testnet': {
+                    name: 'Fantom testnet',
+                    id: 4002,
+                    metamask: 'unknown'
+                },
+                // Avalanche
+                'avalanche': {
+                    name: 'Avalanche',
+                    id: 43114,
+                    metamask: 'unknown'
+                },
+                'avalanche-testnet': {
+                    name: 'Avalanche testnet',
+                    id: 43113,
+                    metamask: 'unknown'
+                },
+                // Optimism
+                'optimism': {
+                    name: 'Optimism',
+                    id: 10
+                },
+                'optimism-testnet': {
+                    name: 'Optimism testnet',
+                    id: 69
+                },
+                // Arbitrum
+                'arbitrum': {
+                    name: 'Arbitrum',
+                    id: 42161
+                },
+                'arbitrum-testnet': {
+                    name: 'Arbitrum testnet',
+                    id: 421611
+                },
+            }
+            return chains[chain]
+        },
+        /**
          * Set error message
          * @param {string} message 
          */

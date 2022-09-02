@@ -657,6 +657,12 @@ select {
 .col-span-1 {
   grid-column: span 1 / span 1;
 }
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
 .float-right {
   float: right;
 }
@@ -1232,10 +1238,6 @@ select {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-.px-7 {
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-}
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -1392,6 +1394,10 @@ select {
 .\!text-sm {
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
+}
+.\!text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
 }
 .font-medium {
   font-weight: 500;
@@ -10164,6 +10170,10 @@ readers do not read off random characters that represent icons */
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
+.hover\:underline:hover {
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
 .hover\:file\:bg-primary-700::-webkit-file-upload-button:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(2 101 221 / var(--tw-bg-opacity));
@@ -10418,6 +10428,10 @@ readers do not read off random characters that represent icons */
 
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:col-span-3 {
+    grid-column: span 3 / span 3;
   }
 
   .lg\:max-w-5xl {

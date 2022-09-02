@@ -2,7 +2,12 @@
     <div class="bg-white overflow-hidden">
         <div class="bg-white">
             <div class="mb-12 px-2">
-                <h2 class="text-center text-3xl mb-6 font-semibold">{{ __('Invoices') }}</h2>
+                <div class="text-center mb-12">
+                    <h2 class="text-center text-3xl mb-1 font-semibold">{{ __('Invoices') }}</h2>
+                    <p class="text-mintpad-300 text-center text-lg">{{ __('Download your invoices here.') }}</p>
+                </div>
+                <p class="mb-4 text-mintpad-300 font-regular text-sm">{{ __('Are you a company? Add your details to your account on the') }} <x-link href="{{ route('users.profile') }}" class="font-semibold">my profile</x-link> {{ __('page.') }}</p>
+                
                 @if ($invoices->count() == 0)
                     <p class="text-sm text-center">{{ __('You don\'t have any invoices yet.') }}</p>
                 @else

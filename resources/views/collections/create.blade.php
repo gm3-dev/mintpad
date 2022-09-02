@@ -12,10 +12,6 @@
                 </div>
 
                 <div class="w-full flex flex-wrap">
-                    <div class="basis-full mb-4">
-                        <x-label for="name" :value="__('Name')" />
-                        <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
-                    </div>
                     <div class="basis-1/3 mb-4">
                         <x-label for="symbol" :value="__('Blockchain')" />
                         <x-select class="mt-1 !w-full" v-model="collection.blockchain" :options="$blockchains"></x-select>
@@ -27,6 +23,10 @@
                     <div class="basis-1/3 mb-4">
                         <x-label for="royalties" :value="__('Royalties (%)')" />
                         <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
+                    </div>
+                    <div class="basis-full mb-4">
+                        <x-label for="name" :value="__('Name')" />
+                        <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                     </div>
                     <div class="basis-full mb-4">
                         <x-label for="description" :value="__('Description')" />

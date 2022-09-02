@@ -40,7 +40,7 @@
                 </label>
 
                 @if (Route::has('password.request'))
-                <div class="text-right flex-auto">
+                <div class="text-right text-xs flex-auto">
                     <x-link href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </x-link>
