@@ -89,7 +89,7 @@
                             <p class="text-mintpad-300 font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                         </div>
                         <div>
-                            <x-label for="start" :value="__('When will this phase start?')" />
+                            <x-label for="start" :value="__('Phase start time?')" />
                             <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                         </div>
                         <div>
@@ -106,8 +106,9 @@
                             <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
                         </div>
                         <div>
-                            <x-label for="whitelist" :value="__('Who can claim NFTs during this phase?')" />
-                            <x-select class="mt-1 !w-full" v-model="phase.whitelist" :options="['Any wallet', 'Only specific wallets']"></x-select>
+                            <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4" />
+                            <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
+                            <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
                         </div>
                         <div v-if="phase.whitelist == 1">
                             <x-label :value="__('Whitelist CSV file')" />

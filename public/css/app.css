@@ -654,12 +654,6 @@ select {
 .z-50 {
   z-index: 50;
 }
-.col-span-1 {
-  grid-column: span 1 / span 1;
-}
-.col-span-2 {
-  grid-column: span 2 / span 2;
-}
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
@@ -700,9 +694,6 @@ select {
 }
 .mb-12 {
   margin-bottom: 3rem;
-}
-.mb-6 {
-  margin-bottom: 1.5rem;
 }
 .mb-1 {
   margin-bottom: 0.25rem;
@@ -761,6 +752,9 @@ select {
 .mb-2 {
   margin-bottom: 0.5rem;
 }
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
 .mt-6 {
   margin-top: 1.5rem;
 }
@@ -770,14 +764,17 @@ select {
 .-mb-1 {
   margin-bottom: -0.25rem;
 }
+.mb-8 {
+  margin-bottom: 2rem;
+}
 .mr-5 {
   margin-right: 1.25rem;
 }
+.mr-4 {
+  margin-right: 1rem;
+}
 .mt-5 {
   margin-top: 1.25rem;
-}
-.mb-8 {
-  margin-bottom: 2rem;
 }
 .-mr-2 {
   margin-right: -0.5rem;
@@ -1350,14 +1347,14 @@ select {
 .font-semibold {
   font-family: Graphik-Semibold;
 }
+.font-regular {
+  font-family: Graphik-Regular;
+}
 .font-sans {
   font-family: Graphik-Medium, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 .font-jpegdev {
   font-family: JPEGDEVFONTBlack;
-}
-.font-regular {
-  font-family: Graphik-Regular;
 }
 .text-sm {
   font-size: 0.875rem;
@@ -1371,10 +1368,6 @@ select {
   font-size: 1.125rem;
   line-height: 1.75rem;
 }
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -1382,6 +1375,10 @@ select {
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .text-2xl {
   font-size: 1.5rem;
@@ -1394,10 +1391,6 @@ select {
 .\!text-sm {
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
-}
-.\!text-lg {
-  font-size: 1.125rem !important;
-  line-height: 1.75rem !important;
 }
 .font-medium {
   font-weight: 500;
@@ -10418,20 +10411,11 @@ readers do not read off random characters that represent icons */
   .sm\:pb-4 {
     padding-bottom: 1rem;
   }
-
-  .sm\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
 }
 @media (min-width: 1024px) {
 
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
-  }
-
-  .lg\:col-span-3 {
-    grid-column: span 3 / span 3;
   }
 
   .lg\:max-w-5xl {
