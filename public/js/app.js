@@ -32211,18 +32211,19 @@ if (document.getElementById('app')) {
               switch (_context6.prev = _context6.next) {
                 case 0:
                   chain = this.getChainInfo(blockchain);
+                  console.log(this.wallet);
 
                   if (!(chain.id != this.wallet.network.chainId)) {
-                    _context6.next = 5;
+                    _context6.next = 6;
                     break;
                   }
 
                   return _context6.abrupt("return", false);
 
-                case 5:
+                case 6:
                   return _context6.abrupt("return", true);
 
-                case 6:
+                case 7:
                 case "end":
                   return _context6.stop();
               }

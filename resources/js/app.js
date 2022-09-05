@@ -178,6 +178,7 @@ if (document.getElementById('app')) {
             },
             validateMatchingBlockchains: async function(blockchain) {
                 const chain = this.getChainInfo(blockchain)
+                console.log(this.wallet)
                 if (chain.id != this.wallet.network.chainId) {
                     return false
                 } else {
