@@ -18,41 +18,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
+Route::domain(env('APP_URL'))->group(function () {
+    Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
-Route::group(['middleware' => ['auth']], function () {
-    // Collections
-    Route::resource('collections', CollectionController::class);
-    Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
-    Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
-    // Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
-    Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
+    Route::group(['middleware' => ['auth']], function () {
+        // Collections
+        Route::resource('collections', CollectionController::class);
+        Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
+        Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
+        // Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
+        Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
 
-    // User
-    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
-    Route::put('profile', [UserController::class, 'update'])->name('users.update');
-    Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
-    Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
+        // User
+        Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+        Route::put('profile', [UserController::class, 'update'])->name('users.update');
+        Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
+        Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
-    // Tutorials
-    Route::get('tutorials', function () {
-        return view('tutorials.index');
-    })->name('tutorials');
+        // Tutorials
+        Route::get('tutorials', function () {
+            return view('tutorials.index');
+        })->name('tutorials');
 
-    // Support
-    Route::get('support', function () {
-        return view('support.index');
-    })->name('support');
+        // Support
+        Route::get('support', function () {
+            return view('support.index');
+        })->name('support');
 
-    // NFT generator
-    Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
-    Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
-    Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
-    Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
+        // NFT generator
+        Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
+        Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
+        Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
+        Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
+    });
 });
 
-// Mint layout
-Route::get('mint/{collection}', [MintController::class, 'mint'])->name('mint.index');
-Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
+Route::domain(env('APP_MINT_URL'))->group(function () {
+    // Mint layout
+    Route::get('mint/{collection}', [MintController::class, 'mint'])->name('mint.index');
+    Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
+});
 
 require __DIR__.'/auth.php';
