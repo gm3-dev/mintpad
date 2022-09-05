@@ -31952,6 +31952,7 @@ if (document.getElementById('app')) {
         previews: [],
         totalSupply: 0,
         totalClaimedSupply: 0,
+        permalink: '',
         website: '',
         roadmap: '',
         twitter: '',
@@ -32077,110 +32078,109 @@ if (document.getElementById('app')) {
                                 // Set DB data
                                 _this2.contractAddress = response.data.address;
                                 _this2.collection.blockchain = response.data.blockchain;
-                                _this2.collection.token = response.data.token; // Check if wallet is connected to the correct blockchain
+                                _this2.collection.token = response.data.token; // Mint settings
 
-                                _context4.next = 5;
+                                _this2.collection.permalink = response.data.permalink;
+                                _this2.collection.website = response.data.website;
+                                _this2.collection.roadmap = response.data.roadmap;
+                                _this2.collection.twitter = response.data.twitter;
+                                _this2.collection.discord = response.data.discord;
+                                _this2.collection.about = response.data.about; // Check if wallet is connected to the correct blockchain
+
+                                _context4.next = 11;
                                 return _this2.validateMatchingBlockchains(response.data.blockchain);
 
-                              case 5:
+                              case 11:
                                 if (_context4.sent) {
-                                  _context4.next = 10;
+                                  _context4.next = 16;
                                   break;
                                 }
 
                                 _this2.page.tab = -1;
                                 return _context4.abrupt("return");
 
-                              case 10:
+                              case 16:
                                 _this2.page.tab = 1;
 
-                              case 11:
+                              case 17:
                                 _this2.setSDKFromSigner(_this2.wallet.signer, _this2.collection.blockchain);
 
-                                _context4.next = 14;
+                                _context4.next = 20;
                                 return _this2.setSmartContract(_this2.contractAddress);
 
-                              case 14:
-                                _context4.prev = 14;
-                                _context4.next = 17;
+                              case 20:
+                                _context4.prev = 20;
+                                _context4.next = 23;
                                 return _this2.contract.metadata.get();
 
-                              case 17:
+                              case 23:
                                 metadata = _context4.sent;
-                                _context4.next = 20;
+                                _context4.next = 26;
                                 return _this2.contract.royalties.getDefaultRoyaltyInfo();
 
-                              case 20:
+                              case 26:
                                 royalties = _context4.sent;
                                 _this2.collection.name = metadata.name;
                                 _this2.collection.description = metadata.description;
                                 _this2.collection.fee_recipient = royalties.fee_recipient;
                                 _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                                _context4.next = 30;
+                                _context4.next = 36;
                                 break;
 
-                              case 27:
-                                _context4.prev = 27;
-                                _context4.t0 = _context4["catch"](14);
+                              case 33:
+                                _context4.prev = 33;
+                                _context4.t0 = _context4["catch"](20);
 
                                 _this2.setErrorMessage('Contract could not be loaded...', true);
 
-                              case 30:
-                                _context4.prev = 30;
-                                _context4.next = 33;
+                              case 36:
+                                _context4.prev = 36;
+                                _context4.next = 39;
                                 return _this2.contract.claimConditions.getAll();
 
-                              case 33:
+                              case 39:
                                 claimConditions = _context4.sent;
                                 _this2.claimPhases = _this2.parseClaimConditions(claimConditions);
-                                _context4.next = 39;
+                                _context4.next = 45;
                                 break;
 
-                              case 37:
-                                _context4.prev = 37;
-                                _context4.t1 = _context4["catch"](30);
-
-                              case 39:
-                                _context4.prev = 39;
-                                _context4.next = 42;
-                                return _this2.contract.totalSupply();
-
-                              case 42:
-                                _this2.collection.totalSupply = _context4.sent;
-                                _context4.next = 45;
-                                return _this2.contract.totalClaimedSupply();
+                              case 43:
+                                _context4.prev = 43;
+                                _context4.t1 = _context4["catch"](36);
 
                               case 45:
+                                _context4.prev = 45;
+                                _context4.next = 48;
+                                return _this2.contract.totalSupply();
+
+                              case 48:
+                                _this2.collection.totalSupply = _context4.sent;
+                                _context4.next = 51;
+                                return _this2.contract.totalClaimedSupply();
+
+                              case 51:
                                 _this2.collection.totalClaimedSupply = _context4.sent;
                                 _this2.collection.totalRatio = Math.round(_this2.collection.totalClaimedSupply / _this2.collection.totalSupply * 100);
-                                _context4.next = 49;
+                                _context4.next = 55;
                                 return _this2.contract.getAll({
                                   count: 8
                                 });
 
-                              case 49:
+                              case 55:
                                 _this2.collection.nfts = _context4.sent;
-                                _context4.next = 54;
+                                _context4.next = 60;
                                 break;
 
-                              case 52:
-                                _context4.prev = 52;
-                                _context4.t2 = _context4["catch"](39);
+                              case 58:
+                                _context4.prev = 58;
+                                _context4.t2 = _context4["catch"](45);
 
-                              case 54:
-                                // Mint settings
-                                _this2.collection.website = response.data.website;
-                                _this2.collection.roadmap = response.data.roadmap;
-                                _this2.collection.twitter = response.data.twitter;
-                                _this2.collection.discord = response.data.discord;
-                                _this2.collection.about = response.data.about;
-
-                              case 59:
+                              case 60:
                               case "end":
                                 return _context4.stop();
                             }
                           }
-                        }, _callee4, null, [[14, 27], [30, 37], [39, 52]]);
+                        }, _callee4, null, [[20, 33], [36, 43], [45, 58]]);
                       }));
 
                       return function (_x3) {
@@ -32524,6 +32524,7 @@ if (document.getElementById('app')) {
                 case 0:
                   this.setButtonLoader(e);
                   data = {
+                    permalink: this.collection.permalink,
                     website: this.collection.website,
                     roadmap: this.collection.roadmap,
                     twitter: this.collection.twitter,
@@ -32531,8 +32532,14 @@ if (document.getElementById('app')) {
                     about: this.collection.about
                   };
                   _context13.next = 4;
-                  return axios.put('/collections/' + this.collectionID, data).then(function (response) {
-                    _this4.setSuccessMessage('Mint settings updated');
+                  return axios.put('/collections/' + this.collectionID, data)["catch"](function (error) {
+                    if (error.response.status == 422) {
+                      _this4.setErrorMessage(error.response.data.message);
+                    }
+                  }).then(function (response) {
+                    if (response) {
+                      _this4.setSuccessMessage('Mint settings updated');
+                    }
                   });
 
                 case 4:

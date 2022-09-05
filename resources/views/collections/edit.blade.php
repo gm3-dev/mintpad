@@ -223,6 +223,13 @@
                 <div class="w-full grid grid-cols-2 gap-2 mb-6">
                     <div>
                         <div class="mb-4">
+                            <x-label for="permalink" :value="__('Permalink')" />
+                            <div class="grid grid-cols-2 gap-2">
+                                <span class="inline-block border-2 border-gray-300 text-sm bg-gray-200 rounded-lg p-3 mt-1">{{ config('app.mint_url') }}/</span>
+                                <x-input id="permalink" class="mt-1" type="text" v-model="collection.permalink" />
+                            </div>
+                        </div>
+                        <div class="mb-4">
                             <x-label for="socials-website" :value="__('Website')" />
                             <x-input id="socials-website" class="mt-1 w-full" type="text" v-model="collection.website" />
                         </div>
@@ -247,7 +254,7 @@
 
                 <div class="w-full">
                     <x-link-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-link-button>
-                    <x-gray-button href="{{ route('mint.index', $collection->id) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-gray-button>
+                    <x-gray-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-gray-button>
                 </div>
             </div>
         </div>

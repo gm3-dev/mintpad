@@ -1,11 +1,5 @@
 <x-mint-layout>
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
-        
-    <div class="text-center mt-4">
-        <a href="/" class="text-4xl font-jpegdev">
-            mintpad
-        </a>
-    </div>
 
     <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div v-if="claimPhases.length > 0" class="grid grid-cols-1 gap-4">

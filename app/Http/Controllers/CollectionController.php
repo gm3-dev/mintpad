@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
-use Collator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Image;
+use Illuminate\Support\Str;
 
 class CollectionController extends Controller
 {
@@ -195,7 +193,12 @@ class CollectionController extends Controller
     {
         $this->authorize('update', $collection);
 
+        $request->validate([
+            'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id],
+        ]);
+
         $data = $request->all();
+        $collection->permalink = $data['permalink'] ?? '';
         $collection->website = $data['website'] ?? '';
         $collection->roadmap = $data['roadmap'] ?? '';
         $collection->twitter = $data['twitter'] ?? '';
@@ -272,8 +275,15 @@ class CollectionController extends Controller
             'blockchain' => 'required',
             'address' => 'required'
         ]);
+        $counter = 0;
+        do {
+            $permalink = Str::slug($request->get('name')) . ($counter > 0 ? '-' . $counter : '');
+            $permalink_check = Collection::where('permalink', $permalink)->first();
+            $counter++;
+        } while ($permalink_check);
 
         $collection->name  = $request->get('name');
+        $collection->permalink  = $permalink;
         $collection->description  = $request->get('description');
         $collection->symbol  = $request->get('symbol');
         $collection->royalties  = $request->get('royalties');

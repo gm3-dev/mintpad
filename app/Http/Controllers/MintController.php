@@ -19,8 +19,14 @@ class MintController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function mint(Collection $collection)
+    public function mint($permalink)
     {
+        $collection = Collection::where('permalink', $permalink)->first();
+
+        if (!$collection) {
+            abort(404);
+        }
+
         return view('mint.index')->with(compact('collection'));
     }
 

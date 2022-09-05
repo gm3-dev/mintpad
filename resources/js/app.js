@@ -66,6 +66,7 @@ if (document.getElementById('app')) {
                 previews: [],
                 totalSupply: 0,
                 totalClaimedSupply: 0,
+                permalink: '',
                 website: '',
                 roadmap: '',
                 twitter: '',
@@ -123,6 +124,14 @@ if (document.getElementById('app')) {
                         this.collection.blockchain = response.data.blockchain
                         this.collection.token = response.data.token
 
+                        // Mint settings
+                        this.collection.permalink = response.data.permalink
+                        this.collection.website = response.data.website
+                        this.collection.roadmap = response.data.roadmap
+                        this.collection.twitter = response.data.twitter
+                        this.collection.discord = response.data.discord
+                        this.collection.about = response.data.about
+
                         // Check if wallet is connected to the correct blockchain
                         if (!await this.validateMatchingBlockchains(response.data.blockchain)) {
                             this.page.tab = -1
@@ -164,13 +173,6 @@ if (document.getElementById('app')) {
                         } catch(error) {
                             // this.setErrorMessage('Claim phases could not be loaded...')
                         }
-
-                        // Mint settings
-                        this.collection.website = response.data.website
-                        this.collection.roadmap = response.data.roadmap
-                        this.collection.twitter = response.data.twitter
-                        this.collection.discord = response.data.discord
-                        this.collection.about = response.data.about
                     })
                 }
             },
@@ -313,6 +315,7 @@ if (document.getElementById('app')) {
                 this.setButtonLoader(e)
 
                 var data = {
+                    permalink: this.collection.permalink,
                     website: this.collection.website,
                     roadmap: this.collection.roadmap,
                     twitter: this.collection.twitter,
@@ -320,8 +323,16 @@ if (document.getElementById('app')) {
                     about: this.collection.about,
                 }
 
-                await axios.put('/collections/'+this.collectionID, data).then((response) => {
-                    this.setSuccessMessage('Mint settings updated')
+                await axios.put('/collections/'+this.collectionID, data)
+                .catch((error) => {
+                    if (error.response.status == 422) {
+                        this.setErrorMessage(error.response.data.message)
+                    }
+                })
+                .then((response) => {
+                    if (response) {
+                        this.setSuccessMessage('Mint settings updated')
+                    }
                 })
 
                 this.resetButtonLoader()

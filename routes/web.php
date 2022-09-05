@@ -55,7 +55,7 @@ Route::domain(env('APP_URL'))->group(function () {
 
 Route::domain(env('APP_MINT_URL'))->group(function () {
     // Mint layout
-    Route::get('mint/{collection}', [MintController::class, 'mint'])->name('mint.index');
+    Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
     Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 });
 
