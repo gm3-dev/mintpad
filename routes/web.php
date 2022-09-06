@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\DataController;
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\GeneratorController;
 use App\Http\Controllers\UserController;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Back-end URL only
 Route::domain(env('APP_URL'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
@@ -53,10 +55,14 @@ Route::domain(env('APP_URL'))->group(function () {
     });
 });
 
+// Mint page URL only
 Route::domain(env('APP_MINT_URL'))->group(function () {
     // Mint layout
     Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
     Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 });
+
+// All domains
+Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
 
 require __DIR__.'/auth.php';

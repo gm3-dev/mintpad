@@ -1,8 +1,8 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
+import Vue from 'vue/dist/vue.js'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
-import { initMetaMask } from './metamask'
+import metamask from './metamask.js'
 import { initFastSigner } from './signer'
 import helpers from './helpers.js'
 import modal from './modal.js'
@@ -41,7 +41,7 @@ if (document.getElementById('user-address')) {
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [helpers,modal,thirdweb,nftgenerator],
+        mixins: [metamask,helpers,modal,thirdweb,nftgenerator],
         data: {
             ipfs: {
                 gateway: false,
@@ -52,11 +52,10 @@ if (document.getElementById('app')) {
             sdk: false,
             contract: false,
             contractAddress: false,
-            wallet: false,
             upload: false,
             collection: {
                 name: '',
-                blockchain: 'ethereum',
+                chain_id: 1,
                 token: 'ETH',
                 symbol: '',
                 fee_recipient: 0,
@@ -86,27 +85,29 @@ if (document.getElementById('app')) {
                 return this.wallet.account ? this.wallet.account.substring(0, 5)+'...'+this.wallet.account.substr(this.wallet.account.length - 3) : ''
             },
             collectionChain() {
-                return this.collection.blockchain
+                return this.collection.chain_id
             }
         },
         watch: {
-            collectionChain: async function(blockchain) {
-                // this.validateMatchingBlockchains(blockchain)
+            collectionChain: async function(chainID) {
+                this.hasValidChain = await this.validateMatchingBlockchains(parseInt(chainID))
             }
         },
         async mounted() {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
-
-            this.setPage()
-            this.setPageData()
     
-            this.wallet = await initMetaMask(false)
+            await this.setBlockchains()
+            await this.initMetaMask(false)
             // this.fastSigner = await initFastSigner()
+            
             if (this.wallet.account) {
                 $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
             }
+
+            this.setPage()
+            this.setPageData()
         },
         methods: {
             changeEditTab: async function(tab) {
@@ -116,14 +117,19 @@ if (document.getElementById('app')) {
                 this.page.name = this.$el.getAttribute('data-page')
             },
             setPageData: async function() {
+
                 // Collection pages
-                if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
+                if (this.page.name == 'collections.create') {
+                    this.collection.chain_id = this.wallet.network.id
+                    this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
+
+                } else if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     this.setClaimPhasesInfo()
 
                     axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
                         // Set DB data
                         this.contractAddress = response.data.address
-                        this.collection.blockchain = response.data.blockchain
+                        this.collection.chain_id = response.data.chain_id
                         this.collection.token = response.data.token
 
                         // Mint settings
@@ -135,14 +141,14 @@ if (document.getElementById('app')) {
                         this.collection.about = response.data.about
 
                         // Check if wallet is connected to the correct blockchain
-                        if (!await this.validateMatchingBlockchains(response.data.blockchain)) {
+                        if (!await this.validateMatchingBlockchains(response.data.chain_id)) {
                             this.page.tab = -1
                             return;
                         } else {
                             this.page.tab = 1
                         }
 
-                        this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
+                        this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
                         await this.setSmartContract(this.contractAddress)
 
                         // Global settings
@@ -178,31 +184,9 @@ if (document.getElementById('app')) {
                     })
                 }
             },
-            validateMatchingBlockchains: async function(blockchain) {
-                const chain = this.getChainInfo(blockchain)
-                if (chain.id != this.wallet.network.chainId) {
-                    return false
-                } else {
-                    return true
-                }
-            },
-            switchBlockchainTo: async function(blockchain) {
-                var blockchain = blockchain === false ? this.collection.blockchain : blockchain
-                const chain = this.getChainInfo(blockchain)
-
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: ethers.utils.hexValue(chain.id) }],
-                    })
-                } catch(error) {
-                    console.log('switchBlockchainTo', error)
-                    this.setErrorMessage('Failed to switch to the correct blockchain')
-                }
-            },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
-                    this.wallet = await initMetaMask(true)
+                    await this.initMetaMask(true)
                 }
             },
             setClaimPhasesInfo: function() {
@@ -340,13 +324,16 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             },
             deployContract: async function(e) {
-                this.setButtonLoader(e)
+                if (!this.hasValidChain) {
+                    this.setErrorMessage('Please connect to the correct blockchain')
+                    return
+                }
 
-                console.log('this.collection.blockchain', this.collection.blockchain)
+                this.setButtonLoader(e)
 
                 // deploy contract
                 try {
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
+                    this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
                         name: this.collection.name,
                         symbol: this.collection.symbol,

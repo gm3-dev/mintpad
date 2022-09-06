@@ -11,25 +11,6 @@ use Illuminate\Support\Str;
 
 class CollectionController extends Controller
 {
-    public $blockchains = [
-        'ethereum' => 'Ethereum (ETH)',
-        'polygon' => 'Polygon (MATIC)',
-        'fantom' => 'Fantom (FTM)',
-        'avalanche' => 'Avalanche (AVAX)',
-    ];
-    public $testnets = [
-        'goerli' => 'Goerli (ETH)',
-        'mumbai' => 'Mumbai (MATIC)',
-        'fantom-testnet' => 'Fantom Testnet (FTM)',
-        'avalanche-testnet' => 'Avalanche Fuji Testnet (AVAX)',
-    ];
-    public $tokens;
-
-    public function __construct()
-    {
-        $this->tokens = config('tokens');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -48,7 +29,11 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        $blockchains = ['Mainnets' => $this->blockchains, 'Testnets' => $this->testnets];
+        $blockchains = ['Mainnets' => [], 'Testnets' => []];
+        foreach (config('blockchains') as $blockchain) {
+            $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';
+            $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
+        }
         return view('collections.create')->with(compact('blockchains'));
     }
 
@@ -177,7 +162,7 @@ class CollectionController extends Controller
     {
         $this->authorize('view', $collection);
 
-        $collection->token = $this->tokens[$collection->blockchain];
+        $collection->token = config('blockchains.'.$collection->chain_id.'.token');
 
         return response()->json($collection, 200);
     }

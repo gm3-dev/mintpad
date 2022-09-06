@@ -1,6 +1,6 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
-import { initMetaMask } from './metamask'
+import metamask from './metamask.js'
 import helpers from './helpers.js'
 import thirdweb from './thirdweb.js'
 const axios = require('axios')
@@ -12,9 +12,8 @@ axios.defaults.headers.common = {
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [helpers,thirdweb],
+        mixins: [metamask,helpers,thirdweb],
         data: {
-            wallet: false,
             collection: {
                 totalSupply: 0,
                 totalClaimedSupply: 0,
@@ -35,18 +34,21 @@ if (document.getElementById('app')) {
                 return
             }
 
-            this.wallet = await initMetaMask(false)
+            await this.setBlockchains()
+            await this.initMetaMask(false)
+            console.log(this.wallet)
 
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
-                this.collection.blockchain = response.data.blockchain
+                this.collection.chain_id = response.data.chain_id
                 this.collection.token = response.data.token
+                this.hasValidChain = await this.validateMatchingBlockchains(parseInt(this.collection.chain_id))
 
                 // Set SDK
-                if (this.wallet) {
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.blockchain)
+                if (this.wallet.account && this.hasValidChain) {
+                    this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
                 } else {
-                    this.setSDK(this.collection.blockchain)
+                    this.setSDK(this.blockchains[this.collection.chain_id].name)
                 }
 
                 await this.setSmartContract(this.contractAddress)
@@ -88,7 +90,7 @@ if (document.getElementById('app')) {
         methods: {
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
-                    this.wallet = await initMetaMask(true)
+                    this.wallet = await this.initMetaMask(true)
                 }
             },
             setActiveClaimPhase: function() {

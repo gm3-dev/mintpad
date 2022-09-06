@@ -1,3 +1,11 @@
+window.$ = require('jquery')
+import { ethers } from 'ethers'
+const axios = require('axios')
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+}
+
 export default {
     data() {
         return {
@@ -7,89 +15,39 @@ export default {
                     target: null
                 }
             },
+            blockchains: {},
             errorMessage: false,
             showRefreshButton: false,
             successMessage: false,
             showModal: false,
+            hasValidChain: true,
         }
     },
     methods: {
-        /**
-         * Get chain info
-         * @param {string} chain 
-         * @returns {object}
-         */
-        getChainInfo: function(chain) {
-            const chains = {
-                // Ethereum
-                'ethereum': {
-                    name: 'Mainnet',
-                    id: 1,
-                    metamask: 'homestead'
-                },
-                'rinkeby': { // deprecated
-                    name: 'Rinkeby',
-                    id: 4,
-                    metamask: 'rinkeby'
-                },
-                'goerli': {
-                    name: 'Goerli',
-                    id: 5,
-                    metamask: 'goerli'
-                },
-                // Polygon
-                'polygon': {
-                    name: 'Polygon',
-                    id: 137,
-                    metamask: 'matic'
-                },
-                'mumbai': {
-                    name: 'Mumbai',
-                    id: 80001,
-                    metamask: 'maticmum'
-                },
-                // Fantom
-                'fantom': {
-                    name: 'Fantom',
-                    id: 250,
-                    metamask: 'unknown'
-                },
-                'fantom-testnet': {
-                    name: 'Fantom testnet',
-                    id: 4002,
-                    metamask: 'unknown'
-                },
-                // Avalanche
-                'avalanche': {
-                    name: 'Avalanche',
-                    id: 43114,
-                    metamask: 'unknown'
-                },
-                'avalanche-testnet': {
-                    name: 'Avalanche testnet',
-                    id: 43113,
-                    metamask: 'unknown'
-                },
-                // Optimism
-                'optimism': {
-                    name: 'Optimism',
-                    id: 10
-                },
-                'optimism-testnet': {
-                    name: 'Optimism testnet',
-                    id: 69
-                },
-                // Arbitrum
-                'arbitrum': {
-                    name: 'Arbitrum',
-                    id: 42161
-                },
-                'arbitrum-testnet': {
-                    name: 'Arbitrum testnet',
-                    id: 421611
-                },
+        switchBlockchainTo: async function(chainID) {
+            var chainID = chainID === false ? this.collection.chain_id : chainID
+
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: ethers.utils.hexValue(parseInt(chainID)) }],
+                })
+            } catch(error) {
+                console.log('switchBlockchainTo', error)
+                this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.')
             }
-            return chains[chain]
+        },
+        validateMatchingBlockchains: async function(chainID) {
+            if (chainID != this.wallet.network.id) {
+                return false
+            } else {
+                return true
+            }
+        },
+        setBlockchains: function() {
+            return axios.get('/data/blockchains').then((response) => {
+                this.blockchains = response.data
+            })
         },
         /**
          * Set error message
@@ -217,13 +175,6 @@ export default {
          */
         getDoubleDigitNumber: function(number) {
             return number < 10 ? '0'+number : number
-        },
-        /**
-         * Toggle modal
-         * @param {boolean} state 
-         */
-        toggleModal: function(state) {
-            this.showModal = state
         }
     }
 }

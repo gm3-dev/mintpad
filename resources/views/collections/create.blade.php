@@ -11,10 +11,15 @@
                     <p class="text-mintpad-300 text-center mb-5">{{ __('Create your NFT collections.') }}</p>
                 </div>
 
+                <div v-if="!hasValidChain" class="border-2 border-primary-600 rounded-lg p-4 mb-8">
+                    <p class="text-sm text-center mb-4">Your wallet is not connected to the correct blockchain. Switching blockchains will refresh this page and all form data will be lost.</p>
+                    <p class="text-center"><x-link-button href="#" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-link-button></p>
+                </div>
+
                 <div class="w-full flex flex-wrap">
                     <div class="basis-1/3 mb-4">
                         <x-label for="symbol" :value="__('Blockchain')" />
-                        <x-select class="mt-1 !w-full" v-model="collection.blockchain" :options="$blockchains"></x-select>
+                        <x-select class="mt-1 !w-full" v-model="collection.chain_id" :options="$blockchains"></x-select>
                     </div>
                     <div class="basis-1/3 mb-4 px-2">
                         <x-label for="symbol" :value="__('Symbol')" />

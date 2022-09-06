@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class MintController extends Controller
 {
-    public $tokens;
-
-    public function __construct()
-    {
-        $this->tokens = config('tokens');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -44,7 +37,7 @@ class MintController extends Controller
             return response()->json('Collection not found', 204);
         }
 
-        $collection->token = $this->tokens[$collection->blockchain];
+        $collection->token = config('blockchains.'.$collection->chain_id.'.token');
 
         return response()->json($collection, 200);
     }
