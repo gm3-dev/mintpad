@@ -47,7 +47,6 @@ class CollectionController extends Controller
     {
         $collection = new Collection();
         $collection->user_id = Auth::user()->id;
-        $collection->chain = Auth::user()->id;
 
         $this->save($request, $collection);
 
@@ -257,7 +256,7 @@ class CollectionController extends Controller
             'royalties' => 'required|numeric|between:0,100',
             'description' => 'required',
             'symbol' => 'required',
-            'blockchain' => 'required',
+            'chain_id' => 'required|numeric',
             'address' => 'required'
         ]);
         $counter = 0;
@@ -272,7 +271,7 @@ class CollectionController extends Controller
         $collection->description  = $request->get('description');
         $collection->symbol  = $request->get('symbol');
         $collection->royalties  = $request->get('royalties');
-        $collection->blockchain  = $request->get('blockchain');
+        $collection->chain_id  = $request->get('chain_id');
         $collection->address  = $request->get('address');
         $collection->save();
     }
