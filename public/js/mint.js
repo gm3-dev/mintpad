@@ -28423,7 +28423,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       errorMessage: false,
       showRefreshButton: false,
-      successMessage: false
+      successMessage: false,
+      showModal: false
     };
   },
   methods: {
@@ -28650,6 +28651,14 @@ __webpack_require__.r(__webpack_exports__);
      */
     getDoubleDigitNumber: function getDoubleDigitNumber(number) {
       return number < 10 ? '0' + number : number;
+    },
+
+    /**
+     * Toggle modal
+     * @param {boolean} state 
+     */
+    toggleModal: function toggleModal(state) {
+      this.showModal = state;
     }
   }
 });
@@ -28820,14 +28829,21 @@ function _initMetaMask() {
                   while (1) {
                     switch (_context.prev = _context.next) {
                       case 0:
+                        _context.prev = 0;
                         provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any");
-                        _context.next = 3;
+                        _context.next = 4;
                         return provider.getNetwork();
 
-                      case 3:
+                      case 4:
                         network = _context.sent;
+                        _context.next = 9;
+                        break;
 
-                        // this.provider = await detectEthereumProvider() // not used
+                      case 7:
+                        _context.prev = 7;
+                        _context.t0 = _context["catch"](0);
+
+                      case 9:
                         if (provider) {
                           // From now on, this should always be true:
                           // provider === window.ethereum
@@ -28841,12 +28857,12 @@ function _initMetaMask() {
                           console.log(e);
                         });
 
-                      case 6:
+                      case 11:
                       case "end":
                         return _context.stop();
                     }
                   }
-                }, _callee);
+                }, _callee, null, [[0, 7]]);
               }));
               return _getProvider.apply(this, arguments);
             };

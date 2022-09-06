@@ -10,6 +10,7 @@ export default {
             errorMessage: false,
             showRefreshButton: false,
             successMessage: false,
+            showModal: false,
         }
     },
     methods: {
@@ -216,6 +217,13 @@ export default {
          */
         getDoubleDigitNumber: function(number) {
             return number < 10 ? '0'+number : number
+        },
+        /**
+         * Toggle modal
+         * @param {boolean} state 
+         */
+        toggleModal: function(state) {
+            this.showModal = state
         }
     }
 }

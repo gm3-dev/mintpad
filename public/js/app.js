@@ -31866,17 +31866,18 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
 /* harmony import */ var vue_tippy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-tippy */ "./node_modules/vue-tippy/dist/vue-tippy.esm.js");
 /* harmony import */ var _metamask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./metamask */ "./resources/js/metamask.js");
 /* harmony import */ var _signer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./signer */ "./resources/js/signer.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers.js */ "./resources/js/helpers.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/bignumbers.js");
-/* harmony import */ var _thirdweb_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./thirdweb.js */ "./resources/js/thirdweb.js");
-/* harmony import */ var _nft_generator_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./nft-generator.js */ "./resources/js/nft-generator.js");
+/* harmony import */ var _modal_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modal.js */ "./resources/js/modal.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/bignumbers.js");
+/* harmony import */ var _thirdweb_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./thirdweb.js */ "./resources/js/thirdweb.js");
+/* harmony import */ var _nft_generator_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./nft-generator.js */ "./resources/js/nft-generator.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -31884,6 +31885,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
 
 
 
@@ -31902,11 +31904,11 @@ axios.defaults.headers.common = {
 };
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default().use(vue_tippy__WEBPACK_IMPORTED_MODULE_2__["default"]);
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default().component("tippy", vue_tippy__WEBPACK_IMPORTED_MODULE_2__.TippyComponent); // User address in navigation
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9___default().use(vue_tippy__WEBPACK_IMPORTED_MODULE_2__["default"]);
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9___default().component("tippy", vue_tippy__WEBPACK_IMPORTED_MODULE_2__.TippyComponent); // User address in navigation
 
 if (document.getElementById('user-address')) {
-  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default())({
+  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9___default())({
     el: '#user-address',
     methods: {
       copyAddress: function copyAddress(e) {
@@ -31924,9 +31926,9 @@ if (document.getElementById('user-address')) {
 }
 
 if (document.getElementById('app')) {
-  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default())({
+  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_9___default())({
     el: '#app',
-    mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_5__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_6__["default"], _nft_generator_js__WEBPACK_IMPORTED_MODULE_7__["default"]],
+    mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_5__["default"], _modal_js__WEBPACK_IMPORTED_MODULE_6__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_7__["default"], _nft_generator_js__WEBPACK_IMPORTED_MODULE_8__["default"]],
     data: {
       ipfs: {
         gateway: false,
@@ -32007,16 +32009,14 @@ if (document.getElementById('app')) {
                   _this.collectionID = $('#collectionID').val();
                 }
 
-                _this.setClaimPhasesInfo();
-
                 _this.setPage();
 
                 _this.setPageData();
 
-                _context2.next = 6;
+                _context2.next = 5;
                 return (0,_metamask__WEBPACK_IMPORTED_MODULE_3__.initMetaMask)(false);
 
-              case 6:
+              case 5:
                 _this.wallet = _context2.sent;
 
                 // this.fastSigner = await initFastSigner()
@@ -32024,7 +32024,7 @@ if (document.getElementById('app')) {
                   $('#user-address > button').text(_this.userAddressShort).data('address', _this.wallet.account).removeClass('hidden');
                 }
 
-              case 8:
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -32068,6 +32068,7 @@ if (document.getElementById('app')) {
                 case 0:
                   // Collection pages
                   if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
+                    this.setClaimPhasesInfo();
                     axios.get('/collections/' + this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(response) {
                         var metadata, royalties, claimConditions;
@@ -32211,19 +32212,18 @@ if (document.getElementById('app')) {
               switch (_context6.prev = _context6.next) {
                 case 0:
                   chain = this.getChainInfo(blockchain);
-                  console.log(this.wallet);
 
                   if (!(chain.id != this.wallet.network.chainId)) {
-                    _context6.next = 6;
+                    _context6.next = 5;
                     break;
                   }
 
                   return _context6.abrupt("return", false);
 
-                case 6:
+                case 5:
                   return _context6.abrupt("return", true);
 
-                case 7:
+                case 6:
                 case "end":
                   return _context6.stop();
               }
@@ -32251,7 +32251,7 @@ if (document.getElementById('app')) {
                   return window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{
-                      chainId: ethers__WEBPACK_IMPORTED_MODULE_9__.hexValue(chain.id)
+                      chainId: ethers__WEBPACK_IMPORTED_MODULE_10__.hexValue(chain.id)
                     }]
                   });
 
@@ -32330,7 +32330,7 @@ if (document.getElementById('app')) {
                       price: claimPhase.price,
                       maxQuantity: claimPhase.maxQuantity,
                       quantityLimitPerTransaction: 1,
-                      waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers__WEBPACK_IMPORTED_MODULE_10__.MaxUint256 : 5,
+                      waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers__WEBPACK_IMPORTED_MODULE_11__.MaxUint256 : 5,
                       snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot
                     };
                     claimPhases.push(newClaimPhase);
@@ -32913,6 +32913,10 @@ if (document.getElementById('app')) {
           button.html('<i class="far fa-copy mr-2"></i>' + buttonText);
         }, 1000);
         navigator.clipboard.writeText(button.data('address'));
+      },
+      openYouTubeModal: function openYouTubeModal(url) {
+        this.modalToggle(true);
+        this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="' + url + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>');
       }
     }
   });
@@ -32942,7 +32946,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       errorMessage: false,
       showRefreshButton: false,
-      successMessage: false
+      successMessage: false,
+      showModal: false
     };
   },
   methods: {
@@ -33169,6 +33174,14 @@ __webpack_require__.r(__webpack_exports__);
      */
     getDoubleDigitNumber: function getDoubleDigitNumber(number) {
       return number < 10 ? '0' + number : number;
+    },
+
+    /**
+     * Toggle modal
+     * @param {boolean} state 
+     */
+    toggleModal: function toggleModal(state) {
+      this.showModal = state;
     }
   }
 });
@@ -33339,14 +33352,21 @@ function _initMetaMask() {
                   while (1) {
                     switch (_context.prev = _context.next) {
                       case 0:
+                        _context.prev = 0;
                         provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any");
-                        _context.next = 3;
+                        _context.next = 4;
                         return provider.getNetwork();
 
-                      case 3:
+                      case 4:
                         network = _context.sent;
+                        _context.next = 9;
+                        break;
 
-                        // this.provider = await detectEthereumProvider() // not used
+                      case 7:
+                        _context.prev = 7;
+                        _context.t0 = _context["catch"](0);
+
+                      case 9:
                         if (provider) {
                           // From now on, this should always be true:
                           // provider === window.ethereum
@@ -33360,12 +33380,12 @@ function _initMetaMask() {
                           console.log(e);
                         });
 
-                      case 6:
+                      case 11:
                       case "end":
                         return _context.stop();
                     }
                   }
-                }, _callee);
+                }, _callee, null, [[0, 7]]);
               }));
               return _getProvider.apply(this, arguments);
             };
@@ -33406,6 +33426,56 @@ function _initMetaMask() {
   }));
   return _initMetaMask.apply(this, arguments);
 }
+
+/***/ }),
+
+/***/ "./resources/js/modal.js":
+/*!*******************************!*\
+  !*** ./resources/js/modal.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      modal: {
+        show: false,
+        title: false,
+        content: ''
+      }
+    };
+  },
+  methods: {
+    /**
+     * Toggle modal
+     * @param {boolean} state 
+     */
+    modalToggle: function modalToggle(state) {
+      this.modal.show = state;
+    },
+
+    /**
+     * Set modal title
+     * @param {string} title 
+     */
+    modalTitle: function modalTitle(title) {
+      this.modal.title = title;
+    },
+
+    /**
+     * Set modal content
+     * @param {string} content 
+     */
+    modalContent: function modalContent(content) {
+      this.modal.content = content;
+    }
+  }
+});
 
 /***/ }),
 

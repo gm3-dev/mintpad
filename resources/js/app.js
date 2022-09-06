@@ -5,6 +5,7 @@ import VueTippy, { TippyComponent } from "vue-tippy"
 import { initMetaMask } from './metamask'
 import { initFastSigner } from './signer'
 import helpers from './helpers.js'
+import modal from './modal.js'
 import { ethers } from 'ethers'
 import thirdweb from './thirdweb.js'
 import nftgenerator from './nft-generator.js'
@@ -40,7 +41,7 @@ if (document.getElementById('user-address')) {
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [helpers,thirdweb,nftgenerator],
+        mixins: [helpers,modal,thirdweb,nftgenerator],
         data: {
             ipfs: {
                 gateway: false,
@@ -98,7 +99,6 @@ if (document.getElementById('app')) {
                 this.collectionID = $('#collectionID').val()
             }
 
-            this.setClaimPhasesInfo()
             this.setPage()
             this.setPageData()
     
@@ -118,6 +118,8 @@ if (document.getElementById('app')) {
             setPageData: async function() {
                 // Collection pages
                 if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
+                    this.setClaimPhasesInfo()
+
                     axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
                         // Set DB data
                         this.contractAddress = response.data.address
@@ -178,7 +180,6 @@ if (document.getElementById('app')) {
             },
             validateMatchingBlockchains: async function(blockchain) {
                 const chain = this.getChainInfo(blockchain)
-                console.log(this.wallet)
                 if (chain.id != this.wallet.network.chainId) {
                     return false
                 } else {
@@ -506,6 +507,10 @@ if (document.getElementById('app')) {
                     button.html('<i class="far fa-copy mr-2"></i>'+buttonText)
                 }, 1000)
                 navigator.clipboard.writeText(button.data('address'))
+            },
+            openYouTubeModal: function(url) {
+                this.modalToggle(true)
+                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }
     })

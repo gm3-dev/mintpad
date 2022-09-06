@@ -37,7 +37,10 @@
                 <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                     @method('PUT')
 
-                    <h3 class="text-2xl mb-4 mt-6">{{ __('General Settings') }}</h3>
+                    <h3 class="text-2xl mb-4 mt-6">
+                        {{ __('General Settings') }}
+                        <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                    </h3>
                     <div class="w-full flex flex-wrap">
                         <div class="basis-full mb-4">
                             <x-label for="name" :value="__('Collection name')" />
@@ -78,7 +81,10 @@
                 <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                     @method('PUT')
 
-                    <h3 class="text-2xl mb-4 mt-6">{{ __('Mint phases') }}</h3>
+                    <h3 class="text-2xl mb-4 mt-6">
+                        {{ __('Mint phases') }} 
+                        <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                    </h3>
                     <p class="text-mintpad-300 font-regular text-sm">{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                     <p class="text-mintpad-300 font-regular text-sm mb-8">{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
 
@@ -171,7 +177,10 @@
                     @csrf
 
                     <div class="w-full">
-                        <h3 class="text-2xl mb-4 mt-6">{{ __('Add images to your collection') }}</h3>
+                        <h3 class="text-2xl mb-4 mt-6">
+                            {{ __('Add images to your collection') }}
+                            <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                        </h3>
                         <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection.') }}</b></p>
                         <p class="font-semibold text-sm mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a sample collection.') }}</x-link></p>
 
@@ -217,7 +226,10 @@
                 </form>
             </div>
             <div v-if="page.tab == 4">
-                <h3 class="text-2xl mb-4 mt-6">{{ __('Mint settings') }}</h3>
+                <h3 class="text-2xl mb-4 mt-6">
+                    {{ __('Mint settings') }}
+                    <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                </h3>
                 <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
 
                 <div class="w-full grid grid-cols-2 gap-2 mb-6">
@@ -254,7 +266,7 @@
 
                 <div class="w-full">
                     <x-link-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-link-button>
-                    <x-gray-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-gray-button>
+                    <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-blue-button>
                 </div>
             </div>
         </div>

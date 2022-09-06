@@ -10,9 +10,14 @@ export async function initMetaMask(triggerRequest) {
     }
 
     async function getProvider() {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        const network = await provider.getNetwork()
-        // this.provider = await detectEthereumProvider() // not used
+        try {
+            var provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+            var network = await provider.getNetwork()
+            // this.provider = await detectEthereumProvider() // not used
+
+        } catch(error) {
+            //
+        }
 
         if (provider) {
             // From now on, this should always be true:
