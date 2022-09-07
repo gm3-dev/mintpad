@@ -36,19 +36,20 @@ if (document.getElementById('app')) {
 
             await this.setBlockchains()
             await this.initMetaMask(false)
-            console.log(this.wallet)
 
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.token = response.data.token
+                this.collection.buttons = this.createButtonList(response.data)
+                this.collection.about = response.data.about
                 this.hasValidChain = await this.validateMatchingBlockchains(parseInt(this.collection.chain_id))
 
                 // Set SDK
                 if (this.wallet.account && this.hasValidChain) {
-                    this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
+                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
                 } else {
-                    this.setSDK(this.blockchains[this.collection.chain_id].name)
+                    this.setSDK(this.collection.chain_id)
                 }
 
                 await this.setSmartContract(this.contractAddress)
@@ -63,8 +64,6 @@ if (document.getElementById('app')) {
                     this.collection.totalSupply = await this.contract.totalSupply()
                     this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.buttons = this.createButtonList(response.data)
-                    this.collection.about = response.data.about
                     this.collection.image = await this.setCollectionImage()
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
@@ -83,6 +82,7 @@ if (document.getElementById('app')) {
                     // console.log('Failed to load metadata', e)
                     // this.setErrorMessage('Claim phases could not be loaded...')
                 }
+
             }).catch((error, asdf) => {
                 //
             });

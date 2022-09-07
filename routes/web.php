@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Back-end URL only
-Route::domain(env('APP_URL'))->group(function () {
+Route::domain(config('app.url'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
     Route::group(['middleware' => ['auth']], function () {
@@ -56,7 +56,7 @@ Route::domain(env('APP_URL'))->group(function () {
 });
 
 // Mint page URL only
-Route::domain(env('APP_MINT_URL'))->group(function () {
+Route::domain(config('app.mint_url'))->group(function () {
     // Mint layout
     Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
     Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');

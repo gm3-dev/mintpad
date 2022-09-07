@@ -6,7 +6,9 @@ export default {
          * Set SDK object
          * @param {string} blockchain blockchain name
          */
-        setSDK: function(blockchain) {
+        setSDK: function(chainID) {
+            var chain = this.blockchains[chainID]
+            var blockchain = this.getSDKBlockchain(chain)
             this.sdk = new ThirdwebSDK(blockchain)
         },
         /**
@@ -14,8 +16,18 @@ export default {
          * @param {string} signer wallet signer
          * @param {string} blockchain blockchain name
          */
-        setSDKFromSigner: function(signer, blockchain) {
+        setSDKFromSigner: function(signer, chainID) {
+            var chain = this.blockchains[chainID]
+            var blockchain = this.getSDKBlockchain(chain)
             this.sdk = ThirdwebSDK.fromSigner(signer, blockchain, {})
+        },
+        /**
+         * Get chain RPC or chain name
+         * @param {object} chain 
+         * @returns string
+         */
+        getSDKBlockchain: function(chain) {
+            return chain.rpc !== false ? chain.rpc : chain.name
         },
         /**
          * Set smart contract object

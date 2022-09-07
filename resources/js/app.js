@@ -148,7 +148,7 @@ if (document.getElementById('app')) {
                             this.page.tab = 1
                         }
 
-                        this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
+                        this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
                         await this.setSmartContract(this.contractAddress)
 
                         // Global settings
@@ -333,7 +333,7 @@ if (document.getElementById('app')) {
 
                 // deploy contract
                 try {
-                    this.setSDKFromSigner(this.wallet.signer, this.blockchains[this.collection.chain_id].name)
+                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
                     const contractAddress = await this.sdk.deployer.deployNFTDrop({
                         name: this.collection.name,
                         symbol: this.collection.symbol,
