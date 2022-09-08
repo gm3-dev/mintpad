@@ -1,8 +1,6 @@
 <x-mint-layout>
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
-
-
     <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 mb-4">
         <p class="text-sm text-center">Your wallet is not connected to the correct blockchain.</p>
     </div>
@@ -28,19 +26,27 @@
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1" v-html="timers[index].seconds">00</span>
                     </div>
                 </div>
-                <p v-else-if="timers[index] !== Infinity" class="text-sm">{{ __('Phase ended') }}</p>
+                <p v-else-if="timers[index] !== Infinity && typeof timers[index] !== 'object'" class="text-sm">{{ __('Phase ended') }}</p>
+                <p v-else class="text-sm">&nbsp;</p>
             </div>
         </div>
-        <div v-else class="relative bg-white rounded-xl px-8 py-6"></div>
-        <div class="bg-white rounded-xl" v-bind:class="{'pt-full': !collection.image}">
+        <div v-else class="grid grid-cols-1 gap-4">
+            <div v-for="(phase, index) in [1,2,3]" class="relative bg-white rounded-xl px-8 py-6">
+                <div class="bg-gray-300 rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
+                <div class="bg-gray-300 rounded-md w-full h-5 mb-4 animate-pulse"></div>
+                <div class="bg-gray-300 rounded-md w-2/3 h-5 animate-pulse"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl text-center">
             <img v-if="collection.image" v-bind:src="collection.image" class="rounded-xl" />
+            <img v-else src="/images/image-skeleton.png" class="rounded-xl animate-pulse" />
         </div>
         <div class="bg-white rounded-xl p-8">
             <h2 class="text-xl font-semibold text-center mb-1">{{ __('Mint an NFT') }}</h2>
             <p class="text-mintpad-300 font-regular text-center mb-4">{{ __('Start minting by clicking the button below') }}</p>
             <div class="flex gap-2">                    
                 <x-button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full">Connect MetaMask</x-button>
-                <x-button v-if="!hasValidChain" @click.prevent="switchBlockchainTo(false)" class="w-full">Switch blockchain</x-button>
+                <x-button v-else-if="!hasValidChain" @click.prevent="switchBlockchainTo(false)" class="w-full">Switch blockchain</x-button>
                 <x-button v-else @click.prevent="mintNFT" class="w-full">Start minting</x-button>
             </div>
             <div class="grid grid-cols-2 mt-4 text-sm font-medium text-mintpad-300">
