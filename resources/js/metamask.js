@@ -70,6 +70,7 @@ export default {
     
                 ethereum.on('disconnect', function (error) {
                     console.log('Disconnected from network', error)
+                    window.location.reload()
                 })
             }
         },
