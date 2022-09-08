@@ -232,7 +232,7 @@
                 </h3>
                 <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
 
-                <div class="w-full grid grid-cols-2 gap-2 mb-6">
+                <div class="w-full grid grid-cols-2 gap-4 mb-6">
                     <div>
                         <div class="mb-4">
                             <x-label for="permalink" :value="__('Permalink')" />
@@ -243,19 +243,19 @@
                         </div>
                         <div class="mb-4">
                             <x-label for="socials-website" :value="__('Website')" />
-                            <x-input id="socials-website" class="mt-1 w-full" type="text" v-model="collection.website" />
+                            <x-input id="socials-website" class="mt-1 w-full" type="text" v-model="collection.website" placeholder="https://www.example.com" />
                         </div>
                         <div class="mb-4">
                             <x-label for="socials-roadmap" :value="__('Roadmap')" />
-                            <x-input id="socials-roadmap" class="mt-1 w-full" type="text" v-model="collection.roadmap" />
+                            <x-input id="socials-roadmap" class="mt-1 w-full" type="text" v-model="collection.roadmap" placeholder="https://www.example.com/roadmap" />
                         </div>
                         <div class="mb-4">
                             <x-label for="socials-twitter" :value="__('Twitter')" />
-                            <x-input id="socials-twitter" class="mt-1 w-full" type="text" v-model="collection.twitter" />
+                            <x-input id="socials-twitter" class="mt-1 w-full" type="text" v-model="collection.twitter" placeholder="https://www.example.com/twitter" />
                         </div>
                         <div>
                             <x-label for="socials-discord" :value="__('Discord')" />
-                            <x-input id="socials-discord" class="mt-1 w-full" type="text" v-model="collection.discord" />
+                            <x-input id="socials-discord" class="mt-1 w-full" type="text" v-model="collection.discord" placeholder="https://www.example.com/discord" />
                         </div>
                     </div>
                     <div>

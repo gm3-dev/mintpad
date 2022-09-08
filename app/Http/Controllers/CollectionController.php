@@ -179,6 +179,10 @@ class CollectionController extends Controller
 
         $request->validate([
             'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id],
+            'website' => ['nullable', 'max:255', 'url'],
+            'roadmap' => ['nullable', 'max:255', 'url'],
+            'twitter' => ['nullable', 'max:255', 'url'],
+            'discord' => ['nullable', 'max:255', 'url']
         ]);
 
         $data = $request->all();

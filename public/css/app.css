@@ -10200,6 +10200,54 @@ readers do not read off random characters that represent icons */
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.placeholder\:text-mintpad-200::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(225 229 232 / var(--tw-text-opacity));
+}
+.placeholder\:text-mintpad-200:-ms-input-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(225 229 232 / var(--tw-text-opacity));
+}
+.placeholder\:text-mintpad-200::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(225 229 232 / var(--tw-text-opacity));
+}
+.placeholder\:text-mintpad-300::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(101 111 119 / var(--tw-text-opacity));
+}
+.placeholder\:text-mintpad-300:-ms-input-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(101 111 119 / var(--tw-text-opacity));
+}
+.placeholder\:text-mintpad-300::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(101 111 119 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-300::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-300:-ms-input-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-300::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-400::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-400:-ms-input-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.placeholder\:text-gray-400::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
 .hover\:border-primary-600:hover {
   --tw-border-opacity: 1;
   border-color: rgb(0 113 249 / var(--tw-border-opacity));
