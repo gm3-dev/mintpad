@@ -73,4 +73,7 @@
             <p class="text-mintpad-300 font-regular" v-html="collection.about"></p>
         </div>
     </div>
+    <div class="pt-4 text-center">
+        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm text-mintpad-300">Terms of Service</x-link>
+    </div>
 </x-app-layout>
