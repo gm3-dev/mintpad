@@ -36,6 +36,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $rules = [
+            'accept_tos' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -52,7 +53,9 @@ class RegisteredUserController extends Controller
             $rules['address'] = ['required', 'string', 'max:255'];
         }
 
-        $request->validate($rules);
+        $request->validate($rules, [
+            'accept_tos.required' => 'Accepting the Terms of Service is required'
+        ]);
 
         $user = new User();
         $user->name = $request->name;

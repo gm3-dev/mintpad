@@ -33,13 +33,15 @@
                     <x-label for="password_confirmation" :value="__('Confirm Password')" class="relative is-required" />
                     <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
                 </div>
-            </div>
 
-            <!-- Is company -->
-            <div class="my-4 flex">
-                <label for="is-company" class="inline-flex items-center flex-auto">
+                <label for="is-company" class="inline-flex items-center flex-auto pt-1">
                     <x-checkbox id="is-company" type="checkbox" name="is_company" value="1" checked="{{ old('is_company') !== null ? true : false }}" />
                     <x-label for="is-company" class="ml-2">{{ __('I\'m a company') }}</x-label>
+                </label>
+
+                <label for="accept-tos" class="inline-flex items-center flex-auto pt-1">
+                    <x-checkbox id="accept-tos" type="checkbox" name="accept_tos" value="1" checked="{{ old('accept_tos') !== null ? true : false }}" />
+                    <x-label for="accept-tos" class="ml-2 relative is-required">{{ __('I accept the') }} <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm">Terms of Service</x-link></x-label>
                 </label>
             </div>
 
