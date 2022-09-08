@@ -65,4 +65,10 @@ Route::domain(config('app.mint_url'))->group(function () {
 // All domains
 Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
 
+// Auth routes
 require __DIR__.'/auth.php';
+
+// Fallback aka 404
+Route::fallback(function () {
+    return view('errors.404');
+});
