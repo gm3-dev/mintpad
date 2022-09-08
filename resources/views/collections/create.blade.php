@@ -1,12 +1,12 @@
 <x-app-layout>
-    <div class="bg-white overflow-hidden">
+    <div class="relative bg-white overflow-hidden">
         <div v-if="!wallet.account">
             @include('partials.connect')
         </div>
         <div v-else>
             <form method="POST" action="{{ route('collections.store') }}" enctype="multipart/form-data">
                 <div class="text-center mb-10">
-                <x-gray-button href="{{ route('collections.index') }}" class="float-left mt-1">{{ __('Back') }}</x-gray-button>
+                    <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
                     <h2 class="text-3xl text-center mb-1">{{ __('Create NFT collection') }}</h2>
                     <p class="text-mintpad-300 text-center mb-5">{{ __('Create your NFT collections.') }}</p>
                 </div>
