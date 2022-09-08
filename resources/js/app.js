@@ -3,7 +3,6 @@ import Vue from 'vue/dist/vue.min.js'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import metamask from './metamask.js'
-import { initFastSigner } from './signer'
 import helpers from './helpers.js'
 import modal from './modal.js'
 import { ethers } from 'ethers'
@@ -43,11 +42,6 @@ if (document.getElementById('app')) {
         el: '#app',
         mixins: [metamask,helpers,modal,thirdweb,nftgenerator],
         data: {
-            ipfs: {
-                gateway: false,
-                hash: 'QmZ7JB3mBYxTD8McJZK8QrVAY7i9JrL3Tqu14GVaYYqnQh',
-                embed: ''
-            },
             collectionID: false,
             sdk: false,
             contract: false,
@@ -100,7 +94,7 @@ if (document.getElementById('app')) {
     
             await this.setBlockchains()
             await this.initMetaMask(false)
-            // this.fastSigner = await initFastSigner()
+            this.appReady()
             
             if (this.wallet.account) {
                 $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
@@ -110,6 +104,10 @@ if (document.getElementById('app')) {
             this.setPageData()
         },
         methods: {
+            appReady: function() {
+                $('#app').removeClass('hidden')
+                $('#app-loader').remove()
+            },
             changeEditTab: async function(tab) {
                 this.page.tab = tab
             },
