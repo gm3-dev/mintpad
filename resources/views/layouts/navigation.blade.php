@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-2 lg:space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('collections.index')" :active="request()->routeIs('collections.*')">
                         {{ __('Collections') }}
                     </x-nav-link>
@@ -29,7 +29,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <div id="user-address">
+                <div id="user-address" class="hidden lg:inline-block">
                     <button href="#" @click.prevent="copyAddress" class="hidden border-2 text-mintpad-400 text-sm rounded-lg hover:border-primary-600 px-3 py-1 mr-3" content="Copy wallet address" v-tippy></button>
                 </div>
                 <x-dropdown align="right" width="48">

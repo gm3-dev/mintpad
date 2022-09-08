@@ -129,6 +129,7 @@ if (document.getElementById('app')) {
                         this.contractAddress = response.data.address
                         this.collection.chain_id = response.data.chain_id
                         this.collection.token = response.data.token
+                        this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
 
                         // Mint settings
                         this.collection.permalink = response.data.permalink
@@ -139,7 +140,7 @@ if (document.getElementById('app')) {
                         this.collection.about = response.data.about
 
                         // Check if wallet is connected to the correct blockchain
-                        if (!await this.validateMatchingBlockchains(response.data.chain_id)) {
+                        if (!this.hasValidChain) {
                             this.page.tab = -1
                             return;
                         } else {
