@@ -38,13 +38,13 @@ export default {
                 // From now on, this should always be true:
                 // provider === window.ethereum
                 this.wallet.provider = provider
+    
+                provider.on("pending", function(e) {
+                    console.log(e)
+                })
             } else {
                 console.log('Please install MetaMask!')
             }
-    
-            provider.on("pending", function(e) {
-                console.log(e)
-            })
         },
         loadWeb3: function () {
             if (window.ethereum) {        

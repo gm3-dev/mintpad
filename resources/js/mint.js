@@ -18,6 +18,7 @@ if (document.getElementById('app')) {
                 totalSupply: 0,
                 totalClaimedSupply: 0,
                 totalRatio: 0,
+                image: false
             },
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
@@ -36,6 +37,7 @@ if (document.getElementById('app')) {
 
             await this.setBlockchains()
             await this.initMetaMask(false)
+            this.appReady()
 
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
@@ -88,6 +90,10 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
+            appReady: function() {
+                $('#app').removeClass('hidden')
+                $('#app-loader').remove()
+            },
             connectMetaMask: async function() {
                 if (this.wallet.account === false) {
                     this.wallet = await this.initMetaMask(true)
