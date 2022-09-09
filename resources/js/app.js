@@ -104,10 +104,6 @@ if (document.getElementById('app')) {
             this.setPageData()
         },
         methods: {
-            appReady: function() {
-                $('#app').removeClass('hidden')
-                $('#app-loader').remove()
-            },
             changeEditTab: async function(tab) {
                 this.page.tab = tab
             },
@@ -123,70 +119,67 @@ if (document.getElementById('app')) {
 
                 } else if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
                     this.setClaimPhasesInfo()
-
-                    axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
-                        // Set DB data
-                        this.contractAddress = response.data.address
-                        this.collection.chain_id = response.data.chain_id
-                        this.collection.token = response.data.token
-                        this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
-
-                        // Mint settings
-                        this.collection.permalink = response.data.permalink
-                        this.collection.website = response.data.website
-                        this.collection.roadmap = response.data.roadmap
-                        this.collection.twitter = response.data.twitter
-                        this.collection.discord = response.data.discord
-                        this.collection.about = response.data.about
-
-                        // Check if wallet is connected to the correct blockchain
-                        if (!this.hasValidChain) {
-                            this.page.tab = -1
-                            return;
-                        } else {
-                            this.page.tab = 1
-                        }
-
-                        this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
-                        await this.setSmartContract(this.contractAddress)
-
-                        // Global settings
-                        try {
-                            const metadata = await this.contract.metadata.get()
-                            const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
-                            this.collection.name = metadata.name
-                            this.collection.description = metadata.description
-                            this.collection.fee_recipient = royalties.fee_recipient
-                            this.collection.royalties = royalties.seller_fee_basis_points / 100
-                        } catch (error) {
-                            this.setErrorMessage('Contract could not be loaded...', true)
-                        }
-
-                        // Claim phases
-                        try {
-                            var claimConditions = await this.contract.claimConditions.getAll()
-                            this.claimPhases = this.parseClaimConditions(claimConditions)
-                        } catch (error) {
-                            // console.log('Failed to load claim conditions', error)
-                            // this.setErrorMessage('Claim phases could not be loaded...')
-                        }
-
-                        // Collection
-                        try {
-                            this.collection.totalSupply = await this.contract.totalSupply()
-                            this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
-                            this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                            this.collection.nfts = await this.contract.getAll({count: 8})
-                        } catch(error) {
-                            // this.setErrorMessage('Claim phases could not be loaded...')
-                        }
-                    })
+                    await this.setCollectionData()
                 }
             },
-            connectMetaMask: async function() {
-                if (this.wallet.account === false) {
-                    await this.initMetaMask(true)
-                }
+            setCollectionData: async function() {
+                axios.get('/collections/'+this.collectionID+'/fetch').then(async (response) => {
+                    // Set DB data
+                    this.contractAddress = response.data.address
+                    this.collection.chain_id = response.data.chain_id
+                    this.collection.token = response.data.token
+                    this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
+
+                    // Mint settings
+                    this.collection.permalink = response.data.permalink
+                    this.collection.website = response.data.website
+                    this.collection.roadmap = response.data.roadmap
+                    this.collection.twitter = response.data.twitter
+                    this.collection.discord = response.data.discord
+                    this.collection.about = response.data.about
+
+                    // Check if wallet is connected to the correct blockchain
+                    if (!this.hasValidChain) {
+                        this.page.tab = -1
+                        return;
+                    } else {
+                        this.page.tab = 1
+                    }
+
+                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
+                    await this.setSmartContract(this.contractAddress)
+
+                    // Global settings
+                    try {
+                        const metadata = await this.contract.metadata.get()
+                        const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                        this.collection.name = metadata.name
+                        this.collection.description = metadata.description
+                        this.collection.fee_recipient = royalties.fee_recipient
+                        this.collection.royalties = royalties.seller_fee_basis_points / 100
+                    } catch (error) {
+                        this.setErrorMessage('Contract could not be loaded...', true)
+                    }
+
+                    // Claim phases
+                    try {
+                        var claimConditions = await this.contract.claimConditions.getAll()
+                        this.claimPhases = this.parseClaimConditions(claimConditions)
+                    } catch (error) {
+                        // console.log('Failed to load claim conditions', error)
+                        // this.setErrorMessage('Claim phases could not be loaded...')
+                    }
+
+                    // Collection
+                    try {
+                        this.collection.totalSupply = await this.contract.totalSupply()
+                        this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                        this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                        this.collection.nfts = await this.contract.getAll({count: 8})
+                    } catch(error) {
+                        // this.setErrorMessage('Claim phases could not be loaded...')
+                    }
+                })
             },
             setClaimPhasesInfo: function() {
                 this.claimPhaseInfo = [
@@ -480,19 +473,6 @@ if (document.getElementById('app')) {
                     default:
                         return false;
                 }
-            },
-            /**
-             * Should be rewritten in 1 method together with wallet copier
-             */
-            copyContractAddress: function(e) {
-                var button = $(e.target)
-                var buttonWidth = button.outerWidth()
-                var buttonText = button.text()
-                button.css('width', buttonWidth+'px').text('Copied')
-                setTimeout(function() {
-                    button.html('<i class="far fa-copy mr-2"></i>'+buttonText)
-                }, 1000)
-                navigator.clipboard.writeText(button.data('address'))
             },
             openYouTubeModal: function(url) {
                 this.modalToggle(true)

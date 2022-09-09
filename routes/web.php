@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\MintController;
@@ -19,12 +21,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Back-end URL only
+/**
+ * Back-end routes
+ */
 Route::domain(config('app.url'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
     Route::group(['middleware' => ['auth']], function () {
-        // Collections
+        /**
+         * Admin routes
+         */
+        Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
+            Route::name('admin.')->group(function () {
+                // Dashboard
+                Route::resource('dashboard', AdminDashboardController::class);
+                // Collections
+                Route::resource('collections', AdminCollectionController::class);
+            });
+        });
+        /**
+         * Customer routes
+         */
         Route::resource('collections', CollectionController::class);
         Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
         Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
@@ -55,20 +72,28 @@ Route::domain(config('app.url'))->group(function () {
     });
 });
 
-// Mint page URL only
+/**
+ * Mint page routes
+ */
 Route::domain(config('app.mint_url'))->group(function () {
     // Mint layout
     Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
     Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 });
 
-// All domains
+/**
+ * Global routes
+ */
 Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
 
-// Auth routes
+/**
+ * Auth routes
+ */
 require __DIR__.'/auth.php';
 
-// Fallback aka 404
+/**
+ * Fallback routes
+ */
 Route::fallback(function () {
     return view('errors.404');
 });

@@ -14,8 +14,8 @@ if (!function_exists('input')) {
 }
 
 if (!function_exists('shorten_address')) {
-    function shorten_address($address)
+    function shorten_address($address, $start = 5, $end = 7)
     {
-        return substr($address, 0, 5) . '...' . substr($address, -7);
+        return substr($address, 0, $start) . '...' . substr($address, -$end);
     }
 }

@@ -18,7 +18,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="main-container min-h-screen bg-white">
-            @include('layouts.navigation')
+            @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">
                     <div class="px-10 w-full sm:max-w-7xl mx-auto">

@@ -19,6 +19,11 @@ export default {
         }
     },
     methods: {
+        connectMetaMask: async function() {
+            if (this.wallet.account === false) {
+                await this.initMetaMask(true)
+            }
+        },
         initMetaMask: async function(triggerRequest) {
             await this.getProvider()
             this.loadWeb3()

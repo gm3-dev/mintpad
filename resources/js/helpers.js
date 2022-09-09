@@ -24,6 +24,23 @@ export default {
         }
     },
     methods: {
+        appReady: function() {
+            $('#app').removeClass('hidden')
+            $('#app-loader').remove()
+        },
+        /**
+         * Should be rewritten in 1 method together with wallet copier
+         */
+        copyContractAddress: function(e) {
+            var button = $(e.target)
+            var buttonWidth = button.outerWidth()
+            var buttonText = button.text()
+            button.css('width', buttonWidth+'px').text('Copied')
+            setTimeout(function() {
+                button.html('<i class="far fa-copy mr-2"></i>'+buttonText)
+            }, 1000)
+            navigator.clipboard.writeText(button.data('address'))
+        },
         switchBlockchainTo: async function(chainID) {
             var chainID = chainID === false ? this.collection.chain_id : chainID
 

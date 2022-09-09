@@ -90,15 +90,6 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
-            appReady: function() {
-                $('#app').removeClass('hidden')
-                $('#app-loader').remove()
-            },
-            connectMetaMask: async function() {
-                if (this.wallet.account === false) {
-                    this.wallet = await this.initMetaMask(true)
-                }
-            },
             setActiveClaimPhase: function() {
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
