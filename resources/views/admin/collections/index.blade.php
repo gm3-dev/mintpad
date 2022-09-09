@@ -22,7 +22,10 @@
                             <div class="p-2 basis-6/12 text-right">
                                 <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm border-2 border-mintpad-200 hover:border-primary-600 px-3 py-1 text-mintpad-400 rounded-lg" v-tippy><i class="fas fa-copy mr-2 text-mintpad-300"></i>{{ shorten_address($collection->address, 5, 7) }}</button>
                                 <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2 !px-2">{{ __('Mint page') }}</x-blue-button>
-                                <x-link-button href="#" @click.prevent="openCollectionModal({{ $collection->id }})" class="ml-2 !px-2">More info</x-link-button>
+                                <span v-if="this.wallet.network.id != {{ $collection->chain_id }}" content="You need to switch to {{ config('blockchains.'.$collection->chain_id.'.token') }}" v-tippy>
+                                    <x-gray-button href="#" @click.prevent="switchBlockchainTo({{ $collection->chain_id }})" class="ml-2 !px-2 w-24">Switch</x-gray-button>
+                                </span>
+                                <x-link-button v-else href="#" @click.prevent="openCollectionModal({{ $collection->id }})" class="ml-2 !px-2 w-24">More info</x-link-button>
                             </div>
                         </div>
                     @endforeach
