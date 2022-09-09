@@ -34,18 +34,13 @@
                     <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
                 </div>
 
-                <label for="is-company" class="inline-flex items-center flex-auto pt-1">
+                <label for="is-company" class="inline-flex items-center flex-auto pt-2">
                     <x-checkbox id="is-company" type="checkbox" name="is_company" value="1" checked="{{ old('is_company') !== null ? true : false }}" />
                     <x-label for="is-company" class="ml-2">{{ __('I\'m a company') }}</x-label>
                 </label>
-
-                <label for="accept-tos" class="inline-flex items-center flex-auto pt-1">
-                    <x-checkbox id="accept-tos" type="checkbox" name="accept_tos" value="1" checked="{{ old('accept_tos') !== null ? true : false }}" />
-                    <x-label for="accept-tos" class="ml-2 relative is-required">{{ __('I accept the') }} <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm">Terms of Service</x-link></x-label>
-                </label>
             </div>
 
-            <div id="company-info" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div id="company-info" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
                 <!-- Company name -->
                 <div>
                     <x-label for="company_name" :value="__('Company name')" class="relative is-required" />
@@ -87,6 +82,11 @@
                     <x-input id="address2" class="block mt-1 w-full" type="text" name="address2" :value="old('address2')" />
                 </div>
             </div>
+
+            <label for="accept-tos" class="inline-flex items-center flex-auto mt-4">
+                <x-checkbox id="accept-tos" type="checkbox" name="accept_tos" value="1" checked="{{ old('accept_tos') !== null ? true : false }}" />
+                <x-label for="accept-tos" class="ml-2 relative is-required">{{ __('I agree to the') }} <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm">Terms of Service</x-link> {{ __('and the') }} <x-link href="https://mintpad.co/privacy-policy/" target="_blank" class="text-sm">Privacy Policy</x-link> {{ __('from Mintpad') }}</x-label>
+            </label>
 
             <div class="w-1/2 mx-auto mt-4">
                 <x-button class="w-full">
