@@ -61,12 +61,12 @@
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
                                 <x-label for="fee_recipient" :value="__('Recipient Address')" />
-                                <p class="text-mintpad-300 font-regular text-sm mb-1">A recipient address is the wallet address of the recipient of the royalties.</p>
+                                <x-more-info content="A recipient address is the wallet address of the recipient of the royalties."></x-more-info>
                                 <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                             </div>
                             <div class="basis-1/3">
-                                <x-label for="royalties" :value="__('Royalties (%)')" />
-                                <p class="text-mintpad-300 font-regular text-sm mb-1">What percentage you want to receive.</p>
+                                <x-label for="royalties" :value="__('Creator Royalties (%)')" />
+                                <x-more-info content="A royalty percentage that you receive from secondary sales of your collection on marketplaces."></x-more-info>
                                 <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                             </div>
                         </div>
