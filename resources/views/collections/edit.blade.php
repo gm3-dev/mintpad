@@ -20,16 +20,16 @@
                 <div class="w-full mx-auto mb-3 pb-3">
                     <div class="flex items-center font-semibold border-b-2 border-mintpad-200">
                         <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 1}">
-                            {{ __('Settings') }}
+                            {{ __('1. Settings') }}
                         </a>
                         <a href="#" @click.prevent="changeEditTab(2)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 2}">
-                            {{ __('Mint phases') }}
+                            {{ __('2. Mint phases') }}
                         </a>
                         <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 3}">
-                            {{ __('Upload collection') }}
+                            {{ __('3. Upload collection') }}
                         </a>
                         <a href="#" @click.prevent="changeEditTab(4)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 4}">
-                            {{ __('Mint settings') }}
+                            {{ __('4. Mint settings') }}
                         </a>
                     </div>
                 </div>
