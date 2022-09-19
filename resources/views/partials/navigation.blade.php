@@ -15,10 +15,7 @@
                     <x-nav-link :href="route('collections.index')" :active="request()->routeIs('collections.*')">
                         {{ __('Collections') }}
                     </x-nav-link>
-                    <x-nav-link :href="'https://www.youtube.com/playlist?list=PLhK96Cs4VX5PYJA-H7MUv_m1Iqo47B5nR'" :target="'_blank'">
-                        {{ __('Tutorials') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('support')" :active="request()->routeIs('support')">
+                    <x-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                         {{ __('Support') }}
                     </x-nav-link>
                     <x-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">
@@ -89,10 +86,7 @@
             <x-responsive-nav-link :href="route('collections.index')" :active="request()->routeIs('collections.*')">
                 {{ __('Collections') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="'https://www.youtube.com/playlist?list=PLhK96Cs4VX5PYJA-H7MUv_m1Iqo47B5nR'" :target="'_blank'">
-                {{ __('Tutorials') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('support')" :active="request()->routeIs('support')">
+            <x-responsive-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                 {{ __('Support') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">

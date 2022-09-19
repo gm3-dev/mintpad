@@ -39,6 +39,7 @@ Route::domain(config('app.url'))->group(function () {
                 Route::resource('collections', AdminCollectionController::class);
             });
         });
+        
         /**
          * Customer routes
          */
@@ -53,16 +54,6 @@ Route::domain(config('app.url'))->group(function () {
         Route::put('profile', [UserController::class, 'update'])->name('users.update');
         Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
         Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
-
-        // Tutorials
-        Route::get('tutorials', function () {
-            return view('tutorials.index');
-        })->name('tutorials');
-
-        // Support
-        Route::get('support', function () {
-            return view('support.index');
-        })->name('support');
 
         // NFT generator
         Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
