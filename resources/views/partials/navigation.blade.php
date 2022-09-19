@@ -1,10 +1,10 @@
-<nav x-data="{ open: false }" class="bg-white border-b-2 border-mintpad-200 p-2">
+<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b-2 border-mintpad-200 p-2">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center text-4xl font-jpegdev">
+                <div class="shrink-0 flex items-center text-4xl font-jpegdev dark:text-white">
                     <a href="{{ route('collections.index') }}">
                         mintpad
                     </a>
@@ -27,11 +27,17 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div id="user-address" class="hidden lg:inline-block">
-                    <button href="#" @click.prevent="copyAddress" class="hidden border-2 text-mintpad-400 text-sm rounded-lg hover:border-primary-600 px-3 py-1 mr-3" content="Copy wallet address" v-tippy></button>
+                    <button href="#" @click.prevent="copyAddress" class="hidden border-2 text-mintpad-400 dark:text-gray-200 text-sm rounded-lg hover:border-primary-600 px-3 py-1 mr-3" content="Copy wallet address" v-tippy></button>
+                </div>
+                <div id="toggle-darkmode">
+                    <a href="#" class="text-lg p-1 mr-2 hover:text-primary-600" @click.prevent="toggleDarkmode">
+                        <i v-if="dark" class="far fa-sun text-white hover:text-primary-600"></i>
+                        <i v-else class="far fa-moon"></i>
+                    </a>
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="flex items-center text-mintpad-300 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
+                        <button class="flex items-center text-mintpad-300 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
                             <div><i class="fas fa-user-circle text-3xl"></i></div>
 
                             <div class="ml-1">

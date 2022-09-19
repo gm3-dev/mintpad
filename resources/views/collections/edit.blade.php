@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="relative bg-white overflow-hidden">
+    <div class="relative">
         <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
         
         <div v-if="!wallet.account">
@@ -8,8 +8,8 @@
         <div v-else>
             <div class="text-center mb-10">
                 <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
-                <h2 class="text-3xl text-center mb-1">{{ __('Manage NFT collection') }}</h2>
-                <p class="text-mintpad-300 text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
+                <h2 class="text-3xl text-center dark:text-gray-200 mb-1">{{ __('Manage NFT collection') }}</h2>
+                <p class="text-mintpad-300 dark:text-gray-400 text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
             </div>
 
             <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 mb-4">
@@ -19,16 +19,16 @@
             <div v-else>
                 <div class="w-full mx-auto mb-3 pb-3">
                     <div class="flex items-center font-semibold border-b-2 border-mintpad-200">
-                        <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 1}">
+                        <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 1}">
                             {{ __('1. Settings') }}
                         </a>
-                        <a href="#" @click.prevent="changeEditTab(2)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 2}">
+                        <a href="#" @click.prevent="changeEditTab(2)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 2}">
                             {{ __('2. Mint phases') }}
                         </a>
-                        <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 3}">
+                        <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 3}">
                             {{ __('3. Upload collection') }}
                         </a>
-                        <a href="#" @click.prevent="changeEditTab(4)" class="py-4 mr-10 text-mintpad-300 hover:text-mintpad-500" :class="{'text-mintpad-500 border-b-4 -mb-1 border-primary-600': page.tab == 4}">
+                        <a href="#" @click.prevent="changeEditTab(4)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 4}">
                             {{ __('4. Mint settings') }}
                         </a>
                     </div>
@@ -37,7 +37,7 @@
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
-                        <h3 class="text-2xl mb-4 mt-6">
+                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
                             {{ __('General Settings') }}
                             <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/RLKfq9vb9AQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                         </h3>
@@ -57,7 +57,7 @@
                             </span>
                         </div>   
 
-                        <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
+                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Royalties') }}</h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
                                 <x-label for="fee_recipient" :value="__('Recipient Address')" />
@@ -81,7 +81,7 @@
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
-                        <h3 class="text-2xl mb-4 mt-6">
+                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
                             {{ __('Mint phases') }} 
                             <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/wSGxNAaQaT0')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                         </h3>
@@ -91,7 +91,7 @@
                         <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             <div class="col-span-3">
                                 <x-gray-button href="#" class="float-right mt-2 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
-                                <h3 class="basis-full text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
+                                <h3 class="basis-full text-2xl mb-1 dark:text-gray-200" v-html="'Phase '+(index+1)"></h3>
                                 <p class="text-mintpad-300 font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                             </div>
                             <div>
@@ -112,7 +112,7 @@
                                 <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
                             </div>
                             <div>
-                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4" />
+                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4 w-full" />
                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
                             </div>
@@ -177,7 +177,7 @@
                         @csrf
 
                         <div class="w-full">
-                            <h3 class="text-2xl mb-4 mt-6">
+                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
                                 {{ __('Add images to your collection') }}
                                 <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                             </h3>
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <div v-if="collection.previews.length > 0">
-                            <h3 class="text-2xl mb-4 mt-6">{{ __('Preview of your collection') }}</h3>
+                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Preview of your collection') }}</h3>
                             <div class="grid grid-cols-4">
                                 <div v-for="preview in collection.previews">
                                     <div class="p-1 text-sm rounded-lg">
@@ -214,7 +214,7 @@
                         </div>
 
                         <div class="text-sm">
-                            <h3 class="text-2xl mb-4 mt-6">{{ __('Your collection') }}</h3>
+                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Your collection') }}</h3>
                             <p v-if="collection.nfts.length == 0" class="text-mintpad-300 font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
                             <p v-else class="text-mintpad-300 text-sm">Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
                             <div class="grid grid-cols-4 mt-2">
@@ -226,7 +226,7 @@
                     </form>
                 </div>
                 <div v-if="page.tab == 4">
-                    <h3 class="text-2xl mb-4 mt-6">
+                    <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
                         {{ __('Mint settings') }}
                         <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                     </h3>

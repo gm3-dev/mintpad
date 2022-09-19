@@ -12,12 +12,9 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-        <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container min-h-screen bg-white">
+        <div class="main-container min-h-screen bg-white dark:bg-slate-900">
             @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">
@@ -29,7 +26,7 @@
             @include('partials.messages')
 
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-gray-200"><i class="fa-solid fa-gear animate-spin"></i></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -71,6 +68,10 @@
                 @endif
             </main>
         </div>
+
+        <!-- Scripts -->
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
         <script type="text/javascript"> var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date(); (function(){ var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0]; s1.async=true; s1.src='https://embed.tawk.to/62cd4911b0d10b6f3e7bec0f/1g7ouaqvr'; s1.charset='UTF-8'; s1.setAttribute('crossorigin','*'); s0.parentNode.insertBefore(s1,s0); })(); </script>
     </body>
 </html>

@@ -18,6 +18,35 @@ Alpine.start()
 Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
 
+/**
+ * Darkmode support
+ */
+if (document.getElementById('toggle-darkmode')) {
+    new Vue({
+        el: '#toggle-darkmode',
+        data: {
+            dark: false
+        },
+        mounted: function() {
+            this.dark = useDarkmode
+        },
+        methods: {
+            toggleDarkmode: function(e) {
+                var mode = document.documentElement.classList.contains('dark')
+                if (mode) {
+                    document.documentElement.classList.remove('dark')
+                    localStorage.theme = 'light'
+                    this.dark = false
+                } else {
+                    document.documentElement.classList.add('dark')
+                    localStorage.theme = 'dark'
+                    this.dark = true
+                }
+            }
+        }
+    })
+}
+
 // User address in navigation
 if (document.getElementById('user-address')) {  
     new Vue({
