@@ -369,7 +369,8 @@ if (document.getElementById('app')) {
                     var formData = this.collection
                     formData.address = contractAddress
                     await axios.post('/collections', formData).then((response) => {
-                        window.location.href = "/collections"
+                        var data = response.data
+                        window.location.href = "/collections/"+data.id+"/edit"
                     })
 
                 } catch(error) {
