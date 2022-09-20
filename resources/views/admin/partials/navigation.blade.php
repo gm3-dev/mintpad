@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b-2 border-mintpad-200 pb-2">
+<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b-2 border-mintpad-200 pb-2">
     <!-- Admin bar -->
     <div class="w-full bg-primary-600 text-white text-center text-sm">
         <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">

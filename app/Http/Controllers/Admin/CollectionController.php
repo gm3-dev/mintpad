@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\PolygonScanApi;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use Illuminate\Http\Request;
@@ -15,6 +16,10 @@ class CollectionController extends Controller
      */
     public function index()
     {
+        $api = new PolygonScanApi();
+        $api->getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
+        $api->getInternalTransactions('0x892a99573583c6490526739ba38baefae10a84d4');
+
         $collections = Collection::all();
         return view('admin.collections.index')->with(compact('collections'));
     }

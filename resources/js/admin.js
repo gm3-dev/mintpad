@@ -71,6 +71,7 @@ if (document.getElementById('app')) {
                         const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                         const platformFees = await this.contract.platformFees.get()
 
+                        this.collection.primary_sales_recipient = await this.contract.sales.getRecipient()
                         this.collection.platform_fee = platformFees.platform_fee_basis_points / 100
                         this.collection.platform_fee_recipient = platformFees.platform_fee_recipient
                         this.collection.name = metadata.name
