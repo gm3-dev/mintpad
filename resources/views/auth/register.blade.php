@@ -34,10 +34,10 @@
                     <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
                 </div>
 
-                <label for="is-company" class="inline-flex items-center flex-auto pt-2">
+                <x-label for="is-company" class="inline-flex items-center flex-auto pt-2">
                     <x-checkbox id="is-company" type="checkbox" name="is_company" value="1" checked="{{ old('is_company') !== null ? true : false }}" />
                     <x-label for="is-company" class="ml-2">{{ __('I\'m a company') }}</x-label>
-                </label>
+                </x-label>
             </div>
 
             <div id="company-info" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
@@ -95,7 +95,7 @@
             </div>
 
             <div>
-                <p class="text-xs text-center mt-4">{{ __('Already have an account?') }} <x-link href="{{ route('login') }}">{{ __('Sign in') }}</x-link></p>
+                <p class="text-xs text-mintpad-500 text-center mt-4">{{ __('Already have an account?') }} <x-link href="{{ route('login') }}">{{ __('Sign in') }}</x-link></p>
             </div>
 
         </form>

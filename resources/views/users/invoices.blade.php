@@ -2,9 +2,9 @@
     <div class="mb-12 px-2">
         <div class="text-center mb-12">
             <h2 class="text-center text-3xl mb-1 font-semibold">{{ __('Invoices') }}</h2>
-            <p class="text-mintpad-300 text-center text-lg">{{ __('Download your invoices here.') }}</p>
+            <p class="text-center text-lg">{{ __('Download your invoices here.') }}</p>
         </div>
-        <p class="mb-4 text-mintpad-300 font-regular text-sm">{{ __('Are you a company? Add your details to your account on the') }} <x-link href="{{ route('users.profile') }}" class="font-semibold">my profile</x-link> {{ __('page.') }}</p>
+        <p class="mb-4 font-regular text-sm">{{ __('Are you a company? Add your details to your account on the') }} <x-link href="{{ route('users.profile') }}" class="font-semibold">my profile</x-link> {{ __('page.') }}</p>
         
         @if ($invoices->count() == 0)
             <p class="text-sm text-center">{{ __('You don\'t have any invoices yet.') }}</p>
@@ -17,7 +17,7 @@
                 <div class="p-1 basis-1/5"></div>
             </div>
             @foreach ($invoices as $invoice)
-                <div class="px-6 py-1 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center text-sm">
+                <div class="px-6 py-1 mb-4 text-mintpad-500 rounded-2xl border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center text-sm">
                     <div class="p-1 basis-2/5 font-semibold">{{ $invoice['invoice_id'] }}</div>
                     <div class="p-1 basis-1/5 font-semibold">$ {{ number_format($invoice['total_price_incl_tax'], 2) }}</div>
                     <div class="p-1 basis-1/5 font-semibold">{{ $invoice['state'] }}</div>

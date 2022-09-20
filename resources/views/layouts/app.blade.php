@@ -26,7 +26,7 @@
             @include('partials.messages')
 
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-gray-200"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><i class="fa-solid fa-gear animate-spin"></i></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto px-6 lg:px-8">

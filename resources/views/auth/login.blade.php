@@ -55,7 +55,7 @@
             </div>
 
             <div>
-                <p class="text-xs text-center mt-4">{{ __('Don’t have an account?') }} <x-link href="{{ route('register') }}">{{ __('Sign up') }}</x-link></p>
+                <p class="text-xs text-mintpad-500 text-center mt-4">{{ __('Don’t have an account?') }} <x-link href="{{ route('register') }}">{{ __('Sign up') }}</x-link></p>
             </div>
         </form>
     </x-auth-card>

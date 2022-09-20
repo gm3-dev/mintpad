@@ -5,8 +5,8 @@
         </div>
         <div v-else>
             <div class="text-center mb-12">
-                <h2 class="text-3xl text-center mb-1 font-semibold dark:text-gray-200">{{ __('Collections') }}</h2>
-                <p class="text-mintpad-300 text-center text-lg dark:text-gray-400">{{ __('Create and manage your NFT collections.') }}</p>
+                <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('Collections') }}</h2>
+                <p class="text-center text-lg">{{ __('Create and manage your NFT collections.') }}</p>
             </div>
             <div class="mb-10">
                 @if (count($collections))
@@ -18,7 +18,7 @@
                         <div class="p-2 basis-2/12"></div>
                     </div>
                     @foreach ($collections as $collection)
-                        <div class="px-6 py-1 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center">
+                        <div class="px-6 py-1 mb-4 rounded-2xl text-mintpad-500 border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center">
                             <div class="p-2 basis-3/12 lg:basis-4/12 font-semibold">{{ $collection->name }}</div>
                             <div class="p-2 basis-1/12 font-semibold">{{ $collection->symbol }}</div>
                             <div class="p-2 basis-2/12 font-semibold">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>

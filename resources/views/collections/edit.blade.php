@@ -1,15 +1,15 @@
 <x-app-layout>
     <div class="relative">
         <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
-        
+
         <div v-if="!wallet.account">
             @include('partials.connect')
         </div>
         <div v-else>
             <div class="text-center mb-10">
                 <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
-                <h2 class="text-3xl text-center dark:text-gray-200 mb-1">{{ __('Manage NFT collection') }}</h2>
-                <p class="text-mintpad-300 dark:text-gray-400 text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
+                <h2 class="text-3xl text-center mb-1">{{ __('Manage NFT collection') }}</h2>
+                <p class="text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
             </div>
 
             <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 mb-4">
@@ -37,7 +37,7 @@
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
-                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
+                        <h3 class="text-2xl mb-4 mt-6">
                             {{ __('General Settings') }}
                             <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/RLKfq9vb9AQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                         </h3>
@@ -57,7 +57,7 @@
                             </span>
                         </div>   
 
-                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Royalties') }}</h3>
+                        <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
                                 <x-label for="fee_recipient" :value="__('Recipient Address')" />
@@ -81,18 +81,18 @@
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
-                        <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
+                        <h3 class="text-2xl mb-4 mt-6">
                             {{ __('Mint phases') }} 
                             <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/wSGxNAaQaT0')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                         </h3>
-                        <p class="text-mintpad-300 font-regular text-sm">{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
-                        <p class="text-mintpad-300 font-regular text-sm mb-8">{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
+                        <p class="font-regular text-sm">{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
+                        <p class="font-regular text-sm mb-8">{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
 
                         <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                             <div class="col-span-3">
                                 <x-gray-button href="#" class="float-right mt-2 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
-                                <h3 class="basis-full text-2xl mb-1 dark:text-gray-200" v-html="'Phase '+(index+1)"></h3>
-                                <p class="text-mintpad-300 font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
+                                <h3 class="basis-full text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
+                                <p class="font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                             </div>
                             <div>
                                 <x-label for="start" :value="__('Phase start time?')" />
@@ -118,7 +118,7 @@
                             </div>
                             <div v-if="phase.whitelist == 1">
                                 <x-label :value="__('Whitelist CSV file')" />
-                                <p class="text-sm mt-1 text-mintpad-300"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Upload whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
+                                <p class="text-sm mt-1"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Upload whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                             </div>
 
                             <div v-if="phase.modal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -141,7 +141,7 @@
                                                     </table>
                                                     <div v-else>
                                                         <h3 class="text-2xl mb-1">{{ __('Upload whitelist') }}</h3>
-                                                        <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload a .CSV file. One wallet address per row.') }}</b></p>
+                                                        <p class="font-regular text-sm">{{ __('Upload a .CSV file. One wallet address per row.') }}</b></p>
                             
                                                         <label class="block my-5 text-mintpad-300">
                                                             <span class="sr-only">Choose File</span>
@@ -177,18 +177,18 @@
                         @csrf
 
                         <div class="w-full">
-                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
+                            <h3 class="text-2xl mb-4 mt-6">
                                 {{ __('Add images to your collection') }}
                                 <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                             </h3>
-                            <p class="text-mintpad-300 font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection.') }}</b></p>
+                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection.') }}</b></p>
                             <p class="font-semibold text-sm mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a sample collection.') }}</x-link></p>
 
                             <label class="block mt-10 text-mintpad-300">
                                 <span class="sr-only">Choose Files</span>
                                 <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                             </label>
-                            <p class="text-mintpad-300 font-regular text-sm mb-10 mt-2 ml-1">{{ __('Your upload must contain images and JSON files.') }}</p>
+                            <p class="font-regular text-sm mb-10 mt-2 ml-1">{{ __('Your upload must contain images and JSON files.') }}</p>
 
                             <div v-if="upload">
                                 <p class="text-sm mb-2">We are uploading your collection, please don't close this page or the upload will fail!</p>
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <div v-if="collection.previews.length > 0">
-                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Preview of your collection') }}</h3>
+                            <h3 class="text-2xl mb-4 mt-6">{{ __('Preview of your collection') }}</h3>
                             <div class="grid grid-cols-4">
                                 <div v-for="preview in collection.previews">
                                     <div class="p-1 text-sm rounded-lg">
@@ -214,9 +214,9 @@
                         </div>
 
                         <div class="text-sm">
-                            <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">{{ __('Your collection') }}</h3>
-                            <p v-if="collection.nfts.length == 0" class="text-mintpad-300 font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
-                            <p v-else class="text-mintpad-300 text-sm">Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
+                            <h3 class="text-2xl mb-4 mt-6">{{ __('Your collection') }}</h3>
+                            <p v-if="collection.nfts.length == 0" class="font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
+                            <p v-else class="text-sm">Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
                             <div class="grid grid-cols-4 mt-2">
                                 <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
                                     <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="nft.metadata.image" />
@@ -226,18 +226,18 @@
                     </form>
                 </div>
                 <div v-if="page.tab == 4">
-                    <h3 class="text-2xl mb-4 mt-6 dark:text-gray-200">
+                    <h3 class="text-2xl mb-4 mt-6">
                         {{ __('Mint settings') }}
                         <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                     </h3>
-                    <p class="text-mintpad-300 font-regular text-sm mb-4">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
+                    <p class="font-regular text-sm mb-4">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
 
                     <div class="w-full grid grid-cols-2 gap-4 mb-6">
                         <div>
                             <div class="mb-4">
                                 <x-label for="permalink" :value="__('Permalink')" />
                                 <div class="grid grid-cols-2 gap-2">
-                                    <span class="inline-block border-2 border-gray-300 text-sm bg-gray-200 rounded-lg p-3 mt-1">{{ config('app.mint_url') }}/</span>
+                                    <span class="inline-block text-mintpad-300 border-2 border-gray-300 text-sm bg-gray-200 rounded-lg p-3 mt-1">{{ config('app.mint_url') }}/</span>
                                     <x-input id="permalink" class="mt-1" type="text" v-model="collection.permalink" />
                                 </div>
                             </div>
