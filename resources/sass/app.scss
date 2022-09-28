@@ -43,7 +43,70 @@
         p {
             @apply text-mintpad-300;
         }
-    } 
+
+        .tinymce-html {
+            h1, h2, h3, h4, h5, h6, p, ul, ol {
+                @apply mb-4;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                @apply text-xl
+            }
+            p {
+                @apply font-regular;
+            }
+            a {
+                @apply font-sans underline
+            }
+            ul, ol {
+                @apply pl-6 font-regular;
+            }
+            ul {
+                @apply list-disc
+            }
+            ol {
+                @apply list-decimal
+            }
+        }
+    }
+}
+
+/* Colorpicker */
+.one-colorpanel {
+    .one-color-stash,
+    .one-color-toggle,
+    .one-opacity {
+        display: none !important;
+    }
+    .one-color-control {
+        padding-bottom: 0px;
+    }
+    .one-color-value {
+        .one-type-hex {
+            width: 100%;
+        }
+        p {
+            display: none !important;
+        }
+        input {
+            padding: 4px 0;
+        }
+    }
+}
+.one-colorpicker {
+    vertical-align: middle !important;
+
+    .color-block {
+        width: 30px; 
+        height: 30px;
+
+        .value {
+            border-radius: 10px;
+            border: 2px solid rgb(101, 111, 119);
+        }
+        .bg {
+            background: none;
+        }
+    }
 }
 
 .is-required:after {

@@ -169,6 +169,7 @@ return [
          * Package Service Providers...
          */
         Intervention\Image\ImageServiceProvider::class,
+        Plank\Metable\MetableServiceProvider::class,
 
         /*
          * Application Service Providers...

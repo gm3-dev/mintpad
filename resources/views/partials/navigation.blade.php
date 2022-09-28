@@ -102,10 +102,12 @@
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
-            </div>
+            @if (Auth::user())
+                <div class="px-4">
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
+                </div>
+            @endif
 
             <div class="mt-3 space-y-1">
                 @if (Auth::user() && Auth::user()->role == 'admin')

@@ -14,11 +14,14 @@ if (document.getElementById('app')) {
         el: '#app',
         mixins: [metamask,helpers,thirdweb],
         data: {
+            tab: 1,
             collection: {
                 totalSupply: 0,
                 totalClaimedSupply: 0,
                 totalRatio: 0,
-                image: false
+                image: false,
+                logo: false,
+                thumbs: false
             },
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
@@ -37,15 +40,24 @@ if (document.getElementById('app')) {
 
             await this.setBlockchains()
             await this.initMetaMask(false)
-            this.appReady()
 
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.token = response.data.token
-                this.collection.buttons = this.createButtonList(response.data)
+                this.collection.buttons = response.data.buttons
                 this.collection.about = response.data.about
+                this.collection.roadmap = response.data.roadmap
+                this.collection.team = response.data.team
+                this.collection.logo = response.data.logo
+                this.collection.thumb = response.data.thumb
                 this.hasValidChain = await this.validateMatchingBlockchains(parseInt(this.collection.chain_id))
+                
+                // Set theme
+                this.theme = response.data.theme
+                this.setStyling()
+                
+                this.appReady()
 
                 // Set SDK
                 if (this.wallet.account && this.hasValidChain) {
@@ -66,7 +78,7 @@ if (document.getElementById('app')) {
                     this.collection.totalSupply = await this.contract.totalSupply()
                     this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.image = await this.setCollectionImage()
+                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
@@ -90,6 +102,9 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
+            changeTab: function(index) {
+                this.tab = index
+            },
             setActiveClaimPhase: function() {
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]

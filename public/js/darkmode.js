@@ -5,4 +5,3 @@ if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.match
     document.documentElement.classList.remove('dark')
     var useDarkmode = false
 }
-console.log('useDarkmode', useDarkmode)

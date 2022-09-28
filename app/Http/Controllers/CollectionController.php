@@ -50,9 +50,12 @@ class CollectionController extends Controller
 
         $this->save($request, $collection);
 
-        return response()->json($collection, 200);
+        $public = public_path('resources/'.$collection->id.'/');
+        if (! File::exists($public)) {
+            File::makeDirectory($public, 0775, true);
+        }
 
-        // return redirect()->route('collections.index')->with('status', 'Collection added!');
+        return response()->json($collection, 200);
     }
 
     /**
@@ -68,63 +71,6 @@ class CollectionController extends Controller
 
         $images = File::glob(storage_path('app/collections/'.$collection->id.'/').'*.{png,gif,jpg,jpeg}', GLOB_BRACE);
         return view('collections.collection')->with(compact('collection', 'images'));
-    }
-
-    // public function upload(Request $request, Collection $collection)
-    // {
-    //     $this->authorize('view', $collection);
-
-    //     if (! Storage::exists('collections')) {
-    //         Storage::makeDirectory('collections', 0775, true);
-    //     }
-
-    //     $output = ['counter' => 0, 'images' => []];
-    //     if ($request->hasFile('files')) {
-    //         $files = $request->file('files');
-    //         $path = 'collections/' . $collection->id;
-
-    //         if (! Storage::exists($path . '/thumbs')) {
-    //             Storage::makeDirectory($path . '/thumbs', 0775, true);
-    //         }
-
-    //         foreach ($files as $file_key => $file) {
-    //             $filename = $file->getClientOriginalName();
-    //             // $path = $request->get('paths')[$file_key];
-    //             $file->storeAs(
-    //                 $path,
-    //                 strtolower($filename)
-    //             );
-    //             if ($file->extension() != 'json') {
-    //                 $image = Image::make($file->path());
-    //                 $image->resize(100, 100, function ($constraint) {
-    //                     $constraint->aspectRatio();
-    //                 })->save(storage_path('app/' . $path . '/thumbs/' . strtolower($filename)));
-    //                 $output['images'][] = url(route('collections.image', [$collection->id, strtolower($filename)]));
-    //             }
-    //             $output['counter']++;
-    //         }
-    //     }
-    //     $output['files'] = count($files);
-
-    //     return response()->json($output, 200);
-    // }
-
-    public function image(Request $request, Collection $collection, $filename)
-    {
-        $this->authorize('view', $collection);
-
-        $path = storage_path('app/collections/'.$collection->id.'/thumbs/' . $filename);
-        if (!File::exists($path)) {
-            abort(404);
-        }
-
-        $file = File::get($path);
-        $type = File::mimeType($path);
-
-        $response = Response::make($file, 200);
-        $response->header("Content-Type", $type);
-
-        return $response;
     }
 
     /**
@@ -177,24 +123,90 @@ class CollectionController extends Controller
     {
         $this->authorize('update', $collection);
 
-        $request->validate([
-            'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id],
-            'website' => ['nullable', 'max:255', 'url'],
-            'roadmap' => ['nullable', 'max:255', 'url'],
-            'twitter' => ['nullable', 'max:255', 'url'],
-            'discord' => ['nullable', 'max:255', 'url']
-        ]);
-
         $data = $request->all();
-        $collection->permalink = $data['permalink'] ?? '';
-        $collection->website = $data['website'] ?? '';
-        $collection->roadmap = $data['roadmap'] ?? '';
-        $collection->twitter = $data['twitter'] ?? '';
-        $collection->discord = $data['discord'] ?? '';
-        $collection->about = $data['about'] ?? '';
+
+        $collection->setMeta('about', $data['about'] ?? '');
+        $collection->setMeta('team', $data['team'] ?? '');
+        $collection->setMeta('roadmap', $data['roadmap'] ?? '');
+        $collection->setMeta('buttons', $data['buttons'] ?? []);
+        $collection->setMeta('theme', $data['theme'] ?? []);
+
         $collection->save();
 
         return response()->json($collection, 200);
+    }
+
+    /**
+     * Download first NFT as thumb
+     *
+     * @param Request $request
+     * @param Collection $collection
+     * @return Response
+     */
+    public function downloadThumb(Request $request, Collection $collection)
+    {
+        if ($request->ajax()) {
+            $this->authorize('view', $collection);
+
+            $public = public_path('resources/'.$collection->id.'/');
+            if (! File::exists($public)) {
+                File::makeDirectory($public, 0775, true);
+            }
+
+            $url = $request->get('url');
+            $destination = public_path('resources/'.$collection->id.'/thumb.'.pathinfo($url, PATHINFO_EXTENSION));
+
+            file_put_contents($destination, file_get_contents($url));
+
+            return response()->json(['url' => $url], 200);
+        }
+    }
+
+    /**
+     * Update mint settings
+     *
+     * @param Request $request
+     * @param Collection $collection
+     * @return Response
+     */
+    public function updateMint(Request $request, Collection $collection)
+    {
+        if ($request->ajax()) {
+            $this->authorize('update', $collection);
+
+            $request->validate([
+                'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id]
+            ]);
+
+            $data = $request->all();
+
+            $collection->permalink = $data['permalink'] ?? '';
+            $collection->save();
+
+            return response()->json($collection, 200);
+        }
+    }
+
+    /**
+     * Update metadata settings
+     *
+     * @param Request $request
+     * @param Collection $collection
+     * @return Response
+     */
+    public function updateMetadata(Request $request, Collection $collection)
+    {
+        if ($request->ajax()) {
+            $this->authorize('update', $collection);
+
+            $data = $request->all();
+
+            $collection->name  = $data['name'] ?? '';
+            $collection->description  = $data['description'] ?? '';
+            $collection->save();
+
+            return response()->json($collection, 200);
+        }
     }
 
     /**

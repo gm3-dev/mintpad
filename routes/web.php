@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::domain(config('app.url'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
-    Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => []], function () {
         /**
          * Admin routes
          */
@@ -46,8 +46,10 @@ Route::domain(config('app.url'))->group(function () {
         Route::resource('collections', CollectionController::class);
         Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
         Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
-        // Route::get('collections/{collection}/image/{filename}', [CollectionController::class, 'image'])->name('collections.image');
         Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
+        Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update_mint');
+        Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update_metadata');
+        Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
 
         // User
         Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
@@ -60,6 +62,11 @@ Route::domain(config('app.url'))->group(function () {
         Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
         Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
         Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
+
+        // Mint layout
+        Route::get('mint/{collection}/edit', [MintController::class, 'edit'])->name('mint.edit');
+        Route::post('mint/{collection}/upload-logo', [MintController::class, 'uploadLogo'])->name('mint.upload_logo');
+        Route::delete('mint/{collection}/delete-logo', [MintController::class, 'deleteLogo'])->name('mint.delete_logo');
     });
 });
 
@@ -69,13 +76,13 @@ Route::domain(config('app.url'))->group(function () {
 Route::domain(config('app.mint_url'))->group(function () {
     // Mint layout
     Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
-    Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 });
 
 /**
  * Global routes
  */
 Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
+Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 
 /**
  * Auth routes

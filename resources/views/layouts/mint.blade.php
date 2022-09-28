@@ -20,9 +20,9 @@
         <div class="main-container min-h-screen bg-primary-400">
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto pt-4 text-lg"><i class="fa-solid fa-gear animate-spin"></i></div>
-            <main id="app" class="hidden">
+            <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
                 <div class="py-12">
-                    <div class="max-w-3xl lg:max-w-5xl mx-auto sm:px-6 lg:px-8">
+                    <div class="max-w-3xl lg:max-w-5xl mx-auto sm:px-6 lg:px-0">
                         {{ $slot }}
                     </div>
                 </div>

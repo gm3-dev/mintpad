@@ -66,7 +66,9 @@ if (document.getElementById('user-address')) {
     })
 }
 
-if (document.getElementById('app')) {    
+if (document.getElementById('app')) {
+    Vue.component('tinymce', require('./components/TinyMCE.vue').default);
+
     new Vue({
         el: '#app',
         mixins: [metamask,helpers,modal,thirdweb,nftgenerator],
@@ -161,11 +163,6 @@ if (document.getElementById('app')) {
 
                     // Mint settings
                     this.collection.permalink = response.data.permalink
-                    this.collection.website = response.data.website
-                    this.collection.roadmap = response.data.roadmap
-                    this.collection.twitter = response.data.twitter
-                    this.collection.discord = response.data.discord
-                    this.collection.about = response.data.about
 
                     // Check if wallet is connected to the correct blockchain
                     if (!this.hasValidChain) {
@@ -239,8 +236,7 @@ if (document.getElementById('app')) {
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {
-                    // console.log('error updateMetadata', error)
-                    this.setErrorMessage('error updateMetadata')
+                    this.setErrorMessage('error updateClaimPhases')
                 }
                 
                 this.resetButtonLoader()
@@ -291,13 +287,16 @@ if (document.getElementById('app')) {
                         description: this.collection.description
                     })
 
-                    this.setSuccessMessage('General settings updated')
+                    var formData = this.collection
+                    await axios.put('/collections/'+this.collectionID+'/metadata', formData).then((response) => {
+                        //
+                    })
 
+                    this.setSuccessMessage('General settings updated')
                 } catch(error) {
                     // console.log('error updateMetadata', error)
                     this.setErrorMessage('General settings not updated')
                 }
-
 
                 this.resetButtonLoader()
             },
@@ -322,15 +321,10 @@ if (document.getElementById('app')) {
                 this.setButtonLoader(e)
 
                 var data = {
-                    permalink: this.collection.permalink,
-                    website: this.collection.website,
-                    roadmap: this.collection.roadmap,
-                    twitter: this.collection.twitter,
-                    discord: this.collection.discord,
-                    about: this.collection.about,
+                    permalink: this.collection.permalink
                 }
 
-                await axios.put('/collections/'+this.collectionID, data)
+                await axios.put('/collections/'+this.collectionID+'/mint', data)
                 .catch((error) => {
                     if (error.response.status == 422) {
                         this.setErrorMessage(error.response.data.message)
@@ -400,6 +394,14 @@ if (document.getElementById('app')) {
 
                 try {
                     await this.contract.createBatch(this.collection.metadata)
+                    var images = await this.contract.getAll({count: 1})
+                    
+                    if (images.length > 0) {
+                        var data = {url: images[0].metadata.image}
+                        await axios.post('/collections/'+this.collectionID+'/thumb', data).then((response) => {
+                            //
+                        })
+                    }
 
                     this.setSuccessMessage('NFTs added to the collection!')
                 } catch(error) {

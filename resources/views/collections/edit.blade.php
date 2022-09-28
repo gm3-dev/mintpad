@@ -33,7 +33,7 @@
                         </a>
                     </div>
                 </div>
-                <div v-if="page.tab == 1">
+                <div v-show="page.tab == 1">
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
@@ -77,7 +77,7 @@
                         </div>
                     </form>
                 </div>
-                <div v-if="page.tab == 2">
+                <div v-show="page.tab == 2">
                     <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                         @method('PUT')
 
@@ -172,7 +172,7 @@
                         </div>
                     </form>
                 </div>
-                <div v-if="page.tab == 3">
+                <div v-show="page.tab == 3">
                     <form method="POST" action="/" enctype="multipart/form-data">
                         @csrf
 
@@ -226,7 +226,7 @@
                         </div> 
                     </form>
                 </div>
-                <div v-if="page.tab == 4">
+                <div v-show="page.tab == 4">
                     <h3 class="text-2xl mb-4 mt-6">
                         {{ __('Mint settings') }}
                         <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
@@ -243,31 +243,15 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <x-label for="socials-website" :value="__('Website')" />
-                                <x-input id="socials-website" class="mt-1 w-full" type="text" v-model="collection.website" placeholder="https://www.example.com" />
+                                <p>SEO fiels here</p>
                             </div>
-                            <div class="mb-4">
-                                <x-label for="socials-roadmap" :value="__('Roadmap')" />
-                                <x-input id="socials-roadmap" class="mt-1 w-full" type="text" v-model="collection.roadmap" placeholder="https://www.example.com/roadmap" />
-                            </div>
-                            <div class="mb-4">
-                                <x-label for="socials-twitter" :value="__('Twitter')" />
-                                <x-input id="socials-twitter" class="mt-1 w-full" type="text" v-model="collection.twitter" placeholder="https://www.example.com/twitter" />
-                            </div>
-                            <div>
-                                <x-label for="socials-discord" :value="__('Discord')" />
-                                <x-input id="socials-discord" class="mt-1 w-full" type="text" v-model="collection.discord" placeholder="https://www.example.com/discord" />
-                            </div>
-                        </div>
-                        <div>
-                            <x-label for="collection-about" :value="__('About the collection')" />
-                            <x-textarea id="collection-about" class="mt-1 w-full" :rows="12" v-model="collection.about"></x-textarea>
                         </div>
                     </div>
 
                     <div class="w-full">
                         <x-link-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-link-button>
                         <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-blue-button>
+                        <x-blue-button href="{{ route('mint.edit', $collection->id) }}" target="_blank" class="ml-2">{{ __('View collection page editor') }}</x-blue-button>
                     </div>
                 </div>
             </div>

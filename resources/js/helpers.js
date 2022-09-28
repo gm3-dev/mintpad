@@ -21,12 +21,45 @@ export default {
             successMessage: false,
             showModal: false,
             hasValidChain: true,
+            theme: {
+                primary: 'rgba(0, 113, 249, 1)',
+                background: 'rgba(238, 242, 253, 1)',
+                title: 'rgba(5, 18, 27, 1)',
+                text: 'rgba(101, 111, 119, 1)',
+                box: 'rgba(255, 255, 255, 1)',
+            }
         }
     },
     methods: {
         appReady: function() {
             $('#app').removeClass('hidden')
             $('#app-loader').remove()
+        },
+        setStyling: function() {
+            if (this.theme) {
+                var css = ''
+                css += '.main-container { background-color: '+this.theme.background+' !important; } '
+                css += '#custom-style-container .text-primary-600 { color: '+this.theme.primary+' !important; } '
+                css += '#custom-style-container .text-primary-300 { color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+' !important; } '
+                css += '#custom-style-container .bg-primary-600 { background-color: '+this.theme.primary+' !important; } '
+                css += '#custom-style-container .bg-primary-300 { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
+                css += '#custom-style-container .bg-gray-300 { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
+                css += '#custom-style-container .border-primary-600 { border-color: '+this.theme.primary+' !important; } '
+                css += '#custom-style-container .border-primary-300 { border-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
+                css += '#custom-style-container .text-mintpad-500 { color: '+this.theme.title+'; } '
+                css += '#custom-style-container .text-mintpad-300 { color: '+this.theme.text+'; } '
+                css += '#custom-style-container .bg-white { background-color: '+this.theme.box+'; } '
+                css += '.tinymce-html h1 { color: '+this.theme.title+'; } '
+                css += '.tinymce-html a { color: '+this.theme.primary+'; } '
+                css += '.tinymce-html p, ul, ol { color: '+this.theme.text+'; } '
+    
+                this.styleTag = document.createElement('style')
+                this.styleTag.appendChild(document.createTextNode(css))
+                document.head.appendChild(this.styleTag)
+            }
+        },
+        replaceOpacityValue(string, opacity) {
+            return string.replace(/[^,]+(?=\))/, opacity)
         },
         /**
          * Should be rewritten in 1 method together with wallet copier
@@ -130,7 +163,7 @@ export default {
             var buttonWidth = button.outerWidth()
             this.loader.button = {
                 target: button,
-                label: button.text()
+                label: button.html()
             }
             button.css('width', buttonWidth+'px').prop('disabled', true).html('Processing...')
         },
