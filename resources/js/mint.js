@@ -21,7 +21,8 @@ if (document.getElementById('app')) {
                 totalRatio: 0,
                 image: false,
                 logo: false,
-                thumbs: false
+                thumbs: false,
+                buttons: []
             },
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
@@ -56,6 +57,7 @@ if (document.getElementById('app')) {
                 // Set theme
                 this.theme = response.data.theme
                 this.setStyling()
+                this.setTab()
                 
                 this.appReady()
 
@@ -102,6 +104,15 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
+            setTab: function() {
+                if (this.collection.about) {
+                    this.tab = 1
+                } else if (this.collection.roadmap) {
+                    this.tab = 2
+                } else if (this.collection.team) {
+                    this.tab = 3
+                }
+            },
             changeTab: function(index) {
                 this.tab = index
             },
