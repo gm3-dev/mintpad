@@ -88,10 +88,10 @@
                         <p class="font-regular text-sm">{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                         <p class="font-regular text-sm mb-8">{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
 
-                        <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                            <div class="col-span-3">
+                        <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+                            <div class="col-span-2 md:col-span-3 lg:col-span-4">
                                 <x-gray-button href="#" class="float-right mt-2 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
-                                <h3 class="basis-full text-2xl mb-1" v-html="'Phase '+(index+1)"></h3>
+                                <h3 class="basis-full text-2xl mb-1" v-html="phase.name"></h3>
                                 <p class="font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                             </div>
                             <div>
@@ -99,7 +99,7 @@
                                 <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                             </div>
                             <div>
-                                <x-label for="max-quantity" :value="__('Number of NFTs in this phase? (0 = unlimited)')" />
+                                <x-label for="max-quantity" :value="__('Amount')" />
                                 <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                             </div>
                             <div class="relative">
@@ -112,11 +112,15 @@
                                 <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
                             </div>
                             <div>
+                                <x-label for="phase-name" :value="__('Phase name')" />
+                                <x-input id="phase-name" class="mt-1 w-full" type="text" v-model="phase.name" required />
+                            </div>
+                            <div>
                                 <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4 w-full" />
                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
                             </div>
-                            <div v-if="phase.whitelist == 1">
+                            <div v-if="phase.whitelist == 1" class="col-span-2">
                                 <x-label :value="__('Whitelist CSV file')" />
                                 <p class="text-sm mt-1"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Upload whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                             </div>
@@ -243,7 +247,8 @@
                                 </div>
                             </div>
                             <div class="mb-4">
-                                <p>SEO fiels here</p>
+                                <h3 class="text-2xl mb-4 mt-6"> {{ __('SEO settings') }}</h3>
+                                <p class="font-regular text-sm mb-4">Coming soon</p>
                             </div>
                         </div>
                     </div>

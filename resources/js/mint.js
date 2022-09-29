@@ -91,7 +91,7 @@ if (document.getElementById('app')) {
 
                 try {
                     var claimConditions = await this.contract.claimConditions.getAll()
-                    this.claimPhases = this.parseClaimConditions(claimConditions)
+                    this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
                 } catch (e) {

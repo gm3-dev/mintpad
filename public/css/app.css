@@ -708,6 +708,12 @@ select {
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
+.col-span-4 {
+  grid-column: span 4 / span 4;
+}
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
 .float-right {
   float: right;
 }
@@ -1154,6 +1160,14 @@ select {
 }
 .gap-6 {
   gap: 1.5rem;
+}
+.gap-x-2 {
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
+}
+.gap-x-4 {
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
 }
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -10802,10 +10816,25 @@ readers do not read off random characters that represent icons */
   }
 }
 
+@media (min-width: 768px) {
+
+  .md\:col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 1024px) {
 
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:col-span-4 {
+    grid-column: span 4 / span 4;
   }
 
   .lg\:inline-block {
@@ -10830,6 +10859,10 @@ readers do not read off random characters that represent icons */
 
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lg\:space-x-8 > :not([hidden]) ~ :not([hidden]) {

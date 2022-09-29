@@ -15,7 +15,7 @@
             <div v-for="(phase, index) in claimPhases" class="relative py-2 h-1/3">
                 <div class="bg-white rounded-xl px-8 py-6 h-full">
                     <i v-if="phase.active" class="far fa-check-circle text-primary-600 absolute right-3 top-5 text-xl"></i>
-                    <h2 class="text-lg font-semibold mb-1 text-mintpad-500"><span v-if="phase.whitelist">{{ __('Whitelist') }}</span><span v-else>{{ __('Public') }}</span></h2>
+                    <h2 class="text-lg font-semibold mb-1 text-mintpad-500" v-html="phase.name"></h2>
                     <p class="text-sm mb-3 text-mintpad-300">
                         <span v-if="phase.whitelist">• Whitelist <span class="text-primary-600" v-html="phase.snapshot.length"></span></span>
                         <span v-if="phase.waitInSeconds == 0">• Max <span class="text-primary-600" v-html="phase.quantityLimitPerTransaction"></span> token</span>

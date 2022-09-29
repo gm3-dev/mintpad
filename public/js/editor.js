@@ -3713,7 +3713,7 @@ axios.defaults.headers.common = {
      * @param {array} claimConditions list of claim phases
      * @returns array
      */
-    parseClaimConditions: function parseClaimConditions(claimConditions) {
+    parseClaimConditions: function parseClaimConditions(claimConditions, data) {
       var output = [];
 
       for (var i = 0; i < claimConditions.length; i++) {
@@ -3723,7 +3723,8 @@ axios.defaults.headers.common = {
         var nextIndex = i + 1;
         var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex];
         output.push({
-          id: i + 1,
+          id: nextIndex,
+          name: data['claim_phase_name_' + nextIndex] ? data['claim_phase_name_' + nextIndex] : 'Phase ' + nextIndex,
           startTime: this.formateDatetimeLocal(claimCondition.startTime),
           endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
           price: this.hexToValue(claimCondition.price._hex),

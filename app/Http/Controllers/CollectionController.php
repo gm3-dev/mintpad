@@ -108,6 +108,9 @@ class CollectionController extends Controller
         $this->authorize('view', $collection);
 
         $collection->token = config('blockchains.'.$collection->chain_id.'.token');
+        $collection->claim_phase_name_1 = $collection->getMeta('claim_phase_name_1');
+        $collection->claim_phase_name_2 = $collection->getMeta('claim_phase_name_2');
+        $collection->claim_phase_name_3 = $collection->getMeta('claim_phase_name_3');
 
         return response()->json($collection, 200);
     }
@@ -159,6 +162,29 @@ class CollectionController extends Controller
             file_put_contents($destination, file_get_contents($url));
 
             return response()->json(['url' => $url], 200);
+        }
+    }
+
+    /**
+     * Update claim phases
+     *
+     * @param Request $request
+     * @param Collection $collection
+     * @return Response
+     */
+    public function updateClaimPhases(Request $request, Collection $collection)
+    {
+        if ($request->ajax()) {
+            $this->authorize('update', $collection);
+
+            $data = $request->all();
+            $collection->setMeta('claim_phase_name_1', $data['phase1'] ?? '');
+            $collection->setMeta('claim_phase_name_2', $data['phase2'] ?? '');
+            $collection->setMeta('claim_phase_name_3', $data['phase3'] ?? '');
+
+            $collection->save();
+
+            return response()->json($collection, 200);
         }
     }
 

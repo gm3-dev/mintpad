@@ -190,7 +190,7 @@ if (document.getElementById('app')) {
                     // Claim phases
                     try {
                         var claimConditions = await this.contract.claimConditions.getAll()
-                        this.claimPhases = this.parseClaimConditions(claimConditions)
+                        this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     } catch (error) {
                         // console.log('Failed to load claim conditions', error)
                         // this.setErrorMessage('Claim phases could not be loaded...')
@@ -218,6 +218,7 @@ if (document.getElementById('app')) {
                 this.setButtonLoader(e)
 
                 var claimPhases = []
+                var formData = {}
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
                     var newClaimPhase = {
@@ -229,10 +230,14 @@ if (document.getElementById('app')) {
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
                     claimPhases.push(newClaimPhase)
+                    formData['phase'+(i+1)] = claimPhase.name
                 }
 
                 try {
                     await this.contract.claimConditions.set(claimPhases)
+                    await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
+                        //
+                    })
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {

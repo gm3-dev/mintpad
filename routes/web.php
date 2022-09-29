@@ -49,6 +49,7 @@ Route::domain(config('app.url'))->group(function () {
         Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
         Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update_mint');
         Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update_metadata');
+        Route::put('collections/{collection}/claim-phases', [CollectionController::class, 'updateClaimPhases'])->name('collections.update_claim_phases');
         Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
 
         // User
