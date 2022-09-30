@@ -81,8 +81,22 @@ class GeneratorController extends Controller
     public function download()
     {
         $file = storage_path(). '/app/archives/'.Auth::user()->id.'/collection.zip';
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename="collection.zip"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            exit;
+        }
 
-        return response()->download($file, 'collection.zip', ['Content-Type' => 'application/zip']);
+        abort(404);
+
+        // Laravel method does not work in Chrome
+        // return response()->download($file, 'collection.zip', ['Content-Type' => 'application/zip']);
     }
 
     public function getFullPath($path)
