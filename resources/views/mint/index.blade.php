@@ -23,9 +23,9 @@
                     </p>
                     <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="text-sm flex">
                         <div class="w-1/5 leading-8">
-                            <span class="inline-block align-middle"><span v-html="timers[index].state"></span> in</span>
+                            <span class="inline-block align-middle text-mintpad-300"><span v-html="timers[index].state"></span> in</span>
                         </div>
-                        <div class="w-4/5 text-lg font-semibold">
+                        <div class="w-4/5 text-lg font-semibold text-mintpad-300">
                             <span class="bg-primary-300 text-center rounded inline-block w-10 py-1 mr-1" v-html="timers[index].days">00</span>
                             <span class="bg-primary-300 text-center rounded inline-block w-10 py-1 mr-1" v-html="timers[index].hours">00</span>
                             <span class="bg-primary-300 text-center rounded inline-block w-10 py-1 mr-1" v-html="timers[index].minutes">00</span>

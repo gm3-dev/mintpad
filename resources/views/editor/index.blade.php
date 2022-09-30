@@ -45,9 +45,9 @@
                 </p>
                 <div class="text-sm flex">
                     <div class="w-1/5">
-                        <span class="mr-1"><span>Ends</span> in</span>
+                        <span class="mr-1 text-mintpad-300"><span>Ends</span> in</span>
                     </div>
-                    <div class="w-4/5">
+                    <div class="w-4/5 text-mintpad-300">
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">00</span>
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">02</span>
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">03</span>
@@ -63,9 +63,9 @@
                 </p>
                 <div class="text-sm flex">
                     <div class="w-1/5">
-                        <span class="mr-1"><span>Starts</span> in</span>
+                        <span class="mr-1 text-mintpad-300"><span>Starts</span> in</span>
                     </div>
-                    <div class="w-4/5">
+                    <div class="w-4/5 text-mintpad-300">
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">00</span>
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">02</span>
                         <span class="bg-primary-300 font-semibold rounded px-1 py-2 mr-1">03</span>
