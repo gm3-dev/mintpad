@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="bg-white rounded-xl text-center">
-            <img v-if="collection.image" v-bind:src="collection.image" class="rounded-xl" />
+            <img v-if="collection.image" v-bind:src="collection.image" class="inline-block rounded-xl" />
             <i v-else class="far fa-image text-9xl text-primary-300 mb-1 mt-36 rounded-xl animate-pulse"></i>
         </div>
         <div class="bg-white rounded-xl p-8">
@@ -76,10 +76,10 @@
             <x-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }}</x-button>
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
-            <div class="mb-8">
-                <a v-if="collection.about" href="#" @click.prevent="changeTab(1)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
-                <a v-if="collection.roadmap" href="#" @click.prevent="changeTab(2)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
-                <a v-if="collection.team" href="#" @click.prevent="changeTab(3)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+            <div class="mb-4">
+                <a v-if="collection.about" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
+                <a v-if="collection.roadmap" href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
+                <a v-if="collection.team" href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
             </div>
             
             <div v-show="tab == 1 && collection.about" class="tinymce-html" v-html="collection.about"></div>

@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="bg-white rounded-xl text-center">
-            <img v-if="collection.thumb" :src="collection.thumb" class="rounded-xl" />
+            <img v-if="collection.thumb" :src="collection.thumb" class="inline-block rounded-xl" />
             <i v-else class="far fa-image text-9xl text-primary-300 mb-1 mt-36 rounded-xl animate-pulse"></i>
         </div>
         <div class="bg-white rounded-xl p-8">
@@ -108,19 +108,21 @@
                 <a href="#" @click.prevent="newButton" class="p-2 rounded-lg text-mintpad-300"><i class="fas fa-plus"></i></a>
             </span>
         </div>
-        <div class="lg:col-span-2 p-4 px-8">
-            <a href="#" @click.prevent="changeTab(1)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
-            <a href="#" @click.prevent="changeTab(2)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
-            <a href="#" @click.prevent="changeTab(3)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
-        </div>
-        <div v-show="tab == 1" class="lg:col-span-2 bg-white rounded-xl p-8">
-            <tinymce v-model="collection.about"></tinymce>
-        </div>
-        <div v-show="tab == 2" class="lg:col-span-2 bg-white rounded-xl p-8">
-            <tinymce v-model="collection.roadmap"></tinymce>
-        </div>
-        <div v-show="tab == 3" class="lg:col-span-2 bg-white rounded-xl p-8">
-            <tinymce v-model="collection.team"></tinymce>
+        <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
+            <div class="mb-4">
+                <a href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
+                <a href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
+                <a href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+            </div>
+            <div v-show="tab == 1">
+                <tinymce v-model="collection.about"></tinymce>
+            </div>
+            <div v-show="tab == 2">
+                <tinymce v-model="collection.roadmap"></tinymce>
+            </div>
+            <div v-show="tab == 3">
+                <tinymce v-model="collection.team"></tinymce>
+            </div>
         </div>
     </div>
     <div class="mt-8 text-center">
