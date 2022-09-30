@@ -123,8 +123,8 @@
             <tinymce v-model="collection.team"></tinymce>
         </div>
     </div>
-    <div class="pt-4 text-center">
-        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm text-mintpad-300">Terms of Service</x-link>
+    <div class="mt-8 text-center">
+        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white p-2 px-4 rounded-lg text-mintpad-300 ">Terms of Service</x-link>
     </div>
 
     <div v-if="modal.id == 'edit-button'">
