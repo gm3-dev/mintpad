@@ -3578,8 +3578,6 @@ axios.defaults.headers.common = {
       }
     },
     setBackground: function setBackground() {
-      console.log(this.collection.background);
-
       if (this.collection.background) {
         // this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center'}
         this.style = {
@@ -21596,11 +21594,12 @@ if (document.getElementById('app')) {
                 switch (_context4.prev = _context4.next) {
                   case 0:
                     _this3.collection[name] = response.data.url;
+                    console.log('response.data.url', response.data.url);
                     _this3.edit.loading = false;
 
                     _this3.setBackground();
 
-                  case 3:
+                  case 4:
                   case "end":
                     return _context4.stop();
                 }

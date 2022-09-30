@@ -133,6 +133,7 @@ if (document.getElementById('app')) {
                 formData.append('name', name)
                 axios.post('/editor/'+this.collectionID+'/upload-resource', formData).then(async (response) => {
                     this.collection[name] = response.data.url
+                    console.log('response.data.url', response.data.url)
                     this.edit.loading = false
                     this.setBackground()
                 }).catch((error) => {

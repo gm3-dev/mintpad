@@ -59,7 +59,6 @@ export default {
             }
         },
         setBackground: function() {
-            console.log(this.collection.background)
             if (this.collection.background) {
                 // this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center'}
                 this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center', backgroundSize: 'cover'}

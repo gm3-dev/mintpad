@@ -73,7 +73,7 @@ class EditorController extends Controller
         }
 
         $output = [
-            'url' => '/resources/'.$collection->id.'/'.$name.'.'.$file->getClientOriginalExtension(),
+            'url' => '/resources/'.$collection->id.'/'.$name.'.'.$file->getClientOriginalExtension().'?v='.filemtime($public.$name.'.'.$file->getClientOriginalExtension()),
         ];
         
         return response()->json($output, 200);
