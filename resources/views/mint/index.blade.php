@@ -1,7 +1,7 @@
 <x-mint-layout>
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
-    <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 mb-4">
+    <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4">
         <p class="text-sm text-center">Your wallet is not connected to the correct blockchain.</p>
     </div>
 

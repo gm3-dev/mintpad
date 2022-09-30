@@ -12,7 +12,7 @@
                 <p class="text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
             </div>
 
-            <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 mb-4">
+            <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4">
                 <p class="text-sm text-center mb-4">Your wallet is not connected to the correct blockchain</p>
                 <p class="text-center"><x-link-button href="#" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-link-button></p>
             </div>
