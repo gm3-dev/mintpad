@@ -75,14 +75,17 @@
         <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white text-center rounded-xl p-8">
             <x-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }}</x-button>
         </div>
-        <div class="lg:col-span-2 p-4 px-8">
-            <a v-if="collection.about" href="#" @click.prevent="changeTab(1)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
-            <a v-if="collection.roadmap" href="#" @click.prevent="changeTab(2)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
-            <a v-if="collection.team" href="#" @click.prevent="changeTab(3)" class="border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+        <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
+            <div class="mb-8">
+                <a v-if="collection.about" href="#" @click.prevent="changeTab(1)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
+                <a v-if="collection.roadmap" href="#" @click.prevent="changeTab(2)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
+                <a v-if="collection.team" href="#" @click.prevent="changeTab(3)" class="text-xl border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+            </div>
+            
+            <div v-show="tab == 1 && collection.about" class="tinymce-html" v-html="collection.about"></div>
+            <div v-show="tab == 2 && collection.roadmap" class="tinymce-html" v-html="collection.roadmap"></div>
+            <div v-show="tab == 3 && collection.team" class="tinymce-html" v-html="collection.team"></div>
         </div>
-        <div v-show="tab == 1 && collection.about" class="lg:col-span-2 bg-white rounded-xl p-8 tinymce-html" v-html="collection.about"></div>
-        <div v-show="tab == 2 && collection.roadmap" class="lg:col-span-2 bg-white rounded-xl p-8 tinymce-html" v-html="collection.roadmap"></div>
-        <div v-show="tab == 3 && collection.team" class="lg:col-span-2 bg-white rounded-xl p-8 tinymce-html" v-html="collection.team"></div>
     </div>
     <div class="pt-4 text-center">
         <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm text-mintpad-300">Terms of Service</x-link>

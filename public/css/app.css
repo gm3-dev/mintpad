@@ -570,17 +570,13 @@ select {
   color: rgb(101 111 119 / var(--tw-text-opacity));
 }
   html .tinymce-html h1, html .tinymce-html h2, html .tinymce-html h3, html .tinymce-html p, html .tinymce-html ul, html .tinymce-html ol {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
   html .tinymce-html h1 {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-  html .tinymce-html h2 {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
-  html .tinymce-html h3 {
+  html .tinymce-html h2 {
   font-size: 1.125rem;
   line-height: 1.75rem;
 }
