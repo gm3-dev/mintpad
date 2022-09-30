@@ -17,7 +17,7 @@
                 <div class="p-1 basis-1/5"></div>
             </div>
             @foreach ($invoices as $invoice)
-                <div class="px-6 py-1 mb-4 text-mintpad-500 rounded-2xl border-2 border-mintpad-200 bg-primary-100 flex flex-row text-left items-center text-sm">
+                <div class="px-6 py-1 mb-4 text-mintpad-500 dark:text-white rounded-2xl border-2 border-mintpad-200 dark:border-gray-600 bg-primary-100 dark:bg-mintpad-700 flex flex-row text-left items-center text-sm">
                     <div class="p-1 basis-2/5 font-semibold">{{ $invoice['invoice_id'] }}</div>
                     <div class="p-1 basis-1/5 font-semibold">$ {{ number_format($invoice['total_price_incl_tax'], 2) }}</div>
                     <div class="p-1 basis-1/5 font-semibold">{{ $invoice['state'] }}</div>
