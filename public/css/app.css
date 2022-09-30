@@ -569,12 +569,26 @@ select {
   --tw-text-opacity: 1;
   color: rgb(101 111 119 / var(--tw-text-opacity));
 }
-  html .tinymce-html h1, html .tinymce-html h2, html .tinymce-html h3, html .tinymce-html h4, html .tinymce-html h5, html .tinymce-html h6, html .tinymce-html p, html .tinymce-html ul, html .tinymce-html ol {
+  html .tinymce-html h1, html .tinymce-html h2, html .tinymce-html h3, html .tinymce-html p, html .tinymce-html ul, html .tinymce-html ol {
   margin-bottom: 1rem;
 }
-  html .tinymce-html h1, html .tinymce-html h2, html .tinymce-html h3, html .tinymce-html h4, html .tinymce-html h5, html .tinymce-html h6 {
+  html .tinymce-html h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  --tw-text-opacity: 1;
+  color: rgb(5 18 27 / var(--tw-text-opacity));
+}
+  html .tinymce-html h2 {
   font-size: 1.25rem;
   line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(5 18 27 / var(--tw-text-opacity));
+}
+  html .tinymce-html h3 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(5 18 27 / var(--tw-text-opacity));
 }
   html .tinymce-html p {
   font-family: Graphik-Regular;
@@ -1451,6 +1465,10 @@ select {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 .\!px-2 {
   padding-left: 0.5rem !important;
   padding-right: 0.5rem !important;
@@ -1478,10 +1496,6 @@ select {
 .py-16 {
   padding-top: 4rem;
   padding-bottom: 4rem;
-}
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 }
 .pb-2 {
   padding-bottom: 0.5rem;
