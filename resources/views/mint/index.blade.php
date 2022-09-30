@@ -88,6 +88,6 @@
         </div>
     </div>
     <div class="mt-8 text-center">
-        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white p-2 px-4 rounded-lg text-mintpad-300 ">Terms of Service</x-link>
+        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white p-2 px-4 rounded-lg !text-mintpad-300 ">Terms of Service</x-link>
     </div>
 </x-app-layout>

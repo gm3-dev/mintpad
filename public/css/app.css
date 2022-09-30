@@ -1729,6 +1729,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));
 }
+.\!text-mintpad-300 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(101 111 119 / var(--tw-text-opacity)) !important;
+}
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
