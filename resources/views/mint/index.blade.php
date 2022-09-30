@@ -8,7 +8,7 @@
     <div id="custom-style-container" class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div v-if="collection.logo" class="lg:col-span-2 text-center p-3">
             <div class="inline-block max-h-20">
-                <img :src="collection.logo" class="h-full" />
+                <img :src="collection.logo" class="h-full max-h-20" />
             </div>
         </div>
         <div v-if="claimPhases.length > 0" class="flex-row grid-cols-1 -my-2">
