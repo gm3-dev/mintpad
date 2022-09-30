@@ -14,6 +14,7 @@ if (document.getElementById('app')) {
         el: '#app',
         mixins: [metamask,helpers,thirdweb],
         data: {
+            style: {},
             tab: 1,
             collection: {
                 totalSupply: 0,
@@ -51,14 +52,16 @@ if (document.getElementById('app')) {
                 this.collection.roadmap = response.data.roadmap
                 this.collection.team = response.data.team
                 this.collection.logo = response.data.logo
+                this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
                 this.hasValidChain = await this.validateMatchingBlockchains(parseInt(this.collection.chain_id))
                 
                 // Set theme
                 this.theme = response.data.theme
+                this.setBackground()
                 this.setStyling()
                 this.setTab()
-                
+            
                 this.appReady()
 
                 // Set SDK

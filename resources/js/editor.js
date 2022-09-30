@@ -21,6 +21,7 @@ if (document.getElementById('app')) {
         mixins: [helpers,modal],
         components: {},
         data: {
+            style: {},
             colors: false,
             collectionID: false,
             collection: {
@@ -29,14 +30,15 @@ if (document.getElementById('app')) {
                 roadmap: '',
                 team: '',
                 buttons: [],
-                logo: false
+                logo: false,
+                background: false
             },
             tab: 1,
             edit: {
-                logo: {
-                    classes: []
-                },
-                button: false
+                logo: {classes: []},
+                background: {classes: []},
+                button: false,
+                loading: false
             }
         },
         computed: {
@@ -84,14 +86,15 @@ if (document.getElementById('app')) {
                 this.collection.roadmap = response.data.roadmap
                 this.collection.team = response.data.team
                 this.collection.logo = response.data.logo
+                this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
                 
                 // Set theme
                 if (response.data.theme) {
                     this.theme = response.data.theme
                 }
+                this.setBackground()
                 this.setStyling()
-
                 this.appReady()
 
             }).catch((error) => {
@@ -99,34 +102,43 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
-            addMintLogo: function() {
-                // this.edit.logo.src = '/images/image-skeleton.png'
-                this.modal.id = 'edit-logo'
+            /**
+             * Logo management
+             */
+            addResource: function(name) {
+                this.modal.id = 'edit-'+name
             },
-            deleteMintLogo: function() {
-                if (confirm("Are you sure you want to delete this logo?") == true) {
-                    axios.delete('/mint/'+this.collectionID+'/delete-logo').then(async (response) => {
-                        this.collection.logo = false
+            deleteResource: function(name) {
+                if (confirm("Are you sure you want to delete this "+name+"?") == true) {
+                    var data = {data: {name: name}}
+                    axios.delete('/editor/'+this.collectionID+'/delete-resource', data).then(async (response) => {
+                        this.collection[name] = false
+                        this.setBackground()
                     }).catch((error) => {
                         // console.log(error)
                     });
                 }
             },
-            dragEnterUploadLogo: function() {
-                this.edit.logo.classes = ['border-mintpad-300']
+            dragEnterUploadResource: function(name) {
+                this.edit[name].classes = ['border-mintpad-300']
             },
-            dragLeaveUploadLogo: function() {
-                this.edit.logo.classes = []
+            dragLeaveUploadResource: function(name) {
+                this.edit[name].classes = []
             },
-            uploadLogo: function(event) {
+            uploadResource: function(name, event) {
+                this.edit.loading = true
                 var files = event.target.files
                 var formData = new FormData()
-                formData.append('logo', files[0])
-                axios.post('/mint/'+this.collectionID+'/upload-logo', formData).then(async (response) => {
-                    this.collection.logo = response.data.url
+                formData.append('resource', files[0])
+                formData.append('name', name)
+                axios.post('/editor/'+this.collectionID+'/upload-resource', formData).then(async (response) => {
+                    this.collection[name] = response.data.url
+                    this.edit.loading = false
+                    this.setBackground()
                 }).catch((error) => {
+                    this.edit.loading = false
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors.logo[0])
+                        this.setErrorMessage(error.response.data.errors[name][0])
                     } else {
                         this.setErrorMessage('Something went wrong, please try again.')
                     }

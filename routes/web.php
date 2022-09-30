@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\EditorController;
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\GeneratorController;
 use App\Http\Controllers\UserController;
@@ -64,10 +65,10 @@ Route::domain(config('app.url'))->group(function () {
         Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
         Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
 
-        // Mint layout
-        Route::get('mint/{collection}/edit', [MintController::class, 'edit'])->name('mint.edit');
-        Route::post('mint/{collection}/upload-logo', [MintController::class, 'uploadLogo'])->name('mint.upload_logo');
-        Route::delete('mint/{collection}/delete-logo', [MintController::class, 'deleteLogo'])->name('mint.delete_logo');
+        // Editor layout
+        Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
+        Route::post('editor/{collection}/upload-resource', [EditorController::class, 'uploadResource'])->name('editor.upload');
+        Route::delete('editor/{collection}/delete-resource', [EditorController::class, 'deleteResource'])->name('editor.delete');
     });
 });
 

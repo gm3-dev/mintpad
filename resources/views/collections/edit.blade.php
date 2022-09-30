@@ -99,7 +99,7 @@
                                 <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                             </div>
                             <div>
-                                <x-label for="max-quantity" :value="__('Amount')" />
+                                <x-label for="max-quantity" :value="__('Number of NFTs')" />
                                 <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                             </div>
                             <div class="relative">
@@ -256,7 +256,7 @@
                     <div class="w-full">
                         <x-link-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-link-button>
                         <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-blue-button>
-                        <x-blue-button href="{{ route('mint.edit', $collection->id) }}" target="_blank" class="ml-2">{{ __('View collection page editor') }}</x-blue-button>
+                        <x-blue-button href="{{ route('editor.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page editor') }}</x-blue-button>
                     </div>
                 </div>
             </div>

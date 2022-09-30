@@ -224,7 +224,7 @@ if (document.getElementById('app')) {
                     var newClaimPhase = {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
-                        maxQuantity: claimPhase.maxQuantity,
+                        maxQuantity: claimPhase.maxQuantity == 0 ? 'unlimited' : claimPhase.maxQuantity,
                         quantityLimitPerTransaction: 1,
                         waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,

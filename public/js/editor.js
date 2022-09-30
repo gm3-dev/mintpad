@@ -3577,6 +3577,18 @@ axios.defaults.headers.common = {
         document.head.appendChild(this.styleTag);
       }
     },
+    setBackground: function setBackground() {
+      console.log(this.collection.background);
+
+      if (this.collection.background) {
+        this.style = {
+          background: 'url("' + this.collection.background + '")',
+          backgroundPosition: 'top center'
+        }; // this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center', backgroundSize: 'cover'}
+      } else {
+        this.style = {};
+      }
+    },
     replaceOpacityValue: function replaceOpacityValue(string, opacity) {
       return string.replace(/[^,]+(?=\))/, opacity);
     },
@@ -21404,6 +21416,7 @@ if (document.getElementById('app')) {
     mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_1__["default"], _modal_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
     components: {},
     data: {
+      style: {},
       colors: false,
       collectionID: false,
       collection: {
@@ -21412,14 +21425,19 @@ if (document.getElementById('app')) {
         roadmap: '',
         team: '',
         buttons: [],
-        logo: false
+        logo: false,
+        background: false
       },
       tab: 1,
       edit: {
         logo: {
           classes: []
         },
-        button: false
+        background: {
+          classes: []
+        },
+        button: false,
+        loading: false
       }
     },
     computed: {
@@ -21479,17 +21497,20 @@ if (document.getElementById('app')) {
                             _this.collection.roadmap = response.data.roadmap;
                             _this.collection.team = response.data.team;
                             _this.collection.logo = response.data.logo;
+                            _this.collection.background = response.data.background;
                             _this.collection.thumb = response.data.thumb; // Set theme
 
                             if (response.data.theme) {
                               _this.theme = response.data.theme;
                             }
 
+                            _this.setBackground();
+
                             _this.setStyling();
 
                             _this.appReady();
 
-                          case 9:
+                          case 11:
                           case "end":
                             return _context.stop();
                         }
@@ -21512,23 +21533,32 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
-      addMintLogo: function addMintLogo() {
-        // this.edit.logo.src = '/images/image-skeleton.png'
-        this.modal.id = 'edit-logo';
+      /**
+       * Logo management
+       */
+      addResource: function addResource(name) {
+        this.modal.id = 'edit-' + name;
       },
-      deleteMintLogo: function deleteMintLogo() {
+      deleteResource: function deleteResource(name) {
         var _this2 = this;
 
-        if (confirm("Are you sure you want to delete this logo?") == true) {
-          axios["delete"]('/mint/' + this.collectionID + '/delete-logo').then( /*#__PURE__*/function () {
+        if (confirm("Are you sure you want to delete this " + name + "?") == true) {
+          var data = {
+            data: {
+              name: name
+            }
+          };
+          axios["delete"]('/editor/' + this.collectionID + '/delete-resource', data).then( /*#__PURE__*/function () {
             var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                 while (1) {
                   switch (_context3.prev = _context3.next) {
                     case 0:
-                      _this2.collection.logo = false;
+                      _this2.collection[name] = false;
 
-                    case 1:
+                      _this2.setBackground();
+
+                    case 2:
                     case "end":
                       return _context3.stop();
                   }
@@ -21543,27 +21573,32 @@ if (document.getElementById('app')) {
           });
         }
       },
-      dragEnterUploadLogo: function dragEnterUploadLogo() {
-        this.edit.logo.classes = ['border-mintpad-300'];
+      dragEnterUploadResource: function dragEnterUploadResource(name) {
+        this.edit[name].classes = ['border-mintpad-300'];
       },
-      dragLeaveUploadLogo: function dragLeaveUploadLogo() {
-        this.edit.logo.classes = [];
+      dragLeaveUploadResource: function dragLeaveUploadResource(name) {
+        this.edit[name].classes = [];
       },
-      uploadLogo: function uploadLogo(event) {
+      uploadResource: function uploadResource(name, event) {
         var _this3 = this;
 
+        this.edit.loading = true;
         var files = event.target.files;
         var formData = new FormData();
-        formData.append('logo', files[0]);
-        axios.post('/mint/' + this.collectionID + '/upload-logo', formData).then( /*#__PURE__*/function () {
+        formData.append('resource', files[0]);
+        formData.append('name', name);
+        axios.post('/editor/' + this.collectionID + '/upload-resource', formData).then( /*#__PURE__*/function () {
           var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(response) {
             return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
               while (1) {
                 switch (_context4.prev = _context4.next) {
                   case 0:
-                    _this3.collection.logo = response.data.url;
+                    _this3.collection[name] = response.data.url;
+                    _this3.edit.loading = false;
 
-                  case 1:
+                    _this3.setBackground();
+
+                  case 3:
                   case "end":
                     return _context4.stop();
                 }
@@ -21575,8 +21610,10 @@ if (document.getElementById('app')) {
             return _ref3.apply(this, arguments);
           };
         }())["catch"](function (error) {
+          _this3.edit.loading = false;
+
           if (error.response.data.errors != undefined) {
-            _this3.setErrorMessage(error.response.data.errors.logo[0]);
+            _this3.setErrorMessage(error.response.data.errors[name][0]);
           } else {
             _this3.setErrorMessage('Something went wrong, please try again.');
           }
