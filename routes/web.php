@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::domain(config('app.url'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
-    Route::group(['middleware' => []], function () {
+    Route::group(['middleware' => ['auth']], function () {
         /**
          * Admin routes
          */
