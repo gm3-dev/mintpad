@@ -53609,64 +53609,49 @@ if (document.getElementById('app')) {
                               _this2.collection.name = metadata.name;
                               _this2.collection.description = metadata.description;
                               _this2.collection.fee_recipient = royalties.fee_recipient;
-                              _this2.collection.royalties = royalties.seller_fee_basis_points / 100;
-                              _context5.next = 32;
-                              break;
+                              _this2.collection.royalties = royalties.seller_fee_basis_points / 100; // Claim phases
 
-                            case 29:
-                              _context5.prev = 29;
-                              _context5.t0 = _context5["catch"](16);
-
-                              _this2.setErrorMessage('Contract could not be loaded...', true);
-
-                            case 32:
-                              _context5.prev = 32;
-                              _context5.next = 35;
+                              _context5.next = 29;
                               return _this2.contract.claimConditions.getAll();
 
-                            case 35:
+                            case 29:
                               claimConditions = _context5.sent;
-                              _this2.claimPhases = _this2.parseClaimConditions(claimConditions, response.data);
-                              _context5.next = 41;
-                              break;
+                              _this2.claimPhases = _this2.parseClaimConditions(claimConditions, response.data); // Collection
 
-                            case 39:
-                              _context5.prev = 39;
-                              _context5.t1 = _context5["catch"](32);
-
-                            case 41:
-                              _context5.prev = 41;
-                              _context5.next = 44;
+                              _context5.next = 33;
                               return _this2.contract.totalSupply();
 
-                            case 44:
+                            case 33:
                               _this2.collection.totalSupply = _context5.sent;
-                              _context5.next = 47;
+                              _context5.next = 36;
                               return _this2.contract.totalClaimedSupply();
 
-                            case 47:
+                            case 36:
                               _this2.collection.totalClaimedSupply = _context5.sent;
                               _this2.collection.totalRatio = Math.round(_this2.collection.totalClaimedSupply / _this2.collection.totalSupply * 100);
-                              _context5.next = 51;
+                              _context5.next = 40;
                               return _this2.contract.getAll({
                                 count: 8
                               });
 
-                            case 51:
+                            case 40:
                               _this2.collection.nfts = _context5.sent;
-                              _context5.next = 56;
+                              _context5.next = 47;
                               break;
 
-                            case 54:
-                              _context5.prev = 54;
-                              _context5.t2 = _context5["catch"](41);
+                            case 43:
+                              _context5.prev = 43;
+                              _context5.t0 = _context5["catch"](16);
+                              Sentry.captureException(_context5.t0);
 
-                            case 56:
+                              _this2.setErrorMessage('Contract could not be loaded, please try again.', true);
+
+                            case 47:
                             case "end":
                               return _context5.stop();
                           }
                         }
-                      }, _callee5, null, [[16, 29], [32, 39], [41, 54]]);
+                      }, _callee5, null, [[16, 43]]);
                     }));
 
                     return function (_x3) {
@@ -53727,18 +53712,19 @@ if (document.getElementById('app')) {
 
                 case 9:
                   this.setSuccessMessage('Claim phases updated');
-                  _context7.next = 15;
+                  _context7.next = 16;
                   break;
 
                 case 12:
                   _context7.prev = 12;
                   _context7.t0 = _context7["catch"](4);
-                  this.setErrorMessage('error updateClaimPhases');
-
-                case 15:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context7.t0);
+                  this.setErrorMessage('Something went wrong, please try again.');
 
                 case 16:
+                  this.resetButtonLoader();
+
+                case 17:
                 case "end":
                   return _context7.stop();
               }
@@ -53835,19 +53821,19 @@ if (document.getElementById('app')) {
 
                 case 7:
                   this.setSuccessMessage('General settings updated');
-                  _context9.next = 13;
+                  _context9.next = 14;
                   break;
 
                 case 10:
                   _context9.prev = 10;
                   _context9.t0 = _context9["catch"](1);
-                  // console.log('error updateMetadata', error)
-                  this.setErrorMessage('General settings not updated');
-
-                case 13:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context9.t0);
+                  this.setErrorMessage('Something went wrong, please try again.');
 
                 case 14:
+                  this.resetButtonLoader();
+
+                case 15:
                 case "end":
                   return _context9.stop();
               }
@@ -53879,19 +53865,19 @@ if (document.getElementById('app')) {
 
                 case 4:
                   this.setSuccessMessage('Royalties updated');
-                  _context10.next = 10;
+                  _context10.next = 11;
                   break;
 
                 case 7:
                   _context10.prev = 7;
                   _context10.t0 = _context10["catch"](1);
-                  // console.log('error updateRoyalties', error)
-                  this.setErrorMessage('Royalties not updated');
-
-                case 10:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context10.t0);
+                  this.setErrorMessage('Something went wrong, please try again.');
 
                 case 11:
+                  this.resetButtonLoader();
+
+                case 12:
                 case "end":
                   return _context10.stop();
               }
@@ -53994,19 +53980,19 @@ if (document.getElementById('app')) {
                   });
 
                 case 13:
-                  _context12.next = 18;
+                  _context12.next = 19;
                   break;
 
                 case 15:
                   _context12.prev = 15;
                   _context12.t0 = _context12["catch"](4);
-                  // console.log('error deploying contract', error)
-                  this.setErrorMessage('Smart contract deployment failed');
-
-                case 18:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context12.t0);
+                  this.setErrorMessage('Something went wrong, please try again.');
 
                 case 19:
+                  this.resetButtonLoader();
+
+                case 20:
                 case "end":
                   return _context12.stop();
               }
@@ -54097,19 +54083,19 @@ if (document.getElementById('app')) {
 
                 case 11:
                   this.setSuccessMessage('NFTs added to the collection!');
-                  _context14.next = 17;
+                  _context14.next = 18;
                   break;
 
                 case 14:
                   _context14.prev = 14;
                   _context14.t0 = _context14["catch"](1);
-                  // console.log('error updateCollection', error)
-                  this.setErrorMessage('Error while uploading your collection');
-
-                case 17:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context14.t0);
+                  this.setErrorMessage('Something went wrong, please try again.');
 
                 case 18:
+                  this.resetButtonLoader();
+
+                case 19:
                 case "end":
                   return _context14.stop();
               }
@@ -54459,7 +54445,7 @@ axios.defaults.headers.common = {
               case 6:
                 _context.prev = 6;
                 _context.t0 = _context["catch"](1);
-                console.log('switchBlockchainTo', _context.t0);
+                Sentry.captureException(_context.t0);
                 this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.');
 
               case 10:
@@ -55150,7 +55136,7 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
                     total: parseInt(this.generator.total)
                   });
                 } else {
-                  this.setErrorMessage('Generation failed');
+                  this.setErrorMessage('Generation failed, please try again.');
                 }
 
                 this.resetButtonLoader();

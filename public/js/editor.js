@@ -13139,7 +13139,7 @@ axios.defaults.headers.common = {
               case 6:
                 _context.prev = 6;
                 _context.t0 = _context["catch"](1);
-                console.log('switchBlockchainTo', _context.t0);
+                Sentry.captureException(_context.t0);
                 this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.');
 
               case 10:

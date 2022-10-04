@@ -177,35 +177,27 @@ if (document.getElementById('app')) {
                     this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
                     await this.setSmartContract(this.contractAddress)
 
-                    // Global settings
                     try {
+                        // Global settings
                         const metadata = await this.contract.metadata.get()
                         const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                         this.collection.name = metadata.name
                         this.collection.description = metadata.description
                         this.collection.fee_recipient = royalties.fee_recipient
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
-                    } catch (error) {
-                        this.setErrorMessage('Contract could not be loaded...', true)
-                    }
 
-                    // Claim phases
-                    try {
+                        // Claim phases
                         var claimConditions = await this.contract.claimConditions.getAll()
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
-                    } catch (error) {
-                        // console.log('Failed to load claim conditions', error)
-                        // this.setErrorMessage('Claim phases could not be loaded...')
-                    }
 
-                    // Collection
-                    try {
+                        // Collection
                         this.collection.totalSupply = await this.contract.totalSupply()
                         this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                         this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                         this.collection.nfts = await this.contract.getAll({count: 8})
-                    } catch(error) {
-                        // this.setErrorMessage('Claim phases could not be loaded...')
+                    } catch (error) {
+                        Sentry.captureException(error)
+                        this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
                 })
             },
@@ -243,7 +235,8 @@ if (document.getElementById('app')) {
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {
-                    this.setErrorMessage('error updateClaimPhases')
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.')
                 }
                 
                 this.resetButtonLoader()
@@ -301,8 +294,8 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('General settings updated')
                 } catch(error) {
-                    // console.log('error updateMetadata', error)
-                    this.setErrorMessage('General settings not updated')
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.')
                 }
 
                 this.resetButtonLoader()
@@ -318,8 +311,8 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('Royalties updated')
                 } catch(error) {
-                    // console.log('error updateRoyalties', error)
-                    this.setErrorMessage('Royalties not updated')
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.')
                 }
 
                 this.resetButtonLoader()
@@ -375,8 +368,8 @@ if (document.getElementById('app')) {
                     })
 
                 } catch(error) {
-                    // console.log('error deploying contract', error)
-                    this.setErrorMessage('Smart contract deployment failed')
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.')
                 }
 
                 this.resetButtonLoader()
@@ -412,8 +405,8 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('NFTs added to the collection!')
                 } catch(error) {
-                    // console.log('error updateCollection', error)
-                    this.setErrorMessage('Error while uploading your collection')
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.')
                 }
 
                 this.resetButtonLoader()

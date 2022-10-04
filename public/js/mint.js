@@ -49459,7 +49459,7 @@ axios.defaults.headers.common = {
               case 6:
                 _context.prev = 6;
                 _context.t0 = _context["catch"](1);
-                console.log('switchBlockchainTo', _context.t0);
+                Sentry.captureException(_context.t0);
                 this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.');
 
               case 10:
@@ -75460,9 +75460,9 @@ if (document.getElementById('app')) {
                           case 50:
                             _context.prev = 50;
                             _context.t1 = _context["catch"](21);
-                            console.log('Failed to load metadata', _context.t1);
+                            Sentry.captureException(_context.t1);
 
-                            _this.setErrorMessage('Contract could not be loaded...', true);
+                            _this.setErrorMessage('Something went wrong, please try again.', true);
 
                           case 54:
                             _context.prev = 54;
@@ -75477,14 +75477,15 @@ if (document.getElementById('app')) {
 
                             _this.setActiveClaimPhase();
 
-                            _context.next = 65;
+                            _context.next = 66;
                             break;
 
                           case 63:
                             _context.prev = 63;
                             _context.t2 = _context["catch"](54);
+                            Sentry.captureException(_context.t2);
 
-                          case 65:
+                          case 66:
                           case "end":
                             return _context.stop();
                         }
@@ -75686,19 +75687,19 @@ if (document.getElementById('app')) {
 
                 case 4:
                   this.setSuccessMessage('NFT minted!');
-                  _context4.next = 10;
+                  _context4.next = 11;
                   break;
 
                 case 7:
                   _context4.prev = 7;
                   _context4.t0 = _context4["catch"](1);
-                  // console.log(error)
-                  this.setErrorMessage(_context4.t0);
-
-                case 10:
-                  this.resetButtonLoader();
+                  Sentry.captureException(_context4.t0);
+                  this.setErrorMessage('Something went wrong, please try again.', true);
 
                 case 11:
+                  this.resetButtonLoader();
+
+                case 12:
                 case "end":
                   return _context4.stop();
               }

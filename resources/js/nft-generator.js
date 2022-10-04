@@ -98,7 +98,7 @@ export default {
             if (this.generator.userID) {
                 socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             } else {
-                this.setErrorMessage('Generation failed')
+                this.setErrorMessage('Generation failed, please try again.')
             }
             this.resetButtonLoader()
         },

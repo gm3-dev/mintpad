@@ -89,9 +89,9 @@ if (document.getElementById('app')) {
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
-                } catch (e) {
-                    console.log('Failed to load metadata', e)
-                    this.setErrorMessage('Contract could not be loaded...', true)
+                } catch (error) {
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.', true)
                 }
 
                 try {
@@ -99,9 +99,8 @@ if (document.getElementById('app')) {
                     this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
-                } catch (e) {
-                    // console.log('Failed to load metadata', e)
-                    // this.setErrorMessage('Claim phases could not be loaded...')
+                } catch (error) {
+                    Sentry.captureException(error)
                 }
 
             }).catch((error, asdf) => {
@@ -233,8 +232,8 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('NFT minted!')
                 } catch (error) {
-                    // console.log(error)
-                    this.setErrorMessage(error)
+                    Sentry.captureException(error)
+                    this.setErrorMessage('Something went wrong, please try again.', true)
                 }
 
                 this.resetButtonLoader()

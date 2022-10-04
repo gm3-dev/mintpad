@@ -91,7 +91,7 @@ export default {
                     params: [{ chainId: ethers.utils.hexValue(parseInt(chainID)) }],
                 })
             } catch(error) {
-                console.log('switchBlockchainTo', error)
+                Sentry.captureException(error)
                 this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.')
             }
         },
