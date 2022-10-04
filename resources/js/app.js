@@ -1,5 +1,6 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
+import initSentry from './sentry'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import metamask from './metamask.js'
@@ -17,6 +18,7 @@ window.Alpine = Alpine
 Alpine.start()
 Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
+initSentry(Vue)
 
 /**
  * Darkmode support
@@ -122,7 +124,7 @@ if (document.getElementById('app')) {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
-    
+            
             await this.setBlockchains()
             await this.initMetaMask(false)
             this.appReady()

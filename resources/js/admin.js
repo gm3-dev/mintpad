@@ -1,5 +1,6 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
+import initSentry from './sentry'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 import metamask from './metamask.js'
@@ -15,6 +16,7 @@ window.Alpine = Alpine
 Alpine.start()
 Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
+initSentry(Vue)
 
 if (document.getElementById('app')) {    
     new Vue({

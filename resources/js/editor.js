@@ -1,5 +1,6 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
+import initSentry from './sentry'
 import helpers from './helpers.js'
 import modal from './modal.js'
 const axios = require('axios')
@@ -10,6 +11,7 @@ axios.defaults.headers.common = {
 import VueTippy from "vue-tippy"
 Vue.use(VueTippy)
 import {ColorPicker, ColorPanel} from 'one-colorpicker'
+initSentry(Vue)
 
 if (document.getElementById('app')) {  
     Vue.component('tinymce', require('./components/TinyMCE.vue').default);

@@ -1,5 +1,6 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
+import initSentry from './sentry'
 import metamask from './metamask.js'
 import helpers from './helpers.js'
 import thirdweb from './thirdweb.js'
@@ -8,6 +9,7 @@ axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
+initSentry(Vue)
 
 if (document.getElementById('app')) {    
     new Vue({
