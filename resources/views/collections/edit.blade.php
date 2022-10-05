@@ -242,7 +242,7 @@
                             <div class="mb-4">
                                 <x-label for="permalink" :value="__('Permalink')" />
                                 <div class="grid grid-cols-2 gap-2">
-                                    <span class="inline-block text-mintpad-300 border-2 border-gray-300 text-sm bg-gray-200 rounded-lg p-3 mt-1">{{ config('app.mint_url') }}/</span>
+                                    <span class="inline-block text-mintpad-300 border-2 border-gray-300 text-sm bg-gray-200 rounded-lg p-3 mt-1">{{ config('app.url') }}/</span>
                                     <x-input id="permalink" class="mt-1" type="text" v-model="collection.permalink" />
                                 </div>
                             </div>
