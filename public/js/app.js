@@ -54556,7 +54556,7 @@ axios.defaults.headers.common = {
           startTime: this.formateDatetimeLocal(claimCondition.startTime),
           endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
           price: this.hexToValue(claimCondition.price._hex),
-          maxQuantity: parseInt(claimCondition.maxQuantity),
+          maxQuantity: claimCondition.maxQuantity == 'unlimited' ? 0 : parseInt(claimCondition.maxQuantity),
           waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0,
           quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
           whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
