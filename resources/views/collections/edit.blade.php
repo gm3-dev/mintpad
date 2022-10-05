@@ -43,7 +43,7 @@
                         </h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full mb-4">
-                                <x-label for="name" :value="__('Collection name')" />
+                                <x-label for="name" :value="__('Collection name')" info="More info here..." />
                                 <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                             </div>
                             <div class="basis-full mb-4">
