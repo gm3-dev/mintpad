@@ -75370,7 +75370,7 @@ if (document.getElementById('app')) {
                             _this.contractAddress = response.data.address;
                             _this.collection.chain_id = response.data.chain_id;
                             _this.collection.token = response.data.token;
-                            _this.collection.buttons = response.data.buttons;
+                            _this.collection.buttons = _this.setButtons(response.data.buttons);
                             _this.collection.about = response.data.about;
                             _this.collection.roadmap = response.data.roadmap;
                             _this.collection.team = response.data.team;
@@ -75535,6 +75535,23 @@ if (document.getElementById('app')) {
             this.claimPhases[i].active = false;
           }
         }
+      },
+      setButtons: function setButtons(buttons) {
+        var output = [];
+
+        for (var i = 0; i < buttons.length; i++) {
+          var button = buttons[i];
+
+          try {
+            new URL(button.href);
+          } catch (error) {
+            button.href = 'https://' + button.href;
+          }
+
+          output.push(button);
+        }
+
+        return output;
       },
       setCollectionImage: function () {
         var _setCollectionImage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {

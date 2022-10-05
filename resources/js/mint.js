@@ -49,7 +49,7 @@ if (document.getElementById('app')) {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.token = response.data.token
-                this.collection.buttons = response.data.buttons
+                this.collection.buttons = this.setButtons(response.data.buttons)
                 this.collection.about = response.data.about
                 this.collection.roadmap = response.data.roadmap
                 this.collection.team = response.data.team
@@ -134,6 +134,19 @@ if (document.getElementById('app')) {
                         this.claimPhases[i].active = false
                     }
                 }
+            },
+            setButtons: function(buttons) {
+                var output = []
+                for (var i = 0; i < buttons.length; i++) {
+                    var button = buttons[i]
+                    try {
+                        new URL(button.href);
+                    } catch (error) {
+                        button.href = 'https://'+button.href
+                    }
+                    output.push(button)
+                }
+                return output
             },
             setCollectionImage: async function() {
                 var images = await this.contract.getAll({count: 1})
