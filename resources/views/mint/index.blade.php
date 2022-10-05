@@ -73,7 +73,7 @@
             <p class="font-regular text-mintpad-300" v-html="collection.description"></p>
         </div>
         <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white text-center rounded-xl p-8">
-            <x-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }}</x-button>
+            <x-link-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }}</x-link-button>
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
             <div class="mb-4">
