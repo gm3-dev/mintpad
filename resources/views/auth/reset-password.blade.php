@@ -1,8 +1,9 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/" class="text-4xl font-jpegdev">
+            <a href="/" class="relative text-4xl font-jpegdev">
                 mintpad
+                <span class="absolute font-bold text-lg text-primary-600 -bottom-4 -right-3">Beta</span>
             </a>
         </x-slot>
 

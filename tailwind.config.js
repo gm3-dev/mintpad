@@ -33,6 +33,7 @@ module.exports = {
             },
             fontFamily: {
                 sans: ['Graphik-Medium', ...defaultTheme.fontFamily.sans],
+                bold: ['Graphik-Bold'],
                 semibold: ['Graphik-Semibold'],
                 medium: ['Graphik-Medium'],
                 regular: ['Graphik-Regular'],

@@ -5,8 +5,9 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-4xl font-jpegdev dark:text-white">
-                    <a href="{{ route('collections.index') }}">
+                    <a href="{{ route('collections.index') }}" class="relative">
                         mintpad
+                        <span class="absolute font-bold text-lg text-primary-600 -bottom-4 -right-3">Beta</span>
                     </a>
                 </div>
 
