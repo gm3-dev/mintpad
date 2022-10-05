@@ -19226,6 +19226,206 @@ const wordlists = {
 
 /***/ }),
 
+/***/ "./node_modules/@sentry/hub/esm/exports.js":
+/*!*************************************************!*\
+  !*** ./node_modules/@sentry/hub/esm/exports.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addBreadcrumb": () => (/* binding */ addBreadcrumb),
+/* harmony export */   "captureEvent": () => (/* binding */ captureEvent),
+/* harmony export */   "captureException": () => (/* binding */ captureException),
+/* harmony export */   "captureMessage": () => (/* binding */ captureMessage),
+/* harmony export */   "configureScope": () => (/* binding */ configureScope),
+/* harmony export */   "setContext": () => (/* binding */ setContext),
+/* harmony export */   "setExtra": () => (/* binding */ setExtra),
+/* harmony export */   "setExtras": () => (/* binding */ setExtras),
+/* harmony export */   "setTag": () => (/* binding */ setTag),
+/* harmony export */   "setTags": () => (/* binding */ setTags),
+/* harmony export */   "setUser": () => (/* binding */ setUser),
+/* harmony export */   "startTransaction": () => (/* binding */ startTransaction),
+/* harmony export */   "withScope": () => (/* binding */ withScope)
+/* harmony export */ });
+/* harmony import */ var _hub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hub.js */ "./node_modules/@sentry/hub/esm/hub.js");
+
+
+// Note: All functions in this file are typed with a return value of `ReturnType<Hub[HUB_FUNCTION]>`,
+// where HUB_FUNCTION is some method on the Hub class.
+//
+// This is done to make sure the top level SDK methods stay in sync with the hub methods.
+// Although every method here has an explicit return type, some of them (that map to void returns) do not
+// contain `return` keywords. This is done to save on bundle size, as `return` is not minifiable.
+
+/**
+ * Captures an exception event and sends it to Sentry.
+ *
+ * @param exception An exception-like object.
+ * @param captureContext Additional scope data to apply to exception event.
+ * @returns The generated eventId.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+function captureException(exception, captureContext) {
+  return (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().captureException(exception, { captureContext });
+}
+
+/**
+ * Captures a message event and sends it to Sentry.
+ *
+ * @param message The message to send to Sentry.
+ * @param Severity Define the level of the message.
+ * @returns The generated eventId.
+ */
+function captureMessage(
+  message,
+  // eslint-disable-next-line deprecation/deprecation
+  captureContext,
+) {
+  // This is necessary to provide explicit scopes upgrade, without changing the original
+  // arity of the `captureMessage(message, level)` method.
+  var level = typeof captureContext === 'string' ? captureContext : undefined;
+  var context = typeof captureContext !== 'string' ? { captureContext } : undefined;
+  return (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().captureMessage(message, level, context);
+}
+
+/**
+ * Captures a manually created event and sends it to Sentry.
+ *
+ * @param event The event to send to Sentry.
+ * @returns The generated eventId.
+ */
+function captureEvent(event, hint) {
+  return (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().captureEvent(event, hint);
+}
+
+/**
+ * Callback to set context information onto the scope.
+ * @param callback Callback function that receives Scope.
+ */
+function configureScope(callback) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().configureScope(callback);
+}
+
+/**
+ * Records a new breadcrumb which will be attached to future events.
+ *
+ * Breadcrumbs will be added to subsequent events to provide more context on
+ * user's actions prior to an error or crash.
+ *
+ * @param breadcrumb The breadcrumb to record.
+ */
+function addBreadcrumb(breadcrumb) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().addBreadcrumb(breadcrumb);
+}
+
+/**
+ * Sets context data with the given name.
+ * @param name of the context
+ * @param context Any kind of data. This data will be normalized.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setContext(name, context) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setContext(name, context);
+}
+
+/**
+ * Set an object that will be merged sent as extra data with the event.
+ * @param extras Extras object to merge into current context.
+ */
+function setExtras(extras) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setExtras(extras);
+}
+
+/**
+ * Set key:value that will be sent as extra data with the event.
+ * @param key String of extra
+ * @param extra Any kind of data. This data will be normalized.
+ */
+function setExtra(key, extra) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setExtra(key, extra);
+}
+
+/**
+ * Set an object that will be merged sent as tags data with the event.
+ * @param tags Tags context object to merge into current context.
+ */
+function setTags(tags) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setTags(tags);
+}
+
+/**
+ * Set key:value that will be sent as tags data with the event.
+ *
+ * Can also be used to unset a tag, by passing `undefined`.
+ *
+ * @param key String key of tag
+ * @param value Value of tag
+ */
+function setTag(key, value) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setTag(key, value);
+}
+
+/**
+ * Updates user context information for future events.
+ *
+ * @param user User context object to be set in the current context. Pass `null` to unset the user.
+ */
+function setUser(user) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().setUser(user);
+}
+
+/**
+ * Creates a new scope with and executes the given operation within.
+ * The scope is automatically removed once the operation
+ * finishes or throws.
+ *
+ * This is essentially a convenience function for:
+ *
+ *     pushScope();
+ *     callback();
+ *     popScope();
+ *
+ * @param callback that will be enclosed into push/popScope.
+ */
+function withScope(callback) {
+  (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().withScope(callback);
+}
+
+/**
+ * Starts a new `Transaction` and returns it. This is the entry point to manual tracing instrumentation.
+ *
+ * A tree structure can be built by adding child spans to the transaction, and child spans to other spans. To start a
+ * new child span within the transaction or any span, call the respective `.startChild()` method.
+ *
+ * Every child span must be finished before the transaction is finished, otherwise the unfinished spans are discarded.
+ *
+ * The transaction must be finished with a call to its `.finish()` method, at which point the transaction with all its
+ * finished child spans will be sent to Sentry.
+ *
+ * NOTE: This function should only be used for *manual* instrumentation. Auto-instrumentation should call
+ * `startTransaction` directly on the hub.
+ *
+ * @param context Properties of the new `Transaction`.
+ * @param customSamplingContext Information given to the transaction sampling function (along with context-dependent
+ * default values). See {@link Options.tracesSampler}.
+ *
+ * @returns The transaction which was just started
+ */
+function startTransaction(
+  context,
+  customSamplingContext,
+) {
+  return (0,_hub_js__WEBPACK_IMPORTED_MODULE_0__.getCurrentHub)().startTransaction({ ...context }, customSamplingContext);
+}
+
+
+//# sourceMappingURL=exports.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@sentry/hub/esm/hub.js":
 /*!*********************************************!*\
   !*** ./node_modules/@sentry/hub/esm/hub.js ***!
@@ -54664,6 +54864,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _sentry_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @sentry/vue */ "./node_modules/@sentry/hub/esm/exports.js");
 /* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/web3-provider.js");
 
 
@@ -54672,6 +54873,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
 
 
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -54731,11 +54933,16 @@ axios.defaults.headers.common = {
                 return this.getProvider();
 
               case 2:
+                if (!this.wallet.provider) {
+                  _context2.next = 6;
+                  break;
+                }
+
                 this.loadWeb3();
-                _context2.next = 5;
+                _context2.next = 6;
                 return this.loadAccount(triggerRequest);
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -54759,7 +54966,8 @@ axios.defaults.headers.common = {
                 try {
                   provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any"); // var network = await provider.getNetwork()
                   // this.provider = await detectEthereumProvider() // not used
-                } catch (error) {//
+                } catch (error) {
+                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
                 }
 
                 if (provider) {
@@ -54770,7 +54978,7 @@ axios.defaults.headers.common = {
                     console.log(e);
                   });
                 } else {
-                  console.log('Please install MetaMask!');
+                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
                 }
 
               case 2:
@@ -54852,17 +55060,22 @@ axios.defaults.headers.common = {
               case 17:
                 _context4.prev = 17;
                 _context4.t0 = _context4["catch"](5);
-                console.log('ERROR', _context4.t0.message);
+
+                if (_context4.t0.message != 'Not connected') {
+                  this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
+                  _sentry_vue__WEBPACK_IMPORTED_MODULE_2__.captureException(_context4.t0);
+                }
+
                 requestAccount = true;
 
               case 21:
                 if (!window.ethereum) {
-                  _context4.next = 34;
+                  _context4.next = 35;
                   break;
                 }
 
                 if (!(requestAccount && triggerRequest)) {
-                  _context4.next = 33;
+                  _context4.next = 34;
                   break;
                 }
 
@@ -54874,25 +55087,24 @@ axios.defaults.headers.common = {
 
               case 26:
                 accounts = _context4.sent;
-                _context4.next = 32;
+                _context4.next = 33;
                 break;
 
               case 29:
                 _context4.prev = 29;
                 _context4.t1 = _context4["catch"](23);
+                this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
+                _sentry_vue__WEBPACK_IMPORTED_MODULE_2__.captureException(_context4.t1);
 
-                if (_context4.t1.code == -32002) {//
-                }
-
-              case 32:
+              case 33:
                 if (accounts.length > 0) {
                   account = accounts[0];
                 }
 
-              case 33:
+              case 34:
                 chainID = window.ethereum.networkVersion;
 
-              case 34:
+              case 35:
                 this.wallet.signer = signer;
                 this.wallet.account = account;
 
@@ -54902,7 +55114,7 @@ axios.defaults.headers.common = {
                   this.wallet.network = this.blockchains[1];
                 }
 
-              case 37:
+              case 38:
               case "end":
                 return _context4.stop();
             }

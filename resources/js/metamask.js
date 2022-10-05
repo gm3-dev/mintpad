@@ -1,4 +1,5 @@
 window.$ = require('jquery')
+import * as Sentry from "@sentry/vue";
 import { ethers } from 'ethers'
 const axios = require('axios')
 axios.defaults.headers.common = {
@@ -26,8 +27,10 @@ export default {
         },
         initMetaMask: async function(triggerRequest) {
             await this.getProvider()
-            this.loadWeb3()
-            await this.loadAccount(triggerRequest)
+            if (this.wallet.provider) {
+                this.loadWeb3()
+                await this.loadAccount(triggerRequest)
+            }
         },
         getProvider: async function () {
             try {
@@ -36,7 +39,7 @@ export default {
                 // this.provider = await detectEthereumProvider() // not used
     
             } catch(error) {
-                //
+                this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
             }
     
             if (provider) {
@@ -48,11 +51,11 @@ export default {
                     console.log(e)
                 })
             } else {
-                console.log('Please install MetaMask!')
+                this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
             }
         },
         loadWeb3: function () {
-            if (window.ethereum) {        
+            if (window.ethereum) {
                 ethereum.on('accountsChanged', (accounts) => {
                     // Time to reload your interface with accounts[0]!
                     console.log('accountsChanged', accounts)
@@ -95,8 +98,11 @@ export default {
                     throw Error('Not connected')
                 }
                 // account = await signer.getAddress()
-            } catch (e) {
-                console.log('ERROR', e.message)
+            } catch (error) {
+                if (error.message != 'Not connected') {
+                    this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                    Sentry.captureException(error) 
+                }
                 requestAccount = true
             }
     
@@ -104,10 +110,9 @@ export default {
                 if (requestAccount && triggerRequest) {
                     try {
                         accounts = await ethereum.request({method: 'eth_requestAccounts'})
-                    } catch(e) {
-                        if (e.code == -32002) {
-                            //
-                        }
+                    } catch(error) {
+                        this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                        Sentry.captureException(error) 
                     }
                     if (accounts.length > 0) {
                         account = accounts[0]
