@@ -35,6 +35,10 @@
             p {
                 @apply text-gray-400;
             }
+
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
 		}
 
         h2, h3 {

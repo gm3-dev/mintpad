@@ -105,7 +105,7 @@
                             <div class="relative">
                                 <x-label for="price" :value="__('Mint price')" />
                                 <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
-                                <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500"></label>
+                                <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500 dark:text-primary-600"></label>
                             </div>
                             <div>
                                 <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" />
@@ -185,7 +185,7 @@
                                 {{ __('Add images to your collection') }}
                                 <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                             </h3>
-                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free NFT generator to generate your collection.') }}</b></p>
+                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ route('generator.index') }}">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
                             <p class="font-semibold text-sm mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a sample collection.') }}</x-link></p>
 
                             <label class="block mt-10 text-mintpad-300">
