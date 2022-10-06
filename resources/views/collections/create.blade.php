@@ -8,7 +8,7 @@
                 <div class="text-center mb-10">
                     <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
                     <h2 class="text-3xl text-center mb-1">{{ __('Create NFT collection') }}</h2>
-                    <p class="text-center mb-5">{{ __('Create your NFT collections.') }}</p>
+                    <p class="text-center mb-5">{{ __('This is the start of your NFT collection.') }}</p>
                 </div>
 
                 <div v-if="!hasValidChain" class="border-2 border-primary-600 rounded-lg p-4 py-8 mb-8">
@@ -18,23 +18,23 @@
 
                 <div class="w-full flex flex-wrap">
                     <div class="basis-1/3 mb-4">
-                        <x-label for="symbol" :value="__('Blockchain')" />
+                        <x-label for="symbol" :value="__('Blockchain')" info="Choose which blockchain you want to launch your NFT collection on." />
                         <x-select class="mt-1 !w-full" v-model="collection.chain_id" :options="$blockchains"></x-select>
                     </div>
                     <div class="basis-1/3 mb-4 px-2">
-                        <x-label for="symbol" :value="__('Symbol')" />
+                        <x-label for="symbol" :value="__('Symbol / Ticker')" info="The symbol of the token contract is the symbol by which the token contract should be known, for example “DOGGY” or “BAYC”. It is broadly equivalent to a stock ticker." />
                         <x-input id="symbol" class="mt-1 w-full" type="text" name="symbol" v-model="collection.symbol" />
                     </div>
                     <div class="basis-1/3 mb-4">
-                        <x-label for="royalties" :value="__('Royalties (%)')" />
+                        <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as Open Sea and Magic Eden." />
                         <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                     </div>
                     <div class="basis-full mb-4">
-                        <x-label for="name" :value="__('Name')" />
+                        <x-label for="name" :value="__('Collection name')" info="This is the name of your NFT collection." />
                         <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                     </div>
                     <div class="basis-full mb-4">
-                        <x-label for="description" :value="__('Description')" />
+                        <x-label for="description" :value="__('Collection description')" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
                         <x-textarea id="description" class="mt-1 w-full" name="description" v-model="collection.description"></x-textarea>
                     </div>
                 </div>

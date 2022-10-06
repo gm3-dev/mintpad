@@ -36,7 +36,7 @@
             </div>
 
             <div class="text-center mt-10">
-                <x-link-button href="{{ route('collections.create') }}">Create Collection</x-link-button>
+                <x-link-button href="{{ route('collections.create') }}">Create collection</x-link-button>
             </div>
         </div>
     </div>

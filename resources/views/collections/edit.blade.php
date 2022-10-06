@@ -43,11 +43,11 @@
                         </h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full mb-4">
-                                <x-label for="name" :value="__('Collection name')" info="More info here..." />
+                                <x-label for="name" :value="__('Collection name')" info="This is the name of your NFT collection." />
                                 <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                             </div>
                             <div class="basis-full mb-4">
-                                <x-label for="description" :value="__('Collection description')" />
+                                <x-label for="description" :value="__('Collection description')" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
                                 <x-textarea id="description" class="mt-1 w-full" name="description" v-model="collection.description"></x-textarea>
                             </div>
                         </div>
@@ -60,13 +60,11 @@
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
-                                <x-label for="fee_recipient" :value="__('Recipient Address')" />
-                                <x-more-info content="A recipient address is the wallet address of the recipient of the royalties."></x-more-info>
+                                <x-label for="fee_recipient" :value="__('Recipient address')" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
                                 <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                             </div>
                             <div class="basis-1/3">
-                                <x-label for="royalties" :value="__('Creator Royalties (%)')" />
-                                <x-more-info content="A royalty percentage that you receive from secondary sales of your collection on marketplaces."></x-more-info>
+                                <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as Open Sea and Magic Eden." />
                                 <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                             </div>
                         </div>
@@ -95,33 +93,33 @@
                                 <p class="font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                             </div>
                             <div>
-                                <x-label for="start" :value="__('Phase start time?')" />
+                                <x-label for="start" :value="__('Phase start time')" info="This is the time and date when people can mint your NFT collection. Note: This time is shown in your local time." />
                                 <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                             </div>
                             <div>
-                                <x-label for="max-quantity" :value="__('Number of NFTs')" />
+                                <x-label for="max-quantity" :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase." />
                                 <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                             </div>
                             <div class="relative">
-                                <x-label for="price" :value="__('Mint price')" />
+                                <x-label for="price" :value="__('Mint price')" info="The mint price people pay for 1 NFT from your collection." />
                                 <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
                                 <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500 dark:text-primary-600"></label>
                             </div>
                             <div>
-                                <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" />
+                                <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="Here you can choose whether people can only mint one NFT per wallet or unlimited." />
                                 <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
                             </div>
                             <div>
-                                <x-label for="phase-name" :value="__('Phase name')" />
+                                <x-label for="phase-name" :value="__('Phase name')" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
                                 <x-input id="phase-name" class="mt-1 w-full" type="text" v-model="phase.name" required />
                             </div>
                             <div>
-                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4 w-full" />
+                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4 w-full" info="Here you can choose whether to enable a whitelist or not." />
                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
                             </div>
                             <div v-if="phase.whitelist == 1" class="col-span-2">
-                                <x-label :value="__('Whitelist CSV file')" />
+                                <x-label :value="__('Whitelist CSV file')" info="Here you can upload a .CSV file with all whitelisted wallets." />
                                 <p class="text-sm mt-1"><x-gray-button href="#" class="!py-3" @click.prevent="toggleWhitelistModal(index, true)">Upload whitelist</x-gray-button><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                             </div>
 
@@ -235,7 +233,7 @@
                         {{ __('Mint settings') }}
                         <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                     </h3>
-                    <p class="font-regular text-sm mb-4">{{ __('Here you can add some information about your collection that will be shown on your collections mint page.') }}</p>
+                    <p class="font-regular text-sm mb-4">{{ __('Here you can customize your mint page. Add SEO to your page and customize the design.') }}</p>
 
                     <div class="w-full grid grid-cols-2 gap-4 mb-6">
                         <div>
