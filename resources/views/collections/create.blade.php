@@ -26,7 +26,7 @@
                         <x-input id="symbol" class="mt-1 w-full" type="text" name="symbol" v-model="collection.symbol" />
                     </div>
                     <div class="basis-1/3 mb-4">
-                        <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as Open Sea and Magic Eden." />
+                        <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                         <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                     </div>
                     <div class="basis-full mb-4">

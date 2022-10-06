@@ -64,7 +64,7 @@
                                 <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                             </div>
                             <div class="basis-1/3">
-                                <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as Open Sea and Magic Eden." />
+                                <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                                 <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                 <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                             </div>
                             <div class="relative">
-                                <x-label for="price" :value="__('Mint price')" info="The mint price people pay for 1 NFT from your collection." />
+                                <x-label for="price" :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
                                 <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
                                 <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500 dark:text-primary-600"></label>
                             </div>
@@ -114,7 +114,7 @@
                                 <x-input id="phase-name" class="mt-1 w-full" type="text" v-model="phase.name" required />
                             </div>
                             <div>
-                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4 w-full" info="Here you can choose whether to enable a whitelist or not." />
+                                <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4" info="Here you can choose whether to enable a whitelist or not." /><br/>
                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
                             </div>
