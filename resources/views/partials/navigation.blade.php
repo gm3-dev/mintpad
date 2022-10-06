@@ -7,7 +7,7 @@
                 <div class="shrink-0 flex items-center text-4xl font-jpegdev dark:text-white">
                     <a href="{{ route('collections.index') }}" class="relative">
                         mintpad
-                        <span class="absolute font-bold text-lg text-primary-600 -bottom-4 -right-3">Beta</span>
+                        @include('partials.beta')
                     </a>
                 </div>
 
