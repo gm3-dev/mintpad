@@ -53,7 +53,7 @@ class GeneratorController extends Controller
     public function upload(Request $request)
     {
         if ($request->ajax()) {
-            if (! Storage::exists('users')) {
+            if (! Storage::exists('traits')) {
                 Storage::makeDirectory('traits', 0775, true);
             }
 
