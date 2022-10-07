@@ -23,7 +23,11 @@
                     <div class="p-1 basis-1/5 font-semibold">{{ $invoice['state'] }}</div>
                     <div class="p-1 basis-1/5 font-semibold">{{ date('Y-m-d', strtotime($invoice['created_at'])) }}</div>
                     <div class="p-1 basis-1/5 text-right">
-                        <x-link-button href="{{ route('users.download', $invoice['id']) }}" target="_blank" class="!py-1">Download</x-link-button>
+                        @if (1 == 2)
+                            <x-link-button href="{{ route('users.download', $invoice['id']) }}" target="_blank" class="!py-1">Download</x-link-button>
+                        @else
+                            <x-link-button href="#" target="_blank" class="!py-1">Download</x-link-button>
+                        @endif
                     </div>
                 </div>
             @endforeach
