@@ -42,6 +42,7 @@ export default {
     methods: {
         handleSocketResponse: function(response) {
             console.log('response', response);
+            console.log('response', response);
             if (response.state == 'error') {
                 this.setErrorMessage(response.value)
             } else if (response.state == undefined) {

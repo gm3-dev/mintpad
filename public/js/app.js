@@ -55277,6 +55277,7 @@ var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-g
   methods: {
     handleSocketResponse: function handleSocketResponse(response) {
       console.log('response', response);
+      console.log('response', response);
 
       if (response.state == 'error') {
         this.setErrorMessage(response.value);
