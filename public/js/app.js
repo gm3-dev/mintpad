@@ -55240,6 +55240,7 @@ axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest',
   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 };
+console.log('process.env.MIX_GENERATOR_URL', "https://nft-generator-beta.mintpad.co");
 
 var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-generator-beta.mintpad.co", {
   withCredentials: true
