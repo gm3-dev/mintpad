@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TestMail;
 use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -18,6 +20,8 @@ class CollectionController extends Controller
      */
     public function index()
     {
+        Mail::to('timnijssen@gmail.com')->send(new TestMail());
+
         $collections = Collection::where('user_id', Auth::user()->id)->get();
         return view('collections.index')->with(compact('collections'));
     }

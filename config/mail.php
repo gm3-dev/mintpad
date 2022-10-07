@@ -34,6 +34,10 @@ return [
     */
 
     'mailers' => [
+        'sendgrid' => [
+            'transport' => 'sendgrid',
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
