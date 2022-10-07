@@ -6,7 +6,6 @@ axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
-console.log('process.env.MIX_GENERATOR_URL', process.env.MIX_GENERATOR_URL);
 import { io } from "socket.io-client";
 const socket = io(process.env.MIX_GENERATOR_URL, {
     withCredentials: true
@@ -41,8 +40,6 @@ export default {
     },
     methods: {
         handleSocketResponse: function(response) {
-            console.log('response', response);
-            console.log('response', response);
             if (response.state == 'error') {
                 this.setErrorMessage(response.value)
             } else if (response.state == undefined) {
