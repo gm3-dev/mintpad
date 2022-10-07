@@ -30,6 +30,9 @@ class GeneratorController extends Controller
             if (! Storage::exists('traits')) {
                 Storage::makeDirectory('traits', 0775, true);
             }
+            if (! Storage::exists('traits/'.Auth::user()->id)) {
+                Storage::makeDirectory('traits/'.Auth::user()->id, 0775, true);
+            }
 
             if ($request->has('layers')) {
                 Storage::disk('local')->put('traits/'.Auth::user()->id.'/traits.json', $request->get('layers'));
@@ -50,7 +53,7 @@ class GeneratorController extends Controller
     public function upload(Request $request)
     {
         if ($request->ajax()) {
-            if (! Storage::exists('users')) {
+            if (! Storage::exists('traits')) {
                 Storage::makeDirectory('traits', 0775, true);
             }
 

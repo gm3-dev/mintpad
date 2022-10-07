@@ -700,17 +700,8 @@ select {
 .bottom-2 {
   bottom: 0.5rem;
 }
-.-bottom-4 {
-  bottom: -1rem;
-}
-.-right-3 {
-  right: -0.75rem;
-}
 .top-5 {
   top: 1.25rem;
-}
-.bottom-0 {
-  bottom: 0px;
 }
 .-bottom-3 {
   bottom: -0.75rem;
@@ -732,9 +723,6 @@ select {
 }
 .float-right {
   float: right;
-}
-.clear-both {
-  clear: both;
 }
 .m-1 {
   margin: 0.25rem;
@@ -1246,9 +1234,6 @@ select {
 .\!rounded-full {
   border-radius: 9999px !important;
 }
-.rounded-sm {
-  border-radius: 0.125rem;
-}
 .rounded-l-md {
   border-top-left-radius: 0.375rem;
   border-bottom-left-radius: 0.375rem;
@@ -1503,6 +1488,10 @@ select {
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
 }
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 .px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -1510,10 +1499,6 @@ select {
 .py-16 {
   padding-top: 4rem;
   padding-bottom: 4rem;
-}
-.py-0 {
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 .pb-2 {
   padding-bottom: 0.5rem;
@@ -10281,6 +10266,7 @@ readers do not read off random characters that represent icons */
   background: #dc2626;
   border-radius: 4px;
   content: "";
+  right: -10px;
 }
 
 .tippy-popper .tippy-content {
