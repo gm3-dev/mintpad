@@ -55241,7 +55241,7 @@ axios.defaults.headers.common = {
   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 };
 
-var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-generator.tnwebsolutions.nl", {
+var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_2__.io)("https://nft-generator-beta.mintpad.co", {
   withCredentials: true
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

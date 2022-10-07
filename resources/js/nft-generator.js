@@ -8,7 +8,7 @@ axios.defaults.headers.common = {
 }
 
 import { io } from "socket.io-client";
-const socket = io("https://nft-generator.tnwebsolutions.nl", {
+const socket = io(process.env.MIX_GENERATOR_URL, {
     withCredentials: true
 });
 
