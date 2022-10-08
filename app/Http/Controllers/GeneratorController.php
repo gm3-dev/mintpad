@@ -92,8 +92,27 @@ class GeneratorController extends Controller
             header('Cache-Control: must-revalidate');
             header('Pragma: public');
             header('Content-Length: ' . filesize($file));
-            readfile($file);
+            
+            $chunkSize = 1024 * 1024;
+            $handle = fopen($file, 'rb');
+            while (!feof($handle)) {
+                $buffer = fread($handle, $chunkSize);
+                echo $buffer;
+                ob_flush();
+                flush();
+            }
+            fclose($handle);
             exit;
+
+            // header('Content-Description: File Transfer');
+            // header('Content-Type: application/zip');
+            // header('Content-Disposition: attachment; filename="collection.zip"');
+            // header('Expires: 0');
+            // header('Cache-Control: must-revalidate');
+            // header('Pragma: public');
+            // header('Content-Length: ' . filesize($file));
+            // readfile($file);
+            // exit;
         }
 
         abort(404);
