@@ -75574,6 +75574,8 @@ if (document.getElementById('app')) {
               case 9:
                 axios.get('/mint/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(response) {
+                    var _response$data$button;
+
                     var metadata, royalties, claimConditions;
                     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
                       while (1) {
@@ -75582,7 +75584,7 @@ if (document.getElementById('app')) {
                             _this.contractAddress = response.data.address;
                             _this.collection.chain_id = response.data.chain_id;
                             _this.collection.token = response.data.token;
-                            _this.collection.buttons = _this.setButtons(response.data.buttons);
+                            _this.collection.buttons = _this.setButtons((_response$data$button = response.data.buttons) !== null && _response$data$button !== void 0 ? _response$data$button : []);
                             _this.collection.about = response.data.about;
                             _this.collection.roadmap = response.data.roadmap;
                             _this.collection.team = response.data.team;
@@ -75708,7 +75710,8 @@ if (document.getElementById('app')) {
                   return function (_x) {
                     return _ref.apply(this, arguments);
                   };
-                }())["catch"](function (error, asdf) {//
+                }())["catch"](function (error) {
+                  console.log('error', error);
                 });
 
               case 10:

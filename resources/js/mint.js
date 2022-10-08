@@ -49,7 +49,7 @@ if (document.getElementById('app')) {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.token = response.data.token
-                this.collection.buttons = this.setButtons(response.data.buttons)
+                this.collection.buttons = this.setButtons(response.data.buttons ?? [])
                 this.collection.about = response.data.about
                 this.collection.roadmap = response.data.roadmap
                 this.collection.team = response.data.team
@@ -103,8 +103,8 @@ if (document.getElementById('app')) {
                     Sentry.captureException(error)
                 }
 
-            }).catch((error, asdf) => {
-                //
+            }).catch((error) => {
+                console.log('error', error)
             });
         },
         methods: {
