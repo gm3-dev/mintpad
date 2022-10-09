@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
     // NFT generator
-    // Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
+    Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
     // Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
     // Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
     // Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
