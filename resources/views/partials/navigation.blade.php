@@ -19,8 +19,8 @@
                     <x-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                         {{ __('Support') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">
-                        {{ __('NFT generator') }}
+                    <x-nav-link :active="request()->routeIs('generator.*')" class="relative">
+                        {{ __('NFT generator') }}<span class="absolute bottom-1 left-7 text-xs text-primary-600">(coming soon)</span>
                     </x-nav-link>
                 </div>
             </div>
@@ -95,9 +95,6 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                 {{ __('Support') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')">
-                {{ __('NFT generator') }}
             </x-responsive-nav-link>
         </div>
 
