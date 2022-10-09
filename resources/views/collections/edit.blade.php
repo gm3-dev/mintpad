@@ -97,7 +97,7 @@
                                 <x-input id="start" class="mt-1 w-full" type="datetime-local" v-model="phase.startTime" required />
                             </div>
                             <div>
-                                <x-label for="max-quantity" :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase." />
+                                <x-label for="max-quantity" :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
                                 <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
                             </div>
                             <div class="relative">
