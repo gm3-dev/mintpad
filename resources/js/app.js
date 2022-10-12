@@ -3,7 +3,8 @@ import Vue from 'vue/dist/vue.min.js'
 import initSentry from './sentry'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
-import metamask from './metamask.js'
+import metamask from './wallets/metamask.js'
+import phantom from './wallets/phantom.js'
 import helpers from './helpers.js'
 import modal from './modal.js'
 import { ethers } from 'ethers'
@@ -70,10 +71,11 @@ if (document.getElementById('user-address')) {
 
 if (document.getElementById('app')) {
     Vue.component('tinymce', require('./components/TinyMCE.vue').default);
+    Vue.component('connect-wallet', require('./components/ConnectWallet.vue').default);
 
     new Vue({
         el: '#app',
-        mixins: [metamask,helpers,modal,thirdweb,nftgenerator],
+        mixins: [metamask,phantom,helpers,modal,thirdweb,nftgenerator],
         data: {
             collectionID: false,
             sdk: false,

@@ -1,7 +1,7 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
 import initSentry from './sentry'
-import metamask from './metamask.js'
+import metamask from './wallets/metamask.js'
 import helpers from './helpers.js'
 import thirdweb from './thirdweb.js'
 const axios = require('axios')

@@ -1,4 +1,3 @@
-
 <div v-if="errorMessage" class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-red-100 border-t-4 border-red-500 dark:bg-red-200" role="alert">
     <div class="w-full">
         <i class="fas fa-info-circle text-red-700"></i>

@@ -53320,288 +53320,6 @@ axios.defaults.headers.common = {
 
 /***/ }),
 
-/***/ "./resources/js/metamask.js":
-/*!**********************************!*\
-  !*** ./resources/js/metamask.js ***!
-  \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _sentry_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @sentry/vue */ "./node_modules/@sentry/hub/esm/exports.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/web3-provider.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-
-
-
-var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-axios.defaults.headers.common = {
-  'X-Requested-With': 'XMLHttpRequest',
-  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    return {
-      wallet: {
-        name: 'metamask',
-        account: false,
-        network: false,
-        provider: false,
-        signer: false
-      }
-    };
-  },
-  methods: {
-    connectMetaMask: function () {
-      var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(this.wallet.account === false)) {
-                  _context.next = 3;
-                  break;
-                }
-
-                _context.next = 3;
-                return this.initMetaMask(true);
-
-              case 3:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function connectMetaMask() {
-        return _connectMetaMask.apply(this, arguments);
-      }
-
-      return connectMetaMask;
-    }(),
-    initMetaMask: function () {
-      var _initMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(triggerRequest) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return this.getProvider();
-
-              case 2:
-                if (!this.wallet.provider) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                this.loadWeb3();
-                _context2.next = 6;
-                return this.loadAccount(triggerRequest);
-
-              case 6:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function initMetaMask(_x) {
-        return _initMetaMask.apply(this, arguments);
-      }
-
-      return initMetaMask;
-    }(),
-    getProvider: function () {
-      var _getProvider = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var provider;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                try {
-                  provider = new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(window.ethereum, "any"); // var network = await provider.getNetwork()
-                  // this.provider = await detectEthereumProvider() // not used
-                } catch (error) {
-                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
-                }
-
-                if (provider) {
-                  // From now on, this should always be true:
-                  // provider === window.ethereum
-                  this.wallet.provider = provider;
-                  provider.on("pending", function (e) {
-                    console.log(e);
-                  });
-                } else {
-                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
-                }
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function getProvider() {
-        return _getProvider.apply(this, arguments);
-      }
-
-      return getProvider;
-    }(),
-    loadWeb3: function loadWeb3() {
-      if (window.ethereum) {
-        ethereum.on('accountsChanged', function (accounts) {
-          // Time to reload your interface with accounts[0]!
-          console.log('accountsChanged', accounts);
-          window.location.reload();
-        });
-        ethereum.on('chainChanged', function () {
-          // Time to reload your interface with accounts[0]!
-          console.log('chainChanged');
-          window.location.reload();
-        });
-        ethereum.on('message', function (message) {
-          console.log('message', message);
-        });
-        ethereum.on('connect', function (info) {
-          console.log('Connected to network', info);
-        });
-        ethereum.on('disconnect', function (error) {
-          console.log('Disconnected from network', error);
-          window.location.reload();
-        });
-      }
-    },
-    loadAccount: function () {
-      var _loadAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(triggerRequest) {
-        var requestAccount, signer, account, chainID, accounts;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                requestAccount = false;
-                signer = false;
-                account = false;
-                chainID = false;
-                accounts = [];
-                _context4.prev = 5;
-                signer = this.wallet.provider.getSigner();
-                _context4.next = 9;
-                return ethereum.request({
-                  method: 'eth_accounts'
-                });
-
-              case 9:
-                accounts = _context4.sent;
-
-                if (!(accounts.length > 0)) {
-                  _context4.next = 14;
-                  break;
-                }
-
-                account = accounts[0];
-                _context4.next = 15;
-                break;
-
-              case 14:
-                throw Error('Not connected');
-
-              case 15:
-                _context4.next = 21;
-                break;
-
-              case 17:
-                _context4.prev = 17;
-                _context4.t0 = _context4["catch"](5);
-
-                if (_context4.t0.message != 'Not connected') {
-                  this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
-                  _sentry_vue__WEBPACK_IMPORTED_MODULE_2__.captureException(_context4.t0);
-                }
-
-                requestAccount = true;
-
-              case 21:
-                if (!window.ethereum) {
-                  _context4.next = 35;
-                  break;
-                }
-
-                if (!(requestAccount && triggerRequest)) {
-                  _context4.next = 34;
-                  break;
-                }
-
-                _context4.prev = 23;
-                _context4.next = 26;
-                return ethereum.request({
-                  method: 'eth_requestAccounts'
-                });
-
-              case 26:
-                accounts = _context4.sent;
-                _context4.next = 33;
-                break;
-
-              case 29:
-                _context4.prev = 29;
-                _context4.t1 = _context4["catch"](23);
-                this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
-                _sentry_vue__WEBPACK_IMPORTED_MODULE_2__.captureException(_context4.t1);
-
-              case 33:
-                if (accounts.length > 0) {
-                  account = accounts[0];
-                }
-
-              case 34:
-                chainID = window.ethereum.networkVersion;
-
-              case 35:
-                this.wallet.signer = signer;
-                this.wallet.account = account;
-
-                if (chainID && this.blockchains[chainID]) {
-                  this.wallet.network = this.blockchains[chainID];
-                } else {
-                  this.wallet.network = this.blockchains[1];
-                }
-
-              case 38:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, this, [[5, 17], [23, 29]]);
-      }));
-
-      function loadAccount(_x2) {
-        return _loadAccount.apply(this, arguments);
-      }
-
-      return loadAccount;
-    }()
-  }
-});
-
-/***/ }),
-
 /***/ "./resources/js/modal.js":
 /*!*******************************!*\
   !*** ./resources/js/modal.js ***!
@@ -53779,6 +53497,284 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return setSmartContract;
+    }()
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/wallets/metamask.js":
+/*!******************************************!*\
+  !*** ./resources/js/wallets/metamask.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _sentry_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @sentry/vue */ "./node_modules/@sentry/hub/esm/exports.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/web3-provider.js");
+/* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers.js */ "./resources/js/helpers.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mixins: [_helpers_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  data: function data() {
+    return {
+      wallet: {
+        name: 'metamask',
+        account: false,
+        network: false,
+        provider: false,
+        signer: false
+      }
+    };
+  },
+  methods: {
+    connectMetaMask: function () {
+      var _connectMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(this.wallet.account === false)) {
+                  _context.next = 3;
+                  break;
+                }
+
+                _context.next = 3;
+                return this.initMetaMask(true);
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function connectMetaMask() {
+        return _connectMetaMask.apply(this, arguments);
+      }
+
+      return connectMetaMask;
+    }(),
+    initMetaMask: function () {
+      var _initMetaMask = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(triggerRequest) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.getMetaMaskProvider();
+
+              case 2:
+                if (!this.wallet.provider) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                this.setMetaMaskEvents();
+                _context2.next = 6;
+                return this.loadMetaMaskAccount(triggerRequest);
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function initMetaMask(_x) {
+        return _initMetaMask.apply(this, arguments);
+      }
+
+      return initMetaMask;
+    }(),
+    getMetaMaskProvider: function () {
+      var _getMetaMaskProvider = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var provider;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                try {
+                  provider = new ethers__WEBPACK_IMPORTED_MODULE_2__.Web3Provider(window.ethereum, "any"); // var network = await provider.getNetwork()
+                  // this.provider = await detectEthereumProvider() // not used
+                } catch (error) {
+                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
+                }
+
+                if (provider) {
+                  // From now on, this should always be true:
+                  // provider === window.ethereum
+                  this.wallet.provider = provider;
+                  provider.on("pending", function (e) {
+                    console.log(e);
+                  });
+                } else {
+                  this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true);
+                }
+
+              case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function getMetaMaskProvider() {
+        return _getMetaMaskProvider.apply(this, arguments);
+      }
+
+      return getMetaMaskProvider;
+    }(),
+    setMetaMaskEvents: function setMetaMaskEvents() {
+      if (window.ethereum) {
+        ethereum.on('accountsChanged', function (accounts) {
+          // Time to reload your interface with accounts[0]!
+          console.log('accountsChanged', accounts);
+          window.location.reload();
+        });
+        ethereum.on('chainChanged', function () {
+          // Time to reload your interface with accounts[0]!
+          console.log('chainChanged');
+          window.location.reload();
+        });
+        ethereum.on('message', function (message) {
+          console.log('message', message);
+        });
+        ethereum.on('connect', function (info) {
+          console.log('Connected to network', info);
+        });
+        ethereum.on('disconnect', function (error) {
+          console.log('Disconnected from network', error);
+          window.location.reload();
+        });
+      }
+    },
+    loadMetaMaskAccount: function () {
+      var _loadMetaMaskAccount = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(triggerRequest) {
+        var requestAccount, signer, account, chainID, accounts;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                requestAccount = false;
+                signer = false;
+                account = false;
+                chainID = false;
+                accounts = [];
+                _context4.prev = 5;
+                signer = this.wallet.provider.getSigner();
+                _context4.next = 9;
+                return ethereum.request({
+                  method: 'eth_accounts'
+                });
+
+              case 9:
+                accounts = _context4.sent;
+
+                if (!(accounts.length > 0)) {
+                  _context4.next = 14;
+                  break;
+                }
+
+                account = accounts[0];
+                _context4.next = 15;
+                break;
+
+              case 14:
+                throw Error('Not connected');
+
+              case 15:
+                _context4.next = 21;
+                break;
+
+              case 17:
+                _context4.prev = 17;
+                _context4.t0 = _context4["catch"](5);
+
+                if (_context4.t0.message != 'Not connected') {
+                  this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
+                  _sentry_vue__WEBPACK_IMPORTED_MODULE_3__.captureException(_context4.t0);
+                }
+
+                requestAccount = true;
+
+              case 21:
+                if (!window.ethereum) {
+                  _context4.next = 35;
+                  break;
+                }
+
+                if (!(requestAccount && triggerRequest)) {
+                  _context4.next = 34;
+                  break;
+                }
+
+                _context4.prev = 23;
+                _context4.next = 26;
+                return ethereum.request({
+                  method: 'eth_requestAccounts'
+                });
+
+              case 26:
+                accounts = _context4.sent;
+                _context4.next = 33;
+                break;
+
+              case 29:
+                _context4.prev = 29;
+                _context4.t1 = _context4["catch"](23);
+                this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true);
+                _sentry_vue__WEBPACK_IMPORTED_MODULE_3__.captureException(_context4.t1);
+
+              case 33:
+                if (accounts.length > 0) {
+                  account = accounts[0];
+                }
+
+              case 34:
+                chainID = window.ethereum.networkVersion;
+
+              case 35:
+                this.wallet.signer = signer;
+                this.wallet.account = account;
+
+                if (chainID && this.blockchains[chainID]) {
+                  this.wallet.network = this.blockchains[chainID];
+                } else {
+                  this.wallet.network = this.blockchains[1];
+                }
+
+              case 38:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[5, 17], [23, 29]]);
+      }));
+
+      function loadMetaMaskAccount(_x2) {
+        return _loadMetaMaskAccount.apply(this, arguments);
+      }
+
+      return loadMetaMaskAccount;
     }()
   }
 });
@@ -84295,7 +84291,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sentry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sentry */ "./resources/js/sentry.js");
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
 /* harmony import */ var vue_tippy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-tippy */ "./node_modules/vue-tippy/dist/vue-tippy.esm.js");
-/* harmony import */ var _metamask_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./metamask.js */ "./resources/js/metamask.js");
+/* harmony import */ var _wallets_metamask_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./wallets/metamask.js */ "./resources/js/wallets/metamask.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers.js */ "./resources/js/helpers.js");
 /* harmony import */ var _modal_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modal.js */ "./resources/js/modal.js");
 /* harmony import */ var _thirdweb_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./thirdweb.js */ "./resources/js/thirdweb.js");
@@ -84330,7 +84326,7 @@ vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default().component("tippy", vu
 if (document.getElementById('app')) {
   new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_8___default())({
     el: '#app',
-    mixins: [_metamask_js__WEBPACK_IMPORTED_MODULE_4__["default"], _helpers_js__WEBPACK_IMPORTED_MODULE_5__["default"], _modal_js__WEBPACK_IMPORTED_MODULE_6__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_7__["default"]],
+    mixins: [_wallets_metamask_js__WEBPACK_IMPORTED_MODULE_4__["default"], _helpers_js__WEBPACK_IMPORTED_MODULE_5__["default"], _modal_js__WEBPACK_IMPORTED_MODULE_6__["default"], _thirdweb_js__WEBPACK_IMPORTED_MODULE_7__["default"]],
     data: {
       collectionID: false,
       sdk: false,

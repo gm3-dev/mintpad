@@ -3,7 +3,7 @@ import Vue from 'vue/dist/vue.min.js'
 import initSentry from './sentry'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
-import metamask from './metamask.js'
+import metamask from './wallets/metamask.js'
 import helpers from './helpers.js'
 import modal from './modal.js'
 import thirdweb from './thirdweb.js'
