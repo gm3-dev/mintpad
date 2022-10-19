@@ -48,6 +48,12 @@ export default {
         })
     },
     methods: {
+        disconnectSocketio: function() {
+            socket.disconnect()
+        },
+        connectSocketio: function() {
+            socket.connect()
+        },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
                 this.setErrorMessage(response.value)

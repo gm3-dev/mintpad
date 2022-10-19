@@ -66,6 +66,8 @@
         <div class="text-center mt-8">
             <p class="font-regular text-sm">{{ __('Important to know. The larger the collection, the longer it takes. Wait for a download button to appear.') }}</p>
             <p class="font-regular text-sm mb-4">{{ __('Do not close this tab while generating. You can only generate one collection at a time.') }}</p>
+            <x-button @click.prevent="connectSocketio">connectSocketio</x-button>
+            <x-button @click.prevent="disconnectSocketio">disconnectSocketio</x-button>
             <x-button @click.prevent="generateCollection">Generate</x-button>
         </div>
     </div>
