@@ -58,6 +58,7 @@ export default {
         },
         connectSocketio: function() {
             socket.connect()
+            socket.emit('user-reconnected', true);
         },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
