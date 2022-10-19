@@ -46,13 +46,18 @@ export default {
         socket.on('disconnect', (reason) => {
             console.log('disconnect', reason)
         })
+        socket.on('reconnect', function () {
+            console.log('reconnect', socket.id);
+            // where username is a global variable for the client
+            socket.emit('user-reconnected', username);
+        });
     },
     methods: {
         disconnectSocketio: function() {
             socket.disconnect()
         },
         connectSocketio: function() {
-            socket.connect()
+            socket.socket.connect()
         },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
