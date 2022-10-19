@@ -8,7 +8,10 @@ axios.defaults.headers.common = {
 }
 import { io } from "socket.io-client";
 const socket = io(process.env.MIX_GENERATOR_URL, {
-    withCredentials: true
+    'withCredentials': true,
+    'reconnection': true,
+    'reconnectionDelay': 500,
+    'reconnectionAttempts': 10
 });
 
 export default {
@@ -36,7 +39,13 @@ export default {
     mounted: function() {
         socket.on('nft-generation-status', (response) => {
             this.handleSocketResponse(response)
-        });
+        })
+        socket.on('connect', () => {
+            console.log('connect', socket.id)
+        })
+        socket.on('disconnect', () => {
+            console.log('disconnect', socket.id)
+        })
     },
     methods: {
         handleSocketResponse: function(response) {

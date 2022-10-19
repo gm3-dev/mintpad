@@ -970,6 +970,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ethersproject_properties__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ethersproject/properties */ "./node_modules/@ethersproject/properties/lib.esm/index.js");
 /* harmony import */ var _ethersproject_logger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ethersproject/logger */ "./node_modules/@ethersproject/logger/lib.esm/index.js");
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_version */ "./node_modules/@ethersproject/abi/lib.esm/_version.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 
@@ -7804,6 +7805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Logger": () => (/* binding */ Logger)
 /* harmony export */ });
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_version */ "./node_modules/@ethersproject/logger/lib.esm/_version.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 let _permanentCensorErrors = false;
 let _censorErrors = false;
@@ -12048,6 +12050,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ethersproject_transactions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ethersproject/transactions */ "./node_modules/@ethersproject/transactions/lib.esm/index.js");
 /* harmony import */ var _ethersproject_logger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ethersproject/logger */ "./node_modules/@ethersproject/logger/lib.esm/index.js");
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_version */ "./node_modules/@ethersproject/providers/lib.esm/_version.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 
@@ -14006,6 +14009,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ws__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ws */ "./node_modules/@ethersproject/providers/lib.esm/ws.js");
 /* harmony import */ var _ethersproject_logger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ethersproject/logger */ "./node_modules/@ethersproject/logger/lib.esm/index.js");
 /* harmony import */ var _version__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_version */ "./node_modules/@ethersproject/providers/lib.esm/_version.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -28936,17 +28940,136 @@ function getNumberOfUrlSegments(url) {
 
 /***/ }),
 
-/***/ "./node_modules/@thirdweb-dev/sdk/dist/defineProperty-fe02f37c.esm.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/@thirdweb-dev/sdk/dist/defineProperty-fe02f37c.esm.js ***!
-  \****************************************************************************/
+/***/ "./node_modules/@thirdweb-dev/sdk/dist/QueryParams-24720dd7.esm.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@thirdweb-dev/sdk/dist/QueryParams-24720dd7.esm.js ***!
+  \*************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "_": () => (/* binding */ _defineProperty)
+/* harmony export */   "B": () => (/* binding */ BasisPointsSchema),
+/* harmony export */   "C": () => (/* binding */ CommonNFTOutput),
+/* harmony export */   "D": () => (/* binding */ DEFAULT_QUERY_ALL_COUNT),
+/* harmony export */   "F": () => (/* binding */ FileOrBufferOrStringSchema),
+/* harmony export */   "N": () => (/* binding */ NFTInputOrUriSchema),
+/* harmony export */   "Q": () => (/* binding */ QuantitySchema),
+/* harmony export */   "_": () => (/* binding */ _defineProperty),
+/* harmony export */   "a": () => (/* binding */ CommonNFTInput)
 /* harmony export */ });
+/* harmony import */ var bn_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bn.js */ "./node_modules/bn.js/lib/bn.js");
+/* harmony import */ var bn_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bn_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bignumber/lib.esm/bignumber.js");
+/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! zod */ "./node_modules/zod/lib/index.mjs");
+/* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
+
+
+
+
+const isBrowser = () => typeof window !== "undefined";
+
+const FileOrBufferUnionSchema = isBrowser() ? zod__WEBPACK_IMPORTED_MODULE_1__.z["instanceof"](File) : zod__WEBPACK_IMPORTED_MODULE_1__.z["instanceof"](Buffer); // @fixme, this is a hack to make browser happy for now
+
+/**
+ * @internal
+ */
+
+const FileOrBufferSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.object({
+  data: zod__WEBPACK_IMPORTED_MODULE_1__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.string()]),
+  name: zod__WEBPACK_IMPORTED_MODULE_1__.z.string()
+})]);
+/**
+ * @internal
+ */
+
+const FileOrBufferOrStringSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([FileOrBufferSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.string()]);
+const MAX_BPS = 10000;
+zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.array(zod__WEBPACK_IMPORTED_MODULE_1__.z.number()), zod__WEBPACK_IMPORTED_MODULE_1__.z.string()]);
+const BigNumberSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.string(), zod__WEBPACK_IMPORTED_MODULE_1__.z.number(), zod__WEBPACK_IMPORTED_MODULE_1__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_1__.z.custom(data => {
+  return ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.isBigNumber(data);
+}), zod__WEBPACK_IMPORTED_MODULE_1__.z.custom(data => {
+  return bn_js__WEBPACK_IMPORTED_MODULE_0___default().isBN(data);
+})]).transform(arg => {
+  let str = bn_js__WEBPACK_IMPORTED_MODULE_0___default().isBN(arg) ? new (bn_js__WEBPACK_IMPORTED_MODULE_0___default())(arg).toString() : ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.from(arg).toString();
+  return ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.from(str);
+});
+BigNumberSchema.transform(arg => arg.toString());
+const BigNumberTransformSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_1__.z.custom(data => {
+  return ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.isBigNumber(data);
+}), zod__WEBPACK_IMPORTED_MODULE_1__.z.custom(data => {
+  return bn_js__WEBPACK_IMPORTED_MODULE_0___default().isBN(data);
+})]).transform(arg => {
+  if (bn_js__WEBPACK_IMPORTED_MODULE_0___default().isBN(arg)) {
+    return new (bn_js__WEBPACK_IMPORTED_MODULE_0___default())(arg).toString();
+  }
+
+  return ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.from(arg).toString();
+});
+const BasisPointsSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.number().max(MAX_BPS, "Cannot exeed 100%").min(0, "Cannot be below 0%");
+zod__WEBPACK_IMPORTED_MODULE_1__.z.number().max(100, "Cannot exeed 100%").min(0, "Cannot be below 0%");
+const HexColor = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.string().regex(/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid hex color"), zod__WEBPACK_IMPORTED_MODULE_1__.z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid hex color").transform(val => val.replace("#", "")), zod__WEBPACK_IMPORTED_MODULE_1__.z.string().length(0)]);
+const AmountSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.string().regex(/^([0-9]+\.?[0-9]*|\.[0-9]+)$/, "Invalid amount"), zod__WEBPACK_IMPORTED_MODULE_1__.z.number().min(0, "Amount cannot be negative")]).transform(arg => typeof arg === "number" ? arg.toString() : arg);
+/**
+ * @internal
+ */
+
+const QuantitySchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([AmountSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.literal("unlimited")]).default("unlimited");
+const RawDateSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.date().transform(i => {
+  return ethers__WEBPACK_IMPORTED_MODULE_2__.BigNumber.from(Math.floor(i.getTime() / 1000));
+});
+/**
+ * Default to now
+ */
+
+RawDateSchema.default(new Date(0));
+/**
+ * Default to 10 years from now
+ */
+
+RawDateSchema.default(new Date(Date.now() + 1000 * 60 * 60 * 24 * 365 * 10));
+
+const PropertiesInput = zod__WEBPACK_IMPORTED_MODULE_1__.z.object({}).catchall(zod__WEBPACK_IMPORTED_MODULE_1__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.unknown()]));
+/**
+ * @internal
+ */
+
+const OptionalPropertiesInput = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.array(PropertiesInput), PropertiesInput]).optional();
+
+/**
+ * @internal
+ */
+
+const CommonNFTInput = zod__WEBPACK_IMPORTED_MODULE_1__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_1__.z.union([zod__WEBPACK_IMPORTED_MODULE_1__.z.string(), zod__WEBPACK_IMPORTED_MODULE_1__.z.number()]).optional(),
+  description: zod__WEBPACK_IMPORTED_MODULE_1__.z.string().nullable().optional(),
+  image: FileOrBufferOrStringSchema.nullable().optional(),
+  external_url: FileOrBufferOrStringSchema.nullable().optional(),
+  animation_url: FileOrBufferOrStringSchema.optional(),
+  background_color: HexColor.optional(),
+  properties: OptionalPropertiesInput,
+  attributes: OptionalPropertiesInput
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_1__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_1__.z.unknown()]));
+/**
+ * @internal
+ */
+
+const NFTInputOrUriSchema = zod__WEBPACK_IMPORTED_MODULE_1__.z.union([CommonNFTInput, zod__WEBPACK_IMPORTED_MODULE_1__.z.string()]);
+/**
+ * @internal
+ */
+
+const CommonNFTOutput = CommonNFTInput.extend({
+  id: zod__WEBPACK_IMPORTED_MODULE_1__.z.string(),
+  uri: zod__WEBPACK_IMPORTED_MODULE_1__.z.string(),
+  image: zod__WEBPACK_IMPORTED_MODULE_1__.z.string().nullable().optional(),
+  external_url: zod__WEBPACK_IMPORTED_MODULE_1__.z.string().nullable().optional(),
+  animation_url: zod__WEBPACK_IMPORTED_MODULE_1__.z.string().nullable().optional()
+});
+/**
+ * @public
+ */
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -28962,21 +29085,30 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
+/**
+ * @internal
+ */
+const DEFAULT_QUERY_ALL_COUNT = 100;
+/**
+ * Pagination Parameters
+ * @public
+ */
+
 
 
 
 /***/ }),
 
-/***/ "./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-c4f1082a.esm.js":
+/***/ "./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-1dc52000.esm.js":
 /*!***********************************************************************!*\
-  !*** ./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-c4f1082a.esm.js ***!
+  !*** ./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-1dc52000.esm.js ***!
   \***********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "$": () => (/* binding */ ExtraPublishMetadataSchemaOutput),
+/* harmony export */   "$": () => (/* binding */ FullPublishMetadataSchemaInput),
 /* harmony export */   "A": () => (/* binding */ MintRequest721withQuantity),
 /* harmony export */   "B": () => (/* binding */ BaseSignaturePayloadInput),
 /* harmony export */   "C": () => (/* binding */ CommonContractSchema),
@@ -28993,198 +29125,195 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "N": () => (/* binding */ CustomContractDeploy),
 /* harmony export */   "O": () => (/* binding */ OptionalPropertiesInput),
 /* harmony export */   "P": () => (/* binding */ PartialClaimConditionInputSchema),
-/* harmony export */   "Q": () => (/* binding */ QuantitySchema),
-/* harmony export */   "R": () => (/* binding */ CustomContractSchema),
+/* harmony export */   "Q": () => (/* binding */ CustomContractSchema),
+/* harmony export */   "R": () => (/* binding */ AbiTypeSchema),
 /* harmony export */   "S": () => (/* binding */ SUPPORTED_CHAIN_IDS),
 /* harmony export */   "T": () => (/* binding */ TokenMintInputSchema),
-/* harmony export */   "U": () => (/* binding */ AbiTypeSchema),
-/* harmony export */   "V": () => (/* binding */ AbiObjectSchema),
-/* harmony export */   "W": () => (/* binding */ AbiSchema),
-/* harmony export */   "X": () => (/* binding */ PreDeployMetadata),
-/* harmony export */   "Y": () => (/* binding */ ChainIdToAddressSchema),
-/* harmony export */   "Z": () => (/* binding */ FactoryDeploymentSchema),
-/* harmony export */   "_": () => (/* binding */ ExtraPublishMetadataSchemaInput),
+/* harmony export */   "U": () => (/* binding */ AbiObjectSchema),
+/* harmony export */   "V": () => (/* binding */ AbiSchema),
+/* harmony export */   "W": () => (/* binding */ PreDeployMetadata),
+/* harmony export */   "X": () => (/* binding */ ChainIdToAddressSchema),
+/* harmony export */   "Y": () => (/* binding */ FactoryDeploymentSchema),
+/* harmony export */   "Z": () => (/* binding */ ExtraPublishMetadataSchemaInput),
+/* harmony export */   "_": () => (/* binding */ ExtraPublishMetadataSchemaOutput),
 /* harmony export */   "a": () => (/* binding */ ClaimConditionInputSchema),
-/* harmony export */   "a$": () => (/* binding */ ListingType),
-/* harmony export */   "a0": () => (/* binding */ FullPublishMetadataSchemaInput),
-/* harmony export */   "a1": () => (/* binding */ FullPublishMetadataSchemaOutput),
-/* harmony export */   "a2": () => (/* binding */ ProfileSchemaInput),
-/* harmony export */   "a3": () => (/* binding */ ProfileSchemaOutput),
-/* harmony export */   "a4": () => (/* binding */ PublishedContractSchema),
-/* harmony export */   "a5": () => (/* binding */ ContractInfoSchema),
-/* harmony export */   "a6": () => (/* binding */ CompilerMetadataFetchedSchema),
-/* harmony export */   "a7": () => (/* binding */ PreDeployMetadataFetchedSchema),
-/* harmony export */   "a8": () => (/* binding */ LoginOptionsSchema),
-/* harmony export */   "a9": () => (/* binding */ LoginPayloadDataSchema),
-/* harmony export */   "aA": () => (/* binding */ Erc721Supply),
-/* harmony export */   "aB": () => (/* binding */ Erc721Enumerable),
-/* harmony export */   "aC": () => (/* binding */ Erc721Mintable),
-/* harmony export */   "aD": () => (/* binding */ Erc721BatchMintable),
-/* harmony export */   "aE": () => (/* binding */ Erc721Burnable),
-/* harmony export */   "aF": () => (/* binding */ StandardErc721),
-/* harmony export */   "aG": () => (/* binding */ Erc1155),
-/* harmony export */   "aH": () => (/* binding */ Erc1155Enumerable),
-/* harmony export */   "aI": () => (/* binding */ Erc1155Mintable),
-/* harmony export */   "aJ": () => (/* binding */ Erc1155BatchMintable),
-/* harmony export */   "aK": () => (/* binding */ Erc1155SignatureMintable),
-/* harmony export */   "aL": () => (/* binding */ Erc1155Burnable),
-/* harmony export */   "aM": () => (/* binding */ Erc1155LazyMintable),
-/* harmony export */   "aN": () => (/* binding */ StandardErc1155),
-/* harmony export */   "aO": () => (/* binding */ MarketplaceDirect),
-/* harmony export */   "aP": () => (/* binding */ MarketplaceAuction),
-/* harmony export */   "aQ": () => (/* binding */ ContractDeployer),
-/* harmony export */   "aR": () => (/* binding */ GasCostEstimator),
-/* harmony export */   "aS": () => (/* binding */ ContractEvents),
-/* harmony export */   "aT": () => (/* binding */ ContractInterceptor),
-/* harmony export */   "aU": () => (/* binding */ ContractPlatformFee),
-/* harmony export */   "aV": () => (/* binding */ ContractPublishedMetadata),
-/* harmony export */   "aW": () => (/* binding */ ContractOwner),
-/* harmony export */   "aX": () => (/* binding */ TransactionTask),
-/* harmony export */   "aY": () => (/* binding */ UserWallet),
-/* harmony export */   "aZ": () => (/* binding */ ThirdwebSDK),
-/* harmony export */   "a_": () => (/* binding */ DEFAULT_QUERY_ALL_COUNT),
-/* harmony export */   "aa": () => (/* binding */ LoginPayloadSchema),
-/* harmony export */   "ab": () => (/* binding */ VerifyOptionsSchema),
-/* harmony export */   "ac": () => (/* binding */ AuthenticationOptionsSchema),
-/* harmony export */   "ad": () => (/* binding */ AuthenticationPayloadDataSchema),
-/* harmony export */   "ae": () => (/* binding */ AuthenticationPayloadSchema),
-/* harmony export */   "af": () => (/* binding */ WalletAuthenticator),
-/* harmony export */   "ag": () => (/* binding */ ContractEncoder),
-/* harmony export */   "ah": () => (/* binding */ ContractMetadata),
-/* harmony export */   "ai": () => (/* binding */ ContractRoles),
-/* harmony export */   "aj": () => (/* binding */ ContractRoyalty),
-/* harmony export */   "ak": () => (/* binding */ ContractPrimarySale),
-/* harmony export */   "al": () => (/* binding */ DelayedReveal),
-/* harmony export */   "am": () => (/* binding */ DropClaimConditions),
-/* harmony export */   "an": () => (/* binding */ DropErc1155ClaimConditions),
-/* harmony export */   "ao": () => (/* binding */ DropErc1155History),
-/* harmony export */   "ap": () => (/* binding */ Erc20),
-/* harmony export */   "aq": () => (/* binding */ Erc20Mintable),
-/* harmony export */   "ar": () => (/* binding */ Erc20BatchMintable),
-/* harmony export */   "as": () => (/* binding */ TokenERC20History),
-/* harmony export */   "at": () => (/* binding */ Erc20SignatureMintable),
-/* harmony export */   "au": () => (/* binding */ Erc20Burnable),
-/* harmony export */   "av": () => (/* binding */ StandardErc20),
-/* harmony export */   "aw": () => (/* binding */ Erc721),
-/* harmony export */   "ax": () => (/* binding */ Erc721LazyMintable),
-/* harmony export */   "ay": () => (/* binding */ Erc721ClaimableWithConditions),
-/* harmony export */   "az": () => (/* binding */ Erc721WithQuantitySignatureMintable),
+/* harmony export */   "a$": () => (/* binding */ VoteType),
+/* harmony export */   "a0": () => (/* binding */ FullPublishMetadataSchemaOutput),
+/* harmony export */   "a1": () => (/* binding */ ProfileSchemaInput),
+/* harmony export */   "a2": () => (/* binding */ ProfileSchemaOutput),
+/* harmony export */   "a3": () => (/* binding */ PublishedContractSchema),
+/* harmony export */   "a4": () => (/* binding */ ContractInfoSchema),
+/* harmony export */   "a5": () => (/* binding */ CompilerMetadataFetchedSchema),
+/* harmony export */   "a6": () => (/* binding */ PreDeployMetadataFetchedSchema),
+/* harmony export */   "a7": () => (/* binding */ LoginOptionsSchema),
+/* harmony export */   "a8": () => (/* binding */ LoginPayloadDataSchema),
+/* harmony export */   "a9": () => (/* binding */ LoginPayloadSchema),
+/* harmony export */   "aA": () => (/* binding */ Erc721Enumerable),
+/* harmony export */   "aB": () => (/* binding */ Erc721Mintable),
+/* harmony export */   "aC": () => (/* binding */ Erc721BatchMintable),
+/* harmony export */   "aD": () => (/* binding */ Erc721Burnable),
+/* harmony export */   "aE": () => (/* binding */ StandardErc721),
+/* harmony export */   "aF": () => (/* binding */ Erc1155),
+/* harmony export */   "aG": () => (/* binding */ Erc1155Enumerable),
+/* harmony export */   "aH": () => (/* binding */ Erc1155Mintable),
+/* harmony export */   "aI": () => (/* binding */ Erc1155BatchMintable),
+/* harmony export */   "aJ": () => (/* binding */ Erc1155SignatureMintable),
+/* harmony export */   "aK": () => (/* binding */ Erc1155Burnable),
+/* harmony export */   "aL": () => (/* binding */ Erc1155LazyMintable),
+/* harmony export */   "aM": () => (/* binding */ StandardErc1155),
+/* harmony export */   "aN": () => (/* binding */ MarketplaceDirect),
+/* harmony export */   "aO": () => (/* binding */ MarketplaceAuction),
+/* harmony export */   "aP": () => (/* binding */ ContractDeployer),
+/* harmony export */   "aQ": () => (/* binding */ GasCostEstimator),
+/* harmony export */   "aR": () => (/* binding */ ContractEvents),
+/* harmony export */   "aS": () => (/* binding */ ContractInterceptor),
+/* harmony export */   "aT": () => (/* binding */ ContractPlatformFee),
+/* harmony export */   "aU": () => (/* binding */ ContractPublishedMetadata),
+/* harmony export */   "aV": () => (/* binding */ ContractOwner),
+/* harmony export */   "aW": () => (/* binding */ TransactionTask),
+/* harmony export */   "aX": () => (/* binding */ UserWallet),
+/* harmony export */   "aY": () => (/* binding */ ThirdwebSDK),
+/* harmony export */   "aZ": () => (/* binding */ ListingType),
+/* harmony export */   "a_": () => (/* binding */ ProposalState),
+/* harmony export */   "aa": () => (/* binding */ VerifyOptionsSchema),
+/* harmony export */   "ab": () => (/* binding */ AuthenticationOptionsSchema),
+/* harmony export */   "ac": () => (/* binding */ AuthenticationPayloadDataSchema),
+/* harmony export */   "ad": () => (/* binding */ AuthenticationPayloadSchema),
+/* harmony export */   "ae": () => (/* binding */ WalletAuthenticator),
+/* harmony export */   "af": () => (/* binding */ ContractEncoder),
+/* harmony export */   "ag": () => (/* binding */ ContractMetadata),
+/* harmony export */   "ah": () => (/* binding */ ContractRoles),
+/* harmony export */   "ai": () => (/* binding */ ContractRoyalty),
+/* harmony export */   "aj": () => (/* binding */ ContractPrimarySale),
+/* harmony export */   "ak": () => (/* binding */ DelayedReveal),
+/* harmony export */   "al": () => (/* binding */ DropClaimConditions),
+/* harmony export */   "am": () => (/* binding */ DropErc1155ClaimConditions),
+/* harmony export */   "an": () => (/* binding */ DropErc1155History),
+/* harmony export */   "ao": () => (/* binding */ Erc20),
+/* harmony export */   "ap": () => (/* binding */ Erc20Mintable),
+/* harmony export */   "aq": () => (/* binding */ Erc20BatchMintable),
+/* harmony export */   "ar": () => (/* binding */ TokenERC20History),
+/* harmony export */   "as": () => (/* binding */ Erc20SignatureMintable),
+/* harmony export */   "at": () => (/* binding */ Erc20Burnable),
+/* harmony export */   "au": () => (/* binding */ StandardErc20),
+/* harmony export */   "av": () => (/* binding */ Erc721),
+/* harmony export */   "aw": () => (/* binding */ Erc721LazyMintable),
+/* harmony export */   "ax": () => (/* binding */ Erc721ClaimableWithConditions),
+/* harmony export */   "ay": () => (/* binding */ Erc721WithQuantitySignatureMintable),
+/* harmony export */   "az": () => (/* binding */ Erc721Supply),
 /* harmony export */   "b": () => (/* binding */ ClaimConditionInputArray),
-/* harmony export */   "b$": () => (/* binding */ TW_IPFS_SERVER_URL),
-/* harmony export */   "b0": () => (/* binding */ ProposalState),
-/* harmony export */   "b1": () => (/* binding */ VoteType),
-/* harmony export */   "b2": () => (/* binding */ ClaimEligibility),
-/* harmony export */   "b3": () => (/* binding */ NotFoundError),
-/* harmony export */   "b4": () => (/* binding */ InvalidAddressError),
-/* harmony export */   "b5": () => (/* binding */ MissingRoleError),
-/* harmony export */   "b6": () => (/* binding */ AssetNotFoundError),
-/* harmony export */   "b7": () => (/* binding */ UploadError),
-/* harmony export */   "b8": () => (/* binding */ FileNameMissingError),
-/* harmony export */   "b9": () => (/* binding */ DuplicateFileNameError),
-/* harmony export */   "bA": () => (/* binding */ resolveContractUriFromAddress),
-/* harmony export */   "bB": () => (/* binding */ fetchContractMetadataFromAddress),
-/* harmony export */   "bC": () => (/* binding */ fetchContractMetadata),
-/* harmony export */   "bD": () => (/* binding */ fetchSourceFilesFromMetadata),
-/* harmony export */   "bE": () => (/* binding */ fetchRawPredeployMetadata),
-/* harmony export */   "bF": () => (/* binding */ fetchPreDeployMetadata),
-/* harmony export */   "bG": () => (/* binding */ fetchExtendedReleaseMetadata),
-/* harmony export */   "bH": () => (/* binding */ detectFeatures),
-/* harmony export */   "bI": () => (/* binding */ isFeatureEnabled),
-/* harmony export */   "bJ": () => (/* binding */ assertEnabled),
-/* harmony export */   "bK": () => (/* binding */ detectContractFeature),
-/* harmony export */   "bL": () => (/* binding */ hasFunction),
-/* harmony export */   "bM": () => (/* binding */ toSemver),
-/* harmony export */   "bN": () => (/* binding */ isIncrementalVersion),
-/* harmony export */   "bO": () => (/* binding */ isDowngradeVersion),
-/* harmony export */   "bP": () => (/* binding */ OZ_DEFENDER_FORWARDER_ADDRESS),
-/* harmony export */   "bQ": () => (/* binding */ CONTRACT_ADDRESSES),
-/* harmony export */   "bR": () => (/* binding */ getContractAddressByChainId),
-/* harmony export */   "bS": () => (/* binding */ getContractPublisherAddress),
-/* harmony export */   "bT": () => (/* binding */ InterfaceId_IERC721),
-/* harmony export */   "bU": () => (/* binding */ InterfaceId_IERC1155),
-/* harmony export */   "bV": () => (/* binding */ NATIVE_TOKEN_ADDRESS),
-/* harmony export */   "bW": () => (/* binding */ NATIVE_TOKENS),
-/* harmony export */   "bX": () => (/* binding */ getNativeTokenByChainId),
-/* harmony export */   "bY": () => (/* binding */ EventType),
-/* harmony export */   "bZ": () => (/* binding */ DEFAULT_IPFS_GATEWAY),
-/* harmony export */   "b_": () => (/* binding */ PUBLIC_GATEWAYS),
-/* harmony export */   "ba": () => (/* binding */ NotEnoughTokensError),
-/* harmony export */   "bb": () => (/* binding */ MissingOwnerRoleError),
-/* harmony export */   "bc": () => (/* binding */ QuantityAboveLimitError),
-/* harmony export */   "bd": () => (/* binding */ FetchError),
-/* harmony export */   "be": () => (/* binding */ DuplicateLeafsError),
-/* harmony export */   "bf": () => (/* binding */ AuctionAlreadyStartedError),
-/* harmony export */   "bg": () => (/* binding */ FunctionDeprecatedError),
-/* harmony export */   "bh": () => (/* binding */ ListingNotFoundError),
-/* harmony export */   "bi": () => (/* binding */ WrongListingTypeError),
-/* harmony export */   "bj": () => (/* binding */ RestrictedTransferError),
-/* harmony export */   "bk": () => (/* binding */ AdminRoleMissingError),
-/* harmony export */   "bl": () => (/* binding */ AuctionHasNotEndedError),
-/* harmony export */   "bm": () => (/* binding */ ExtensionNotImplementedError),
-/* harmony export */   "bn": () => (/* binding */ TransactionError),
-/* harmony export */   "bo": () => (/* binding */ convertToTWError),
-/* harmony export */   "bp": () => (/* binding */ includesErrorMessage),
-/* harmony export */   "bq": () => (/* binding */ createSnapshot),
-/* harmony export */   "br": () => (/* binding */ hashLeafNode),
-/* harmony export */   "bs": () => (/* binding */ ALL_ROLES),
-/* harmony export */   "bt": () => (/* binding */ getRoleHash),
-/* harmony export */   "bu": () => (/* binding */ extractConstructorParams),
-/* harmony export */   "bv": () => (/* binding */ extractFunctions),
-/* harmony export */   "bw": () => (/* binding */ extractConstructorParamsFromAbi),
-/* harmony export */   "bx": () => (/* binding */ extractFunctionParamsFromAbi),
-/* harmony export */   "by": () => (/* binding */ extractFunctionsFromAbi),
-/* harmony export */   "bz": () => (/* binding */ extractEventsFromAbi),
+/* harmony export */   "b$": () => (/* binding */ getProviderForNetwork),
+/* harmony export */   "b0": () => (/* binding */ ClaimEligibility),
+/* harmony export */   "b1": () => (/* binding */ NotFoundError),
+/* harmony export */   "b2": () => (/* binding */ InvalidAddressError),
+/* harmony export */   "b3": () => (/* binding */ MissingRoleError),
+/* harmony export */   "b4": () => (/* binding */ AssetNotFoundError),
+/* harmony export */   "b5": () => (/* binding */ UploadError),
+/* harmony export */   "b6": () => (/* binding */ FileNameMissingError),
+/* harmony export */   "b7": () => (/* binding */ DuplicateFileNameError),
+/* harmony export */   "b8": () => (/* binding */ NotEnoughTokensError),
+/* harmony export */   "b9": () => (/* binding */ MissingOwnerRoleError),
+/* harmony export */   "bA": () => (/* binding */ fetchContractMetadata),
+/* harmony export */   "bB": () => (/* binding */ fetchSourceFilesFromMetadata),
+/* harmony export */   "bC": () => (/* binding */ fetchRawPredeployMetadata),
+/* harmony export */   "bD": () => (/* binding */ fetchPreDeployMetadata),
+/* harmony export */   "bE": () => (/* binding */ fetchExtendedReleaseMetadata),
+/* harmony export */   "bF": () => (/* binding */ detectFeatures),
+/* harmony export */   "bG": () => (/* binding */ isFeatureEnabled),
+/* harmony export */   "bH": () => (/* binding */ assertEnabled),
+/* harmony export */   "bI": () => (/* binding */ detectContractFeature),
+/* harmony export */   "bJ": () => (/* binding */ hasFunction),
+/* harmony export */   "bK": () => (/* binding */ toSemver),
+/* harmony export */   "bL": () => (/* binding */ isIncrementalVersion),
+/* harmony export */   "bM": () => (/* binding */ isDowngradeVersion),
+/* harmony export */   "bN": () => (/* binding */ OZ_DEFENDER_FORWARDER_ADDRESS),
+/* harmony export */   "bO": () => (/* binding */ CONTRACT_ADDRESSES),
+/* harmony export */   "bP": () => (/* binding */ getContractAddressByChainId),
+/* harmony export */   "bQ": () => (/* binding */ getContractPublisherAddress),
+/* harmony export */   "bR": () => (/* binding */ InterfaceId_IERC721),
+/* harmony export */   "bS": () => (/* binding */ InterfaceId_IERC1155),
+/* harmony export */   "bT": () => (/* binding */ NATIVE_TOKEN_ADDRESS),
+/* harmony export */   "bU": () => (/* binding */ NATIVE_TOKENS),
+/* harmony export */   "bV": () => (/* binding */ getNativeTokenByChainId),
+/* harmony export */   "bW": () => (/* binding */ EventType),
+/* harmony export */   "bX": () => (/* binding */ DEFAULT_IPFS_GATEWAY),
+/* harmony export */   "bY": () => (/* binding */ PUBLIC_GATEWAYS),
+/* harmony export */   "bZ": () => (/* binding */ TW_IPFS_SERVER_URL),
+/* harmony export */   "b_": () => (/* binding */ PINATA_IPFS_URL),
+/* harmony export */   "ba": () => (/* binding */ QuantityAboveLimitError),
+/* harmony export */   "bb": () => (/* binding */ FetchError),
+/* harmony export */   "bc": () => (/* binding */ DuplicateLeafsError),
+/* harmony export */   "bd": () => (/* binding */ AuctionAlreadyStartedError),
+/* harmony export */   "be": () => (/* binding */ FunctionDeprecatedError),
+/* harmony export */   "bf": () => (/* binding */ ListingNotFoundError),
+/* harmony export */   "bg": () => (/* binding */ WrongListingTypeError),
+/* harmony export */   "bh": () => (/* binding */ RestrictedTransferError),
+/* harmony export */   "bi": () => (/* binding */ AdminRoleMissingError),
+/* harmony export */   "bj": () => (/* binding */ AuctionHasNotEndedError),
+/* harmony export */   "bk": () => (/* binding */ ExtensionNotImplementedError),
+/* harmony export */   "bl": () => (/* binding */ TransactionError),
+/* harmony export */   "bm": () => (/* binding */ convertToTWError),
+/* harmony export */   "bn": () => (/* binding */ includesErrorMessage),
+/* harmony export */   "bo": () => (/* binding */ createSnapshot),
+/* harmony export */   "bp": () => (/* binding */ hashLeafNode),
+/* harmony export */   "bq": () => (/* binding */ ALL_ROLES),
+/* harmony export */   "br": () => (/* binding */ getRoleHash),
+/* harmony export */   "bs": () => (/* binding */ extractConstructorParams),
+/* harmony export */   "bt": () => (/* binding */ extractFunctions),
+/* harmony export */   "bu": () => (/* binding */ extractConstructorParamsFromAbi),
+/* harmony export */   "bv": () => (/* binding */ extractFunctionParamsFromAbi),
+/* harmony export */   "bw": () => (/* binding */ extractFunctionsFromAbi),
+/* harmony export */   "bx": () => (/* binding */ extractEventsFromAbi),
+/* harmony export */   "by": () => (/* binding */ resolveContractUriFromAddress),
+/* harmony export */   "bz": () => (/* binding */ fetchContractMetadataFromAddress),
 /* harmony export */   "c": () => (/* binding */ ClaimConditionOutputSchema),
-/* harmony export */   "c0": () => (/* binding */ PINATA_IPFS_URL),
-/* harmony export */   "c1": () => (/* binding */ getProviderForNetwork),
-/* harmony export */   "c2": () => (/* binding */ getReadOnlyProvider),
-/* harmony export */   "c3": () => (/* binding */ EditionDropInitializer),
-/* harmony export */   "c4": () => (/* binding */ EditionInitializer),
-/* harmony export */   "c5": () => (/* binding */ MarketplaceInitializer),
-/* harmony export */   "c6": () => (/* binding */ MultiwrapInitializer),
-/* harmony export */   "c7": () => (/* binding */ NFTCollectionInitializer),
-/* harmony export */   "c8": () => (/* binding */ NFTDropInitializer),
-/* harmony export */   "c9": () => (/* binding */ PackInitializer),
-/* harmony export */   "cA": () => (/* binding */ FEATURE_NFT_REVEALABLE),
-/* harmony export */   "cB": () => (/* binding */ uploadOrExtractURIs),
-/* harmony export */   "cC": () => (/* binding */ prepareClaim),
-/* harmony export */   "cD": () => (/* binding */ AddressSchema),
-/* harmony export */   "cE": () => (/* binding */ AmountSchema),
-/* harmony export */   "cF": () => (/* binding */ BigNumberishSchema),
-/* harmony export */   "cG": () => (/* binding */ NFTInputOrUriSchema),
-/* harmony export */   "cH": () => (/* binding */ RawDateSchema),
-/* harmony export */   "cI": () => (/* binding */ PackContractSchema),
-/* harmony export */   "cJ": () => (/* binding */ SplitsContractSchema),
-/* harmony export */   "cK": () => (/* binding */ fetchCurrencyValue),
-/* harmony export */   "cL": () => (/* binding */ DropErc20ContractSchema),
-/* harmony export */   "cM": () => (/* binding */ TokenErc20ContractSchema),
-/* harmony export */   "cN": () => (/* binding */ VoteContractSchema),
-/* harmony export */   "ca": () => (/* binding */ SignatureDropInitializer),
-/* harmony export */   "cb": () => (/* binding */ SplitInitializer),
-/* harmony export */   "cc": () => (/* binding */ TokenDropInitializer),
-/* harmony export */   "cd": () => (/* binding */ TokenInitializer),
-/* harmony export */   "ce": () => (/* binding */ VoteInitializer),
-/* harmony export */   "cf": () => (/* binding */ PREBUILT_CONTRACTS_MAP),
-/* harmony export */   "cg": () => (/* binding */ CONTRACTS_MAP),
-/* harmony export */   "ch": () => (/* binding */ getContractTypeForRemoteName),
-/* harmony export */   "ci": () => (/* binding */ PAPER_API_URL),
-/* harmony export */   "cj": () => (/* binding */ parseChainIdToPaperChain),
-/* harmony export */   "ck": () => (/* binding */ fetchRegisteredCheckoutId),
-/* harmony export */   "cl": () => (/* binding */ createCheckoutLinkIntent),
-/* harmony export */   "cm": () => (/* binding */ PaperCheckout),
-/* harmony export */   "cn": () => (/* binding */ ContractWrapper),
-/* harmony export */   "co": () => (/* binding */ DropErc1155ContractSchema),
-/* harmony export */   "cp": () => (/* binding */ TokenErc1155ContractSchema),
-/* harmony export */   "cq": () => (/* binding */ MarketplaceContractSchema),
-/* harmony export */   "cr": () => (/* binding */ mapOffer),
-/* harmony export */   "cs": () => (/* binding */ MultiwrapContractSchema),
-/* harmony export */   "ct": () => (/* binding */ fetchCurrencyMetadata),
-/* harmony export */   "cu": () => (/* binding */ uploadOrExtractURI),
-/* harmony export */   "cv": () => (/* binding */ normalizePriceValue),
-/* harmony export */   "cw": () => (/* binding */ hasERC20Allowance),
-/* harmony export */   "cx": () => (/* binding */ isTokenApprovedForTransfer),
-/* harmony export */   "cy": () => (/* binding */ TokenErc721ContractSchema),
-/* harmony export */   "cz": () => (/* binding */ DropErc721ContractSchema),
+/* harmony export */   "c0": () => (/* binding */ getReadOnlyProvider),
+/* harmony export */   "c1": () => (/* binding */ EditionDropInitializer),
+/* harmony export */   "c2": () => (/* binding */ EditionInitializer),
+/* harmony export */   "c3": () => (/* binding */ MarketplaceInitializer),
+/* harmony export */   "c4": () => (/* binding */ MultiwrapInitializer),
+/* harmony export */   "c5": () => (/* binding */ NFTCollectionInitializer),
+/* harmony export */   "c6": () => (/* binding */ NFTDropInitializer),
+/* harmony export */   "c7": () => (/* binding */ PackInitializer),
+/* harmony export */   "c8": () => (/* binding */ SignatureDropInitializer),
+/* harmony export */   "c9": () => (/* binding */ SplitInitializer),
+/* harmony export */   "cA": () => (/* binding */ prepareClaim),
+/* harmony export */   "cB": () => (/* binding */ AddressSchema),
+/* harmony export */   "cC": () => (/* binding */ AmountSchema),
+/* harmony export */   "cD": () => (/* binding */ BigNumberishSchema),
+/* harmony export */   "cE": () => (/* binding */ RawDateSchema),
+/* harmony export */   "cF": () => (/* binding */ PackContractSchema),
+/* harmony export */   "cG": () => (/* binding */ SplitsContractSchema),
+/* harmony export */   "cH": () => (/* binding */ fetchCurrencyValue),
+/* harmony export */   "cI": () => (/* binding */ DropErc20ContractSchema),
+/* harmony export */   "cJ": () => (/* binding */ TokenErc20ContractSchema),
+/* harmony export */   "cK": () => (/* binding */ VoteContractSchema),
+/* harmony export */   "ca": () => (/* binding */ TokenDropInitializer),
+/* harmony export */   "cb": () => (/* binding */ TokenInitializer),
+/* harmony export */   "cc": () => (/* binding */ VoteInitializer),
+/* harmony export */   "cd": () => (/* binding */ PREBUILT_CONTRACTS_MAP),
+/* harmony export */   "ce": () => (/* binding */ CONTRACTS_MAP),
+/* harmony export */   "cf": () => (/* binding */ getContractTypeForRemoteName),
+/* harmony export */   "cg": () => (/* binding */ PAPER_API_URL),
+/* harmony export */   "ch": () => (/* binding */ parseChainIdToPaperChain),
+/* harmony export */   "ci": () => (/* binding */ fetchRegisteredCheckoutId),
+/* harmony export */   "cj": () => (/* binding */ createCheckoutLinkIntent),
+/* harmony export */   "ck": () => (/* binding */ PaperCheckout),
+/* harmony export */   "cl": () => (/* binding */ ContractWrapper),
+/* harmony export */   "cm": () => (/* binding */ DropErc1155ContractSchema),
+/* harmony export */   "cn": () => (/* binding */ TokenErc1155ContractSchema),
+/* harmony export */   "co": () => (/* binding */ MarketplaceContractSchema),
+/* harmony export */   "cp": () => (/* binding */ mapOffer),
+/* harmony export */   "cq": () => (/* binding */ MultiwrapContractSchema),
+/* harmony export */   "cr": () => (/* binding */ fetchCurrencyMetadata),
+/* harmony export */   "cs": () => (/* binding */ uploadOrExtractURI),
+/* harmony export */   "ct": () => (/* binding */ normalizePriceValue),
+/* harmony export */   "cu": () => (/* binding */ hasERC20Allowance),
+/* harmony export */   "cv": () => (/* binding */ isTokenApprovedForTransfer),
+/* harmony export */   "cw": () => (/* binding */ TokenErc721ContractSchema),
+/* harmony export */   "cx": () => (/* binding */ DropErc721ContractSchema),
+/* harmony export */   "cy": () => (/* binding */ FEATURE_NFT_REVEALABLE),
+/* harmony export */   "cz": () => (/* binding */ uploadOrExtractURIs),
 /* harmony export */   "d": () => (/* binding */ ChainId),
 /* harmony export */   "e": () => (/* binding */ EditionMetadataWithOwnerOutputSchema),
 /* harmony export */   "f": () => (/* binding */ EditionMetadataInputSchema),
@@ -29209,41 +29338,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "y": () => (/* binding */ MintRequest721),
 /* harmony export */   "z": () => (/* binding */ MintRequest1155)
 /* harmony export */ });
-/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! zod */ "./node_modules/zod/lib/index.mjs");
-/* harmony import */ var _defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./defineProperty-fe02f37c.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/defineProperty-fe02f37c.esm.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bignumber/lib.esm/bignumber.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/address/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/strings/lib.esm/utf8.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/addresses.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/url-json-rpc-provider.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/properties/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/web/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/json-rpc-batch-provider.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/websocket-provider.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/units/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/keccak256/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/solidity/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/id.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abstract-signer/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abstract-provider/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/contracts/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abi/lib.esm/abi-coder.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/typed-data.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/bignumbers.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/message.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/transactions/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/wallet/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/strings/lib.esm/bytes32.js");
+/* harmony import */ var zod__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! zod */ "./node_modules/zod/lib/index.mjs");
+/* harmony import */ var _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./QueryParams-24720dd7.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/QueryParams-24720dd7.esm.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bignumber/lib.esm/bignumber.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/address/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/strings/lib.esm/utf8.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/addresses.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/url-json-rpc-provider.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/properties/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/web/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/json-rpc-batch-provider.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/websocket-provider.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/units/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/keccak256/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/solidity/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/id.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abstract-signer/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abstract-provider/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/contracts/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abi/lib.esm/abi-coder.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/typed-data.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/constants/lib.esm/bignumbers.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/hash/lib.esm/message.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/transactions/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/wallet/lib.esm/index.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/strings/lib.esm/bytes32.js");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC165.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC165.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC721_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC721.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC721.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC1155_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC1155.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC1155.json");
-/* harmony import */ var tiny_invariant__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! tiny-invariant */ "./node_modules/tiny-invariant/dist/tiny-invariant.esm.js");
-/* harmony import */ var cross_fetch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
-/* harmony import */ var cross_fetch__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(cross_fetch__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var eventemitter3__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! eventemitter3 */ "./node_modules/eventemitter3/index.js");
-/* harmony import */ var eventemitter3__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(eventemitter3__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var tiny_invariant__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! tiny-invariant */ "./node_modules/tiny-invariant/dist/tiny-invariant.esm.js");
+/* harmony import */ var eventemitter3__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! eventemitter3 */ "./node_modules/eventemitter3/index.js");
+/* harmony import */ var eventemitter3__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(eventemitter3__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var cross_fetch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! cross-fetch */ "./node_modules/cross-fetch/dist/browser-ponyfill.js");
+/* harmony import */ var cross_fetch__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(cross_fetch__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_Forwarder_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/Forwarder.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Forwarder.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IBurnableERC20_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IBurnableERC20.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IBurnableERC20.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IDropSinglePhase_json__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IDropSinglePhase.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IDropSinglePhase.json");
@@ -29269,7 +29398,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC20Metadata_json__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC20Metadata.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC20Metadata.json");
 /* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! fast-deep-equal */ "./node_modules/fast-deep-equal/index.js");
 /* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_28___default = /*#__PURE__*/__webpack_require__.n(fast_deep_equal__WEBPACK_IMPORTED_MODULE_28__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! uuid */ "./node_modules/@thirdweb-dev/sdk/node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! uuid */ "./node_modules/@thirdweb-dev/sdk/node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC721Metadata_json__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC721Metadata.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC721Metadata.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IERC1155Metadata_json__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IERC1155Metadata.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IERC1155Metadata.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IDelayedRevealDeprecated_json__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IDelayedRevealDeprecated.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IDelayedRevealDeprecated.json");
@@ -29278,14 +29407,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_ContractPublisher_json__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/ContractPublisher.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/ContractPublisher.json");
 /* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IThirdwebContract_json__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IThirdwebContract.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IThirdwebContract.json");
 /* harmony import */ var _thirdweb_dev_storage__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! @thirdweb-dev/storage */ "./node_modules/@thirdweb-dev/storage/dist/thirdweb-dev-storage.esm.js");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IContractMetadata_json__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IContractMetadata.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IContractMetadata.json");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPermissions_json__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPermissions.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPermissions.json");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPlatformFee_json__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPrimarySale_json__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPrimarySale.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPrimarySale.json");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IRoyalty_json__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IRoyalty.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IRoyalty.json");
-/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_Ownable_json__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/Ownable.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Ownable.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IAppURI_json__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IAppURI.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IAppURI.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IContractMetadata_json__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IContractMetadata.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IContractMetadata.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPermissions_json__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPermissions.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPermissions.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPermissionsEnumerable_json__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPermissionsEnumerable.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPermissionsEnumerable.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPlatformFee_json__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IPrimarySale_json__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IPrimarySale.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPrimarySale.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_IRoyalty_json__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/IRoyalty.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IRoyalty.json");
+/* harmony import */ var _thirdweb_dev_contracts_js_dist_abis_Ownable_json__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! @thirdweb-dev/contracts-js/dist/abis/Ownable.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Ownable.json");
 /* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+
+
 
 
 
@@ -29337,43 +29471,42 @@ __webpack_require__.r(__webpack_exports__);
 
 const isBrowser$1 = () => typeof window !== "undefined";
 
-const FileOrBufferUnionSchema = isBrowser$1() ? zod__WEBPACK_IMPORTED_MODULE_43__.z["instanceof"](File) : zod__WEBPACK_IMPORTED_MODULE_43__.z["instanceof"](Buffer); // @fixme, this is a hack to make browser happy for now
+const FileOrBufferUnionSchema = isBrowser$1() ? zod__WEBPACK_IMPORTED_MODULE_45__.z["instanceof"](File) : zod__WEBPACK_IMPORTED_MODULE_45__.z["instanceof"](Buffer); // @fixme, this is a hack to make browser happy for now
 
 /**
  * @internal
  */
 
-const FileOrBufferSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  data: zod__WEBPACK_IMPORTED_MODULE_43__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.string()]),
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+const FileOrBufferSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  data: zod__WEBPACK_IMPORTED_MODULE_45__.z.union([FileOrBufferUnionSchema, zod__WEBPACK_IMPORTED_MODULE_45__.z.string()]),
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 })]);
 /**
  * @internal
  */
 
-const FileOrBufferOrStringSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([FileOrBufferSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.string()]);
+const FileOrBufferOrStringSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([FileOrBufferSchema, zod__WEBPACK_IMPORTED_MODULE_45__.z.string()]);
 const MAX_BPS = 10000;
-const BytesLikeSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.number()), zod__WEBPACK_IMPORTED_MODULE_43__.z.string()]);
-const BigNumberSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.string(), zod__WEBPACK_IMPORTED_MODULE_43__.z.number(), zod__WEBPACK_IMPORTED_MODULE_43__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_43__.z.custom(data => {
-  return ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.isBigNumber(data);
-})]).transform(arg => ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(arg));
+const BytesLikeSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.number()), zod__WEBPACK_IMPORTED_MODULE_45__.z.string()]);
+const BigNumberSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.string(), zod__WEBPACK_IMPORTED_MODULE_45__.z.number(), zod__WEBPACK_IMPORTED_MODULE_45__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_45__.z.custom(data => {
+  return ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.isBigNumber(data);
+})]).transform(arg => ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(arg));
 const BigNumberishSchema = BigNumberSchema.transform(arg => arg.toString());
-const BigNumberTransformSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_43__.z.custom(data => {
-  return ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.isBigNumber(data);
+const BigNumberTransformSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.bigint(), zod__WEBPACK_IMPORTED_MODULE_45__.z.custom(data => {
+  return ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.isBigNumber(data);
 })]).transform(arg => {
-  return ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(arg).toString();
+  return ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(arg).toString();
 });
-const BasisPointsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.number().max(MAX_BPS, "Cannot exeed 100%").min(0, "Cannot be below 0%");
-const PercentSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.number().max(100, "Cannot exeed 100%").min(0, "Cannot be below 0%");
-const HexColor = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Invalid hex color").transform(val => val.replace("#", "")), zod__WEBPACK_IMPORTED_MODULE_43__.z.string().length(0)]);
-const AddressSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.string().refine(arg => ethers__WEBPACK_IMPORTED_MODULE_45__.isAddress(arg), out => {
+const BasisPointsSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.number().max(MAX_BPS, "Cannot exeed 100%").min(0, "Cannot be below 0%");
+const PercentSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.number().max(100, "Cannot exeed 100%").min(0, "Cannot be below 0%");
+const AddressSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.string().refine(arg => ethers__WEBPACK_IMPORTED_MODULE_47__.isAddress(arg), out => {
   return {
     message: `${out} is not a valid address`
   };
 });
-const AmountSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.string().regex(/^([0-9]+\.?[0-9]*|\.[0-9]+)$/, "Invalid amount"), zod__WEBPACK_IMPORTED_MODULE_43__.z.number().min(0, "Amount cannot be negative")]).transform(arg => typeof arg === "number" ? arg.toString() : arg);
-const RawDateSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.date().transform(i => {
-  return ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Math.floor(i.getTime() / 1000));
+const AmountSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.string().regex(/^([0-9]+\.?[0-9]*|\.[0-9]+)$/, "Invalid amount"), zod__WEBPACK_IMPORTED_MODULE_45__.z.number().min(0, "Amount cannot be negative")]).transform(arg => typeof arg === "number" ? arg.toString() : arg);
+const RawDateSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.date().transform(i => {
+  return ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Math.floor(i.getTime() / 1000));
 });
 /**
  * Default to now
@@ -29385,16 +29518,16 @@ const StartDateSchema = RawDateSchema.default(new Date(0));
  */
 
 const EndDateSchema = RawDateSchema.default(new Date(Date.now() + 1000 * 60 * 60 * 24 * 365 * 10));
-const CallOverrideSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const CallOverrideSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   gasLimit: BigNumberishSchema.optional(),
   gasPrice: BigNumberishSchema.optional(),
   maxFeePerGas: BigNumberishSchema.optional(),
   maxPriorityFeePerGas: BigNumberishSchema.optional(),
   nonce: BigNumberishSchema.optional(),
   value: BigNumberishSchema.optional(),
-  blockTag: zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.string(), zod__WEBPACK_IMPORTED_MODULE_43__.z.number()]).optional(),
+  blockTag: zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.string(), zod__WEBPACK_IMPORTED_MODULE_45__.z.number()]).optional(),
   from: AddressSchema.optional(),
-  type: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().optional()
+  type: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().optional()
 }).strict();
 
 /**
@@ -29407,7 +29540,6 @@ let ChainId;
 
 (function (ChainId) {
   ChainId[ChainId["Mainnet"] = 1] = "Mainnet";
-  ChainId[ChainId["Rinkeby"] = 4] = "Rinkeby";
   ChainId[ChainId["Goerli"] = 5] = "Goerli";
   ChainId[ChainId["Polygon"] = 137] = "Polygon";
   ChainId[ChainId["Mumbai"] = 80001] = "Mumbai";
@@ -29419,10 +29551,8 @@ let ChainId;
   ChainId[ChainId["Avalanche"] = 43114] = "Avalanche";
   ChainId[ChainId["AvalancheFujiTestnet"] = 43113] = "AvalancheFujiTestnet";
   ChainId[ChainId["Optimism"] = 10] = "Optimism";
-  ChainId[ChainId["OptimismKovan"] = 69] = "OptimismKovan";
   ChainId[ChainId["OptimismGoerli"] = 420] = "OptimismGoerli";
   ChainId[ChainId["Arbitrum"] = 42161] = "Arbitrum";
-  ChainId[ChainId["ArbitrumRinkeby"] = 421611] = "ArbitrumRinkeby";
   ChainId[ChainId["ArbitrumGoerli"] = 421613] = "ArbitrumGoerli";
   ChainId[ChainId["BinanceSmartChainMainnet"] = 56] = "BinanceSmartChainMainnet";
   ChainId[ChainId["BinanceSmartChainTestnet"] = 97] = "BinanceSmartChainTestnet";
@@ -29431,7 +29561,7 @@ let ChainId;
 /**
  * @public
  */
-const SUPPORTED_CHAIN_IDS = [ChainId.Mainnet, ChainId.Rinkeby, ChainId.Goerli, ChainId.Polygon, ChainId.Mumbai, ChainId.Fantom, ChainId.FantomTestnet, ChainId.Avalanche, ChainId.AvalancheFujiTestnet, ChainId.Optimism, ChainId.OptimismKovan, ChainId.OptimismGoerli, ChainId.Arbitrum, ChainId.ArbitrumRinkeby, ChainId.ArbitrumGoerli, ChainId.BinanceSmartChainMainnet, ChainId.BinanceSmartChainTestnet];
+const SUPPORTED_CHAIN_IDS = [ChainId.Mainnet, ChainId.Goerli, ChainId.Polygon, ChainId.Mumbai, ChainId.Fantom, ChainId.FantomTestnet, ChainId.Avalanche, ChainId.AvalancheFujiTestnet, ChainId.Optimism, ChainId.OptimismGoerli, ChainId.Arbitrum, ChainId.ArbitrumGoerli, ChainId.BinanceSmartChainMainnet, ChainId.BinanceSmartChainTestnet];
 
 /**
  * @public
@@ -29449,16 +29579,6 @@ const NATIVE_TOKENS = {
     decimals: 18,
     wrapped: {
       address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-      name: "Wrapped Ether",
-      symbol: "WETH"
-    }
-  },
-  [ChainId.Rinkeby]: {
-    name: "Rinkeby Ether",
-    symbol: "RIN",
-    decimals: 18,
-    wrapped: {
-      address: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
       name: "Wrapped Ether",
       symbol: "WETH"
     }
@@ -29543,16 +29663,6 @@ const NATIVE_TOKENS = {
       symbol: "WETH"
     }
   },
-  [ChainId.ArbitrumRinkeby]: {
-    name: "Arbitrum Rinkeby Ether",
-    symbol: "ARETH",
-    decimals: 18,
-    wrapped: {
-      address: "0xEBbc3452Cc911591e4F18f3b36727Df45d6bd1f9",
-      name: "Wrapped Ether",
-      symbol: "WETH"
-    }
-  },
   [ChainId.ArbitrumGoerli]: {
     name: "Arbitrum Goerli Ether",
     symbol: "AGOR",
@@ -29569,16 +29679,6 @@ const NATIVE_TOKENS = {
     decimals: 18,
     wrapped: {
       address: "0x4200000000000000000000000000000000000006",
-      name: "Wrapped Ether",
-      symbol: "WETH"
-    }
-  },
-  [ChainId.OptimismKovan]: {
-    name: "Kovan Ether",
-    symbol: "KOR",
-    decimals: 18,
-    wrapped: {
-      address: "0xbC6F6b680bc61e30dB47721c6D1c5cde19C1300d",
       name: "Wrapped Ether",
       symbol: "WETH"
     }
@@ -29638,10 +29738,10 @@ function getNativeTokenByChainId(chainId) {
  * @internal
  */
 
-const CurrencySchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  symbol: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  decimals: zod__WEBPACK_IMPORTED_MODULE_43__.z.number()
+const CurrencySchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  symbol: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  decimals: zod__WEBPACK_IMPORTED_MODULE_45__.z.number()
 });
 /**
  * @internal
@@ -29649,21 +29749,21 @@ const CurrencySchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
 
 const CurrencyValueSchema = CurrencySchema.extend({
   value: BigNumberSchema,
-  displayValue: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  displayValue: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 
 /**
  * @internal
  */
 
-const MerkleSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  merkle: zod__WEBPACK_IMPORTED_MODULE_43__.z.record(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()).default({})
+const MerkleSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  merkle: zod__WEBPACK_IMPORTED_MODULE_45__.z.record(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()).default({})
 });
 /**
  * @internal
  */
 
-const SnapshotAddressInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const SnapshotAddressInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   address: AddressSchema,
   maxClaimable: AmountSchema.default(0)
 });
@@ -29671,29 +29771,29 @@ const SnapshotAddressInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-const SnapshotInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()).transform(strings => strings.map(address => SnapshotAddressInput.parse({
+const SnapshotInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()).transform(strings => strings.map(address => SnapshotAddressInput.parse({
   address
-}))), zod__WEBPACK_IMPORTED_MODULE_43__.z.array(SnapshotAddressInput)]);
+}))), zod__WEBPACK_IMPORTED_MODULE_45__.z.array(SnapshotAddressInput)]);
 /**
  * @internal
  */
 
-const SnapshotSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const SnapshotSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The merkle root
    */
-  merkleRoot: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  claims: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(SnapshotAddressInput.extend({
-    proof: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string())
+  merkleRoot: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  claims: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(SnapshotAddressInput.extend({
+    proof: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string())
   }))
 });
 /**
  * @internal
  */
 
-const SnapshotInfoSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  merkleRoot: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  snapshotUri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+const SnapshotInfoSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  merkleRoot: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  snapshotUri: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
   snapshot: SnapshotSchema
 });
 
@@ -29701,26 +29801,21 @@ const SnapshotInfoSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-const QuantitySchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([AmountSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.literal("unlimited")]).default("unlimited");
-/**
- * @internal
- */
-
-const ClaimConditionInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const ClaimConditionInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   startTime: StartDateSchema,
-  currencyAddress: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(NATIVE_TOKEN_ADDRESS),
+  currencyAddress: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(NATIVE_TOKEN_ADDRESS),
   price: AmountSchema.default(0),
-  maxQuantity: QuantitySchema,
-  quantityLimitPerTransaction: QuantitySchema,
+  maxQuantity: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.Q,
+  quantityLimitPerTransaction: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.Q,
   waitInSeconds: BigNumberishSchema.default(0),
-  merkleRootHash: BytesLikeSchema.default(ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32)),
-  snapshot: zod__WEBPACK_IMPORTED_MODULE_43__.z.optional(SnapshotInputSchema)
+  merkleRootHash: BytesLikeSchema.default(ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32)),
+  snapshot: zod__WEBPACK_IMPORTED_MODULE_45__.z.optional(SnapshotInputSchema)
 });
 /**
  * @internal
  */
 
-const ClaimConditionInputArray = zod__WEBPACK_IMPORTED_MODULE_43__.z.array(ClaimConditionInputSchema);
+const ClaimConditionInputArray = zod__WEBPACK_IMPORTED_MODULE_45__.z.array(ClaimConditionInputSchema);
 /**
  * @internal
  */
@@ -29731,10 +29826,10 @@ const PartialClaimConditionInputSchema = ClaimConditionInputSchema.partial();
  */
 
 const ClaimConditionOutputSchema = ClaimConditionInputSchema.extend({
-  availableSupply: QuantitySchema,
-  currentMintSupply: QuantitySchema,
+  availableSupply: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.Q,
+  currentMintSupply: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.Q,
   currencyMetadata: CurrencyValueSchema.default({
-    value: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from("0"),
+    value: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from("0"),
     displayValue: "0",
     symbol: "",
     decimals: 18,
@@ -29748,78 +29843,25 @@ const ClaimConditionOutputSchema = ClaimConditionInputSchema.extend({
 function resolveOrGenerateId(requestUId) {
   if (requestUId === undefined) {
     const buffer = Buffer.alloc(16);
-    (0,uuid__WEBPACK_IMPORTED_MODULE_47__["default"])({}, buffer);
-    return ethers__WEBPACK_IMPORTED_MODULE_46__.hexlify(ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes(buffer.toString("hex")));
+    (0,uuid__WEBPACK_IMPORTED_MODULE_50__["default"])({}, buffer);
+    return ethers__WEBPACK_IMPORTED_MODULE_49__.hexlify(ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes(buffer.toString("hex")));
   } else {
-    return ethers__WEBPACK_IMPORTED_MODULE_46__.hexlify(requestUId);
+    return ethers__WEBPACK_IMPORTED_MODULE_49__.hexlify(requestUId);
   }
 }
 
-const PropertiesInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.unknown()]));
 /**
  * @internal
  */
 
-const OptionalPropertiesInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.array(PropertiesInput), PropertiesInput]).optional();
-
-/**
- * @internal
- */
-
-const CommonTokenInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.string(), zod__WEBPACK_IMPORTED_MODULE_43__.z.number()]).optional(),
-  description: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional(),
-  image: FileOrBufferOrStringSchema.nullable().optional(),
-  external_url: FileOrBufferOrStringSchema.nullable().optional()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.unknown()]));
-/**
- * @internal
- */
-
-const CommonTokenOutput = CommonTokenInput.extend({
-  id: BigNumberSchema,
-  uri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  image: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional(),
-  external_url: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional()
-});
-/**
- * @internal
- */
-
-const CommonNFTInput = CommonTokenInput.extend({
-  animation_url: FileOrBufferOrStringSchema.optional(),
-  background_color: HexColor.optional(),
-  properties: OptionalPropertiesInput,
-  attributes: OptionalPropertiesInput
-});
-/**
- * @internal
- */
-
-const NFTInputOrUriSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([CommonNFTInput, zod__WEBPACK_IMPORTED_MODULE_43__.z.string()]);
-/**
- * @internal
- */
-
-const CommonNFTOutput = CommonTokenOutput.extend({
-  animation_url: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional()
-});
-/**
- * @public
- */
-
-/**
- * @internal
- */
-
-const BaseSignaturePayloadInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  to: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero),
+const BaseSignaturePayloadInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  to: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero),
   price: AmountSchema.default(0),
-  currencyAddress: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(NATIVE_TOKEN_ADDRESS),
+  currencyAddress: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(NATIVE_TOKEN_ADDRESS),
   mintStartTime: StartDateSchema,
   mintEndTime: EndDateSchema,
-  uid: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional().transform(arg => resolveOrGenerateId(arg)),
-  primarySaleRecipient: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)
+  uid: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional().transform(arg => resolveOrGenerateId(arg)),
+  primarySaleRecipient: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)
 });
 /**
  * @internal
@@ -29841,8 +29883,8 @@ const Signature20PayloadOutput = Signature20PayloadInput.extend({
  */
 
 const Signature721PayloadInput = BaseSignaturePayloadInput.extend({
-  metadata: NFTInputOrUriSchema,
-  royaltyRecipient: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero),
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.N,
+  royaltyRecipient: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero),
   royaltyBps: BasisPointsSchema.default(0)
 });
 /**
@@ -29850,7 +29892,7 @@ const Signature721PayloadInput = BaseSignaturePayloadInput.extend({
  */
 
 const Signature721PayloadOutput = Signature721PayloadInput.extend({
-  uri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  uri: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
   royaltyBps: BigNumberSchema,
   mintStartTime: BigNumberSchema,
   mintEndTime: BigNumberSchema
@@ -29860,7 +29902,7 @@ const Signature721PayloadOutput = Signature721PayloadInput.extend({
  */
 
 const Signature1155PayloadInput = Signature721PayloadInput.extend({
-  metadata: NFTInputOrUriSchema.default(""),
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.N["default"](""),
   quantity: BigNumberishSchema
 });
 /**
@@ -29883,7 +29925,7 @@ const Signature1155PayloadOutput = Signature721PayloadOutput.extend({
  */
 
 const Signature721WithQuantityInput = Signature721PayloadInput.extend({
-  metadata: NFTInputOrUriSchema.default(""),
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.N["default"](""),
   quantity: BigNumberSchema.default(1)
 });
 /**
@@ -30029,24 +30071,24 @@ const MintRequest721withQuantity = [{
  * @internal
  */
 
-const CommonContractSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  description: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
+const CommonContractSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  description: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
   image: FileOrBufferOrStringSchema.optional(),
-  external_link: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().url().optional()
+  external_link: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().url().optional()
 });
 
 /**
  * @internal
  */
 const CommonContractOutputSchema = CommonContractSchema.extend({
-  image: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.unknown());
+  image: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional()
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.unknown());
 /**
  * @internal
  */
 
-const CommonRoyaltySchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const CommonRoyaltySchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The amount of royalty collected on all royalties represented as basis points.
    * The default is 0 (no royalties).
@@ -30064,13 +30106,13 @@ const CommonRoyaltySchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
    * to this address.
    * @internalremarks used by OpenSea "fee_recipient"
    */
-  fee_recipient: AddressSchema.default(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)
+  fee_recipient: AddressSchema.default(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)
 });
 /**
  * @internal
  */
 
-const CommonPrimarySaleSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const CommonPrimarySaleSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * primary sale recipient address
    */
@@ -30080,7 +30122,7 @@ const CommonPrimarySaleSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-const CommonPlatformFeeSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const CommonPlatformFeeSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * platform fee basis points
    */
@@ -30089,28 +30131,35 @@ const CommonPlatformFeeSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
   /**
    * platform fee recipient address
    */
-  platform_fee_recipient: AddressSchema.default(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)
+  platform_fee_recipient: AddressSchema.default(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)
 });
 /**
  * @internal
  */
 
-const CommonTrustedForwarderSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  trusted_forwarders: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AddressSchema).default([])
+const CommonTrustedForwarderSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  trusted_forwarders: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AddressSchema).default([])
 });
 /**
  * @internal
  */
 
-const CommonSymbolSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  symbol: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional().default("")
+const CommonSymbolSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  symbol: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional().default("")
 });
+
+const PropertiesInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_45__.z.unknown()]));
+/**
+ * @internal
+ */
+
+const OptionalPropertiesInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.array(PropertiesInput), PropertiesInput]).optional();
 
 /**
  * @internal
  */
 
-const TokenMintInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const TokenMintInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   toAddress: AddressSchema,
   amount: AmountSchema
 });
@@ -30122,33 +30171,33 @@ const TokenMintInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-const EditionMetadataOutputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const EditionMetadataOutputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   supply: BigNumberSchema,
-  metadata: CommonNFTOutput
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.C
 });
 /**
  * @internal
  */
 
 const EditionMetadataWithOwnerOutputSchema = EditionMetadataOutputSchema.extend({
-  owner: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  owner: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
   quantityOwned: BigNumberSchema
 });
 /**
  * @internal
  */
 
-const EditionMetadataInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const EditionMetadataInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   supply: BigNumberishSchema,
-  metadata: CommonNFTInput
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.a
 });
 /**
  * @internal
  */
 
-const EditionMetadataInputOrUriSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const EditionMetadataInputOrUriSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   supply: BigNumberishSchema,
-  metadata: NFTInputOrUriSchema
+  metadata: _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.N
 });
 /**
  * @public
@@ -30174,15 +30223,7 @@ const CONTRACT_ADDRESSES = {
     biconomyForwarder: "0x84a0856b038eaAd1cC7E297cF34A7e72685A8693",
     twFactory: TWFactory_address,
     twRegistry: TWRegistry_address,
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
-  },
-  [ChainId.Rinkeby]: {
-    openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
-    openzeppelinForwarderEOA: "0x0bBA31EAf82C649C0B9579F5F44374C74F4605Ea",
-    biconomyForwarder: "0xFD4973FeB2031D4409fB57afEE5dF2051b171104",
-    twFactory: TWFactory_address,
-    twRegistry: TWRegistry_address,
-    twBYOCRegistry: "0x3E6eE864f850F5e5A98bc950B68E181Cf4010F23"
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.Goerli]: {
     openzeppelinForwarder: "0x5001A14CA6163143316a7C614e30e6041033Ac20",
@@ -30214,7 +30255,7 @@ const CONTRACT_ADDRESSES = {
     biconomyForwarder: "0x64CD353384109423a966dCd3Aa30D884C9b2E057",
     twFactory: TWFactory_address,
     twRegistry: TWRegistry_address,
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.AvalancheFujiTestnet]: {
     openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
@@ -30230,7 +30271,7 @@ const CONTRACT_ADDRESSES = {
     biconomyForwarder: "0x64CD353384109423a966dCd3Aa30D884C9b2E057",
     twFactory: "0x97EA0Fcc552D5A8Fb5e9101316AAd0D62Ea0876B",
     twRegistry: TWRegistry_address,
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.FantomTestnet]: {
     openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
@@ -30246,23 +30287,15 @@ const CONTRACT_ADDRESSES = {
     biconomyForwarder: "0xfe0fa3C06d03bDC7fb49c892BbB39113B534fB57",
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
-  },
-  [ChainId.ArbitrumRinkeby]: {
-    openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
-    openzeppelinForwarderEOA: "0xE1eE43D23f247b6A9aF81fcE2766E76709482728",
-    biconomyForwarder: "0x67454E169d613a8e9BA6b06af2D267696EAaAf41",
-    twFactory: "0xb0435b47ad26115A39c59735b814f3769F07C2c1",
-    twRegistry: "0xcF4c511551aE4dab1F997866FC3900cd2aaeC40D",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.ArbitrumGoerli]: {
     openzeppelinForwarder: "0x8cbc8B5d71702032904750A66AEfE8B603eBC538",
     openzeppelinForwarderEOA: "0x119704314Ef304EaAAE4b3c7C9ABd59272A28310",
-    biconomyForwarder: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero,
+    biconomyForwarder: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.Optimism]: {
     openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
@@ -30270,29 +30303,21 @@ const CONTRACT_ADDRESSES = {
     biconomyForwarder: "0xefba8a2a82ec1fb1273806174f5e28fbb917cf95",
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
-  },
-  [ChainId.OptimismKovan]: {
-    openzeppelinForwarder: OZ_DEFENDER_FORWARDER_ADDRESS,
-    openzeppelinForwarderEOA: "0xE8dd2Ff0212F86d3197b4AfDC6dAC6ac47eb10aC",
-    biconomyForwarder: "0x9C73373C70F23920EA54F7883dCB1F85b162Df40",
-    twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
-    twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.OptimismGoerli]: {
     openzeppelinForwarder: "0x8cbc8B5d71702032904750A66AEfE8B603eBC538",
     openzeppelinForwarderEOA: "0x119704314Ef304EaAAE4b3c7C9ABd59272A28310",
-    biconomyForwarder: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero,
+    biconomyForwarder: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero
   },
   [ChainId.BinanceSmartChainMainnet]: {
     openzeppelinForwarder: "0x8cbc8B5d71702032904750A66AEfE8B603eBC538",
     openzeppelinForwarderEOA: "0xE8dd2Ff0212F86d3197b4AfDC6dAC6ac47eb10aC",
     biconomyForwarder: "0x86C80a8aa58e0A4fa09A69624c31Ab2a6CAD56b8",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero,
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd"
   },
@@ -30300,7 +30325,7 @@ const CONTRACT_ADDRESSES = {
     openzeppelinForwarder: "0x8cbc8B5d71702032904750A66AEfE8B603eBC538",
     openzeppelinForwarderEOA: "0x7e80648EB2071E26937F9D42A513ccf4815fc702",
     biconomyForwarder: "0x61456BF1715C1415730076BB79ae118E806E74d2",
-    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero,
+    twBYOCRegistry: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
     twFactory: "0xd24b3de085CFd8c54b94feAD08a7962D343E6DE0",
     twRegistry: "0x7c487845f98938Bb955B1D5AD069d9a30e4131fd"
   }
@@ -30319,7 +30344,7 @@ function getContractAddressByChainId(chainId, contractName) {
       // eslint-disable-next-line turbo/no-undeclared-env-vars
       return process.env.registryAddress;
     } else {
-      return ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero;
+      return ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero;
     }
   } // real output here
 
@@ -30347,12 +30372,12 @@ function getContractPublisherAddress() {
  * @internal
  */
 
-const InterfaceId_IERC721 = ethers__WEBPACK_IMPORTED_MODULE_46__.arrayify("0x80ac58cd");
+const InterfaceId_IERC721 = ethers__WEBPACK_IMPORTED_MODULE_49__.arrayify("0x80ac58cd");
 /**
  * @internal
  */
 
-const InterfaceId_IERC1155 = ethers__WEBPACK_IMPORTED_MODULE_46__.arrayify("0xd9b67a26");
+const InterfaceId_IERC1155 = ethers__WEBPACK_IMPORTED_MODULE_49__.arrayify("0xd9b67a26");
 
 /**
  * @public
@@ -30364,13 +30389,13 @@ let EventType;
   EventType["Signature"] = "signature";
 })(EventType || (EventType = {}));
 
-class StaticJsonRpcBatchProvider extends ethers__WEBPACK_IMPORTED_MODULE_50__.StaticJsonRpcProvider {
+class StaticJsonRpcBatchProvider extends ethers__WEBPACK_IMPORTED_MODULE_53__.StaticJsonRpcProvider {
   constructor(url, network) {
     super(url, network);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_pendingBatchAggregator", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_pendingBatchAggregator", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_pendingBatch", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_pendingBatch", void 0);
 
     this._pendingBatchAggregator = null;
     this._pendingBatch = null;
@@ -30412,10 +30437,10 @@ class StaticJsonRpcBatchProvider extends ethers__WEBPACK_IMPORTED_MODULE_50__.St
         const request_ = batch.map(inflight => inflight.request);
         this.emit("debug", {
           action: "requestBatch",
-          request: ethers__WEBPACK_IMPORTED_MODULE_52__.deepCopy(request),
+          request: ethers__WEBPACK_IMPORTED_MODULE_54__.deepCopy(request),
           provider: this
         });
-        return ethers__WEBPACK_IMPORTED_MODULE_53__.fetchJson(this.connection, JSON.stringify(request_)).then(result => {
+        return ethers__WEBPACK_IMPORTED_MODULE_55__.fetchJson(this.connection, JSON.stringify(request_)).then(result => {
           this.emit("debug", {
             action: "response",
             request: request_,
@@ -30581,20 +30606,20 @@ function getReadOnlyProvider(network, chainId) {
         case "http":
           return chainId ? // if we know the chainId we should use the StaticJsonRpcBatchProvider
           new StaticJsonRpcBatchProvider(network, chainId) : // otherwise fall back to the built in json rpc batch provider
-          new ethers__WEBPACK_IMPORTED_MODULE_54__.JsonRpcBatchProvider(network, chainId);
+          new ethers__WEBPACK_IMPORTED_MODULE_56__.JsonRpcBatchProvider(network, chainId);
 
         case "ws":
-          return new ethers__WEBPACK_IMPORTED_MODULE_55__.WebSocketProvider(network, chainId);
+          return new ethers__WEBPACK_IMPORTED_MODULE_57__.WebSocketProvider(network, chainId);
 
         default:
-          return ethers__WEBPACK_IMPORTED_MODULE_56__.getDefaultProvider(network);
+          return ethers__WEBPACK_IMPORTED_MODULE_58__.getDefaultProvider(network);
       }
     } else {
-      return ethers__WEBPACK_IMPORTED_MODULE_56__.getDefaultProvider(network);
+      return ethers__WEBPACK_IMPORTED_MODULE_58__.getDefaultProvider(network);
     }
   } catch (e) {
     // fallback to the default provider
-    return ethers__WEBPACK_IMPORTED_MODULE_56__.getDefaultProvider(network);
+    return ethers__WEBPACK_IMPORTED_MODULE_58__.getDefaultProvider(network);
   }
 }
 
@@ -30725,7 +30750,7 @@ class FetchError extends Error {
   constructor(message, innerError) {
     super(`FETCH_FAILED: ${message}`);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "innerError", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "innerError", void 0);
 
     this.innerError = innerError;
   }
@@ -30855,7 +30880,7 @@ class TransactionError extends Error {
       if (functionInfo.value.gt(0)) {
         var _NATIVE_TOKENS;
 
-        builtErrorMsg += withSpaces("value", `${ethers__WEBPACK_IMPORTED_MODULE_57__.formatEther(functionInfo.value)} ${(_NATIVE_TOKENS = NATIVE_TOKENS[network.chainId]) === null || _NATIVE_TOKENS === void 0 ? void 0 : _NATIVE_TOKENS.symbol}`);
+        builtErrorMsg += withSpaces("value", `${ethers__WEBPACK_IMPORTED_MODULE_59__.formatEther(functionInfo.value)} ${(_NATIVE_TOKENS = NATIVE_TOKENS[network.chainId]) === null || _NATIVE_TOKENS === void 0 ? void 0 : _NATIVE_TOKENS.symbol}`);
       }
     }
 
@@ -30873,19 +30898,19 @@ class TransactionError extends Error {
     builtErrorMsg += raw;
     super(builtErrorMsg);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "reason", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "reason", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "from", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "from", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "to", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "to", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "data", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "data", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "chain", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "chain", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "rpcUrl", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "rpcUrl", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "functionInfo", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "functionInfo", void 0);
 
     this.reason = reason;
     this.from = from;
@@ -31031,10 +31056,10 @@ async function createSnapshot(snapshotInput, tokenDecimals, storage) {
     throw new DuplicateLeafsError();
   }
 
-  const hashedLeafs = input.map(i => hashLeafNode(i.address, ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(i.maxClaimable, tokenDecimals))); // import dynamically to avoid bloating bundle size for non-merkle tree users
+  const hashedLeafs = input.map(i => hashLeafNode(i.address, ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(i.maxClaimable, tokenDecimals))); // import dynamically to avoid bloating bundle size for non-merkle tree users
 
   const MerkleTree = (await __webpack_require__.e(/*! import() */ "node_modules_merkletreejs_dist_index_js").then(__webpack_require__.t.bind(__webpack_require__, /*! merkletreejs */ "./node_modules/merkletreejs/dist/index.js", 23))).MerkleTree;
-  const tree = new MerkleTree(hashedLeafs, ethers__WEBPACK_IMPORTED_MODULE_58__.keccak256, {
+  const tree = new MerkleTree(hashedLeafs, ethers__WEBPACK_IMPORTED_MODULE_60__.keccak256, {
     sort: true
   });
   const snapshot = SnapshotSchema.parse({
@@ -31063,7 +31088,7 @@ async function createSnapshot(snapshotInput, tokenDecimals, storage) {
  */
 
 function hashLeafNode(address, maxClaimableAmount) {
-  return ethers__WEBPACK_IMPORTED_MODULE_59__.keccak256(["address", "uint256"], [address, ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(maxClaimableAmount)]);
+  return ethers__WEBPACK_IMPORTED_MODULE_61__.keccak256(["address", "uint256"], [address, ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(maxClaimableAmount)]);
 }
 
 /**
@@ -31095,10 +31120,10 @@ const ALL_ROLES = Object.keys(roleMap);
 
 function getRoleHash(role) {
   if (role === "admin") {
-    return ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32);
+    return ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32);
   }
 
-  return ethers__WEBPACK_IMPORTED_MODULE_60__.id(roleMap[role]);
+  return ethers__WEBPACK_IMPORTED_MODULE_62__.id(roleMap[role]);
 }
 
 const FEATURE_TOKEN_CLAIMABLE_WITH_CONDITIONS = {
@@ -31414,7 +31439,7 @@ const FEATURE_ROYALTY = {
     sdk: "sdk.contractroyalty",
     contracts: "Royalty"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_IRoyalty_json__WEBPACK_IMPORTED_MODULE_41__],
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IRoyalty_json__WEBPACK_IMPORTED_MODULE_43__],
   features: {}
 };
 const FEATURE_PRIMARY_SALE = {
@@ -31424,7 +31449,7 @@ const FEATURE_PRIMARY_SALE = {
     sdk: "sdk.contractprimarysale",
     contracts: "PrimarySale"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_IPrimarySale_json__WEBPACK_IMPORTED_MODULE_40__],
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IPrimarySale_json__WEBPACK_IMPORTED_MODULE_42__],
   features: {}
 };
 const FEATURE_PLATFORM_FEE = {
@@ -31434,7 +31459,17 @@ const FEATURE_PLATFORM_FEE = {
     sdk: "sdk.platformfee",
     contracts: "PlatformFee"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_IPlatformFee_json__WEBPACK_IMPORTED_MODULE_39__],
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IPlatformFee_json__WEBPACK_IMPORTED_MODULE_41__],
+  features: {}
+};
+const FEATURE_PERMISSIONS_ENUMERABLE = {
+  name: "PermissionsEnumerable",
+  namespace: "roles",
+  docLinks: {
+    sdk: "sdk.contractroles",
+    contracts: "PermissionsEnumerable"
+  },
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IPermissionsEnumerable_json__WEBPACK_IMPORTED_MODULE_40__],
   features: {}
 };
 const FEATURE_PERMISSIONS = {
@@ -31442,10 +31477,12 @@ const FEATURE_PERMISSIONS = {
   namespace: "roles",
   docLinks: {
     sdk: "sdk.contractroles",
-    contracts: "PermissionsEnumerable"
+    contracts: "Permissions"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_IPermissions_json__WEBPACK_IMPORTED_MODULE_38__],
-  features: {}
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IPermissions_json__WEBPACK_IMPORTED_MODULE_39__],
+  features: {
+    [FEATURE_PERMISSIONS_ENUMERABLE.name]: FEATURE_PERMISSIONS_ENUMERABLE
+  }
 };
 const FEATURE_METADATA = {
   name: "ContractMetadata",
@@ -31454,7 +31491,17 @@ const FEATURE_METADATA = {
     sdk: "sdk.contractmetadata",
     contracts: "ContractMetadata"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_IContractMetadata_json__WEBPACK_IMPORTED_MODULE_37__],
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IContractMetadata_json__WEBPACK_IMPORTED_MODULE_38__],
+  features: {}
+};
+const FEATURE_APPURI = {
+  name: "AppURI",
+  namespace: "appURI",
+  docLinks: {
+    sdk: "sdk.appURI",
+    contracts: "AppURI"
+  },
+  abis: [_thirdweb_dev_contracts_js_dist_abis_IAppURI_json__WEBPACK_IMPORTED_MODULE_37__],
   features: {}
 };
 const FEATURE_OWNER = {
@@ -31464,7 +31511,7 @@ const FEATURE_OWNER = {
     sdk: "sdk.owner",
     contracts: "Ownable"
   },
-  abis: [_thirdweb_dev_contracts_js_dist_abis_Ownable_json__WEBPACK_IMPORTED_MODULE_42__],
+  abis: [_thirdweb_dev_contracts_js_dist_abis_Ownable_json__WEBPACK_IMPORTED_MODULE_44__],
   features: {}
 };
 
@@ -31484,6 +31531,7 @@ const SUPPORTED_FEATURES = {
   [FEATURE_PRIMARY_SALE.name]: FEATURE_PRIMARY_SALE,
   [FEATURE_PERMISSIONS.name]: FEATURE_PERMISSIONS,
   [FEATURE_METADATA.name]: FEATURE_METADATA,
+  [FEATURE_APPURI.name]: FEATURE_APPURI,
   [FEATURE_OWNER.name]: FEATURE_OWNER
 };
 
@@ -31570,7 +31618,7 @@ function extractFunctionParamsFromAbi(abi, functionName) {
  */
 
 function extractFunctionsFromAbi(abi, metadata) {
-  const functions = abi.filter(el => el.type === "function");
+  const functions = (abi || []).filter(el => el.type === "function");
   const parsed = [];
 
   for (const f of functions) {
@@ -31683,8 +31731,8 @@ async function resolveContractUriFromAddress(address, provider) {
 
 
   try {
-    const proxyStorage = await provider.getStorageAt(address, ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from("0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc"));
-    const implementationAddress = ethers__WEBPACK_IMPORTED_MODULE_46__.hexStripZeros(proxyStorage);
+    const proxyStorage = await provider.getStorageAt(address, ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from("0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc"));
+    const implementationAddress = ethers__WEBPACK_IMPORTED_MODULE_49__.hexStripZeros(proxyStorage);
 
     if (implementationAddress !== "0x") {
       return await resolveContractUriFromAddress(implementationAddress, provider);
@@ -32038,7 +32086,7 @@ function isDowngradeVersion(current, next) {
  * @internal
  */
 
-const BYOCContractMetadataSchema = CommonContractSchema.catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_43__.z.unknown()]));
+const BYOCContractMetadataSchema = CommonContractSchema.catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.union([BigNumberTransformSchema, zod__WEBPACK_IMPORTED_MODULE_45__.z.unknown()]));
 /**
  * @internal
  */
@@ -32070,63 +32118,63 @@ const CustomContractSchema = {
  * @internal
  */
 
-const AbiTypeBaseSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  type: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.any());
+const AbiTypeBaseSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  type: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.any());
 /**
  * @internal
  */
 
 const AbiTypeSchema = AbiTypeBaseSchema.extend({
-  stateMutability: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  components: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AbiTypeBaseSchema).optional()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.any());
+  stateMutability: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  components: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AbiTypeBaseSchema).optional()
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.any());
 /**
  * @internal
  */
 
-const AbiObjectSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  type: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default(""),
-  inputs: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AbiTypeSchema).default([]),
-  outputs: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AbiTypeSchema).default([])
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.any());
+const AbiObjectSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  type: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default(""),
+  inputs: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AbiTypeSchema).default([]),
+  outputs: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AbiTypeSchema).default([])
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.any());
 /**
  * @internal
  */
 
-const AbiSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AbiObjectSchema);
+const AbiSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AbiObjectSchema);
 /**
  * @internal
  */
 
-const PreDeployMetadata = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  metadataUri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  bytecodeUri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  analytics: zod__WEBPACK_IMPORTED_MODULE_43__.z.any().optional()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.any());
+const PreDeployMetadata = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  metadataUri: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  bytecodeUri: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  analytics: zod__WEBPACK_IMPORTED_MODULE_45__.z.any().optional()
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.any());
 /**
  * @internal
  */
 
-const ChainIdToAddressSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.record(zod__WEBPACK_IMPORTED_MODULE_43__.z.string(), zod__WEBPACK_IMPORTED_MODULE_43__.z.string());
+const ChainIdToAddressSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.record(zod__WEBPACK_IMPORTED_MODULE_45__.z.string(), zod__WEBPACK_IMPORTED_MODULE_45__.z.string());
 /**
  * @internal
  */
 
-const FactoryDeploymentSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const FactoryDeploymentSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   implementationAddresses: ChainIdToAddressSchema,
-  implementationInitializerFunction: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default("initialize"),
+  implementationInitializerFunction: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default("initialize"),
   factoryAddresses: ChainIdToAddressSchema.optional()
 });
 /**
  * @internal
  */
 
-const ExtraPublishMetadataSchemaInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  version: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().refine(v => {
+const ExtraPublishMetadataSchemaInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  version: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().refine(v => {
     try {
       toSemver(v);
       return true;
@@ -32138,25 +32186,25 @@ const ExtraPublishMetadataSchemaInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.obje
       message: `'${out}' is not a valid semantic version. Should be in the format of major.minor.patch. Ex: 0.4.1`
     };
   }),
-  displayName: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  description: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  readme: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  license: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  changelog: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  tags: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()).optional(),
+  displayName: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  description: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  readme: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  license: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  changelog: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  tags: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()).optional(),
   audit: FileOrBufferOrStringSchema.nullable().optional(),
   logo: FileOrBufferOrStringSchema.nullable().optional(),
-  isDeployableViaFactory: zod__WEBPACK_IMPORTED_MODULE_43__.z.boolean().optional(),
-  isDeployableViaProxy: zod__WEBPACK_IMPORTED_MODULE_43__.z.boolean().optional(),
+  isDeployableViaFactory: zod__WEBPACK_IMPORTED_MODULE_45__.z.boolean().optional(),
+  isDeployableViaProxy: zod__WEBPACK_IMPORTED_MODULE_45__.z.boolean().optional(),
   factoryDeploymentData: FactoryDeploymentSchema.optional()
-}).catchall(zod__WEBPACK_IMPORTED_MODULE_43__.z.any());
+}).catchall(zod__WEBPACK_IMPORTED_MODULE_45__.z.any());
 /**
  * @internal
  */
 
 const ExtraPublishMetadataSchemaOutput = ExtraPublishMetadataSchemaInput.extend({
-  audit: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional(),
-  logo: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional()
+  audit: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().nullable().optional(),
+  logo: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().nullable().optional()
 });
 
 /**
@@ -32176,53 +32224,53 @@ const FullPublishMetadataSchemaOutput = PreDeployMetadata.merge(ExtraPublishMeta
 /**
  * @internal
  */
-const ProfileSchemaInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  bio: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
+const ProfileSchemaInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  bio: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
   avatar: FileOrBufferOrStringSchema.nullable().optional(),
-  website: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  twitter: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  telegram: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  facebook: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  github: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  medium: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  linkedin: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  reddit: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  discord: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional()
+  website: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  twitter: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  telegram: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  facebook: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  github: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  medium: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  linkedin: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  reddit: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  discord: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional()
 });
 const ProfileSchemaOutput = ProfileSchemaInput.extend({
-  avatar: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().nullable().optional()
+  avatar: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().nullable().optional()
 });
 
 /**
  * @internal
  */
-const PublishedContractSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  id: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+const PublishedContractSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  id: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
   timestamp: BigNumberishSchema,
-  metadataUri: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  metadataUri: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 /**
  * @internal
  * Follows https://docs.soliditylang.org/en/v0.8.15/natspec-format.html
  */
 
-const ContractInfoSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  title: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  author: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  details: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-  notice: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional()
+const ContractInfoSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  title: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  author: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  details: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+  notice: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional()
 });
 /**
  * @internal
  */
 
-const CompilerMetadataFetchedSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  name: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+const CompilerMetadataFetchedSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  name: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
   abi: AbiSchema,
-  metadata: zod__WEBPACK_IMPORTED_MODULE_43__.z.record(zod__WEBPACK_IMPORTED_MODULE_43__.z.string(), zod__WEBPACK_IMPORTED_MODULE_43__.z.any()),
+  metadata: zod__WEBPACK_IMPORTED_MODULE_45__.z.record(zod__WEBPACK_IMPORTED_MODULE_45__.z.string(), zod__WEBPACK_IMPORTED_MODULE_45__.z.any()),
   info: ContractInfoSchema,
-  licenses: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional()).default([]).transform(v => {
+  licenses: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional()).default([]).transform(v => {
     return v.filter(license => license !== undefined);
   })
 });
@@ -32231,38 +32279,38 @@ const CompilerMetadataFetchedSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object
  */
 
 const PreDeployMetadataFetchedSchema = PreDeployMetadata.merge(CompilerMetadataFetchedSchema).extend({
-  bytecode: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  bytecode: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 
 /**
  * @internal
  */
 
-const LoginOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const LoginOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The optional nonce of the login request used to prevent replay attacks
    */
-  nonce: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
+  nonce: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
 
   /**
    * The optional time after which the login payload will be invalid
    */
-  expirationTime: zod__WEBPACK_IMPORTED_MODULE_43__.z.date().optional(),
+  expirationTime: zod__WEBPACK_IMPORTED_MODULE_45__.z.date().optional(),
 
   /**
    * The optional chain ID that the login request was intended for
    */
-  chainId: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().optional()
+  chainId: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().optional()
 }).optional();
 /**
  * @internal
  */
 
-const LoginPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const LoginPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The domain that the user is attempting to login to
    */
-  domain: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  domain: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
 
   /**
    * The address of the account that is logging in
@@ -32272,23 +32320,23 @@ const LoginPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
   /**
    * The nonce of the login request used to prevent replay attacks, defaults to a random UUID
    */
-  nonce: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default((0,uuid__WEBPACK_IMPORTED_MODULE_47__["default"])()),
+  nonce: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default((0,uuid__WEBPACK_IMPORTED_MODULE_50__["default"])()),
 
   /**
    * The time after which the login payload will be invalid, defaults to 5 minutes from now
    */
-  expiration_time: zod__WEBPACK_IMPORTED_MODULE_43__.z.date().transform(d => d.toISOString()),
+  expiration_time: zod__WEBPACK_IMPORTED_MODULE_45__.z.date().transform(d => d.toISOString()),
 
   /**
    * The chain ID that the login request was intended for, defaults to none
    */
-  chain_id: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().optional()
+  chain_id: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().optional()
 });
 /**
  * @internal
  */
 
-const LoginPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const LoginPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The payload data used for login
    */
@@ -32297,52 +32345,52 @@ const LoginPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
   /**
    * The signature of the login request used for verification
    */
-  signature: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  signature: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 /**
  * @internal
  */
 
-const VerifyOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const VerifyOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The optional chain ID to expect the request to be for
    */
-  chainId: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().optional()
+  chainId: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().optional()
 }).optional();
 /**
  * @internal
  */
 
-const AuthenticationOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const AuthenticationOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The date before which the authentication payload is invalid
    */
-  invalidBefore: zod__WEBPACK_IMPORTED_MODULE_43__.z.date().optional(),
+  invalidBefore: zod__WEBPACK_IMPORTED_MODULE_45__.z.date().optional(),
 
   /**
    * The date after which the authentication payload is invalid
    */
-  expirationTime: zod__WEBPACK_IMPORTED_MODULE_43__.z.date().optional()
+  expirationTime: zod__WEBPACK_IMPORTED_MODULE_45__.z.date().optional()
 }).optional();
 /**
  * @internal
  */
 
-const AuthenticationPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const AuthenticationPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The address of the wallet issuing the payload
    */
-  iss: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  iss: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
 
   /**
    * The address of the wallet requesting to authenticate
    */
-  sub: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  sub: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
 
   /**
    * The domain intended to receive the authentication payload
    */
-  aud: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
+  aud: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
 
   /**
    * The date before which the authentication payload is invalid
@@ -32362,13 +32410,13 @@ const AuthenticationPayloadDataSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.obje
   /**
    * The unique identifier of the payload
    */
-  jti: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().default((0,uuid__WEBPACK_IMPORTED_MODULE_47__["default"])())
+  jti: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().default((0,uuid__WEBPACK_IMPORTED_MODULE_50__["default"])())
 });
 /**
  * @internal
  */
 
-const AuthenticationPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const AuthenticationPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   /**
    * The payload data used for authentication
    */
@@ -32377,7 +32425,7 @@ const AuthenticationPayloadSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
   /**
    * The signature of the authentication payload used for authentication
    */
-  signature: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  signature: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 /**
  * @public
@@ -32398,30 +32446,30 @@ const isNode = () => !isBrowser();
  * @public
  */
 
-const SDKOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  readonlySettings: zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-    rpcUrl: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().url(),
-    chainId: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().optional()
+const SDKOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  readonlySettings: zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+    rpcUrl: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().url(),
+    chainId: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().optional()
   }).optional(),
-  gasSettings: zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-    maxPriceInGwei: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().min(1, "gas price cannot be less than 1").default(300),
-    speed: zod__WEBPACK_IMPORTED_MODULE_43__.z["enum"](["standard", "fast", "fastest"]).default("fastest")
+  gasSettings: zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+    maxPriceInGwei: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().min(1, "gas price cannot be less than 1").default(300),
+    speed: zod__WEBPACK_IMPORTED_MODULE_45__.z["enum"](["standard", "fast", "fastest"]).default("fastest")
   }).default({
     maxPriceInGwei: 300,
     speed: "fastest"
   }),
-  gasless: zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-    openzeppelin: zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-      relayerUrl: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().url(),
-      relayerForwarderAddress: zod__WEBPACK_IMPORTED_MODULE_43__.z.string().optional(),
-      useEOAForwarder: zod__WEBPACK_IMPORTED_MODULE_43__.z.boolean().default(false)
+  gasless: zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+    openzeppelin: zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+      relayerUrl: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().url(),
+      relayerForwarderAddress: zod__WEBPACK_IMPORTED_MODULE_45__.z.string().optional(),
+      useEOAForwarder: zod__WEBPACK_IMPORTED_MODULE_45__.z.boolean().default(false)
     }),
-    experimentalChainlessSupport: zod__WEBPACK_IMPORTED_MODULE_43__.z.boolean().default(false)
-  }), zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-    biconomy: zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-      apiId: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-      apiKey: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-      deadlineSeconds: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().min(1, "deadlineSeconds cannot be les than 1").default(3600)
+    experimentalChainlessSupport: zod__WEBPACK_IMPORTED_MODULE_45__.z.boolean().default(false)
+  }), zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+    biconomy: zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+      apiId: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+      apiKey: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+      deadlineSeconds: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().min(1, "deadlineSeconds cannot be les than 1").default(3600)
     })
   })]).optional()
 }).default({
@@ -32464,17 +32512,17 @@ const SDKOptionsSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_4___default()) {
+class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_3___default()) {
   constructor(network, options) {
     super();
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "provider", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "provider", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "signer", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "signer", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "options", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "options", void 0);
 
-    const [signer, provider] = this.getSignerAndProvider(network, options);
+    const [signer, provider] = getSignerAndProvider(network, options);
     this.signer = signer;
     this.provider = provider;
 
@@ -32493,7 +32541,7 @@ class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_4___d
 
 
   updateSignerOrProvider(network) {
-    const [signer, provider] = this.getSignerAndProvider(network, this.options);
+    const [signer, provider] = getSignerAndProvider(network, this.options);
     this.signer = signer;
     this.provider = provider;
   }
@@ -32504,7 +32552,7 @@ class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_4___d
 
 
   isReadOnly() {
-    return !ethers__WEBPACK_IMPORTED_MODULE_61__.Signer.isSigner(this.signer);
+    return !ethers__WEBPACK_IMPORTED_MODULE_63__.Signer.isSigner(this.signer);
   }
   /**
    * Explicitly get the active signer.
@@ -32533,51 +32581,50 @@ class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_4___d
   getSignerOrProvider() {
     return this.getSigner() || this.getProvider();
   }
-  /** ********************
-   * PRIVATE FUNCTIONS
-   *********************/
 
+}
+/**
+ * @internal
+ */
 
-  getSignerAndProvider(network, options) {
-    let signer;
-    let provider;
+function getSignerAndProvider(network, options) {
+  let signer;
+  let provider;
 
-    if (ethers__WEBPACK_IMPORTED_MODULE_61__.Signer.isSigner(network)) {
-      signer = network;
+  if (ethers__WEBPACK_IMPORTED_MODULE_63__.Signer.isSigner(network)) {
+    signer = network;
 
-      if (network.provider) {
-        provider = network.provider;
-      }
+    if (network.provider) {
+      provider = network.provider;
     }
-
-    if (options !== null && options !== void 0 && options.readonlySettings) {
-      provider = getReadOnlyProvider(options.readonlySettings.rpcUrl, options.readonlySettings.chainId);
-    }
-
-    if (!provider) {
-      if (ethers__WEBPACK_IMPORTED_MODULE_62__.Provider.isProvider(network)) {
-        provider = network;
-      } else if (!ethers__WEBPACK_IMPORTED_MODULE_61__.Signer.isSigner(network)) {
-        if (typeof network === "string") {
-          var _options$readonlySett;
-
-          provider = getReadOnlyProvider(network, options === null || options === void 0 ? void 0 : (_options$readonlySett = options.readonlySettings) === null || _options$readonlySett === void 0 ? void 0 : _options$readonlySett.chainId);
-        } else {
-          // no a signer, not a provider, not a string? try with default provider
-          provider = ethers__WEBPACK_IMPORTED_MODULE_56__.getDefaultProvider(network);
-        }
-      }
-    }
-
-    if (!provider) {
-      // we should really never hit this case!
-      provider = ethers__WEBPACK_IMPORTED_MODULE_56__.getDefaultProvider();
-      console.error("No provider found, using default provider on default chain!");
-    }
-
-    return [signer, provider];
   }
 
+  if (options !== null && options !== void 0 && options.readonlySettings) {
+    provider = getReadOnlyProvider(options.readonlySettings.rpcUrl, options.readonlySettings.chainId);
+  }
+
+  if (!provider) {
+    if (ethers__WEBPACK_IMPORTED_MODULE_64__.Provider.isProvider(network)) {
+      provider = network;
+    } else if (!ethers__WEBPACK_IMPORTED_MODULE_63__.Signer.isSigner(network)) {
+      if (typeof network === "string") {
+        var _options$readonlySett;
+
+        provider = getReadOnlyProvider(network, options === null || options === void 0 ? void 0 : (_options$readonlySett = options.readonlySettings) === null || _options$readonlySett === void 0 ? void 0 : _options$readonlySett.chainId);
+      } else {
+        // no a signer, not a provider, not a string? try with default provider
+        provider = ethers__WEBPACK_IMPORTED_MODULE_58__.getDefaultProvider(network);
+      }
+    }
+  }
+
+  if (!provider) {
+    // we should really never hit this case!
+    provider = ethers__WEBPACK_IMPORTED_MODULE_58__.getDefaultProvider();
+    console.error("No provider found, using default provider on default chain!");
+  }
+
+  return [signer, provider];
 }
 
 /**
@@ -32605,13 +32652,13 @@ class RPCConnectionHandler extends (eventemitter3__WEBPACK_IMPORTED_MODULE_4___d
  * // And the server can use the following function to authenticate a token and verify the associated address
  * const address = sdk.auth.authenticate(domain, token);
  * ```
- * @beta
+ * @public
  */
 class WalletAuthenticator extends RPCConnectionHandler {
   constructor(network, wallet, options) {
     super(network, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "wallet", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "wallet", void 0);
 
     this.wallet = wallet;
   }
@@ -32845,7 +32892,7 @@ class WalletAuthenticator extends RPCConnectionHandler {
  */
 class ContractEncoder {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -32887,13 +32934,13 @@ class ContractEncoder {
  */
 class ContractMetadata {
   constructor(contractWrapper, schema, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_METADATA.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_METADATA.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "schema", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "schema", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.contractWrapper = contractWrapper;
     this.schema = schema;
@@ -33051,11 +33098,11 @@ class ContractRoles {
    * @remarks This is used for typing inside react hooks which is why it has to be public.
    */
   constructor(contractWrapper, roles) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_PERMISSIONS.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_PERMISSIONS.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "roles", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "roles", void 0);
 
     this.contractWrapper = contractWrapper;
     this.roles = roles;
@@ -33080,7 +33127,7 @@ class ContractRoles {
 
 
   async getAll() {
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.roles.length, "this contract has no support for roles");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.roles.length, "this contract has no support for roles");
     const roles = {};
 
     for (const role of this.roles) {
@@ -33107,7 +33154,7 @@ class ContractRoles {
 
 
   async get(role) {
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
     const wrapper = this.contractWrapper;
 
     if (hasFunction("getRoleMemberCount", wrapper) && hasFunction("getRoleMember", wrapper)) {
@@ -33141,8 +33188,8 @@ class ContractRoles {
 
   async setAll(rolesWithAddresses) {
     const roles = Object.keys(rolesWithAddresses);
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(roles.length, "you must provide at least one role to set");
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(roles.every(role => this.roles.includes(role)), "this contract does not support the given role");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(roles.length, "you must provide at least one role to set");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(roles.every(role => this.roles.includes(role)), "this contract does not support the given role");
     const currentRoles = await this.getAll();
     const encoded = []; // add / remove admin role at the end so we don't revoke admin then grant
 
@@ -33218,7 +33265,7 @@ class ContractRoles {
 
 
   async grant(role, address) {
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
     return {
       receipt: await this.contractWrapper.sendTransaction("grantRole", [getRoleHash(role), address])
     };
@@ -33250,7 +33297,7 @@ class ContractRoles {
 
 
   async revoke(role, address) {
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.roles.includes(role), `this contract does not support the "${role}" role`);
     const revokeFunctionName = await this.getRevokeRoleFunctionName(address);
     return {
       receipt: await this.contractWrapper.sendTransaction(revokeFunctionName, [getRoleHash(role), address])
@@ -33289,11 +33336,11 @@ class ContractRoles {
  */
 class ContractRoyalty {
   constructor(contractWrapper, metadata) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_ROYALTY.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_ROYALTY.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "metadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "metadata", void 0);
 
     this.contractWrapper = contractWrapper;
     this.metadata = metadata;
@@ -33414,9 +33461,9 @@ class ContractRoyalty {
  */
 class ContractPrimarySale {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_PRIMARY_SALE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_PRIMARY_SALE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -33468,13 +33515,13 @@ const FALLBACK_METADATA = {
  */
 
 async function fetchTokenMetadata(tokenId, tokenUri, storage) {
-  const parsedUri = tokenUri.replace("{id}", ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(tokenId).toHexString(), 32).slice(2));
+  const parsedUri = tokenUri.replace("{id}", ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(tokenId).toHexString(), 32).slice(2));
   let jsonMetadata;
 
   try {
     jsonMetadata = await storage.downloadJSON(parsedUri);
   } catch (err) {
-    const unparsedTokenIdUri = tokenUri.replace("{id}", ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(tokenId).toString());
+    const unparsedTokenIdUri = tokenUri.replace("{id}", ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(tokenId).toString());
 
     try {
       jsonMetadata = await storage.downloadJSON(unparsedTokenIdUri);
@@ -33487,8 +33534,8 @@ async function fetchTokenMetadata(tokenId, tokenUri, storage) {
     }
   }
 
-  return CommonNFTOutput.parse({
-    id: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(tokenId),
+  return _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.C.parse({
+    id: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(tokenId).toString(),
     uri: tokenUri,
     ...jsonMetadata
   });
@@ -33504,15 +33551,15 @@ async function fetchTokenMetadata(tokenId, tokenUri, storage) {
 
 async function fetchTokenMetadataForContract(contractAddress, provider, tokenId, storage) {
   let uri;
-  const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
+  const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
   const isERC721 = await erc165.supportsInterface(InterfaceId_IERC721);
   const isERC1155 = await erc165.supportsInterface(InterfaceId_IERC1155);
 
   if (isERC721) {
-    const erc721 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC721Metadata_json__WEBPACK_IMPORTED_MODULE_29__, provider);
+    const erc721 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC721Metadata_json__WEBPACK_IMPORTED_MODULE_29__, provider);
     uri = await erc721.tokenURI(tokenId);
   } else if (isERC1155) {
-    const erc1155 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC1155Metadata_json__WEBPACK_IMPORTED_MODULE_30__, provider);
+    const erc1155 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC1155Metadata_json__WEBPACK_IMPORTED_MODULE_30__, provider);
     uri = await erc1155.uri(tokenId);
   } else {
     throw Error("Contract must implement ERC 1155 or ERC 721.");
@@ -33534,7 +33581,7 @@ async function uploadOrExtractURI(metadata, storage) {
   if (typeof metadata === "string") {
     return metadata;
   } else {
-    return await storage.upload(CommonNFTInput.parse(metadata));
+    return await storage.upload(_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.a.parse(metadata));
   }
 }
 /**
@@ -33551,7 +33598,7 @@ async function uploadOrExtractURIs(metadatas, storage, startNumber, options) {
   if (isUriList(metadatas)) {
     return metadatas;
   } else if (isMetadataList(metadatas)) {
-    const uris = await storage.uploadBatch(metadatas.map(m => CommonNFTInput.parse(m)), {
+    const uris = await storage.uploadBatch(metadatas.map(m => _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.a.parse(m)), {
       rewriteFileNames: {
         fileStartNumber: startNumber || 0
       },
@@ -33592,13 +33639,13 @@ function isMetadataList(metadatas) {
 
 class DelayedReveal {
   constructor(contractWrapper, storage, fetureName, nextTokenIdToMintFn) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "nextTokenIdToMintFn", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "nextTokenIdToMintFn", void 0);
 
     this.featureName = fetureName;
     this.nextTokenIdToMintFn = nextTokenIdToMintFn;
@@ -33645,14 +33692,14 @@ class DelayedReveal {
       throw new Error("Password is required");
     }
 
-    const placeholderUris = await this.storage.uploadBatch([CommonNFTInput.parse(placeholder)], {
+    const placeholderUris = await this.storage.uploadBatch([_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.a.parse(placeholder)], {
       rewriteFileNames: {
         fileStartNumber: 0
       }
     });
     const placeholderUri = getBaseUriFromBatch(placeholderUris);
     const startFileNumber = await this.nextTokenIdToMintFn();
-    const uris = await this.storage.uploadBatch(metadatas.map(m => CommonNFTInput.parse(m)), {
+    const uris = await this.storage.uploadBatch(metadatas.map(m => _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.a.parse(m)), {
       onProgress: options === null || options === void 0 ? void 0 : options.onProgress,
       rewriteFileNames: {
         fileStartNumber: startFileNumber.toNumber()
@@ -33661,7 +33708,7 @@ class DelayedReveal {
     const baseUri = getBaseUriFromBatch(uris);
     const baseUriId = await this.contractWrapper.readContract.getBaseURICount();
     const hashedPassword = await this.hashDelayRevealPasword(baseUriId, password);
-    const encryptedBaseUri = await this.contractWrapper.readContract.encryptDecrypt(ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes(baseUri), hashedPassword);
+    const encryptedBaseUri = await this.contractWrapper.readContract.encryptDecrypt(ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes(baseUri), hashedPassword);
     let data;
     const legacyContract = await this.isLegacyContract();
 
@@ -33669,8 +33716,8 @@ class DelayedReveal {
       data = encryptedBaseUri;
     } else {
       const chainId = await this.contractWrapper.getChainID();
-      const provenanceHash = ethers__WEBPACK_IMPORTED_MODULE_59__.keccak256(["bytes", "bytes", "uint256"], [ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes(baseUri), hashedPassword, chainId]);
-      data = ethers__WEBPACK_IMPORTED_MODULE_65__.defaultAbiCoder.encode(["bytes", "bytes32"], [encryptedBaseUri, provenanceHash]);
+      const provenanceHash = ethers__WEBPACK_IMPORTED_MODULE_61__.keccak256(["bytes", "bytes", "uint256"], [ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes(baseUri), hashedPassword, chainId]);
+      data = ethers__WEBPACK_IMPORTED_MODULE_67__.defaultAbiCoder.encode(["bytes", "bytes32"], [encryptedBaseUri, provenanceHash]);
     }
 
     const receipt = await this.contractWrapper.sendTransaction("lazyMint", [uris.length, placeholderUri.endsWith("/") ? placeholderUri : `${placeholderUri}/`, data]);
@@ -33766,22 +33813,22 @@ class DelayedReveal {
     const legacyContract = await this.isLegacyContract();
     const encryptedUriData = await Promise.all(Array.from([...uriIndices]).map(i => legacyContract ? this.getLegacyEncryptedData(i) : this.contractWrapper.readContract.encryptedData(i)));
     const encryptedBaseUris = encryptedUriData.map(data => {
-      if (ethers__WEBPACK_IMPORTED_MODULE_46__.hexDataLength(data) > 0) {
+      if (ethers__WEBPACK_IMPORTED_MODULE_49__.hexDataLength(data) > 0) {
         if (legacyContract) {
           return data;
         }
 
-        const result = ethers__WEBPACK_IMPORTED_MODULE_65__.defaultAbiCoder.decode(["bytes", "bytes32"], data);
+        const result = ethers__WEBPACK_IMPORTED_MODULE_67__.defaultAbiCoder.decode(["bytes", "bytes32"], data);
         return result[0];
       } else {
         return data;
       }
     });
     return tokenMetadatas.map((meta, index) => ({
-      batchId: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(index),
+      batchId: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(index),
       batchUri: meta.uri,
       placeholderMetadata: meta
-    })).filter((_, index) => ethers__WEBPACK_IMPORTED_MODULE_46__.hexDataLength(encryptedBaseUris[index]) > 0);
+    })).filter((_, index) => ethers__WEBPACK_IMPORTED_MODULE_49__.hexDataLength(encryptedBaseUris[index]) > 0);
   }
   /**
    * Algorithm to hash delay reveal password, so we don't broadcast the input password on-chain.
@@ -33793,7 +33840,7 @@ class DelayedReveal {
   async hashDelayRevealPasword(batchTokenIndex, password) {
     const chainId = await this.contractWrapper.getChainID();
     const contractAddress = this.contractWrapper.readContract.address;
-    return ethers__WEBPACK_IMPORTED_MODULE_59__.keccak256(["string", "uint256", "uint256", "address"], [password, chainId, batchTokenIndex, contractAddress]);
+    return ethers__WEBPACK_IMPORTED_MODULE_61__.keccak256(["string", "uint256", "uint256", "address"], [password, chainId, batchTokenIndex, contractAddress]);
   }
 
   async getNftMetadata(tokenId) {
@@ -33814,7 +33861,7 @@ class DelayedReveal {
   }
 
   async getLegacyEncryptedData(index) {
-    const legacy = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(this.contractWrapper.readContract.address, _thirdweb_dev_contracts_js_dist_abis_IDelayedRevealDeprecated_json__WEBPACK_IMPORTED_MODULE_31__, this.contractWrapper.getProvider());
+    const legacy = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(this.contractWrapper.readContract.address, _thirdweb_dev_contracts_js_dist_abis_IDelayedRevealDeprecated_json__WEBPACK_IMPORTED_MODULE_31__, this.contractWrapper.getProvider());
     const result = await legacy.functions["encryptedBaseURI"](index);
 
     if (result.length > 0) {
@@ -33912,16 +33959,16 @@ async function getAndIncrementNonce(forwarder, forwarderFunction, forwarderArgs)
     const nonceResult = await forwarder.functions[forwarderFunction](...forwarderArgs);
 
     if (Array.isArray(nonceResult) && nonceResult.length > 0) {
-      _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(nonceResult[0]);
+      _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(nonceResult[0]);
     } else {
-      _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(nonceResult);
+      _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(nonceResult);
     }
 
     _noncesSyncTimestamp[address] = Date.now();
   }
 
   const nonce = _nonces[address];
-  _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(_nonces[address]).add(1);
+  _nonces[address] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(_nonces[address]).add(1);
   return nonce;
 }
 
@@ -33939,8 +33986,8 @@ function getGasStationUrl(chainId) {
   }
 }
 
-const MIN_POLYGON_GAS_PRICE = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("31", "gwei");
-const MIN_MUMBAI_GAS_PRICE = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("1", "gwei");
+const MIN_POLYGON_GAS_PRICE = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("31", "gwei");
+const MIN_MUMBAI_GAS_PRICE = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("1", "gwei");
 /**
  * @internal
  */
@@ -33965,13 +34012,13 @@ async function getPolygonGasPriorityFee(chainId) {
   const gasStationUrl = getGasStationUrl(chainId);
 
   try {
-    const data = await (await cross_fetch__WEBPACK_IMPORTED_MODULE_3___default()(gasStationUrl)).json(); // take the standard speed here, SDK options will define the extra tip
+    const data = await (await cross_fetch__WEBPACK_IMPORTED_MODULE_4___default()(gasStationUrl)).json(); // take the standard speed here, SDK options will define the extra tip
 
     const priorityFee = data["standard"]["maxPriorityFee"];
 
     if (priorityFee > 0) {
       const fixedFee = parseFloat(priorityFee).toFixed(9);
-      return ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(fixedFee, "gwei");
+      return ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(fixedFee, "gwei");
     }
   } catch (e) {
     console.error("failed to fetch gas", e);
@@ -33998,7 +34045,7 @@ async function signTypedDataInternal(signer, domain, types, message) {
     throw new Error("missing provider");
   }
 
-  const payload = ethers__WEBPACK_IMPORTED_MODULE_66__.TypedDataEncoder.getPayload(domain, types, message);
+  const payload = ethers__WEBPACK_IMPORTED_MODULE_68__.TypedDataEncoder.getPayload(domain, types, message);
 
   let signature = ""; // an indirect way for accessing walletconnect's underlying provider
 
@@ -34021,7 +34068,7 @@ async function signTypedDataInternal(signer, domain, types, message) {
 
   return {
     payload,
-    signature: ethers__WEBPACK_IMPORTED_MODULE_46__.joinSignature(ethers__WEBPACK_IMPORTED_MODULE_46__.splitSignature(signature))
+    signature: ethers__WEBPACK_IMPORTED_MODULE_49__.joinSignature(ethers__WEBPACK_IMPORTED_MODULE_49__.splitSignature(signature))
   };
 }
 
@@ -34090,7 +34137,7 @@ const NONCES_ABI = [{
 }];
 
 async function getSignerNonce(signer, contractAddress) {
-  const contract = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, NONCES_ABI, signer);
+  const contract = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, NONCES_ABI, signer);
 
   try {
     return await contract.nonces(await signer.getAddress());
@@ -34100,7 +34147,7 @@ async function getSignerNonce(signer, contractAddress) {
 }
 
 async function getDomainSeperator(signer, contractAddress) {
-  const contract = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, DOMAIN_SEPARATOR_ABI, signer);
+  const contract = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, DOMAIN_SEPARATOR_ABI, signer);
 
   try {
     return await contract.DOMAIN_SEPARATOR();
@@ -34110,7 +34157,7 @@ async function getDomainSeperator(signer, contractAddress) {
 }
 
 async function getTokenName(signer, contractAddress) {
-  return new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, NAME_ABI, signer).name();
+  return new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, NAME_ABI, signer).name();
 }
 /**
  * Polygon chain has different EIP712 domain separator for USDC, DAI compared to other chains and slightly different than EIP-2612.
@@ -34123,10 +34170,10 @@ async function getChainDomainSeperator(signer, domain) {
     name: domain.name,
     version: domain.version,
     verifyingContract: domain.verifyingContract,
-    salt: ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(domain.chainId).toHexString(), 32)
+    salt: ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(domain.chainId).toHexString(), 32)
   };
 
-  if (ethers__WEBPACK_IMPORTED_MODULE_66__.TypedDataEncoder.hashDomain(polygonDomain) === contractDomainSeparator) {
+  if (ethers__WEBPACK_IMPORTED_MODULE_68__.TypedDataEncoder.hashDomain(polygonDomain) === contractDomainSeparator) {
     return polygonDomain;
   }
 
@@ -34144,7 +34191,7 @@ async function signEIP2612Permit(signer, currencyAddress, owner, spender, value,
     verifyingContract: currencyAddress
   });
   nonce = nonce || (await getSignerNonce(signer, currencyAddress)).toString();
-  deadline = deadline || ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256;
+  deadline = deadline || ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256;
   const message = {
     owner,
     spender,
@@ -34215,7 +34262,7 @@ const PackContractSchema = {
   input: PackContractInput
 };
 
-const SplitRecipientInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const SplitRecipientInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   address: AddressSchema,
   sharesBps: BasisPointsSchema.gt(0, "Shares must be greater than 0")
 });
@@ -34224,7 +34271,7 @@ const SplitRecipientOuputSchema = SplitRecipientInputSchema.extend({
   sharesBps: BasisPointsSchema
 });
 const SplitsContractInput = CommonContractSchema.extend({
-  recipients: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(SplitRecipientInputSchema).default([]).superRefine((val, context) => {
+  recipients: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(SplitRecipientInputSchema).default([]).superRefine((val, context) => {
     const addressMap = {};
     let totalShares = 0;
 
@@ -34233,7 +34280,7 @@ const SplitsContractInput = CommonContractSchema.extend({
 
       if (addressMap[entry.address]) {
         context.addIssue({
-          code: zod__WEBPACK_IMPORTED_MODULE_43__.z.ZodIssueCode.custom,
+          code: zod__WEBPACK_IMPORTED_MODULE_45__.z.ZodIssueCode.custom,
           message: `Duplicate address.`,
           path: [index, `address`]
         });
@@ -34244,7 +34291,7 @@ const SplitsContractInput = CommonContractSchema.extend({
 
       if (totalShares > 10000) {
         context.addIssue({
-          code: zod__WEBPACK_IMPORTED_MODULE_43__.z.ZodIssueCode.custom,
+          code: zod__WEBPACK_IMPORTED_MODULE_45__.z.ZodIssueCode.custom,
           message: `Total shares cannot go over 100%.`,
           path: [index, `sharesBps`]
         });
@@ -34253,7 +34300,7 @@ const SplitsContractInput = CommonContractSchema.extend({
 
     if (totalShares !== 10000) {
       context.addIssue({
-        code: zod__WEBPACK_IMPORTED_MODULE_43__.z.ZodIssueCode.custom,
+        code: zod__WEBPACK_IMPORTED_MODULE_45__.z.ZodIssueCode.custom,
         message: `Total shares need to add up to 100%. Total shares are currently ${totalShares / 100}%`,
         path: []
       });
@@ -34261,7 +34308,7 @@ const SplitsContractInput = CommonContractSchema.extend({
   })
 });
 const SplitsContractOutput = CommonContractOutputSchema.extend({
-  recipients: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(SplitRecipientOuputSchema)
+  recipients: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(SplitRecipientOuputSchema)
 });
 const SplitsContractDeploy = SplitsContractInput.merge(SplitsContractInput).merge(CommonTrustedForwarderSchema);
 const SplitsContractSchema = {
@@ -34297,9 +34344,9 @@ const TokenErc1155ContractSchema = {
   input: TokenErc1155ContractInput
 };
 
-const VoteSettingsInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
-  voting_delay_in_blocks: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().min(0).default(0),
-  voting_period_in_blocks: zod__WEBPACK_IMPORTED_MODULE_43__.z.number().min(1).default(1),
+const VoteSettingsInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
+  voting_delay_in_blocks: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().min(0).default(0),
+  voting_period_in_blocks: zod__WEBPACK_IMPORTED_MODULE_45__.z.number().min(1).default(1),
   voting_token_address: AddressSchema,
   voting_quorum_fraction: PercentSchema.default(0),
   proposal_token_threshold: BigNumberishSchema.default(1)
@@ -34315,16 +34362,16 @@ const VoteContractSchema = {
   output: VoteContractOutput,
   input: VoteContractInput
 };
-zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   proposalId: BigNumberSchema,
-  proposer: zod__WEBPACK_IMPORTED_MODULE_43__.z.string(),
-  targets: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()),
-  values: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(BigNumberSchema),
-  signatures: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()),
-  calldatas: zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()),
+  proposer: zod__WEBPACK_IMPORTED_MODULE_45__.z.string(),
+  targets: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()),
+  values: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(BigNumberSchema),
+  signatures: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()),
+  calldatas: zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()),
   startBlock: BigNumberSchema,
   endBlock: BigNumberSchema,
-  description: zod__WEBPACK_IMPORTED_MODULE_43__.z.string()
+  description: zod__WEBPACK_IMPORTED_MODULE_45__.z.string()
 });
 
 /**
@@ -34338,19 +34385,19 @@ class ContractWrapper extends RPCConnectionHandler {
   constructor(network, contractAddress, contractAbi, options) {
     super(network, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "isValidContract", false);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "isValidContract", false);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "customOverrides", () => ({}));
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "customOverrides", () => ({}));
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "writeContract", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "writeContract", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "readContract", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "readContract", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "abi", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "abi", void 0);
 
     this.abi = contractAbi; // set up the contract
 
-    this.writeContract = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, contractAbi, this.getSignerOrProvider()); // setup the read only contract
+    this.writeContract = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, contractAbi, this.getSignerOrProvider()); // setup the read only contract
 
     this.readContract = this.writeContract.connect(this.getProvider());
   }
@@ -34416,7 +34463,7 @@ class ContractWrapper extends RPCConnectionHandler {
     if (supports1559) {
       const chainId = await this.getChainID();
       const block = await this.getProvider().getBlock("latest");
-      const baseBlockFee = block && block.baseFeePerGas ? block.baseFeePerGas : ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("1", "gwei");
+      const baseBlockFee = block && block.baseFeePerGas ? block.baseFeePerGas : ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("1", "gwei");
       let defaultPriorityFee;
 
       if (chainId === ChainId.Mumbai || chainId === ChainId.Polygon) {
@@ -34424,7 +34471,7 @@ class ContractWrapper extends RPCConnectionHandler {
         defaultPriorityFee = await getPolygonGasPriorityFee(chainId);
       } else {
         // otherwise get it from ethers
-        defaultPriorityFee = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(feeData.maxPriorityFeePerGas);
+        defaultPriorityFee = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(feeData.maxPriorityFeePerGas);
       } // then add additional fee based on user preferences
 
 
@@ -34455,7 +34502,7 @@ class ContractWrapper extends RPCConnectionHandler {
 
     switch (speed) {
       case "standard":
-        extraTip = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0); // default is 2.5 gwei for ETH, 31 gwei for polygon
+        extraTip = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0); // default is 2.5 gwei for ETH, 31 gwei for polygon
 
         break;
 
@@ -34471,9 +34518,9 @@ class ContractWrapper extends RPCConnectionHandler {
     }
 
     let txGasPrice = defaultPriorityFeePerGas.add(extraTip);
-    const max = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(maxGasPrice.toString(), "gwei"); // no more than max gas setting
+    const max = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(maxGasPrice.toString(), "gwei"); // no more than max gas setting
 
-    const min = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("2.5", "gwei"); // no less than 2.5 gwei
+    const min = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("2.5", "gwei"); // no less than 2.5 gwei
 
     if (txGasPrice.gt(max)) {
       txGasPrice = max;
@@ -34499,7 +34546,7 @@ class ContractWrapper extends RPCConnectionHandler {
 
     switch (speed) {
       case "standard":
-        extraTip = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(1); // min 1 wei
+        extraTip = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(1); // min 1 wei
 
         break;
 
@@ -34515,7 +34562,7 @@ class ContractWrapper extends RPCConnectionHandler {
     }
 
     txGasPrice = txGasPrice.add(extraTip);
-    const max = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(maxGasPrice.toString(), "gwei");
+    const max = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(maxGasPrice.toString(), "gwei");
 
     if (txGasPrice.gt(max)) {
       txGasPrice = max;
@@ -34682,18 +34729,18 @@ class ContractWrapper extends RPCConnectionHandler {
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     let callOverrides = arguments.length > 2 ? arguments[2] : undefined;
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "Cannot execute gasless transaction without valid signer");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "Cannot execute gasless transaction without valid signer");
     const chainId = await this.getChainID();
     const from = await this.getSignerAddress();
     const to = this.writeContract.address;
     const value = (callOverrides === null || callOverrides === void 0 ? void 0 : callOverrides.value) || 0;
 
-    if (ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(value).gt(0)) {
+    if (ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(value).gt(0)) {
       throw new Error("Cannot send native token value with gasless transaction");
     }
 
     const data = this.writeContract.interface.encodeFunctionData(fn, args);
-    let gas = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0);
+    let gas = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0);
 
     try {
       const gasEstimate = await this.readContract.estimateGas[fn](...args);
@@ -34704,12 +34751,12 @@ class ContractWrapper extends RPCConnectionHandler {
 
 
     if (gas.lt(100000)) {
-      gas = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(500000);
+      gas = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(500000);
     } // check for gas override in callOverrides
 
 
-    if (callOverrides.gasLimit && ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(callOverrides.gasLimit).gt(gas)) {
-      gas = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(callOverrides.gasLimit);
+    if (callOverrides.gasLimit && ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(callOverrides.gasLimit).gt(gas)) {
+      gas = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(callOverrides.gasLimit);
     }
 
     const tx = {
@@ -34763,17 +34810,17 @@ class ContractWrapper extends RPCConnectionHandler {
   async biconomySendFunction(transaction) {
     var _this$options2, _this$options$gasless;
 
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.options.gasless && "biconomy" in this.options.gasless, "calling biconomySendFunction without biconomy");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.options.gasless && "biconomy" in this.options.gasless, "calling biconomySendFunction without biconomy");
     const signer = this.getSigner();
     const provider = this.getProvider();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer && provider, "signer and provider must be set");
-    const forwarder = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(getContractAddressByChainId(transaction.chainId, "biconomyForwarder"), BiconomyForwarderAbi, provider);
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer && provider, "signer and provider must be set");
+    const forwarder = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(getContractAddressByChainId(transaction.chainId, "biconomyForwarder"), BiconomyForwarderAbi, provider);
     const batchId = 0;
     const batchNonce = await getAndIncrementNonce(forwarder, "getNonce", [transaction.from, batchId]);
     const request = {
       from: transaction.from,
       to: transaction.to,
-      token: ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero,
+      token: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
       txGas: transaction.gasLimit.toNumber(),
       tokenGasPrice: "0",
       batchId,
@@ -34781,7 +34828,7 @@ class ContractWrapper extends RPCConnectionHandler {
       deadline: Math.floor(Date.now() / 1000 + (((_this$options2 = this.options) === null || _this$options2 === void 0 ? void 0 : _this$options2.gasless) && "biconomy" in this.options.gasless && ((_this$options$gasless = this.options.gasless.biconomy) === null || _this$options$gasless === void 0 ? void 0 : _this$options$gasless.deadlineSeconds) || 3600)),
       data: transaction.data
     };
-    const hashToSign = ethers__WEBPACK_IMPORTED_MODULE_46__.arrayify(ethers__WEBPACK_IMPORTED_MODULE_59__.keccak256(["address", "address", "address", "uint256", "uint256", "uint256", "uint256", "uint256", "bytes32"], [request.from, request.to, request.token, request.txGas, request.tokenGasPrice, request.batchId, request.batchNonce, request.deadline, ethers__WEBPACK_IMPORTED_MODULE_58__.keccak256(request.data)]));
+    const hashToSign = ethers__WEBPACK_IMPORTED_MODULE_49__.arrayify(ethers__WEBPACK_IMPORTED_MODULE_61__.keccak256(["address", "address", "address", "uint256", "uint256", "uint256", "uint256", "uint256", "bytes32"], [request.from, request.to, request.token, request.txGas, request.tokenGasPrice, request.batchId, request.batchNonce, request.deadline, ethers__WEBPACK_IMPORTED_MODULE_60__.keccak256(request.data)]));
     this.emit(EventType.Signature, {
       status: "submitted",
       message: hashToSign,
@@ -34793,7 +34840,7 @@ class ContractWrapper extends RPCConnectionHandler {
       message: hashToSign,
       signature
     });
-    const response = await cross_fetch__WEBPACK_IMPORTED_MODULE_3___default()("https://api.biconomy.io/api/v2/meta-tx/native", {
+    const response = await cross_fetch__WEBPACK_IMPORTED_MODULE_4___default()("https://api.biconomy.io/api/v2/meta-tx/native", {
       method: "POST",
       body: JSON.stringify({
         from: transaction.from,
@@ -34824,13 +34871,13 @@ class ContractWrapper extends RPCConnectionHandler {
   async defenderSendFunction(transaction) {
     var _message;
 
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(this.options.gasless && "openzeppelin" in this.options.gasless, "calling openzeppelin gasless transaction without openzeppelin config in the SDK options");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(this.options.gasless && "openzeppelin" in this.options.gasless, "calling openzeppelin gasless transaction without openzeppelin config in the SDK options");
     const signer = this.getSigner();
     const provider = this.getProvider();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "provider is not set");
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(provider, "provider is not set");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "provider is not set");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(provider, "provider is not set");
     const forwarderAddress = this.options.gasless.openzeppelin.relayerForwarderAddress || (this.options.gasless.openzeppelin.useEOAForwarder ? CONTRACT_ADDRESSES[transaction.chainId].openzeppelinForwarderEOA : CONTRACT_ADDRESSES[transaction.chainId].openzeppelinForwarder);
-    const forwarder = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(forwarderAddress, _thirdweb_dev_contracts_js_dist_abis_Forwarder_json__WEBPACK_IMPORTED_MODULE_5__, provider);
+    const forwarder = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(forwarderAddress, _thirdweb_dev_contracts_js_dist_abis_Forwarder_json__WEBPACK_IMPORTED_MODULE_5__, provider);
     const nonce = await getAndIncrementNonce(forwarder, "getNonce", [transaction.from]);
     let domain;
     let types;
@@ -34848,11 +34895,11 @@ class ContractWrapper extends RPCConnectionHandler {
       message = {
         from: transaction.from,
         to: transaction.to,
-        value: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0).toString(),
-        gas: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(transaction.gasLimit).toString(),
-        nonce: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(nonce).toString(),
+        value: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0).toString(),
+        gas: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(transaction.gasLimit).toString(),
+        nonce: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(nonce).toString(),
         data: transaction.data,
-        chainid: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(transaction.chainId).toString()
+        chainid: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(transaction.chainId).toString()
       };
     } else {
       domain = {
@@ -34867,9 +34914,9 @@ class ContractWrapper extends RPCConnectionHandler {
       message = {
         from: transaction.from,
         to: transaction.to,
-        value: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0).toString(),
-        gas: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(transaction.gasLimit).toString(),
-        nonce: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(nonce).toString(),
+        value: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0).toString(),
+        gas: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(transaction.gasLimit).toString(),
+        nonce: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(nonce).toString(),
         data: transaction.data
       };
     }
@@ -34894,14 +34941,14 @@ class ContractWrapper extends RPCConnectionHandler {
         r,
         s,
         v
-      } = ethers__WEBPACK_IMPORTED_MODULE_46__.splitSignature(sig);
+      } = ethers__WEBPACK_IMPORTED_MODULE_49__.splitSignature(sig);
       message = {
         to: this.readContract.address,
         owner: permit.owner,
         spender: permit.spender,
-        value: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(permit.value).toString(),
-        nonce: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(permit.nonce).toString(),
-        deadline: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(permit.deadline).toString(),
+        value: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(permit.value).toString(),
+        nonce: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(permit.nonce).toString(),
+        deadline: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(permit.deadline).toString(),
         r,
         s,
         v
@@ -34931,7 +34978,7 @@ class ContractWrapper extends RPCConnectionHandler {
       message,
       signature
     });
-    const response = await cross_fetch__WEBPACK_IMPORTED_MODULE_3___default()(this.options.gasless.openzeppelin.relayerUrl, {
+    const response = await cross_fetch__WEBPACK_IMPORTED_MODULE_4___default()(this.options.gasless.openzeppelin.relayerUrl, {
       method: "POST",
       body
     });
@@ -34953,11 +35000,11 @@ class ContractWrapper extends RPCConnectionHandler {
 }
 
 function isNativeToken(tokenAddress) {
-  return tokenAddress.toLowerCase() === NATIVE_TOKEN_ADDRESS || tokenAddress.toLowerCase() === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero;
+  return tokenAddress.toLowerCase() === NATIVE_TOKEN_ADDRESS || tokenAddress.toLowerCase() === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero;
 }
 async function normalizePriceValue(provider, inputPrice, currencyAddress) {
   const metadata = await fetchCurrencyMetadata(provider, currencyAddress);
-  return ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(AmountSchema.parse(inputPrice), metadata.decimals);
+  return ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(AmountSchema.parse(inputPrice), metadata.decimals);
 }
 async function fetchCurrencyMetadata(provider, asset) {
   if (isNativeToken(asset)) {
@@ -34969,7 +35016,7 @@ async function fetchCurrencyMetadata(provider, asset) {
       decimals: nativeToken.decimals
     };
   } else {
-    const erc20 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(asset, _thirdweb_dev_contracts_js_dist_abis_IERC20Metadata_json__WEBPACK_IMPORTED_MODULE_27__, provider);
+    const erc20 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(asset, _thirdweb_dev_contracts_js_dist_abis_IERC20Metadata_json__WEBPACK_IMPORTED_MODULE_27__, provider);
     const [name, symbol, decimals] = await Promise.all([erc20.name(), erc20.symbol(), erc20.decimals()]);
     return {
       name,
@@ -34981,8 +35028,8 @@ async function fetchCurrencyMetadata(provider, asset) {
 async function fetchCurrencyValue(providerOrSigner, asset, price) {
   const metadata = await fetchCurrencyMetadata(providerOrSigner, asset);
   return { ...metadata,
-    value: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price),
-    displayValue: ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(price, metadata.decimals)
+    value: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price),
+    displayValue: ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(price, metadata.decimals)
   };
 }
 async function setErc20Allowance(contractToApprove, value, currencyAddress, overrides) {
@@ -35011,7 +35058,7 @@ async function approveErc20Allowance(contractToApprove, currencyAddress, price, 
   const owner = await contractToApprove.getSignerAddress();
   const spender = contractToApprove.readContract.address;
   const allowance = await erc20.readContract.allowance(owner, spender);
-  const totalPrice = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price).mul(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(quantity)).div(ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("1", tokenDecimals));
+  const totalPrice = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price).mul(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(quantity)).div(ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("1", tokenDecimals));
 
   if (allowance.lt(totalPrice)) {
     await erc20.sendTransaction("approve", [spender, allowance.add(totalPrice)]);
@@ -35034,11 +35081,11 @@ async function hasERC20Allowance(contractToApprove, currencyAddress, value) {
 
 async function prepareClaim(quantity, activeClaimCondition, merkleMetadataFetcher, tokenDecimals, contractWrapper, storage, checkERC20Allowance) {
   const addressToClaim = await contractWrapper.getSignerAddress();
-  let maxClaimable = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0);
-  let proofs = [ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32)];
+  let maxClaimable = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0);
+  let proofs = [ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32)];
 
   try {
-    if (!activeClaimCondition.merkleRootHash.toString().startsWith(ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)) {
+    if (!activeClaimCondition.merkleRootHash.toString().startsWith(ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)) {
       const claims = await fetchSnapshot(activeClaimCondition.merkleRootHash.toString(), await merkleMetadataFetcher(), storage);
       const item = claims && claims.find(c => c.address.toLowerCase() === addressToClaim.toLowerCase());
 
@@ -35047,7 +35094,7 @@ async function prepareClaim(quantity, activeClaimCondition, merkleMetadataFetche
       }
 
       proofs = item.proof;
-      maxClaimable = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(item.maxClaimable, tokenDecimals);
+      maxClaimable = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(item.maxClaimable, tokenDecimals);
     }
   } catch (e) {
     // have to handle the valid error case that we *do* want to throw on
@@ -35065,7 +35112,7 @@ async function prepareClaim(quantity, activeClaimCondition, merkleMetadataFetche
 
   if (price.gt(0)) {
     if (isNativeToken(currencyAddress)) {
-      overrides["value"] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price).mul(quantity).div(ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits("1", tokenDecimals));
+      overrides["value"] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price).mul(quantity).div(ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits("1", tokenDecimals));
     } else if (checkERC20Allowance) {
       await approveErc20Allowance(contractWrapper, currencyAddress, price, quantity, tokenDecimals);
     }
@@ -35120,7 +35167,7 @@ async function updateExistingClaimConditions(index, claimConditionInput, existin
 
   const priceDecimals = existingConditions[index].currencyMetadata.decimals;
   const priceInWei = existingConditions[index].price;
-  const priceInTokens = ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(priceInWei, priceDecimals); // merge existing (output format) with incoming (input format)
+  const priceInTokens = ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(priceInWei, priceDecimals); // merge existing (output format) with incoming (input format)
 
   const newConditionParsed = ClaimConditionInputSchema.parse({ ...existingConditions[index],
     price: priceInTokens,
@@ -35139,7 +35186,7 @@ async function updateExistingClaimConditions(index, claimConditionInput, existin
       newConditionAtIndex = existingOutput;
     }
 
-    const formattedPrice = ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(newConditionAtIndex.price, priceDecimals);
+    const formattedPrice = ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(newConditionAtIndex.price, priceDecimals);
     return { ...newConditionAtIndex,
       price: formattedPrice // manually transform back to input price type
 
@@ -35159,7 +35206,7 @@ async function getClaimerProofs(addressToClaim, merkleRoot, tokenDecimals, merkl
   if (claims === undefined) {
     return {
       proof: [],
-      maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0)
+      maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0)
     };
   }
 
@@ -35168,13 +35215,13 @@ async function getClaimerProofs(addressToClaim, merkleRoot, tokenDecimals, merkl
   if (item === undefined) {
     return {
       proof: [],
-      maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0)
+      maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0)
     };
   }
 
   return {
     proof: item.proof,
-    maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(item.maxClaimable, tokenDecimals)
+    maxClaimable: ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(item.maxClaimable, tokenDecimals)
   };
 }
 /**
@@ -35196,7 +35243,7 @@ async function processClaimConditionInputs(claimConditionInputs, tokenDecimals, 
       conditionInput.merkleRootHash = snapshotInfo.merkleRoot;
     } else {
       // if no snapshot is passed or empty, reset the merkle root
-      conditionInput.merkleRootHash = ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32);
+      conditionInput.merkleRootHash = ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32);
     } // fill condition with defaults values if not provided
 
 
@@ -35205,8 +35252,8 @@ async function processClaimConditionInputs(claimConditionInputs, tokenDecimals, 
   const parsedInputs = ClaimConditionInputArray.parse(inputsWithSnapshots); // Convert processed inputs to the format the contract expects, and sort by timestamp
 
   const sortedConditions = (await Promise.all(parsedInputs.map(c => convertToContractModel(c, tokenDecimals, provider)))).sort((a, b) => {
-    const left = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(a.startTimestamp);
-    const right = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(b.startTimestamp);
+    const left = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(a.startTimestamp);
+    const right = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(b.startTimestamp);
 
     if (left.eq(right)) {
       return 0;
@@ -35230,20 +35277,20 @@ async function processClaimConditionInputs(claimConditionInputs, tokenDecimals, 
  */
 
 async function convertToContractModel(c, tokenDecimals, provider) {
-  const currency = c.currencyAddress === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero ? NATIVE_TOKEN_ADDRESS : c.currencyAddress;
+  const currency = c.currencyAddress === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero ? NATIVE_TOKEN_ADDRESS : c.currencyAddress;
   let maxClaimableSupply;
   let quantityLimitPerTransaction;
 
   if (c.maxQuantity === "unlimited") {
-    maxClaimableSupply = ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256.toString();
+    maxClaimableSupply = ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256.toString();
   } else {
-    maxClaimableSupply = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(c.maxQuantity, tokenDecimals);
+    maxClaimableSupply = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(c.maxQuantity, tokenDecimals);
   }
 
   if (c.quantityLimitPerTransaction === "unlimited") {
-    quantityLimitPerTransaction = ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256.toString();
+    quantityLimitPerTransaction = ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256.toString();
   } else {
-    quantityLimitPerTransaction = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(c.quantityLimitPerTransaction, tokenDecimals);
+    quantityLimitPerTransaction = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(c.quantityLimitPerTransaction, tokenDecimals);
   }
 
   return {
@@ -35273,7 +35320,7 @@ async function transformResultToClaimCondition(pm, tokenDecimals, provider, merk
   const claims = await fetchSnapshot(pm.merkleRoot, merkleMetadata, storage);
   const maxClaimableSupply = convertToReadableQuantity(pm.maxClaimableSupply, tokenDecimals);
   const quantityLimitPerTransaction = convertToReadableQuantity(pm.quantityLimitPerTransaction, tokenDecimals);
-  const availableSupply = convertToReadableQuantity(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(pm.maxClaimableSupply).sub(pm.supplyClaimed), tokenDecimals);
+  const availableSupply = convertToReadableQuantity(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(pm.maxClaimableSupply).sub(pm.supplyClaimed), tokenDecimals);
   const currentMintSupply = convertToReadableQuantity(pm.supplyClaimed, tokenDecimals);
   return ClaimConditionOutputSchema.parse({
     startTime: pm.startTimestamp,
@@ -35282,7 +35329,7 @@ async function transformResultToClaimCondition(pm, tokenDecimals, provider, merk
     availableSupply,
     quantityLimitPerTransaction,
     waitInSeconds: pm.waitTimeInSecondsBetweenClaims.toString(),
-    price: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(pm.pricePerToken),
+    price: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(pm.pricePerToken),
     currency: pm.currency,
     currencyAddress: pm.currency,
     currencyMetadata: cv,
@@ -35292,10 +35339,10 @@ async function transformResultToClaimCondition(pm, tokenDecimals, provider, merk
 }
 
 function convertToReadableQuantity(bn, tokenDecimals) {
-  if (bn.toString() === ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256.toString()) {
+  if (bn.toString() === ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256.toString()) {
     return "unlimited";
   } else {
-    return ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(bn, tokenDecimals);
+    return ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(bn, tokenDecimals);
   }
 }
 
@@ -35367,11 +35414,11 @@ let ClaimEligibility;
 
 class DropClaimConditions {
   constructor(contractWrapper, metadata, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "metadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "metadata", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.storage = storage;
     this.contractWrapper = contractWrapper;
@@ -35463,7 +35510,7 @@ class DropClaimConditions {
     let activeConditionIndex;
     let claimCondition;
     const decimals = await this.getTokenDecimals();
-    const quantityWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(AmountSchema.parse(quantity), decimals);
+    const quantityWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(AmountSchema.parse(quantity), decimals);
 
     if (addressToCheck === undefined) {
       try {
@@ -35492,7 +35539,7 @@ class DropClaimConditions {
     }
 
     if (claimCondition.availableSupply !== "unlimited") {
-      const supplyWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(claimCondition.availableSupply, decimals);
+      const supplyWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(claimCondition.availableSupply, decimals);
 
       if (supplyWithDecimals.lt(quantityWithDecimals)) {
         reasons.push(ClaimEligibility.NotEnoughSupply);
@@ -35500,7 +35547,7 @@ class DropClaimConditions {
     } // check for merkle root inclusion
 
 
-    const merkleRootArray = ethers__WEBPACK_IMPORTED_MODULE_46__.stripZeros(claimCondition.merkleRootHash);
+    const merkleRootArray = ethers__WEBPACK_IMPORTED_MODULE_49__.stripZeros(claimCondition.merkleRootHash);
 
     if (merkleRootArray.length > 0) {
       const merkleLower = claimCondition.merkleRootHash.toString();
@@ -35532,7 +35579,7 @@ class DropClaimConditions {
     } // check for claim timestamp between claims
 
 
-    let [lastClaimedTimestamp, timestampForNextClaim] = [ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0), ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0)];
+    let [lastClaimedTimestamp, timestampForNextClaim] = [ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0), ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0)];
 
     if (this.isMultiPhaseDropContract(this.contractWrapper)) {
       activeConditionIndex = await this.contractWrapper.readContract.getActiveClaimConditionId();
@@ -35542,11 +35589,11 @@ class DropClaimConditions {
       [lastClaimedTimestamp, timestampForNextClaim] = await this.contractWrapper.readContract.getClaimTimestamp(addressToCheck);
     }
 
-    const now = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Date.now()).div(1000);
+    const now = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Date.now()).div(1000);
 
     if (lastClaimedTimestamp.gt(0) && now.lt(timestampForNextClaim)) {
       // contract will return MaxUint256 if user has already claimed and cannot claim again
-      if (timestampForNextClaim.eq(ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256)) {
+      if (timestampForNextClaim.eq(ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256)) {
         reasons.push(ClaimEligibility.AlreadyClaimed);
       } else {
         reasons.push(ClaimEligibility.WaitBeforeNextClaimTransaction);
@@ -35556,7 +35603,7 @@ class DropClaimConditions {
 
 
     if (claimCondition.price.gt(0) && isNode()) {
-      const totalPrice = claimCondition.price.mul(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(quantity));
+      const totalPrice = claimCondition.price.mul(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(quantity));
       const provider = this.contractWrapper.getProvider();
 
       if (isNativeToken(claimCondition.currencyAddress)) {
@@ -35633,7 +35680,7 @@ class DropClaimConditions {
           maxQuantity: 0,
           quantityLimitPerTransaction: 0,
           waitInSeconds: 0,
-          merkleRootHash: ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32),
+          merkleRootHash: ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32),
           snapshot: []
         }];
       } else if (claimConditionInputs.length > 1) {
@@ -35736,11 +35783,11 @@ class DropClaimConditions {
 
 class DropErc1155ClaimConditions {
   constructor(contractWrapper, metadata, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "metadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "metadata", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.storage = storage;
     this.contractWrapper = contractWrapper;
@@ -35858,13 +35905,13 @@ class DropErc1155ClaimConditions {
     }
 
     if (claimCondition.availableSupply !== "unlimited") {
-      if (ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(claimCondition.availableSupply).lt(quantity)) {
+      if (ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(claimCondition.availableSupply).lt(quantity)) {
         reasons.push(ClaimEligibility.NotEnoughSupply);
       }
     } // check for merkle root inclusion
 
 
-    const merkleRootArray = ethers__WEBPACK_IMPORTED_MODULE_46__.stripZeros(claimCondition.merkleRootHash);
+    const merkleRootArray = ethers__WEBPACK_IMPORTED_MODULE_49__.stripZeros(claimCondition.merkleRootHash);
 
     if (merkleRootArray.length > 0) {
       const merkleLower = claimCondition.merkleRootHash.toString();
@@ -35895,7 +35942,7 @@ class DropErc1155ClaimConditions {
     } // check for claim timestamp between claims
 
 
-    let [lastClaimedTimestamp, timestampForNextClaim] = [ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0), ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0)];
+    let [lastClaimedTimestamp, timestampForNextClaim] = [ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0), ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0)];
 
     if (this.isMultiPhaseDropContract(this.contractWrapper)) {
       activeConditionIndex = await this.contractWrapper.readContract.getActiveClaimConditionId(tokenId);
@@ -35904,11 +35951,11 @@ class DropErc1155ClaimConditions {
       [lastClaimedTimestamp, timestampForNextClaim] = await this.contractWrapper.readContract.getClaimTimestamp(tokenId, addressToCheck);
     }
 
-    const now = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Date.now()).div(1000);
+    const now = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Date.now()).div(1000);
 
     if (lastClaimedTimestamp.gt(0) && now.lt(timestampForNextClaim)) {
       // contract will return MaxUint256 if user has already claimed and cannot claim again
-      if (timestampForNextClaim.eq(ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256)) {
+      if (timestampForNextClaim.eq(ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256)) {
         reasons.push(ClaimEligibility.AlreadyClaimed);
       } else {
         reasons.push(ClaimEligibility.WaitBeforeNextClaimTransaction);
@@ -36045,7 +36092,7 @@ class DropErc1155ClaimConditions {
             maxQuantity: 0,
             quantityLimitPerTransaction: 0,
             waitInSeconds: 0,
-            merkleRootHash: ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad([0], 32),
+            merkleRootHash: ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad([0], 32),
             snapshot: []
           }];
         } else if (claimConditions.length > 1) {
@@ -36147,7 +36194,7 @@ class DropErc1155ClaimConditions {
 
 class DropErc1155History {
   constructor(events) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "events", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "events", void 0);
 
     this.events = events;
   }
@@ -36166,7 +36213,7 @@ class DropErc1155History {
 
 
   async getAllClaimerAddresses(tokenId) {
-    const a = (await this.events.getEvents("TokensClaimed")).filter(e => e.data && ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.isBigNumber(e.data.tokenId) ? e.data.tokenId.eq(tokenId) : false);
+    const a = (await this.events.getEvents("TokensClaimed")).filter(e => e.data && ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.isBigNumber(e.data.tokenId) ? e.data.tokenId.eq(tokenId) : false);
     return Array.from(new Set(a.filter(b => {
       var _b$data;
 
@@ -36178,11 +36225,11 @@ class DropErc1155History {
 
 class Erc20Burnable {
   constructor(erc20, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN_BURNABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN_BURNABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.erc20 = erc20;
     this.contractWrapper = contractWrapper;
@@ -36266,15 +36313,15 @@ class Erc20Claimable {
    * ```
    */
   constructor(erc20, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN_CLAIMABLE_WITH_CONDITIONS.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN_CLAIMABLE_WITH_CONDITIONS.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "conditions", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "conditions", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc20 = erc20;
     this.contractWrapper = contractWrapper;
@@ -36359,13 +36406,13 @@ class Erc20Droppable {
    * ```
    */
   constructor(erc20, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "claim", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "claim", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc20 = erc20;
     this.contractWrapper = contractWrapper;
@@ -36387,11 +36434,11 @@ class Erc20Droppable {
  */
 class Erc20BatchMintable {
   constructor(erc20, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN_BATCH_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN_BATCH_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
 
     this.erc20 = erc20;
     this.contractWrapper = contractWrapper;
@@ -36449,13 +36496,13 @@ class Erc20Mintable {
    * Batch mint Tokens to many addresses
    */
   constructor(erc20, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "batch", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "batch", void 0);
 
     this.erc20 = erc20;
     this.contractWrapper = contractWrapper;
@@ -36499,11 +36546,11 @@ class Erc20Mintable {
 
 class Erc20SignatureMintable {
   constructor(contractWrapper, roles) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN_SIGNATURE_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN_SIGNATURE_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "roles", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "roles", void 0);
 
     this.contractWrapper = contractWrapper;
     this.roles = roles;
@@ -36531,7 +36578,7 @@ class Erc20SignatureMintable {
     const signature = signedPayload.signature;
     const message = await this.mapPayloadToContractStruct(mintRequest);
     const overrides = await this.contractWrapper.getCallOverrides();
-    await setErc20Allowance(this.contractWrapper, ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(message.price), mintRequest.currencyAddress, overrides);
+    await setErc20Allowance(this.contractWrapper, ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(message.price), mintRequest.currencyAddress, overrides);
     return {
       receipt: await this.contractWrapper.sendTransaction("mintWithSignature", [message, signature], overrides)
     };
@@ -36550,7 +36597,7 @@ class Erc20SignatureMintable {
       const signature = s.signature;
       const price = s.payload.price;
 
-      if (ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price).gt(0)) {
+      if (ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price).gt(0)) {
         throw new Error("Can only batch free mints. For mints with a price, use regular mint()");
       }
 
@@ -36629,7 +36676,7 @@ class Erc20SignatureMintable {
     const parsedRequests = payloadsToSign.map(m => Signature20PayloadInput.parse(m));
     const chainId = await this.contractWrapper.getChainID();
     const signer = this.contractWrapper.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "No signer available"); // ERC20Permit (EIP-712) spec differs from signature mint 721, 1155.
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "No signer available"); // ERC20Permit (EIP-712) spec differs from signature mint 721, 1155.
 
     const name = await this.contractWrapper.readContract.name();
     return await Promise.all(parsedRequests.map(async m => {
@@ -36664,7 +36711,7 @@ class Erc20SignatureMintable {
 
   async mapPayloadToContractStruct(mintRequest) {
     const normalizedPrice = await normalizePriceValue(this.contractWrapper.getProvider(), mintRequest.price, mintRequest.currencyAddress);
-    const amountWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(mintRequest.quantity, await this.contractWrapper.readContract.decimals());
+    const amountWithDecimals = ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(mintRequest.quantity, await this.contractWrapper.readContract.decimals());
     return {
       to: mintRequest.to,
       primarySaleRecipient: mintRequest.primarySaleRecipient,
@@ -36694,20 +36741,26 @@ class Erc20 {
   /**
    * Mint tokens
    */
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_TOKEN.name);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "mintable", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_TOKEN.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "burnable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "mintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "droppable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "burnable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "signatureMintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "droppable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "signatureMintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -36715,6 +36768,7 @@ class Erc20 {
     this.burnable = this.detectErc20Burnable();
     this.droppable = this.detectErc20Droppable();
     this.signatureMintable = this.detectErc20SignatureMintable();
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -37170,7 +37224,7 @@ class Erc20 {
 
   async normalizeAmount(amount) {
     const decimals = await this.contractWrapper.readContract.decimals();
-    return ethers__WEBPACK_IMPORTED_MODULE_57__.parseUnits(AmountSchema.parse(amount), decimals);
+    return ethers__WEBPACK_IMPORTED_MODULE_59__.parseUnits(AmountSchema.parse(amount), decimals);
   }
   /**
    * @internal
@@ -37178,7 +37232,7 @@ class Erc20 {
 
 
   async getValue(value) {
-    return await fetchCurrencyValue(this.contractWrapper.getProvider(), this.getAddress(), ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(value));
+    return await fetchCurrencyValue(this.contractWrapper.getProvider(), this.getAddress(), ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(value));
   }
 
   detectErc20Mintable() {
@@ -37222,9 +37276,9 @@ class Erc20 {
 
 class TokenERC20History {
   constructor(contractWrapper, events) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "events", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "events", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
     this.events = events;
@@ -37250,17 +37304,17 @@ class TokenERC20History {
       const to = item === null || item === void 0 ? void 0 : item.to;
       const amount = item === null || item === void 0 ? void 0 : item.value;
 
-      if (!(from === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)) {
+      if (!(from === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)) {
         if (!(from in balances)) {
-          balances[from] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0);
+          balances[from] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0);
         }
 
         balances[from] = balances[from].sub(amount);
       }
 
-      if (!(to === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)) {
+      if (!(to === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)) {
         if (!(to in balances)) {
-          balances[to] = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0);
+          balances[to] = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0);
         }
 
         balances[to] = balances[to].add(amount);
@@ -37285,16 +37339,23 @@ class TokenERC20History {
  * @public
  */
 class StandardErc20 {
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc20", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc20", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
-    this.erc20 = new Erc20(this.contractWrapper, this.storage);
+    this.erc20 = new Erc20(this.contractWrapper, this.storage, chainId);
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -37513,9 +37574,9 @@ class StandardErc20 {
 
 class Erc721Burnable {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_BURNABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_BURNABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -37549,7 +37610,7 @@ class Erc721Burnable {
 
 class GasCostEstimator {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -37576,7 +37637,7 @@ class GasCostEstimator {
   async gasCostOf(fn, args) {
     const price = await this.contractWrapper.getPreferredGasPrice();
     const gasUnits = await this.contractWrapper.estimateGas(fn, args);
-    return ethers__WEBPACK_IMPORTED_MODULE_57__.formatEther(gasUnits.mul(price));
+    return ethers__WEBPACK_IMPORTED_MODULE_59__.formatEther(gasUnits.mul(price));
   }
   /**
    * Estimates the gas limit of a transaction
@@ -37615,7 +37676,7 @@ class GasCostEstimator {
 
   async currentGasPriceInGwei() {
     const price = await this.contractWrapper.getProvider().getGasPrice();
-    return ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(price, "gwei");
+    return ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(price, "gwei");
   }
 
 }
@@ -37630,17 +37691,17 @@ class TransactionTask {
   }
 
   constructor(taskArgs) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "functionName", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "functionName", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "args", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "args", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "overrides", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "overrides", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "encoder", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "encoder", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "estimator", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "estimator", void 0);
 
     this.contractWrapper = taskArgs.contractWrapper;
     this.functionName = taskArgs.functionName;
@@ -37760,11 +37821,11 @@ class TransactionTask {
  */
 class Erc721Claimable {
   constructor(erc721, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_CLAIMABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_CLAIMABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -37874,15 +37935,15 @@ class Erc721ClaimableWithConditions {
    * ```
    */
   constructor(erc721, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_CLAIMABLE_WITH_CONDITIONS.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_CLAIMABLE_WITH_CONDITIONS.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "conditions", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "conditions", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -37904,7 +37965,7 @@ class Erc721ClaimableWithConditions {
       throw new Error("In ERC721ClaimableWithConditions, price per token is be set via claim conditions by calling `contract.erc721.claimConditions.set()`");
     }
 
-    const claimVerification = await this.conditions.prepareClaim(quantity, (options === null || options === void 0 ? void 0 : options.checkERC20Allowance) || true);
+    const claimVerification = await this.conditions.prepareClaim(quantity, (options === null || options === void 0 ? void 0 : options.checkERC20Allowance) === undefined ? true : options.checkERC20Allowance);
     return TransactionTask.make({
       contractWrapper: this.contractWrapper,
       functionName: "claim",
@@ -37965,13 +38026,13 @@ class Erc721ClaimableWithConditions {
     return [destinationAddress, quantity, claimVerification.currencyAddress, claimVerification.price, {
       proof: claimVerification.proofs,
       maxQuantityInAllowlist: claimVerification.maxQuantityPerTransaction
-    }, ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes("")];
+    }, ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes("")];
   }
 
   async isLegacyNFTContract() {
     if (hasFunction("contractType", this.contractWrapper)) {
       try {
-        const contractType = ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8String(await this.contractWrapper.readContract.contractType());
+        const contractType = ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8String(await this.contractWrapper.readContract.contractType());
         return contractType.includes("DropERC721");
       } catch (e) {
         return false;
@@ -38036,19 +38097,19 @@ class Erc721LazyMintable {
    * ```
    */
   constructor(erc721, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_LAZY_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_LAZY_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "revealer", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "revealer", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "claimWithConditions", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "claimWithConditions", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "claim", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "claim", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -38090,7 +38151,7 @@ class Erc721LazyMintable {
     const batch = await uploadOrExtractURIs(metadatas, this.storage, startFileNumber.toNumber(), options); // ensure baseUri is the same for the entire batch
 
     const baseUri = getBaseUriFromBatch(batch);
-    const receipt = await this.contractWrapper.sendTransaction("lazyMint", [batch.length, baseUri.endsWith("/") ? baseUri : `${baseUri}/`, ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes("")]);
+    const receipt = await this.contractWrapper.sendTransaction("lazyMint", [batch.length, baseUri.endsWith("/") ? baseUri : `${baseUri}/`, ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes("")]);
     const event = this.contractWrapper.parseLogs("TokensLazyMinted", receipt === null || receipt === void 0 ? void 0 : receipt.logs);
     const startingIndex = event[0].args.startTokenId;
     const endingIndex = event[0].args.endTokenId;
@@ -38149,13 +38210,13 @@ class Erc721LazyMintable {
  */
 class Erc721BatchMintable {
   constructor(erc721, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_BATCH_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_BATCH_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -38224,15 +38285,15 @@ class Erc721BatchMintable {
  */
 class Erc721Mintable {
   constructor(erc721, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "batch", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "batch", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -38292,15 +38353,6 @@ class Erc721Mintable {
 }
 
 /**
- * @internal
- */
-const DEFAULT_QUERY_ALL_COUNT = 100;
-/**
- * Pagination Parameters
- * @public
- */
-
-/**
  * List owned ERC721 NFTs
  * @remarks Easily list all the NFTs from a ERC721 contract, owned by a certain wallet.
  * @example
@@ -38313,11 +38365,11 @@ const DEFAULT_QUERY_ALL_COUNT = 100;
  */
 class Erc721Enumerable {
   constructor(erc721, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_ENUMERABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_ENUMERABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -38370,13 +38422,13 @@ class Erc721Enumerable {
 
 class Erc721Supply {
   constructor(erc721, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_SUPPLY.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_SUPPLY.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "owned", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "owned", void 0);
 
     this.erc721 = erc721;
     this.contractWrapper = contractWrapper;
@@ -38399,8 +38451,8 @@ class Erc721Supply {
 
 
   async all(queryParams) {
-    const start = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.start) || 0).toNumber();
-    const count = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.count) || DEFAULT_QUERY_ALL_COUNT).toNumber();
+    const start = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.start) || 0).toNumber();
+    const count = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.count) || _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.D).toNumber();
     const maxSupply = await this.erc721.nextTokenIdToMint();
     const maxId = Math.min(maxSupply.toNumber(), start + count);
     return await Promise.all([...Array(maxId - start).keys()].map(i => this.erc721.get((start + i).toString())));
@@ -38414,7 +38466,7 @@ class Erc721Supply {
   async allOwners() {
     return Promise.all([...new Array((await this.totalCount()).toNumber()).keys()].map(async i => ({
       tokenId: i,
-      owner: await this.erc721.ownerOf(i).catch(() => ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero)
+      owner: await this.erc721.ownerOf(i).catch(() => ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero)
     })));
   }
   /**
@@ -38457,11 +38509,11 @@ class Erc721Supply {
 
 class Erc721WithQuantitySignatureMintable {
   constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT_SIGNATURE_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT_SIGNATURE_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -38538,7 +38590,7 @@ class Erc721WithQuantitySignatureMintable {
       const signature = s.signature;
       const price = s.payload.price;
 
-      if (ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price).gt(0)) {
+      if (ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price).gt(0)) {
         throw new Error("Can only batch free mints. For mints with a price, use regular mint()");
       }
 
@@ -38652,7 +38704,7 @@ class Erc721WithQuantitySignatureMintable {
     const uris = await uploadOrExtractURIs(metadatas, this.storage);
     const chainId = await this.contractWrapper.getChainID();
     const signer = this.contractWrapper.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "No signer available");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "No signer available");
     return await Promise.all(parsedRequests.map(async (m, i) => {
       const uri = uris[i];
       const finalPayload = Signature721WithQuantityOutput.parse({ ...m,
@@ -38737,7 +38789,7 @@ class Erc721WithQuantitySignatureMintable {
   async isLegacyNFTContract() {
     if (hasFunction("contractType", this.contractWrapper)) {
       try {
-        const contractType = ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8String(await this.contractWrapper.readContract.contractType());
+        const contractType = ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8String(await this.contractWrapper.readContract.contractType());
         return contractType.includes("TokenERC721");
       } catch (e) {
         return false;
@@ -38761,22 +38813,28 @@ class Erc721WithQuantitySignatureMintable {
  */
 
 class Erc721 {
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_NFT.name);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "query", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_NFT.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "mintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "query", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "burnable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "mintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "lazyMintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "burnable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "signatureMintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "lazyMintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "signatureMintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -38785,6 +38843,7 @@ class Erc721 {
     this.burnable = this.detectErc721Burnable();
     this.lazyMintable = this.detectErc721LazyMintable();
     this.signatureMintable = this.detectErc721SignatureMintable();
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -38814,10 +38873,12 @@ class Erc721 {
 
 
   async get(tokenId) {
-    const [owner, metadata] = await Promise.all([this.ownerOf(tokenId).catch(() => ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero), this.getTokenMetadata(tokenId)]);
+    const [owner, metadata] = await Promise.all([this.ownerOf(tokenId).catch(() => ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero), this.getTokenMetadata(tokenId)]);
     return {
       owner,
-      metadata
+      metadata,
+      type: "ERC721",
+      supply: 1
     };
   }
   /**
@@ -39021,7 +39082,7 @@ class Erc721 {
         var _i$owner2;
 
         return (address === null || address === void 0 ? void 0 : address.toLowerCase()) === ((_i$owner2 = i.owner) === null || _i$owner2 === void 0 ? void 0 : _i$owner2.toLowerCase());
-      }).map(i => ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(i.tokenId));
+      }).map(i => ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(i.tokenId));
     }
   } ////// ERC721 Mintable Extension //////
 
@@ -39462,16 +39523,23 @@ class Erc721 {
  * @public
  */
 class StandardErc721 {
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc721", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc721", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
-    this.erc721 = new Erc721(this.contractWrapper, this.storage);
+    this.erc721 = new Erc721(this.contractWrapper, this.storage, chainId);
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -39654,7 +39722,7 @@ class StandardErc721 {
  * @internal
  */
 
-const AirdropAddressInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
+const AirdropAddressInput = zod__WEBPACK_IMPORTED_MODULE_45__.z.object({
   address: AddressSchema,
   quantity: AmountSchema.default(1)
 });
@@ -39662,15 +39730,15 @@ const AirdropAddressInput = zod__WEBPACK_IMPORTED_MODULE_43__.z.object({
  * @internal
  */
 
-const AirdropInputSchema = zod__WEBPACK_IMPORTED_MODULE_43__.z.union([zod__WEBPACK_IMPORTED_MODULE_43__.z.array(zod__WEBPACK_IMPORTED_MODULE_43__.z.string()).transform(strings => strings.map(address => AirdropAddressInput.parse({
+const AirdropInputSchema = zod__WEBPACK_IMPORTED_MODULE_45__.z.union([zod__WEBPACK_IMPORTED_MODULE_45__.z.array(zod__WEBPACK_IMPORTED_MODULE_45__.z.string()).transform(strings => strings.map(address => AirdropAddressInput.parse({
   address
-}))), zod__WEBPACK_IMPORTED_MODULE_43__.z.array(AirdropAddressInput)]);
+}))), zod__WEBPACK_IMPORTED_MODULE_45__.z.array(AirdropAddressInput)]);
 
 class Erc1155Burnable {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_BURNABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_BURNABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -39794,11 +39862,11 @@ class Erc1155Burnable {
 
 class Erc1155Enumerable {
   constructor(erc1155, contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_ENUMERABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_ENUMERABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc1155", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc1155", void 0);
 
     this.erc1155 = erc1155;
     this.contractWrapper = contractWrapper;
@@ -39820,8 +39888,8 @@ class Erc1155Enumerable {
 
 
   async all(queryParams) {
-    const start = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.start) || 0).toNumber();
-    const count = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.count) || DEFAULT_QUERY_ALL_COUNT).toNumber();
+    const start = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.start) || 0).toNumber();
+    const count = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from((queryParams === null || queryParams === void 0 ? void 0 : queryParams.count) || _QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__.D).toNumber();
     const maxId = Math.min((await this.totalCount()).toNumber(), start + count);
     return await Promise.all([...Array(maxId - start).keys()].map(i => this.erc1155.get((start + i).toString())));
   }
@@ -39879,7 +39947,7 @@ class Erc1155Enumerable {
       const editionMetadata = await this.erc1155.get(b.tokenId.toString());
       return { ...editionMetadata,
         owner: address,
-        quantityOwned: b.balance
+        quantityOwned: b.balance.toNumber()
       };
     }));
   }
@@ -39897,9 +39965,9 @@ class Erc1155Enumerable {
  */
 class ERC1155Claimable {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_CLAIMABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_CLAIMABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -39971,13 +40039,13 @@ class ERC1155Claimable {
 
 class Erc1155ClaimableWithConditions {
   constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_CLAIMABLE_WITH_CONDITIONS.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_CLAIMABLE_WITH_CONDITIONS.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "conditions", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "conditions", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -40044,13 +40112,13 @@ class Erc1155ClaimableWithConditions {
     return [destinationAddress, tokenId, quantity, claimVerification.currencyAddress, claimVerification.price, {
       proof: claimVerification.proofs,
       maxQuantityInAllowlist: claimVerification.maxQuantityPerTransaction
-    }, ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes("")];
+    }, ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes("")];
   }
 
   async isLegacyNFTContract() {
     if (hasFunction("contractType", this.contractWrapper)) {
       try {
-        const contractType = ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8String(await this.contractWrapper.readContract.contractType());
+        const contractType = ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8String(await this.contractWrapper.readContract.contractType());
         return contractType.includes("DropERC1155");
       } catch (e) {
         return false;
@@ -40106,19 +40174,19 @@ class Erc1155LazyMintable {
    * ```
    */
   constructor(erc1155, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_LAZY_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_LAZY_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "revealer", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "revealer", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "claimWithConditions", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "claimWithConditions", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "claim", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "claim", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc1155", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc1155", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc1155 = erc1155;
     this.contractWrapper = contractWrapper;
@@ -40178,7 +40246,7 @@ class Erc1155LazyMintable {
       receipt = await this.contractWrapper.sendTransaction("lazyMint", [batch.length, `${baseUri.endsWith("/") ? baseUri : `${baseUri}/`}`]);
     } else {
       // new contracts/extensions have support for delayed reveal that adds an extra parameter to lazyMint
-      receipt = await this.contractWrapper.sendTransaction("lazyMint", [batch.length, `${baseUri.endsWith("/") ? baseUri : `${baseUri}/`}`, ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes("")]);
+      receipt = await this.contractWrapper.sendTransaction("lazyMint", [batch.length, `${baseUri.endsWith("/") ? baseUri : `${baseUri}/`}`, ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes("")]);
     }
 
     const event = this.contractWrapper.parseLogs("TokensLazyMinted", (_receipt = receipt) === null || _receipt === void 0 ? void 0 : _receipt.logs);
@@ -40228,7 +40296,7 @@ class Erc1155LazyMintable {
   async isLegacyEditionDropContract() {
     if (hasFunction("contractType", this.contractWrapper)) {
       try {
-        const contractType = ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8String(await this.contractWrapper.readContract.contractType());
+        const contractType = ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8String(await this.contractWrapper.readContract.contractType());
         return contractType.includes("DropERC1155");
       } catch (e) {
         return false;
@@ -40253,13 +40321,13 @@ class Erc1155LazyMintable {
 
 class Erc1155BatchMintable {
   constructor(erc1155, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_BATCH_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_BATCH_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc1155", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc1155", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.erc1155 = erc1155;
     this.contractWrapper = contractWrapper;
@@ -40304,7 +40372,7 @@ class Erc1155BatchMintable {
     const metadatas = metadataWithSupply.map(a => a.metadata);
     const supplies = metadataWithSupply.map(a => a.supply);
     const uris = await uploadOrExtractURIs(metadatas, this.storage);
-    const encoded = uris.map((uri, index) => this.contractWrapper.readContract.interface.encodeFunctionData("mintTo", [to, ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256, uri, supplies[index]]));
+    const encoded = uris.map((uri, index) => this.contractWrapper.readContract.interface.encodeFunctionData("mintTo", [to, ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256, uri, supplies[index]]));
     const receipt = await this.contractWrapper.multiCall(encoded);
     const events = this.contractWrapper.parseLogs("TokensMinted", receipt.logs);
 
@@ -40340,15 +40408,15 @@ class Erc1155Mintable {
    * Batch mint Tokens to many addresses
    */
   constructor(erc1155, contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc1155", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc1155", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "batch", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "batch", void 0);
 
     this.erc1155 = erc1155;
     this.contractWrapper = contractWrapper;
@@ -40387,7 +40455,7 @@ class Erc1155Mintable {
 
   async to(to, metadataWithSupply) {
     const uri = await uploadOrExtractURI(metadataWithSupply.metadata, this.storage);
-    const receipt = await this.contractWrapper.sendTransaction("mintTo", [to, ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256, uri, metadataWithSupply.supply]);
+    const receipt = await this.contractWrapper.sendTransaction("mintTo", [to, ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256, uri, metadataWithSupply.supply]);
     const event = this.contractWrapper.parseLogs("TransferSingle", receipt === null || receipt === void 0 ? void 0 : receipt.logs);
 
     if (event.length === 0) {
@@ -40424,7 +40492,7 @@ class Erc1155Mintable {
     const metadata = await this.erc1155.getTokenMetadata(tokenId);
     const receipt = await this.contractWrapper.sendTransaction("mintTo", [to, tokenId, metadata.uri, additionalSupply]);
     return {
-      id: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(tokenId),
+      id: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(tokenId),
       receipt,
       data: () => this.erc1155.get(tokenId)
     };
@@ -40447,13 +40515,13 @@ class Erc1155Mintable {
 
 class Erc1155SignatureMintable {
   constructor(contractWrapper, storage, roles) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION_SIGNATURE_MINTABLE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION_SIGNATURE_MINTABLE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "roles", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "roles", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -40520,7 +40588,7 @@ class Erc1155SignatureMintable {
       const signature = s.signature;
       const price = s.payload.price;
 
-      if (ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(price).gt(0)) {
+      if (ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(price).gt(0)) {
         throw new Error("Can only batch free mints. For mints with a price, use regular mint()");
       }
 
@@ -40597,7 +40665,7 @@ class Erc1155SignatureMintable {
 
   async generate(payloadToSign) {
     const payload = { ...payloadToSign,
-      tokenId: ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256
+      tokenId: ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256
     };
     return this.generateFromTokenId(payload);
   }
@@ -40655,7 +40723,7 @@ class Erc1155SignatureMintable {
 
   async generateBatch(payloadsToSign) {
     const payloads = payloadsToSign.map(payload => ({ ...payload,
-      tokenId: ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256
+      tokenId: ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256
     }));
     return this.generateBatchFromTokenIds(payloads);
   }
@@ -40679,7 +40747,7 @@ class Erc1155SignatureMintable {
     const uris = await uploadOrExtractURIs(metadatas, this.storage);
     const chainId = await this.contractWrapper.getChainID();
     const signer = this.contractWrapper.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "No signer available");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "No signer available");
     return await Promise.all(parsedRequests.map(async (m, i) => {
       const uri = uris[i];
       const finalPayload = Signature1155PayloadOutput.parse({ ...m,
@@ -40746,22 +40814,28 @@ class Erc1155SignatureMintable {
  */
 
 class Erc1155 {
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_EDITION.name);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "query", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_EDITION.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "mintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "query", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "burnable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "mintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "lazyMintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "burnable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "signatureMintable", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "lazyMintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "signatureMintable", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -40770,6 +40844,7 @@ class Erc1155 {
     this.burnable = this.detectErc1155Burnable();
     this.lazyMintable = this.detectErc1155LazyMintable();
     this.signatureMintable = this.detectErc1155SignatureMintable();
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -40798,11 +40873,13 @@ class Erc1155 {
 
 
   async get(tokenId) {
-    const [supply, metadata] = await Promise.all([this.contractWrapper.readContract.totalSupply(tokenId).catch(() => ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0)), this.getTokenMetadata(tokenId)]);
-    return EditionMetadataOutputSchema.parse({
-      supply,
-      metadata
-    });
+    const [supply, metadata] = await Promise.all([this.contractWrapper.readContract.totalSupply(tokenId).catch(() => ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0)), this.getTokenMetadata(tokenId)]);
+    return {
+      owner: ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero,
+      metadata,
+      type: "ERC1155",
+      supply: supply.toNumber()
+    };
   }
   /**
    * Returns the total supply of a specific token
@@ -41595,16 +41672,23 @@ class Erc1155 {
  * @public
  */
 class StandardErc1155 {
-  constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+  get chainId() {
+    return this._chainId;
+  }
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+  constructor(contractWrapper, storage, chainId) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "erc1155", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "erc1155", void 0);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
-    this.erc1155 = new Erc1155(this.contractWrapper, this.storage);
+    this.erc1155 = new Erc1155(this.contractWrapper, this.storage, chainId);
+    this._chainId = chainId;
   }
   /**
    * @internal
@@ -41766,12 +41850,12 @@ class StandardErc1155 {
 
 async function isTokenApprovedForTransfer(provider, transferrerContractAddress, assetContract, tokenId, owner) {
   try {
-    const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
+    const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
     const isERC721 = await erc165.supportsInterface(InterfaceId_IERC721);
     const isERC1155 = await erc165.supportsInterface(InterfaceId_IERC1155);
 
     if (isERC721) {
-      const asset = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC721_json__WEBPACK_IMPORTED_MODULE_1__, provider);
+      const asset = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC721_json__WEBPACK_IMPORTED_MODULE_1__, provider);
       const approved = await asset.isApprovedForAll(owner, transferrerContractAddress);
 
       if (approved) {
@@ -41780,7 +41864,7 @@ async function isTokenApprovedForTransfer(provider, transferrerContractAddress, 
 
       return (await asset.getApproved(tokenId)).toLowerCase() === transferrerContractAddress.toLowerCase();
     } else if (isERC1155) {
-      const asset = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC1155_json__WEBPACK_IMPORTED_MODULE_2__, provider);
+      const asset = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC1155_json__WEBPACK_IMPORTED_MODULE_2__, provider);
       return await asset.isApprovedForAll(owner, transferrerContractAddress);
     } else {
       console.error("Contract does not implement ERC 1155 or ERC 721.");
@@ -41802,7 +41886,7 @@ async function isTokenApprovedForTransfer(provider, transferrerContractAddress, 
  */
 
 async function handleTokenApproval(signerOrProvider, marketplaceAddress, assetContract, tokenId, from) {
-  const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, signerOrProvider);
+  const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(assetContract, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, signerOrProvider);
   const isERC721 = await erc165.supportsInterface(InterfaceId_IERC721);
   const isERC1155 = await erc165.supportsInterface(InterfaceId_IERC1155); // check for token approval
 
@@ -41835,17 +41919,17 @@ async function handleTokenApproval(signerOrProvider, marketplaceAddress, assetCo
 // TODO this should be done in zod
 
 function validateNewListingParam(param) {
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.assetContractAddress !== undefined && param.assetContractAddress !== null, "Asset contract address is required");
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.buyoutPricePerToken !== undefined && param.buyoutPricePerToken !== null, "Buyout price is required");
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.listingDurationInSeconds !== undefined && param.listingDurationInSeconds !== null, "Listing duration is required");
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.startTimestamp !== undefined && param.startTimestamp !== null, "Start time is required");
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.tokenId !== undefined && param.tokenId !== null, "Token ID is required");
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.quantity !== undefined && param.quantity !== null, "Quantity is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.assetContractAddress !== undefined && param.assetContractAddress !== null, "Asset contract address is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.buyoutPricePerToken !== undefined && param.buyoutPricePerToken !== null, "Buyout price is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.listingDurationInSeconds !== undefined && param.listingDurationInSeconds !== null, "Listing duration is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.startTimestamp !== undefined && param.startTimestamp !== null, "Start time is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.tokenId !== undefined && param.tokenId !== null, "Token ID is required");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.quantity !== undefined && param.quantity !== null, "Quantity is required");
 
   switch (param.type) {
     case "NewAuctionListing":
       {
-        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(param.reservePricePerToken !== undefined && param.reservePricePerToken !== null, "Reserve price is required");
+        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(param.reservePricePerToken !== undefined && param.reservePricePerToken !== null, "Reserve price is required");
       }
   }
 }
@@ -41869,11 +41953,11 @@ async function mapOffer(provider, listingId, offer) {
   };
 }
 function isWinningBid(winningPrice, newBidPrice, bidBuffer) {
-  bidBuffer = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(bidBuffer);
-  winningPrice = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(winningPrice);
-  newBidPrice = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(newBidPrice);
+  bidBuffer = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(bidBuffer);
+  winningPrice = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(winningPrice);
+  newBidPrice = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(newBidPrice);
 
-  if (winningPrice.eq(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0))) {
+  if (winningPrice.eq(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0))) {
     return false;
   }
 
@@ -41888,9 +41972,9 @@ function isWinningBid(winningPrice, newBidPrice, bidBuffer) {
 
 class MarketplaceDirect {
   constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -41914,7 +41998,7 @@ class MarketplaceDirect {
   async getListing(listingId) {
     const listing = await this.contractWrapper.readContract.listings(listingId);
 
-    if (listing.assetContract === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero) {
+    if (listing.assetContract === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero) {
       throw new ListingNotFoundError(this.getAddress(), listingId.toString());
     }
 
@@ -41932,15 +42016,15 @@ class MarketplaceDirect {
 
 
   async getActiveOffer(listingId, address) {
-    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(ethers__WEBPACK_IMPORTED_MODULE_45__.isAddress(address), "Address must be a valid address");
+    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(ethers__WEBPACK_IMPORTED_MODULE_47__.isAddress(address), "Address must be a valid address");
     const offers = await this.contractWrapper.readContract.offers(listingId, address);
 
-    if (offers.offeror === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero) {
+    if (offers.offeror === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero) {
       return undefined;
     }
 
-    return await mapOffer(this.contractWrapper.getProvider(), ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId), offers);
+    return await mapOffer(this.contractWrapper.getProvider(), ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId), offers);
   }
   /** ******************************
    * WRITE FUNCTIONS
@@ -41999,7 +42083,7 @@ class MarketplaceDirect {
       quantityToList: listing.quantity,
       reservePricePerToken: normalizedPricePerToken,
       secondsUntilEndTime: listing.listingDurationInSeconds,
-      startTime: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingStartTime)
+      startTime: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingStartTime)
     }], {
       // Higher gas limit for create listing
       gasLimit: 500000
@@ -42052,14 +42136,14 @@ class MarketplaceDirect {
       throw new Error(`Error getting the listing with id ${listingId}`);
     }
 
-    const quantity = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(quantityDesired);
-    const value = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(normalizedPrice).mul(quantity);
+    const quantity = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(quantityDesired);
+    const value = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(normalizedPrice).mul(quantity);
     const overrides = (await this.contractWrapper.getCallOverrides()) || {};
     await setErc20Allowance(this.contractWrapper, value, currencyContractAddress, overrides);
-    let expirationTimestamp = ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256;
+    let expirationTimestamp = ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256;
 
     if (expirationDate) {
-      expirationTimestamp = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Math.floor(expirationDate.getTime() / 1000));
+      expirationTimestamp = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Math.floor(expirationDate.getTime() / 1000));
     }
 
     return {
@@ -42088,7 +42172,7 @@ class MarketplaceDirect {
      * TODO:
      * - Provide better error handling if offer is too low.
      */
-    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const offer = await this.contractWrapper.readContract.offers(listingId, addressOfOfferor);
     return {
       receipt: await this.contractWrapper.sendTransaction("acceptOffer", [listingId, addressOfOfferor, offer.currency, offer.pricePerToken])
@@ -42116,7 +42200,7 @@ class MarketplaceDirect {
 
 
   async buyoutListing(listingId, quantityDesired, receiver) {
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const {
       valid,
       error
@@ -42127,8 +42211,8 @@ class MarketplaceDirect {
     }
 
     const buyFor = receiver ? receiver : await this.contractWrapper.getSignerAddress();
-    const quantity = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(quantityDesired);
-    const value = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.buyoutPrice).mul(quantity);
+    const quantity = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(quantityDesired);
+    const value = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.buyoutPrice).mul(quantity);
     const overrides = (await this.contractWrapper.getCallOverrides()) || {};
     await setErc20Allowance(this.contractWrapper, value, listing.currencyContractAddress, overrides);
     return {
@@ -42201,7 +42285,7 @@ class MarketplaceDirect {
   async mapListing(listing) {
     return {
       assetContractAddress: listing.assetContract,
-      buyoutPrice: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.buyoutPricePerToken),
+      buyoutPrice: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.buyoutPricePerToken),
       currencyContractAddress: listing.currency,
       buyoutCurrencyValuePerToken: await fetchCurrencyValue(this.contractWrapper.getProvider(), listing.currency, listing.buyoutPricePerToken),
       id: listing.listingId.toString(),
@@ -42239,19 +42323,19 @@ class MarketplaceDirect {
     }
 
     const provider = this.contractWrapper.getProvider();
-    const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
+    const erc165 = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC165_json__WEBPACK_IMPORTED_MODULE_0__, provider);
     const isERC721 = await erc165.supportsInterface(InterfaceId_IERC721);
     const isERC1155 = await erc165.supportsInterface(InterfaceId_IERC1155);
 
     if (isERC721) {
-      const asset = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC721_json__WEBPACK_IMPORTED_MODULE_1__, provider);
+      const asset = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC721_json__WEBPACK_IMPORTED_MODULE_1__, provider);
       const valid = (await asset.ownerOf(listing.tokenId)).toLowerCase() === listing.sellerAddress.toLowerCase();
       return {
         valid,
         error: valid ? undefined : `Seller is not the owner of Token '${listing.tokenId}' from contract '${listing.assetContractAddress} anymore'`
       };
     } else if (isERC1155) {
-      const asset = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC1155_json__WEBPACK_IMPORTED_MODULE_2__, provider);
+      const asset = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(listing.assetContractAddress, _thirdweb_dev_contracts_js_dist_abis_IERC1155_json__WEBPACK_IMPORTED_MODULE_2__, provider);
       const balance = await asset.balanceOf(listing.sellerAddress, listing.tokenId);
       const valid = balance.gte(quantity || listing.quantity);
       return {
@@ -42275,9 +42359,9 @@ class MarketplaceDirect {
 
 class MarketplaceAuction {
   constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -42330,14 +42414,14 @@ class MarketplaceAuction {
 
 
   async getWinningBid(listingId) {
-    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const offers = await this.contractWrapper.readContract.winningBid(listingId);
 
-    if (offers.offeror === ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero) {
+    if (offers.offeror === ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero) {
       return undefined;
     }
 
-    return await mapOffer(this.contractWrapper.getProvider(), ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId), offers);
+    return await mapOffer(this.contractWrapper.getProvider(), ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId), offers);
   }
   /**
    * Get Auction Winner
@@ -42358,19 +42442,19 @@ class MarketplaceAuction {
 
 
   async getWinner(listingId) {
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const offers = await this.contractWrapper.readContract.winningBid(listingId);
-    const now = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Math.floor(Date.now() / 1000));
-    const endTime = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.endTimeInEpochSeconds); // if we have a winner in the map and the current time is past the endtime of the auction return the address of the winner
+    const now = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Math.floor(Date.now() / 1000));
+    const endTime = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.endTimeInEpochSeconds); // if we have a winner in the map and the current time is past the endtime of the auction return the address of the winner
 
-    if (now.gt(endTime) && offers.offeror !== ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero) {
+    if (now.gt(endTime) && offers.offeror !== ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero) {
       return offers.offeror;
     } // otherwise fall back to query filter things
     // TODO this should be via indexer or direct contract call
 
 
     const closedAuctions = await this.contractWrapper.readContract.queryFilter(this.contractWrapper.readContract.filters.AuctionClosed());
-    const auction = closedAuctions.find(a => a.args.listingId.eq(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId)));
+    const auction = closedAuctions.find(a => a.args.listingId.eq(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId)));
 
     if (!auction) {
       throw new Error(`Could not find auction with listingId ${listingId} in closed auctions`);
@@ -42438,7 +42522,7 @@ class MarketplaceAuction {
       quantityToList: listing.quantity,
       reservePricePerToken: normalizedReservePrice,
       secondsUntilEndTime: listing.listingDurationInSeconds,
-      startTime: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingStartTime)
+      startTime: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingStartTime)
     }], {
       // Higher gas limit for create listing
       gasLimit: 500000
@@ -42465,9 +42549,9 @@ class MarketplaceAuction {
 
 
   async buyoutListing(listingId) {
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const currencyMetadata = await fetchCurrencyMetadata(this.contractWrapper.getProvider(), listing.currencyContractAddress);
-    return this.makeBid(listingId, ethers__WEBPACK_IMPORTED_MODULE_57__.formatUnits(listing.buyoutPrice, currencyMetadata.decimals));
+    return this.makeBid(listingId, ethers__WEBPACK_IMPORTED_MODULE_59__.formatUnits(listing.buyoutPrice, currencyMetadata.decimals));
   }
   /**
    * Bid On Auction
@@ -42487,10 +42571,10 @@ class MarketplaceAuction {
 
 
   async makeBid(listingId, pricePerToken) {
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
     const normalizedPrice = await normalizePriceValue(this.contractWrapper.getProvider(), pricePerToken, listing.currencyContractAddress);
 
-    if (normalizedPrice.eq(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(0))) {
+    if (normalizedPrice.eq(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(0))) {
       throw new Error("Cannot make a bid with 0 value");
     }
 
@@ -42499,19 +42583,19 @@ class MarketplaceAuction {
 
     if (winningBid) {
       const isWinnner = isWinningBid(winningBid.pricePerToken, normalizedPrice, bidBuffer);
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(isWinnner, "Bid price is too low based on the current winning bid and the bid buffer");
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(isWinnner, "Bid price is too low based on the current winning bid and the bid buffer");
     } else {
       const tokenPrice = normalizedPrice;
-      const reservePrice = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.reservePrice);
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(tokenPrice.gte(reservePrice), "Bid price is too low based on reserve price");
+      const reservePrice = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.reservePrice);
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(tokenPrice.gte(reservePrice), "Bid price is too low based on reserve price");
     }
 
-    const quantity = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.quantity);
+    const quantity = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.quantity);
     const value = normalizedPrice.mul(quantity);
     const overrides = (await this.contractWrapper.getCallOverrides()) || {};
     await setErc20Allowance(this.contractWrapper, value, listing.currencyContractAddress, overrides);
     return {
-      receipt: await this.contractWrapper.sendTransaction("offer", [listingId, listing.quantity, listing.currencyContractAddress, normalizedPrice, ethers__WEBPACK_IMPORTED_MODULE_67__.MaxUint256], overrides)
+      receipt: await this.contractWrapper.sendTransaction("offer", [listingId, listing.quantity, listing.currencyContractAddress, normalizedPrice, ethers__WEBPACK_IMPORTED_MODULE_69__.MaxUint256], overrides)
     };
   }
   /**
@@ -42530,17 +42614,17 @@ class MarketplaceAuction {
 
 
   async cancelListing(listingId) {
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
-    const now = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(Math.floor(Date.now() / 1000));
-    const startTime = ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.startTimeInEpochSeconds);
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
+    const now = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(Math.floor(Date.now() / 1000));
+    const startTime = ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.startTimeInEpochSeconds);
     const offers = await this.contractWrapper.readContract.winningBid(listingId);
 
-    if (now.gt(startTime) && offers.offeror !== ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero) {
+    if (now.gt(startTime) && offers.offeror !== ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero) {
       throw new AuctionAlreadyStartedError(listingId.toString());
     }
 
     return {
-      receipt: await this.contractWrapper.sendTransaction("closeAuction", [ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId), await this.contractWrapper.getSignerAddress()])
+      receipt: await this.contractWrapper.sendTransaction("closeAuction", [ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId), await this.contractWrapper.getSignerAddress()])
     };
   }
   /**
@@ -42565,11 +42649,11 @@ class MarketplaceAuction {
       closeFor = await this.contractWrapper.getSignerAddress();
     }
 
-    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId));
+    const listing = await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId));
 
     try {
       return {
-        receipt: await this.contractWrapper.sendTransaction("closeAuction", [ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId), closeFor])
+        receipt: await this.contractWrapper.sendTransaction("closeAuction", [ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId), closeFor])
       };
     } catch (err) {
       if (err.message.includes("cannot close auction before it has ended")) {
@@ -42606,7 +42690,7 @@ class MarketplaceAuction {
 
   async getMinimumNextBid(listingId) {
     // we can fetch all of these at the same time using promise.all
-    const [currentBidBufferBps, winningBid, listing] = await Promise.all([this.getBidBufferBps(), this.getWinningBid(listingId), await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listingId))]);
+    const [currentBidBufferBps, winningBid, listing] = await Promise.all([this.getBidBufferBps(), this.getWinningBid(listingId), await this.validateListing(ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listingId))]);
     const currentBidOrReservePrice = winningBid ? // if there is a winning bid use the value of it
     winningBid.currencyValue.value : // if there is no winning bid use the reserve price
     listing.reservePrice;
@@ -42647,7 +42731,7 @@ class MarketplaceAuction {
   async mapListing(listing) {
     return {
       assetContractAddress: listing.assetContract,
-      buyoutPrice: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.buyoutPricePerToken),
+      buyoutPrice: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.buyoutPricePerToken),
       currencyContractAddress: listing.currency,
       buyoutCurrencyValuePerToken: await fetchCurrencyValue(this.contractWrapper.getProvider(), listing.currency, listing.buyoutPricePerToken),
       id: listing.listingId.toString(),
@@ -42656,7 +42740,7 @@ class MarketplaceAuction {
       startTimeInEpochSeconds: listing.startTime,
       asset: await fetchTokenMetadataForContract(listing.assetContract, this.contractWrapper.getProvider(), listing.tokenId, this.storage),
       reservePriceCurrencyValuePerToken: await fetchCurrencyValue(this.contractWrapper.getProvider(), listing.currency, listing.reservePricePerToken),
-      reservePrice: ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(listing.reservePricePerToken),
+      reservePrice: ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(listing.reservePricePerToken),
       endTimeInEpochSeconds: listing.endTime,
       sellerAddress: listing.tokenOwner,
       type: ListingType.Auction
@@ -42694,8 +42778,9 @@ const EditionDropInitializer = {
     }
 
     let [network, address, storage, options] = _ref;
-    const [abi, contract] = await Promise.all([EditionDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_edition-drop-7ec627ce_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./edition-drop-7ec627ce.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/edition-drop-7ec627ce.esm.js"))]);
-    return new contract.EditionDrop(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([EditionDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_edition-drop-473113a3_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./edition-drop-473113a3.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/edition-drop-473113a3.esm.js")), provider.getNetwork()]);
+    return new contract.EditionDrop(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC1155_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/DropERC1155.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/DropERC1155.json", 19))).default
 };
@@ -42710,8 +42795,9 @@ const EditionInitializer = {
     }
 
     let [network, address, storage, options] = _ref2;
-    const [abi, contract] = await Promise.all([EditionInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_edition-4cf21bf9_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./edition-4cf21bf9.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/edition-4cf21bf9.esm.js"))]);
-    return new contract.Edition(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([EditionInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_edition-fff75699_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./edition-fff75699.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/edition-fff75699.esm.js")), provider.getNetwork()]);
+    return new contract.Edition(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC1155_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/TokenERC1155.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/TokenERC1155.json", 19))).default
 };
@@ -42726,8 +42812,9 @@ const MarketplaceInitializer = {
     }
 
     let [network, address, storage, options] = _ref3;
-    const [abi, contract] = await Promise.all([MarketplaceInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_marketplace-3de0e7ea_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./marketplace-3de0e7ea.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/marketplace-3de0e7ea.esm.js"))]);
-    return new contract.Marketplace(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([MarketplaceInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_marketplace-d8cdb871_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./marketplace-d8cdb871.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/marketplace-d8cdb871.esm.js")), provider.getNetwork()]);
+    return new contract.Marketplace(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_Marketplace_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/Marketplace.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Marketplace.json", 19))).default
 };
@@ -42742,8 +42829,9 @@ const MultiwrapInitializer = {
     }
 
     let [network, address, storage, options] = _ref4;
-    const [abi, contract] = await Promise.all([MultiwrapInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_multiwrap-bead2653_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./multiwrap-bead2653.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/multiwrap-bead2653.esm.js"))]);
-    return new contract.Multiwrap(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([MultiwrapInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_multiwrap-33220c5a_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./multiwrap-33220c5a.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/multiwrap-33220c5a.esm.js")), provider.getNetwork()]);
+    return new contract.Multiwrap(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_Multiwrap_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/Multiwrap.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Multiwrap.json", 19))).default
 };
@@ -42758,8 +42846,9 @@ const NFTCollectionInitializer = {
     }
 
     let [network, address, storage, options] = _ref5;
-    const [abi, contract] = await Promise.all([NFTCollectionInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_nft-collection-7596627f_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./nft-collection-7596627f.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/nft-collection-7596627f.esm.js"))]);
-    return new contract.NFTCollection(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([NFTCollectionInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_nft-collection-c8ac6135_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./nft-collection-c8ac6135.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/nft-collection-c8ac6135.esm.js")), provider.getNetwork()]);
+    return new contract.NFTCollection(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC721_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/TokenERC721.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/TokenERC721.json", 19))).default
 };
@@ -42774,8 +42863,9 @@ const NFTDropInitializer = {
     }
 
     let [network, address, storage, options] = _ref6;
-    const [abi, contract] = await Promise.all([NFTDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_nft-drop-1573ddc5_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./nft-drop-1573ddc5.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/nft-drop-1573ddc5.esm.js"))]);
-    return new contract.NFTDrop(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([NFTDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_nft-drop-2968fc30_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./nft-drop-2968fc30.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/nft-drop-2968fc30.esm.js")), provider.getNetwork()]);
+    return new contract.NFTDrop(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC721_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/DropERC721.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/DropERC721.json", 19))).default
 };
@@ -42790,8 +42880,9 @@ const PackInitializer = {
     }
 
     let [network, address, storage, options] = _ref7;
-    const [abi, contract] = await Promise.all([PackInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_pack-74eb00dc_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./pack-74eb00dc.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/pack-74eb00dc.esm.js"))]);
-    return new contract.Pack(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([PackInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_pack-4ed93ec1_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./pack-4ed93ec1.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/pack-4ed93ec1.esm.js")), provider.getNetwork()]);
+    return new contract.Pack(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_Pack_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/Pack.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Pack.json", 19))).default
 };
@@ -42806,8 +42897,9 @@ const SignatureDropInitializer = {
     }
 
     let [network, address, storage, options] = _ref8;
-    const [abi, contract] = await Promise.all([SignatureDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_signature-drop-47789447_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./signature-drop-47789447.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/signature-drop-47789447.esm.js"))]);
-    return new contract.SignatureDrop(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([SignatureDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_signature-drop-f0733061_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./signature-drop-f0733061.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/signature-drop-f0733061.esm.js")), provider.getNetwork()]);
+    return new contract.SignatureDrop(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_SignatureDrop_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/SignatureDrop.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/SignatureDrop.json", 19))).default
 };
@@ -42822,8 +42914,9 @@ const SplitInitializer = {
     }
 
     let [network, address, storage, options] = _ref9;
-    const [abi, contract] = await Promise.all([SplitInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_split-ab0ed0cb_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./split-ab0ed0cb.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/split-ab0ed0cb.esm.js"))]);
-    return new contract.Split(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([SplitInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_split-fdec4f14_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./split-fdec4f14.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/split-fdec4f14.esm.js")), provider.getNetwork()]);
+    return new contract.Split(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_Split_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/Split.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/Split.json", 19))).default
 };
@@ -42838,8 +42931,9 @@ const TokenDropInitializer = {
     }
 
     let [network, address, storage, options] = _ref10;
-    const [abi, contract] = await Promise.all([TokenDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_token-drop-032a5def_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./token-drop-032a5def.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/token-drop-032a5def.esm.js"))]);
-    return new contract.TokenDrop(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([TokenDropInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_token-drop-12c91479_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./token-drop-12c91479.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/token-drop-12c91479.esm.js")), provider.getNetwork()]);
+    return new contract.TokenDrop(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC20_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/DropERC20.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/DropERC20.json", 19))).default
 };
@@ -42854,8 +42948,9 @@ const TokenInitializer = {
     }
 
     let [network, address, storage, options] = _ref11;
-    const [abi, contract] = await Promise.all([TokenInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_token-6d923baa_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./token-6d923baa.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/token-6d923baa.esm.js"))]);
-    return new contract.Token(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([TokenInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_token-9ef33b84_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./token-9ef33b84.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/token-9ef33b84.esm.js")), provider.getNetwork()]);
+    return new contract.Token(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC20_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/TokenERC20.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/TokenERC20.json", 19))).default
 };
@@ -42870,8 +42965,9 @@ const VoteInitializer = {
     }
 
     let [network, address, storage, options] = _ref12;
-    const [abi, contract] = await Promise.all([VoteInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_vote-7c2d0cea_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./vote-7c2d0cea.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/vote-7c2d0cea.esm.js"))]);
-    return new contract.Vote(network, address, storage, options, abi);
+    const [, provider] = getSignerAndProvider(network, options);
+    const [abi, contract, _network] = await Promise.all([VoteInitializer.getAbi(), __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_sdk_dist_vote-dcb2bdf0_esm_js").then(__webpack_require__.bind(__webpack_require__, /*! ./vote-dcb2bdf0.esm.js */ "./node_modules/@thirdweb-dev/sdk/dist/vote-dcb2bdf0.esm.js")), provider.getNetwork()]);
+    return new contract.Vote(network, address, storage, options, abi, _network.chainId);
   },
   getAbi: async () => (await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_dist_abis_VoteERC20_json").then(__webpack_require__.t.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/dist/abis/VoteERC20.json */ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/VoteERC20.json", 19))).default
 };
@@ -42914,12 +43010,56 @@ function getContractTypeForRemoteName(name) {
 }
 
 /**
+ * Have an official Application URI for this contract.
+ * @remarks Configure an official Application URI for this contract.
+ * @example
+ * ```javascript
+ * const contract = await sdk.getContract("{{contract_address}}");
+ * const appURI = await contract.appuri.get();
+ * appURI = "ipfs://some_ipfs_hash";
+ *
+ * await contract.appuri.set(appURI)
+ * ```
+ * @public
+ */
+class ContractAppURI {
+  constructor(contractWrapper) {
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_APPURI.name);
+
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
+
+    this.contractWrapper = contractWrapper;
+  }
+  /**
+   * Get the appURI for the contract
+   * @returns the appURI object
+   */
+
+
+  async get() {
+    return await this.contractWrapper.readContract.appURI();
+  }
+  /**
+   * Set the appURI for the contract
+   * @param appURI - the uri to set (typically an IPFS hash)
+   */
+
+
+  async set(appURI) {
+    return {
+      receipt: await this.contractWrapper.sendTransaction("setAppURI", [appURI])
+    };
+  }
+
+}
+
+/**
  * Listen to Contract events in real time
  * @public
  */
 class ContractEvents {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -43204,7 +43344,7 @@ class ContractEvents {
  */
 class ContractInterceptor {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -43244,9 +43384,9 @@ class ContractInterceptor {
  */
 class ContractPlatformFee {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_PLATFORM_FEE.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_PLATFORM_FEE.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -43295,11 +43435,11 @@ class ContractPlatformFee {
  */
 class ContractPublishedMetadata {
   constructor(contractWrapper, storage) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_cachedMetadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_cachedMetadata", void 0);
 
     this.contractWrapper = contractWrapper;
     this.storage = storage;
@@ -43425,6 +43565,14 @@ class SmartContract {
     return assertEnabled(this.detectOwnable(), FEATURE_OWNER);
   }
   /**
+   * Set and get the appuri of the contract
+   */
+
+
+  get appURI() {
+    return assertEnabled(this.detectAppURI(), FEATURE_APPURI);
+  }
+  /**
    * Auto-detects ERC20 standard functions.
    */
 
@@ -43449,28 +43597,36 @@ class SmartContract {
     return assertEnabled(this.detectErc1155(), FEATURE_EDITION);
   }
 
+  get chainId() {
+    return this._chainId;
+  }
+
   constructor(network, address, abi, storage) {
     let options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-    let contractWrapper = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : new ContractWrapper(network, address, abi, options);
+    let chainId = arguments.length > 5 ? arguments[5] : undefined;
+    let contractWrapper = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : new ContractWrapper(network, address, abi, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "events", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "events", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "interceptor", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "interceptor", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "encoder", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "encoder", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "estimator", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "estimator", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "publishedMetadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "publishedMetadata", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "abi", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "abi", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "metadata", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "metadata", void 0);
 
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_chainId", void 0);
+
+    this._chainId = chainId;
     this.storage = storage;
     this.contractWrapper = contractWrapper;
     this.abi = abi;
@@ -43561,7 +43717,7 @@ class SmartContract {
 
   detectErc20() {
     if (detectContractFeature(this.contractWrapper, "ERC20")) {
-      return new Erc20(this.contractWrapper, this.storage);
+      return new Erc20(this.contractWrapper, this.storage, this.chainId);
     }
 
     return undefined;
@@ -43569,7 +43725,7 @@ class SmartContract {
 
   detectErc721() {
     if (detectContractFeature(this.contractWrapper, "ERC721")) {
-      return new Erc721(this.contractWrapper, this.storage);
+      return new Erc721(this.contractWrapper, this.storage, this.chainId);
     }
 
     return undefined;
@@ -43577,7 +43733,15 @@ class SmartContract {
 
   detectErc1155() {
     if (detectContractFeature(this.contractWrapper, "ERC1155")) {
-      return new Erc1155(this.contractWrapper, this.storage);
+      return new Erc1155(this.contractWrapper, this.storage, this.chainId);
+    }
+
+    return undefined;
+  }
+
+  detectAppURI() {
+    if (detectContractFeature(this.contractWrapper, "AppURI")) {
+      return new ContractAppURI(this.contractWrapper);
     }
 
     return undefined;
@@ -43602,9 +43766,9 @@ class ContractPublisher extends RPCConnectionHandler {
   constructor(network, options, storage) {
     super(network, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "publisher", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "publisher", void 0);
 
     this.storage = storage;
     this.publisher = new ContractWrapper(network, getContractPublisherAddress(), _thirdweb_dev_contracts_js_dist_abis_ContractPublisher_json__WEBPACK_IMPORTED_MODULE_34__, options);
@@ -43714,7 +43878,7 @@ class ContractPublisher extends RPCConnectionHandler {
 
   async resolveReleasesFromAddress(address) {
     const contractUri = await resolveContractUriFromAddress(address, this.getProvider());
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(contractUri, "Could not resolve contract URI from address");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(contractUri, "Could not resolve contract URI from address");
     return await this.resolvePublishMetadataFromCompilerMetadata(contractUri);
   }
   /**
@@ -43735,7 +43899,7 @@ class ContractPublisher extends RPCConnectionHandler {
 
   async updatePublisherProfile(profileMetadata) {
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "A signer is required");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "A signer is required");
     const publisher = await signer.getAddress();
     const profileUri = await this.storage.upload(profileMetadata);
     return {
@@ -43805,7 +43969,7 @@ class ContractPublisher extends RPCConnectionHandler {
 
   async publish(predeployUri, extraMetadata) {
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "A signer is required");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "A signer is required");
     const publisher = await signer.getAddress();
     const predeployMetadata = await fetchRawPredeployMetadata(predeployUri, this.storage); // ensure version is incremental
 
@@ -43822,7 +43986,7 @@ class ContractPublisher extends RPCConnectionHandler {
 
     const fetchedBytecode = await (await this.storage.download(predeployMetadata.bytecodeUri)).text();
     const bytecode = fetchedBytecode.startsWith("0x") ? fetchedBytecode : `0x${fetchedBytecode}`;
-    const bytecodeHash = ethers__WEBPACK_IMPORTED_MODULE_59__.keccak256(["bytes"], [bytecode]);
+    const bytecodeHash = ethers__WEBPACK_IMPORTED_MODULE_61__.keccak256(["bytes"], [bytecode]);
     const contractId = predeployMetadata.name;
     const fullMetadata = FullPublishMetadataSchemaInput.parse({ ...extraMetadata,
       metadataUri: predeployMetadata.metadataUri,
@@ -43832,7 +43996,7 @@ class ContractPublisher extends RPCConnectionHandler {
       publisher
     });
     const fullMetadataUri = await this.storage.upload(fullMetadata);
-    const receipt = await this.publisher.sendTransaction("publishContract", [publisher, contractId, fullMetadataUri, predeployMetadata.metadataUri, bytecodeHash, ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero]);
+    const receipt = await this.publisher.sendTransaction("publishContract", [publisher, contractId, fullMetadataUri, predeployMetadata.metadataUri, bytecodeHash, ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero]);
     const events = this.publisher.parseLogs("ContractPublished", receipt.logs);
 
     if (events.length < 1) {
@@ -43879,15 +44043,15 @@ class ContractPublisher extends RPCConnectionHandler {
  */
 class UserWallet {
   constructor(network, options) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "connection", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "connection", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "options", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "options", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "events", new (eventemitter3__WEBPACK_IMPORTED_MODULE_4___default())());
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "events", new (eventemitter3__WEBPACK_IMPORTED_MODULE_3___default())());
 
     this.connection = new RPCConnectionHandler(network, options);
     this.options = options;
-    this.events = new (eventemitter3__WEBPACK_IMPORTED_MODULE_4___default())();
+    this.events = new (eventemitter3__WEBPACK_IMPORTED_MODULE_3___default())();
   } // TODO disconnect()
   // TODO switchChain()
   // TODO tokens()
@@ -44015,9 +44179,9 @@ class UserWallet {
 
 
   recoverAddress(message, signature) {
-    const messageHash = ethers__WEBPACK_IMPORTED_MODULE_68__.hashMessage(message);
-    const messageHashBytes = ethers__WEBPACK_IMPORTED_MODULE_46__.arrayify(messageHash);
-    return ethers__WEBPACK_IMPORTED_MODULE_69__.recoverAddress(messageHashBytes, signature);
+    const messageHash = ethers__WEBPACK_IMPORTED_MODULE_70__.hashMessage(message);
+    const messageHashBytes = ethers__WEBPACK_IMPORTED_MODULE_49__.arrayify(messageHash);
+    return ethers__WEBPACK_IMPORTED_MODULE_71__.recoverAddress(messageHashBytes, signature);
   }
   /**
    * Send a raw transaction to the blockchain from the connected wallet
@@ -44039,7 +44203,7 @@ class UserWallet {
 
   requireWallet() {
     const signer = this.connection.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "This action requires a connected wallet. Please pass a valid signer to the SDK.");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "This action requires a connected wallet. Please pass a valid signer to the SDK.");
     return signer;
   }
 
@@ -44108,8 +44272,8 @@ class ThirdwebSDK extends RPCConnectionHandler {
     let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     let storage = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new _thirdweb_dev_storage__WEBPACK_IMPORTED_MODULE_36__.ThirdwebStorage();
     const signerOrProvider = getProviderForNetwork(network);
-    const provider = ethers__WEBPACK_IMPORTED_MODULE_61__.Signer.isSigner(signerOrProvider) ? signerOrProvider.provider : typeof signerOrProvider === "string" ? getReadOnlyProvider(signerOrProvider) : signerOrProvider;
-    const signer = new ethers__WEBPACK_IMPORTED_MODULE_70__.Wallet(privateKey, provider);
+    const provider = ethers__WEBPACK_IMPORTED_MODULE_63__.Signer.isSigner(signerOrProvider) ? signerOrProvider.provider : typeof signerOrProvider === "string" ? getReadOnlyProvider(signerOrProvider) : signerOrProvider;
+    const signer = new ethers__WEBPACK_IMPORTED_MODULE_72__.Wallet(privateKey, provider);
     return ThirdwebSDK.fromSigner(signer, network, options, storage);
   }
   /**
@@ -44124,19 +44288,19 @@ class ThirdwebSDK extends RPCConnectionHandler {
     const signerOrProvider = getProviderForNetwork(network);
     super(signerOrProvider, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractCache", new Map());
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractCache", new Map());
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_publisher", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_publisher", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storageHandler", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storageHandler", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "deployer", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "deployer", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "wallet", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "wallet", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "auth", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "auth", void 0);
 
     this.storageHandler = storage;
     this.storage = storage;
@@ -44146,152 +44310,246 @@ class ThirdwebSDK extends RPCConnectionHandler {
     this._publisher = new ContractPublisher(signerOrProvider, this.options, this.storageHandler);
   }
   /**
-   * Get an instance of a Drop contract
+   * Get an instance of a NFT Drop contract
    * @param contractAddress - the address of the deployed contract
-   * @returns the contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const dropContract = await sdk.getDropContract("0x1234...");
+   * + const dropContract = await sdk.getContract("0x1234...", "nft-drop");
+   * ```
    */
 
 
   async getNFTDrop(contractAddress) {
-    return await this.getBuiltInContract(contractAddress, NFTDropInitializer.contractType);
+    return await this.getContract(contractAddress, "nft-drop");
   }
   /**
-   * Get an instance of a SignatureDrop contract
+   * Get an instance of a Signature Drop contract
    * @param contractAddress - the address of the deployed contract
-   * @returns the contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const signatureDrop = await sdk.getSignatureDrop("0x1234...");
+   * + const signatureDrop = await sdk.getContract("0x1234...", "signature-drop");
+   * ```
    */
 
 
   async getSignatureDrop(contractAddress) {
-    return await this.getBuiltInContract(contractAddress, SignatureDropInitializer.contractType);
+    return await this.getContract(contractAddress, "signature-drop");
   }
   /**
-   * Get an instance of a NFT Collection contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * Get an instance of a NFT Collection Drop contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const signatureDrop = await sdk.getNFTCollection("0x1234...");
+   * + const signatureDrop = await sdk.getContract("0x1234...", "nft-collection");
+   * ```
    */
 
 
-  async getNFTCollection(address) {
-    return await this.getBuiltInContract(address, NFTCollectionInitializer.contractType);
+  async getNFTCollection(contractAddress) {
+    return await this.getContract(contractAddress, "nft-collection");
   }
   /**
    * Get an instance of a Edition Drop contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const editionDrop = await sdk.getEditionDrop("0x1234...");
+   * + const editionDrop = await sdk.getContract("0x1234...", "edition-drop");
+   * ```
    */
 
 
-  async getEditionDrop(address) {
-    return await this.getBuiltInContract(address, EditionDropInitializer.contractType);
+  async getEditionDrop(contractAddress) {
+    return await this.getContract(contractAddress, "edition-drop");
   }
   /**
-   * Get an instance of an Edition contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * Get an instance of a Edition contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const edition = await sdk.getEdition("0x1234...");
+   * + const edition = await sdk.getContract("0x1234...", "edition");
+   * ```
    */
 
 
-  async getEdition(address) {
-    return await this.getBuiltInContract(address, EditionInitializer.contractType);
+  async getEdition(contractAddress) {
+    return await this.getContract(contractAddress, "edition");
   }
   /**
    * Get an instance of a Token Drop contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const tokenDrop = await sdk.getTokenDrop("0x1234...");
+   * + const tokenDrop = await sdk.getContract("0x1234...", "token-drop");
+   * ```
    */
 
 
-  async getTokenDrop(address) {
-    return await this.getBuiltInContract(address, TokenDropInitializer.contractType);
+  async getTokenDrop(contractAddress) {
+    return await this.getContract(contractAddress, "token-drop");
   }
   /**
    * Get an instance of a Token contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const token = await sdk.getToken("0x1234...");
+   * + const token = await sdk.getContract("0x1234...", "token");
+   * ```
    */
 
 
-  async getToken(address) {
-    return await this.getBuiltInContract(address, TokenInitializer.contractType);
+  async getToken(contractAddress) {
+    return await this.getContract(contractAddress, "token");
   }
   /**
    * Get an instance of a Vote contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const vote = await sdk.getVote("0x1234...");
+   * + const vote = await sdk.getContract("0x1234...", "vote");
+   * ```
    */
 
 
-  async getVote(address) {
-    return await this.getBuiltInContract(address, VoteInitializer.contractType);
+  async getVote(contractAddress) {
+    return await this.getContract(contractAddress, "vote");
   }
   /**
-   * Get an instance of a Splits contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * Get an instance of a Split contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const split = await sdk.getSplit("0x1234...");
+   * + const split = await sdk.getContract("0x1234...", "split");
+   * ```
    */
 
 
-  async getSplit(address) {
-    return await this.getBuiltInContract(address, SplitInitializer.contractType);
+  async getSplit(contractAddress) {
+    return await this.getContract(contractAddress, "split");
   }
   /**
    * Get an instance of a Marketplace contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const marketplace = await sdk.getMarketplace("0x1234...");
+   * + const marketplace = await sdk.getContract("0x1234...", "marketplace");
+   * ```
    */
 
 
-  async getMarketplace(address) {
-    return await this.getBuiltInContract(address, MarketplaceInitializer.contractType);
+  async getMarketplace(contractAddress) {
+    return await this.getContract(contractAddress, "marketplace");
   }
   /**
    * Get an instance of a Pack contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const pack = await sdk.getPack("0x1234...");
+   * + const pack = await sdk.getContract("0x1234...", "pack");
+   * ```
    */
 
 
-  async getPack(address) {
-    return await this.getBuiltInContract(address, PackInitializer.contractType);
+  async getPack(contractAddress) {
+    return await this.getContract(contractAddress, "pack");
   }
   /**
-   * Get an instance of a Multiwrap contract
-   * @param address - the address of the deployed contract
-   * @returns the contract
-   * @beta
+   * Get an instance of a Pack contract
+   * @param contractAddress - the address of the deployed contract
+   * @deprecated
+   * This method is deprecated and will be removed in a future major version. You should use {@link getContract} instead.
+   * ```diff
+   * - const multiWrap = await sdk.getMultiwrap("0x1234...");
+   * + const multiWrap = await sdk.getContract("0x1234...", "multiwrap");
+   * ```
    */
 
 
-  async getMultiwrap(address) {
-    return await this.getBuiltInContract(address, MultiwrapInitializer.contractType);
+  async getMultiwrap(contractAddress) {
+    return await this.getContract(contractAddress, "multiwrap");
   }
   /**
-   *
+   * Get an instance of a Custom ThirdwebContract
+   * @param address - the address of the deployed contract
+   * @returns the contract
+   * @public
+   * @example
+   * ```javascript
+   * const contract = await sdk.getContract("{{contract_address}}");
+   * ```
+   */
+
+
+  async getContract(address, contractTypeOrABI) {
+    // if we have a contract in the cache we will return it
+    // we will do this **without** checking any contract type things for simplicity, this may have to change in the future?
+    if (this.contractCache.has(address)) {
+      // we know this will be there since we check the has above
+      return this.contractCache.get(address);
+    }
+
+    let newContract; // if we don't have a contractType or ABI then we will have to resolve it regardless
+    // we also handle it being "custom" just in case...
+
+    if (!contractTypeOrABI || contractTypeOrABI === "custom") {
+      const resolvedContractType = await this.resolveContractType(address);
+
+      if (resolvedContractType === "custom") {
+        // if it's a custom contract we gotta fetch the compilet metadata
+        try {
+          const publisher = this.getPublisher();
+          const metadata = await publisher.fetchCompilerMetadataFromAddress(address);
+          newContract = await this.getContractFromAbi(address, metadata.abi);
+        } catch (e) {
+          throw new Error(`Error fetching ABI for this contract\n\n${e}`);
+        }
+      } else {
+        // otherwise if it's a prebuilt contract we can just use the contract type
+        const contractAbi = await PREBUILT_CONTRACTS_MAP[resolvedContractType].getAbi();
+        newContract = await this.getContractFromAbi(address, contractAbi);
+      }
+    } // if it's a builtin contract type we can just use the contract type to initialize the contract instance
+    else if (typeof contractTypeOrABI === "string" && contractTypeOrABI in PREBUILT_CONTRACTS_MAP) {
+      newContract = await PREBUILT_CONTRACTS_MAP[contractTypeOrABI].initialize(this.getSignerOrProvider(), address, this.storage, this.options);
+    } // otherwise it has to be an ABI
+    else {
+      newContract = await this.getContractFromAbi(address, contractTypeOrABI);
+    } // set whatever we have on the cache
+
+
+    this.contractCache.set(address, newContract); // return it
+
+    return newContract;
+  }
+  /**
    * @internal
-   * @param address - the address of the contract to instantiate
-   * @param contractType - optional, the type of contract to instantiate
-   * @returns a promise that resolves with the contract instance
+   * @deprecated use {@link getContract} directly instead
    */
 
 
   async getBuiltInContract(address, contractType) {
-    // if we have a contract in the cache we will return it
-    // we will do this **without** checking any contract type things for simplicity, this may have to change in the future?
-    if (this.contractCache.has(address)) {
-      return this.contractCache.get(address);
-    } //@ts-expect-error - this is just extra runtime safety
-
-
-    if (contractType === "custom") {
-      throw new Error("To get an instance of a custom contract, use getContract(address)");
-    } //lazy import the contract from the map
-
-
-    const newContract = await PREBUILT_CONTRACTS_MAP[contractType].initialize(this.getSignerOrProvider(), address, this.storageHandler, this.options);
-    this.contractCache.set(address, newContract); // return the new contract
-
-    return newContract;
+    return await this.getContract(address, contractType);
   }
   /**
    * @param contractAddress - the address of the contract to attempt to resolve the contract type for
@@ -44302,9 +44560,9 @@ class ThirdwebSDK extends RPCConnectionHandler {
 
   async resolveContractType(contractAddress) {
     try {
-      const contract = new ethers__WEBPACK_IMPORTED_MODULE_64__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IThirdwebContract_json__WEBPACK_IMPORTED_MODULE_35__, // !provider only! - signer can break things here!
+      const contract = new ethers__WEBPACK_IMPORTED_MODULE_66__.Contract(contractAddress, _thirdweb_dev_contracts_js_dist_abis_IThirdwebContract_json__WEBPACK_IMPORTED_MODULE_35__, // !provider only! - signer can break things here!
       this.getProvider());
-      const remoteContractType = ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8String(await contract.contractType()) // eslint-disable-next-line no-control-regex
+      const remoteContractType = ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8String(await contract.contractType()) // eslint-disable-next-line no-control-regex
       .replace(/\x00/g, "");
       return getContractTypeForRemoteName(remoteContractType);
     } catch (err) {
@@ -44339,10 +44597,10 @@ class ThirdwebSDK extends RPCConnectionHandler {
         try {
           metadata = (await this.getContract(address)).metadata;
         } catch (e) {
-          console.warn(`Couldn't get contract metadata for custom contract: ${address}`);
+          console.warn(`Couldn't get contract metadata for custom contract: ${address} - ${e}`);
         }
       } else {
-        metadata = (await this.getBuiltInContract(address, contractType)).metadata;
+        metadata = (await this.getContract(address, contractType)).metadata;
       }
 
       return {
@@ -44357,7 +44615,7 @@ class ThirdwebSDK extends RPCConnectionHandler {
         contractType,
         metadata
       } = _ref;
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(metadata, "All ThirdwebContracts require metadata");
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(metadata, "All ThirdwebContracts require metadata");
       return {
         address,
         contractType,
@@ -44388,39 +44646,6 @@ class ThirdwebSDK extends RPCConnectionHandler {
     }
   }
   /**
-   * Get an instance of a Custom ThirdwebContract
-   * @param address - the address of the deployed contract
-   * @returns the contract
-   * @beta
-   * @example
-   * ```javascript
-   * const contract = await sdk.getContract("{{contract_address}}");
-   * ```
-   */
-
-
-  async getContract(address) {
-    if (this.contractCache.has(address)) {
-      return this.contractCache.get(address);
-    }
-
-    try {
-      // try built in contract first, eventually all our contracts will have bytecode metadata
-      const contractType = await this.resolveContractType(address);
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(contractType !== "custom", "custom contract type");
-      const contractAbi = await PREBUILT_CONTRACTS_MAP[contractType].getAbi();
-      return this.getContractFromAbi(address, contractAbi);
-    } catch (err) {
-      try {
-        const publisher = this.getPublisher();
-        const metadata = await publisher.fetchCompilerMetadataFromAddress(address);
-        return this.getContractFromAbi(address, metadata.abi);
-      } catch (e) {
-        throw new Error(`Error fetching ABI for this contract\n\n${e}`);
-      }
-    }
-  }
-  /**
    * Get an instance of a Custom contract from a json ABI
    * @param address - the address of the deployed contract
    * @param abi - the JSON abi
@@ -44440,13 +44665,14 @@ class ThirdwebSDK extends RPCConnectionHandler {
    */
 
 
-  getContractFromAbi(address, abi) {
+  async getContractFromAbi(address, abi) {
     if (this.contractCache.has(address)) {
       return this.contractCache.get(address);
-    } // TODO we still might want to lazy-fy this
+    }
 
+    const [, provider] = getSignerAndProvider(this.getSignerOrProvider(), this.options); // TODO we still might want to lazy-fy this
 
-    const contract = new SmartContract(this.getSignerOrProvider(), address, abi, this.storageHandler, this.options);
+    const contract = new SmartContract(this.getSignerOrProvider(), address, abi, this.storageHandler, this.options, (await provider.getNetwork()).chainId);
     this.contractCache.set(address, contract);
     return contract;
   }
@@ -44482,7 +44708,7 @@ class ContractFactory extends ContractWrapper {
   constructor(factoryAddr, network, storage, options) {
     super(network, factoryAddr, _thirdweb_dev_contracts_js_dist_abis_TWFactory_json__WEBPACK_IMPORTED_MODULE_32__, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.storage = storage;
   }
@@ -44493,8 +44719,8 @@ class ContractFactory extends ContractWrapper {
 
     const contractURI = await this.storage.upload(metadata);
     const ABI = await contract.getAbi();
-    const encodedFunc = ethers__WEBPACK_IMPORTED_MODULE_64__.Contract.getInterface(ABI).encodeFunctionData("initialize", await this.getDeployArguments(contractType, metadata, contractURI));
-    const encodedType = ethers__WEBPACK_IMPORTED_MODULE_71__.formatBytes32String(contract.name);
+    const encodedFunc = ethers__WEBPACK_IMPORTED_MODULE_66__.Contract.getInterface(ABI).encodeFunctionData("initialize", await this.getDeployArguments(contractType, metadata, contractURI));
+    const encodedType = ethers__WEBPACK_IMPORTED_MODULE_73__.formatBytes32String(contract.name);
     let receipt;
 
     try {
@@ -44507,7 +44733,7 @@ class ContractFactory extends ContractWrapper {
 
 
       const blockNumber = await this.getProvider().getBlockNumber();
-      receipt = await this.sendTransaction("deployProxyDeterministic", [encodedType, encodedFunc, ethers__WEBPACK_IMPORTED_MODULE_71__.formatBytes32String(blockNumber.toString())]);
+      receipt = await this.sendTransaction("deployProxyDeterministic", [encodedType, encodedFunc, ethers__WEBPACK_IMPORTED_MODULE_73__.formatBytes32String(blockNumber.toString())]);
     }
 
     const events = this.parseLogs("ProxyDeployed", receipt.logs);
@@ -44521,9 +44747,9 @@ class ContractFactory extends ContractWrapper {
 
 
   async deployProxyByImplementation(implementationAddress, implementationAbi, initializerFunction, initializerArgs) {
-    const encodedFunc = ethers__WEBPACK_IMPORTED_MODULE_64__.Contract.getInterface(implementationAbi).encodeFunctionData(initializerFunction, initializerArgs);
+    const encodedFunc = ethers__WEBPACK_IMPORTED_MODULE_66__.Contract.getInterface(implementationAbi).encodeFunctionData(initializerFunction, initializerArgs);
     const blockNumber = await this.getProvider().getBlockNumber();
-    const receipt = await this.sendTransaction("deployProxyByImplementation", [implementationAddress, encodedFunc, ethers__WEBPACK_IMPORTED_MODULE_71__.formatBytes32String(blockNumber.toString())]);
+    const receipt = await this.sendTransaction("deployProxyByImplementation", [implementationAddress, encodedFunc, ethers__WEBPACK_IMPORTED_MODULE_73__.formatBytes32String(blockNumber.toString())]);
     const events = this.parseLogs("ProxyDeployed", receipt.logs);
 
     if (events.length < 1) {
@@ -44566,11 +44792,11 @@ class ContractFactory extends ContractWrapper {
 
       case VoteInitializer.contractType:
         const voteMetadata = VoteInitializer.schema.deploy.parse(metadata);
-        return [voteMetadata.name, contractURI, trustedForwarders, voteMetadata.voting_token_address, voteMetadata.voting_delay_in_blocks, voteMetadata.voting_period_in_blocks, ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(voteMetadata.proposal_token_threshold), voteMetadata.voting_quorum_fraction];
+        return [voteMetadata.name, contractURI, trustedForwarders, voteMetadata.voting_token_address, voteMetadata.voting_delay_in_blocks, voteMetadata.voting_period_in_blocks, ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(voteMetadata.proposal_token_threshold), voteMetadata.voting_quorum_fraction];
 
       case SplitInitializer.contractType:
         const splitsMetadata = SplitInitializer.schema.deploy.parse(metadata);
-        return [await this.getSignerAddress(), contractURI, trustedForwarders, splitsMetadata.recipients.map(s => s.address), splitsMetadata.recipients.map(s => ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(s.sharesBps))];
+        return [await this.getSignerAddress(), contractURI, trustedForwarders, splitsMetadata.recipients.map(s => s.address), splitsMetadata.recipients.map(s => ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(s.sharesBps))];
 
       case MarketplaceInitializer.contractType:
         const marketplaceMetadata = MarketplaceInitializer.schema.deploy.parse(metadata);
@@ -44588,9 +44814,9 @@ class ContractFactory extends ContractWrapper {
   async getDefaultTrustedForwarders() {
     const chainId = await this.getChainID();
     const chainEnum = SUPPORTED_CHAIN_IDS.find(c => c === chainId);
-    const biconomyForwarder = chainEnum ? CONTRACT_ADDRESSES[chainEnum].biconomyForwarder : ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero;
-    const openzeppelinForwarder = chainEnum ? CONTRACT_ADDRESSES[chainEnum].openzeppelinForwarder : ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero;
-    return biconomyForwarder !== ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero ? [openzeppelinForwarder, biconomyForwarder] : [openzeppelinForwarder];
+    const biconomyForwarder = chainEnum ? CONTRACT_ADDRESSES[chainEnum].biconomyForwarder : ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero;
+    const openzeppelinForwarder = chainEnum ? CONTRACT_ADDRESSES[chainEnum].openzeppelinForwarder : ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero;
+    return biconomyForwarder !== ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero ? [openzeppelinForwarder, biconomyForwarder] : [openzeppelinForwarder];
   }
 
 }
@@ -44606,7 +44832,7 @@ class ContractRegistry extends ContractWrapper {
 
   async getContractAddresses(walletAddress) {
     // TODO @fixme the filter here is necessary because for some reason getAll returns a 0x0 address for the first entry
-    return (await this.readContract.getAll(walletAddress)).filter(adr => ethers__WEBPACK_IMPORTED_MODULE_45__.isAddress(adr) && adr.toLowerCase() !== ethers__WEBPACK_IMPORTED_MODULE_49__.AddressZero);
+    return (await this.readContract.getAll(walletAddress)).filter(adr => ethers__WEBPACK_IMPORTED_MODULE_47__.isAddress(adr) && adr.toLowerCase() !== ethers__WEBPACK_IMPORTED_MODULE_52__.AddressZero);
   }
 
   async addContract(contractAddress) {
@@ -44658,11 +44884,11 @@ class ContractDeployer extends RPCConnectionHandler {
   constructor(network, options, storage) {
     super(network, options);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_factory", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_factory", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "_registry", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "_registry", void 0);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "storage", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "storage", void 0);
 
     this.storage = storage;
   }
@@ -44961,7 +45187,7 @@ class ContractDeployer extends RPCConnectionHandler {
 
   async deployViaFactory(factoryAddress, implementationAddress, implementationAbi, initializerFunction, initializerArgs) {
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "signer is required"); // TODO only require factory interface here - IProxyFactory
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "signer is required"); // TODO only require factory interface here - IProxyFactory
 
     const proxyFactory = new ContractFactory(factoryAddress, this.getSignerOrProvider(), this.storage, {});
     return await proxyFactory.deployProxyByImplementation(implementationAddress, implementationAbi, initializerFunction, initializerArgs);
@@ -44976,7 +45202,7 @@ class ContractDeployer extends RPCConnectionHandler {
 
 
   async deployProxy(implementationAddress, implementationAbi, initializerFunction, initializerArgs) {
-    const encodedInitializer = ethers__WEBPACK_IMPORTED_MODULE_64__.Contract.getInterface(implementationAbi).encodeFunctionData(initializerFunction, initializerArgs);
+    const encodedInitializer = ethers__WEBPACK_IMPORTED_MODULE_66__.Contract.getInterface(implementationAbi).encodeFunctionData(initializerFunction, initializerArgs);
     const {
       TWProxy__factory
     } = await __webpack_require__.e(/*! import() */ "node_modules_thirdweb-dev_contracts-js_factories_TWProxy__factory_dist_thirdweb-dev-contracts-a26ff3").then(__webpack_require__.bind(__webpack_require__, /*! @thirdweb-dev/contracts-js/factories/TWProxy__factory */ "./node_modules/@thirdweb-dev/contracts-js/factories/TWProxy__factory/dist/thirdweb-dev-contracts-js-factories-TWProxy__factory.esm.js"));
@@ -45052,7 +45278,7 @@ class ContractDeployer extends RPCConnectionHandler {
 
   async deployContractFromUri(publishMetadataUri, constructorParamValues, options) {
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "A signer is required");
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "A signer is required");
     const compilerMetadata = await fetchPreDeployMetadata(publishMetadataUri, this.storage);
     let isDeployableViaFactory;
     let isDeployableViaProxy;
@@ -45070,28 +45296,28 @@ class ContractDeployer extends RPCConnectionHandler {
 
     if (factoryDeploymentData && (isDeployableViaProxy || isDeployableViaFactory) && !forceDirectDeploy) {
       const chainId = (await this.getProvider().getNetwork()).chainId;
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(factoryDeploymentData.implementationAddresses, "implementationAddresses is required");
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(factoryDeploymentData.implementationAddresses, "implementationAddresses is required");
       const implementationAddress = factoryDeploymentData.implementationAddresses[chainId];
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(implementationAddress, `implementationAddress not found for chainId '${chainId}'`);
-      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(factoryDeploymentData.implementationInitializerFunction, `implementationInitializerFunction not set'`);
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(implementationAddress, `implementationAddress not found for chainId '${chainId}'`);
+      (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(factoryDeploymentData.implementationInitializerFunction, `implementationInitializerFunction not set'`);
       const initializerParamTypes = extractFunctionParamsFromAbi(compilerMetadata.abi, factoryDeploymentData.implementationInitializerFunction).map(p => p.type);
       const paramValues = this.convertParamValues(initializerParamTypes, constructorParamValues);
 
-      if (isDeployableViaProxy) {
+      if (isDeployableViaFactory) {
+        // deploy via a factory (prioritise factory)
+        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(factoryDeploymentData.factoryAddresses, "isDeployableViaFactory is true so factoryAddresses is required");
+        const factoryAddress = factoryDeploymentData.factoryAddresses[chainId];
+        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(factoryAddress, `isDeployableViaFactory is true and factoryAddress not found for chainId '${chainId}'`);
+        return await this.deployViaFactory(factoryAddress, implementationAddress, compilerMetadata.abi, factoryDeploymentData.implementationInitializerFunction, paramValues);
+      } else if (isDeployableViaProxy) {
         // deploy a proxy directly
         return await this.deployProxy(implementationAddress, compilerMetadata.abi, factoryDeploymentData.implementationInitializerFunction, paramValues);
-      } else if (isDeployableViaFactory) {
-        // deploy via a factory
-        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(factoryDeploymentData.factoryAddresses, "isDeployableViaFactory is true so factoryAddresses is required");
-        const factoryAddress = factoryDeploymentData.factoryAddresses[chainId];
-        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(factoryAddress, `isDeployableViaFactory is true and factoryAddress not found for chainId '${chainId}'`);
-        return await this.deployViaFactory(factoryAddress, implementationAddress, compilerMetadata.abi, factoryDeploymentData.implementationInitializerFunction, paramValues);
       }
     }
 
     const bytecode = compilerMetadata.bytecode.startsWith("0x") ? compilerMetadata.bytecode : `0x${compilerMetadata.bytecode}`;
 
-    if (!ethers__WEBPACK_IMPORTED_MODULE_46__.isHexString(bytecode)) {
+    if (!ethers__WEBPACK_IMPORTED_MODULE_49__.isHexString(bytecode)) {
       throw new Error(`Contract bytecode is invalid.\n\n${bytecode}`);
     }
 
@@ -45116,17 +45342,17 @@ class ContractDeployer extends RPCConnectionHandler {
       }
 
       if (p === "bytes32") {
-        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(ethers__WEBPACK_IMPORTED_MODULE_46__.isHexString(constructorParamValues[index]), `Could not parse bytes32 value. Expected valid hex string but got "${constructorParamValues[index]}".`);
-        return ethers__WEBPACK_IMPORTED_MODULE_46__.hexZeroPad(constructorParamValues[index], 32);
+        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(ethers__WEBPACK_IMPORTED_MODULE_49__.isHexString(constructorParamValues[index]), `Could not parse bytes32 value. Expected valid hex string but got "${constructorParamValues[index]}".`);
+        return ethers__WEBPACK_IMPORTED_MODULE_49__.hexZeroPad(constructorParamValues[index], 32);
       }
 
       if (p.startsWith("bytes")) {
-        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(ethers__WEBPACK_IMPORTED_MODULE_46__.isHexString(constructorParamValues[index]), `Could not parse bytes value. Expected valid hex string but got "${constructorParamValues[index]}".`);
-        return ethers__WEBPACK_IMPORTED_MODULE_48__.toUtf8Bytes(constructorParamValues[index]);
+        (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(ethers__WEBPACK_IMPORTED_MODULE_49__.isHexString(constructorParamValues[index]), `Could not parse bytes value. Expected valid hex string but got "${constructorParamValues[index]}".`);
+        return ethers__WEBPACK_IMPORTED_MODULE_51__.toUtf8Bytes(constructorParamValues[index]);
       }
 
       if (p.startsWith("uint") || p.startsWith("int")) {
-        return ethers__WEBPACK_IMPORTED_MODULE_44__.BigNumber.from(constructorParamValues[index].toString());
+        return ethers__WEBPACK_IMPORTED_MODULE_46__.BigNumber.from(constructorParamValues[index].toString());
       }
 
       return constructorParamValues[index];
@@ -45142,8 +45368,8 @@ class ContractDeployer extends RPCConnectionHandler {
 
   async deployContractWithAbi(abi, bytecode, constructorParams) {
     const signer = this.getSigner();
-    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(signer, "Signer is required to deploy contracts");
-    const deployer = await new ethers__WEBPACK_IMPORTED_MODULE_64__.ContractFactory(abi, bytecode).connect(signer).deploy(...constructorParams);
+    (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(signer, "Signer is required to deploy contracts");
+    const deployer = await new ethers__WEBPACK_IMPORTED_MODULE_66__.ContractFactory(abi, bytecode).connect(signer).deploy(...constructorParams);
     const deployedContract = await deployer.deployed(); // TODO parse transaction receipt
 
     return deployedContract.address;
@@ -45157,9 +45383,9 @@ class ContractDeployer extends RPCConnectionHandler {
  */
 class ContractOwner {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "featureName", FEATURE_OWNER.name);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "featureName", FEATURE_OWNER.name);
 
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -45202,7 +45428,6 @@ const PAPER_API_VERSION = `2022-08-12`;
 const PAPER_API_URL = `${PAPER_API_BASE}/${PAPER_API_VERSION}/platform/thirdweb`;
 const PAPER_CHAIN_ID_MAP = {
   [ChainId.Mainnet]: "Ethereum",
-  [ChainId.Rinkeby]: "Rinkeby",
   [ChainId.Goerli]: "Goerli",
   [ChainId.Polygon]: "Polygon",
   [ChainId.Mumbai]: "Mumbai",
@@ -45213,7 +45438,7 @@ const PAPER_CHAIN_ID_MAP = {
  */
 
 function parseChainIdToPaperChain(chainId) {
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(chainId in PAPER_CHAIN_ID_MAP, `chainId not supported by paper: ${chainId}`);
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(chainId in PAPER_CHAIN_ID_MAP, `chainId not supported by paper: ${chainId}`);
   return PAPER_CHAIN_ID_MAP[chainId];
 }
 
@@ -45227,9 +45452,9 @@ function parseChainIdToPaperChain(chainId) {
  */
 async function fetchRegisteredCheckoutId(contractAddress, chainId) {
   const paperChain = parseChainIdToPaperChain(chainId);
-  const res = await cross_fetch__WEBPACK_IMPORTED_MODULE_3___default()(`${PAPER_API_URL}/register-contract?contractAddress=${contractAddress}&chain=${paperChain}`);
+  const res = await cross_fetch__WEBPACK_IMPORTED_MODULE_4___default()(`${PAPER_API_URL}/register-contract?contractAddress=${contractAddress}&chain=${paperChain}`);
   const json = await res.json();
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(json.result.id, "Contract is not registered with paper");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(json.result.id, "Contract is not registered with paper");
   return json.result.id;
 }
 /**
@@ -45248,7 +45473,7 @@ const DEFAULT_PARAMS = {
  */
 
 async function createCheckoutLinkIntent(contractId, params) {
-  const res = await cross_fetch__WEBPACK_IMPORTED_MODULE_3___default()(`${PAPER_API_URL}/checkout-link-intent`, {
+  const res = await cross_fetch__WEBPACK_IMPORTED_MODULE_4___default()(`${PAPER_API_URL}/checkout-link-intent`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -45269,7 +45494,7 @@ async function createCheckoutLinkIntent(contractId, params) {
     })
   });
   const json = await res.json();
-  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_63__["default"])(json.checkoutLinkIntentUrl, "Failed to create checkout link intent");
+  (0,tiny_invariant__WEBPACK_IMPORTED_MODULE_65__["default"])(json.checkoutLinkIntentUrl, "Failed to create checkout link intent");
   return json.checkoutLinkIntentUrl;
 }
 /**
@@ -45278,7 +45503,7 @@ async function createCheckoutLinkIntent(contractId, params) {
 
 class PaperCheckout {
   constructor(contractWrapper) {
-    (0,_defineProperty_fe02f37c_esm_js__WEBPACK_IMPORTED_MODULE_51__._)(this, "contractWrapper", void 0);
+    (0,_QueryParams_24720dd7_esm_js__WEBPACK_IMPORTED_MODULE_48__._)(this, "contractWrapper", void 0);
 
     this.contractWrapper = contractWrapper;
   }
@@ -45525,6 +45750,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var form_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(form_data__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/@thirdweb-dev/storage/node_modules/uuid/dist/esm-browser/v4.js");
 /* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")["Buffer"];
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 
@@ -47383,6 +47609,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ module_default)
 /* harmony export */ });
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getProtoOf = Object.getPrototypeOf;
@@ -50827,6 +51054,1169 @@ var module_default = src_default;
 
 /***/ }),
 
+/***/ "./node_modules/assert/assert.js":
+/*!***************************************!*\
+  !*** ./node_modules/assert/assert.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var objectAssign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
+
+// compare and isBuffer taken from https://github.com/feross/buffer/blob/680e9e5e488f22aac27599a57dc844a6315928dd/index.js
+// original notice:
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+function compare(a, b) {
+  if (a === b) {
+    return 0;
+  }
+
+  var x = a.length;
+  var y = b.length;
+
+  for (var i = 0, len = Math.min(x, y); i < len; ++i) {
+    if (a[i] !== b[i]) {
+      x = a[i];
+      y = b[i];
+      break;
+    }
+  }
+
+  if (x < y) {
+    return -1;
+  }
+  if (y < x) {
+    return 1;
+  }
+  return 0;
+}
+function isBuffer(b) {
+  if (__webpack_require__.g.Buffer && typeof __webpack_require__.g.Buffer.isBuffer === 'function') {
+    return __webpack_require__.g.Buffer.isBuffer(b);
+  }
+  return !!(b != null && b._isBuffer);
+}
+
+// based on node assert, original notice:
+// NB: The URL to the CommonJS spec is kept just for tradition.
+//     node-assert has evolved a lot since then, both in API and behavior.
+
+// http://wiki.commonjs.org/wiki/Unit_Testing/1.0
+//
+// THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
+//
+// Originally from narwhal.js (http://narwhaljs.org)
+// Copyright (c) 2009 Thomas Robinson <280north.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the 'Software'), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var util = __webpack_require__(/*! util/ */ "./node_modules/assert/node_modules/util/util.js");
+var hasOwn = Object.prototype.hasOwnProperty;
+var pSlice = Array.prototype.slice;
+var functionsHaveNames = (function () {
+  return function foo() {}.name === 'foo';
+}());
+function pToString (obj) {
+  return Object.prototype.toString.call(obj);
+}
+function isView(arrbuf) {
+  if (isBuffer(arrbuf)) {
+    return false;
+  }
+  if (typeof __webpack_require__.g.ArrayBuffer !== 'function') {
+    return false;
+  }
+  if (typeof ArrayBuffer.isView === 'function') {
+    return ArrayBuffer.isView(arrbuf);
+  }
+  if (!arrbuf) {
+    return false;
+  }
+  if (arrbuf instanceof DataView) {
+    return true;
+  }
+  if (arrbuf.buffer && arrbuf.buffer instanceof ArrayBuffer) {
+    return true;
+  }
+  return false;
+}
+// 1. The assert module provides functions that throw
+// AssertionError's when particular conditions are not met. The
+// assert module must conform to the following interface.
+
+var assert = module.exports = ok;
+
+// 2. The AssertionError is defined in assert.
+// new assert.AssertionError({ message: message,
+//                             actual: actual,
+//                             expected: expected })
+
+var regex = /\s*function\s+([^\(\s]*)\s*/;
+// based on https://github.com/ljharb/function.prototype.name/blob/adeeeec8bfcc6068b187d7d9fb3d5bb1d3a30899/implementation.js
+function getName(func) {
+  if (!util.isFunction(func)) {
+    return;
+  }
+  if (functionsHaveNames) {
+    return func.name;
+  }
+  var str = func.toString();
+  var match = str.match(regex);
+  return match && match[1];
+}
+assert.AssertionError = function AssertionError(options) {
+  this.name = 'AssertionError';
+  this.actual = options.actual;
+  this.expected = options.expected;
+  this.operator = options.operator;
+  if (options.message) {
+    this.message = options.message;
+    this.generatedMessage = false;
+  } else {
+    this.message = getMessage(this);
+    this.generatedMessage = true;
+  }
+  var stackStartFunction = options.stackStartFunction || fail;
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, stackStartFunction);
+  } else {
+    // non v8 browsers so we can have a stacktrace
+    var err = new Error();
+    if (err.stack) {
+      var out = err.stack;
+
+      // try to strip useless frames
+      var fn_name = getName(stackStartFunction);
+      var idx = out.indexOf('\n' + fn_name);
+      if (idx >= 0) {
+        // once we have located the function frame
+        // we need to strip out everything before it (and its line)
+        var next_line = out.indexOf('\n', idx + 1);
+        out = out.substring(next_line + 1);
+      }
+
+      this.stack = out;
+    }
+  }
+};
+
+// assert.AssertionError instanceof Error
+util.inherits(assert.AssertionError, Error);
+
+function truncate(s, n) {
+  if (typeof s === 'string') {
+    return s.length < n ? s : s.slice(0, n);
+  } else {
+    return s;
+  }
+}
+function inspect(something) {
+  if (functionsHaveNames || !util.isFunction(something)) {
+    return util.inspect(something);
+  }
+  var rawname = getName(something);
+  var name = rawname ? ': ' + rawname : '';
+  return '[Function' +  name + ']';
+}
+function getMessage(self) {
+  return truncate(inspect(self.actual), 128) + ' ' +
+         self.operator + ' ' +
+         truncate(inspect(self.expected), 128);
+}
+
+// At present only the three keys mentioned above are used and
+// understood by the spec. Implementations or sub modules can pass
+// other keys to the AssertionError's constructor - they will be
+// ignored.
+
+// 3. All of the following functions must throw an AssertionError
+// when a corresponding condition is not met, with a message that
+// may be undefined if not provided.  All assertion methods provide
+// both the actual and expected values to the assertion error for
+// display purposes.
+
+function fail(actual, expected, message, operator, stackStartFunction) {
+  throw new assert.AssertionError({
+    message: message,
+    actual: actual,
+    expected: expected,
+    operator: operator,
+    stackStartFunction: stackStartFunction
+  });
+}
+
+// EXTENSION! allows for well behaved errors defined elsewhere.
+assert.fail = fail;
+
+// 4. Pure assertion tests whether a value is truthy, as determined
+// by !!guard.
+// assert.ok(guard, message_opt);
+// This statement is equivalent to assert.equal(true, !!guard,
+// message_opt);. To test strictly for the value true, use
+// assert.strictEqual(true, guard, message_opt);.
+
+function ok(value, message) {
+  if (!value) fail(value, true, message, '==', assert.ok);
+}
+assert.ok = ok;
+
+// 5. The equality assertion tests shallow, coercive equality with
+// ==.
+// assert.equal(actual, expected, message_opt);
+
+assert.equal = function equal(actual, expected, message) {
+  if (actual != expected) fail(actual, expected, message, '==', assert.equal);
+};
+
+// 6. The non-equality assertion tests for whether two objects are not equal
+// with != assert.notEqual(actual, expected, message_opt);
+
+assert.notEqual = function notEqual(actual, expected, message) {
+  if (actual == expected) {
+    fail(actual, expected, message, '!=', assert.notEqual);
+  }
+};
+
+// 7. The equivalence assertion tests a deep equality relation.
+// assert.deepEqual(actual, expected, message_opt);
+
+assert.deepEqual = function deepEqual(actual, expected, message) {
+  if (!_deepEqual(actual, expected, false)) {
+    fail(actual, expected, message, 'deepEqual', assert.deepEqual);
+  }
+};
+
+assert.deepStrictEqual = function deepStrictEqual(actual, expected, message) {
+  if (!_deepEqual(actual, expected, true)) {
+    fail(actual, expected, message, 'deepStrictEqual', assert.deepStrictEqual);
+  }
+};
+
+function _deepEqual(actual, expected, strict, memos) {
+  // 7.1. All identical values are equivalent, as determined by ===.
+  if (actual === expected) {
+    return true;
+  } else if (isBuffer(actual) && isBuffer(expected)) {
+    return compare(actual, expected) === 0;
+
+  // 7.2. If the expected value is a Date object, the actual value is
+  // equivalent if it is also a Date object that refers to the same time.
+  } else if (util.isDate(actual) && util.isDate(expected)) {
+    return actual.getTime() === expected.getTime();
+
+  // 7.3 If the expected value is a RegExp object, the actual value is
+  // equivalent if it is also a RegExp object with the same source and
+  // properties (`global`, `multiline`, `lastIndex`, `ignoreCase`).
+  } else if (util.isRegExp(actual) && util.isRegExp(expected)) {
+    return actual.source === expected.source &&
+           actual.global === expected.global &&
+           actual.multiline === expected.multiline &&
+           actual.lastIndex === expected.lastIndex &&
+           actual.ignoreCase === expected.ignoreCase;
+
+  // 7.4. Other pairs that do not both pass typeof value == 'object',
+  // equivalence is determined by ==.
+  } else if ((actual === null || typeof actual !== 'object') &&
+             (expected === null || typeof expected !== 'object')) {
+    return strict ? actual === expected : actual == expected;
+
+  // If both values are instances of typed arrays, wrap their underlying
+  // ArrayBuffers in a Buffer each to increase performance
+  // This optimization requires the arrays to have the same type as checked by
+  // Object.prototype.toString (aka pToString). Never perform binary
+  // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
+  // bit patterns are not identical.
+  } else if (isView(actual) && isView(expected) &&
+             pToString(actual) === pToString(expected) &&
+             !(actual instanceof Float32Array ||
+               actual instanceof Float64Array)) {
+    return compare(new Uint8Array(actual.buffer),
+                   new Uint8Array(expected.buffer)) === 0;
+
+  // 7.5 For all other Object pairs, including Array objects, equivalence is
+  // determined by having the same number of owned properties (as verified
+  // with Object.prototype.hasOwnProperty.call), the same set of keys
+  // (although not necessarily the same order), equivalent values for every
+  // corresponding key, and an identical 'prototype' property. Note: this
+  // accounts for both named and indexed properties on Arrays.
+  } else if (isBuffer(actual) !== isBuffer(expected)) {
+    return false;
+  } else {
+    memos = memos || {actual: [], expected: []};
+
+    var actualIndex = memos.actual.indexOf(actual);
+    if (actualIndex !== -1) {
+      if (actualIndex === memos.expected.indexOf(expected)) {
+        return true;
+      }
+    }
+
+    memos.actual.push(actual);
+    memos.expected.push(expected);
+
+    return objEquiv(actual, expected, strict, memos);
+  }
+}
+
+function isArguments(object) {
+  return Object.prototype.toString.call(object) == '[object Arguments]';
+}
+
+function objEquiv(a, b, strict, actualVisitedObjects) {
+  if (a === null || a === undefined || b === null || b === undefined)
+    return false;
+  // if one is a primitive, the other must be same
+  if (util.isPrimitive(a) || util.isPrimitive(b))
+    return a === b;
+  if (strict && Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
+    return false;
+  var aIsArgs = isArguments(a);
+  var bIsArgs = isArguments(b);
+  if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
+    return false;
+  if (aIsArgs) {
+    a = pSlice.call(a);
+    b = pSlice.call(b);
+    return _deepEqual(a, b, strict);
+  }
+  var ka = objectKeys(a);
+  var kb = objectKeys(b);
+  var key, i;
+  // having the same number of owned properties (keys incorporates
+  // hasOwnProperty)
+  if (ka.length !== kb.length)
+    return false;
+  //the same set of keys (although not necessarily the same order),
+  ka.sort();
+  kb.sort();
+  //~~~cheap key test
+  for (i = ka.length - 1; i >= 0; i--) {
+    if (ka[i] !== kb[i])
+      return false;
+  }
+  //equivalent values for every corresponding key, and
+  //~~~possibly expensive deep test
+  for (i = ka.length - 1; i >= 0; i--) {
+    key = ka[i];
+    if (!_deepEqual(a[key], b[key], strict, actualVisitedObjects))
+      return false;
+  }
+  return true;
+}
+
+// 8. The non-equivalence assertion tests for any deep inequality.
+// assert.notDeepEqual(actual, expected, message_opt);
+
+assert.notDeepEqual = function notDeepEqual(actual, expected, message) {
+  if (_deepEqual(actual, expected, false)) {
+    fail(actual, expected, message, 'notDeepEqual', assert.notDeepEqual);
+  }
+};
+
+assert.notDeepStrictEqual = notDeepStrictEqual;
+function notDeepStrictEqual(actual, expected, message) {
+  if (_deepEqual(actual, expected, true)) {
+    fail(actual, expected, message, 'notDeepStrictEqual', notDeepStrictEqual);
+  }
+}
+
+
+// 9. The strict equality assertion tests strict equality, as determined by ===.
+// assert.strictEqual(actual, expected, message_opt);
+
+assert.strictEqual = function strictEqual(actual, expected, message) {
+  if (actual !== expected) {
+    fail(actual, expected, message, '===', assert.strictEqual);
+  }
+};
+
+// 10. The strict non-equality assertion tests for strict inequality, as
+// determined by !==.  assert.notStrictEqual(actual, expected, message_opt);
+
+assert.notStrictEqual = function notStrictEqual(actual, expected, message) {
+  if (actual === expected) {
+    fail(actual, expected, message, '!==', assert.notStrictEqual);
+  }
+};
+
+function expectedException(actual, expected) {
+  if (!actual || !expected) {
+    return false;
+  }
+
+  if (Object.prototype.toString.call(expected) == '[object RegExp]') {
+    return expected.test(actual);
+  }
+
+  try {
+    if (actual instanceof expected) {
+      return true;
+    }
+  } catch (e) {
+    // Ignore.  The instanceof check doesn't work for arrow functions.
+  }
+
+  if (Error.isPrototypeOf(expected)) {
+    return false;
+  }
+
+  return expected.call({}, actual) === true;
+}
+
+function _tryBlock(block) {
+  var error;
+  try {
+    block();
+  } catch (e) {
+    error = e;
+  }
+  return error;
+}
+
+function _throws(shouldThrow, block, expected, message) {
+  var actual;
+
+  if (typeof block !== 'function') {
+    throw new TypeError('"block" argument must be a function');
+  }
+
+  if (typeof expected === 'string') {
+    message = expected;
+    expected = null;
+  }
+
+  actual = _tryBlock(block);
+
+  message = (expected && expected.name ? ' (' + expected.name + ').' : '.') +
+            (message ? ' ' + message : '.');
+
+  if (shouldThrow && !actual) {
+    fail(actual, expected, 'Missing expected exception' + message);
+  }
+
+  var userProvidedMessage = typeof message === 'string';
+  var isUnwantedException = !shouldThrow && util.isError(actual);
+  var isUnexpectedException = !shouldThrow && actual && !expected;
+
+  if ((isUnwantedException &&
+      userProvidedMessage &&
+      expectedException(actual, expected)) ||
+      isUnexpectedException) {
+    fail(actual, expected, 'Got unwanted exception' + message);
+  }
+
+  if ((shouldThrow && actual && expected &&
+      !expectedException(actual, expected)) || (!shouldThrow && actual)) {
+    throw actual;
+  }
+}
+
+// 11. Expected to throw an error:
+// assert.throws(block, Error_opt, message_opt);
+
+assert.throws = function(block, /*optional*/error, /*optional*/message) {
+  _throws(true, block, error, message);
+};
+
+// EXTENSION! This is annoying to write outside this module.
+assert.doesNotThrow = function(block, /*optional*/error, /*optional*/message) {
+  _throws(false, block, error, message);
+};
+
+assert.ifError = function(err) { if (err) throw err; };
+
+// Expose a strict only variant of assert
+function strict(value, message) {
+  if (!value) fail(value, true, message, '==', strict);
+}
+assert.strict = objectAssign(strict, assert, {
+  equal: assert.strictEqual,
+  deepEqual: assert.deepStrictEqual,
+  notEqual: assert.notStrictEqual,
+  notDeepEqual: assert.notDeepStrictEqual
+});
+assert.strict.strict = assert.strict;
+
+var objectKeys = Object.keys || function (obj) {
+  var keys = [];
+  for (var key in obj) {
+    if (hasOwn.call(obj, key)) keys.push(key);
+  }
+  return keys;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/assert/node_modules/inherits/inherits_browser.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/assert/node_modules/inherits/inherits_browser.js ***!
+  \***********************************************************************/
+/***/ ((module) => {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/assert/node_modules/util/support/isBufferBrowser.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/assert/node_modules/util/support/isBufferBrowser.js ***!
+  \**************************************************************************/
+/***/ ((module) => {
+
+module.exports = function isBuffer(arg) {
+  return arg && typeof arg === 'object'
+    && typeof arg.copy === 'function'
+    && typeof arg.fill === 'function'
+    && typeof arg.readUInt8 === 'function';
+}
+
+/***/ }),
+
+/***/ "./node_modules/assert/node_modules/util/util.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/assert/node_modules/util/util.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var formatRegExp = /%[sdj%]/g;
+exports.format = function(f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+    return objects.join(' ');
+  }
+
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function(x) {
+    if (x === '%%') return '%';
+    if (i >= len) return x;
+    switch (x) {
+      case '%s': return String(args[i++]);
+      case '%d': return Number(args[i++]);
+      case '%j':
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return '[Circular]';
+        }
+      default:
+        return x;
+    }
+  });
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += ' ' + x;
+    } else {
+      str += ' ' + inspect(x);
+    }
+  }
+  return str;
+};
+
+
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  // Allow for deprecating things in the process of starting up.
+  if (isUndefined(__webpack_require__.g.process)) {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  if (process.noDeprecation === true) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+
+var debugs = {};
+var debugEnviron;
+exports.debuglog = function(set) {
+  if (isUndefined(debugEnviron))
+    debugEnviron = process.env.NODE_DEBUG || '';
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function() {};
+    }
+  }
+  return debugs[set];
+};
+
+
+/**
+ * Echos the value of a value. Trys to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Object} opts Optional options object that alters the output.
+ */
+/* legacy: obj, showHidden, depth, colors*/
+function inspect(obj, opts) {
+  // default options
+  var ctx = {
+    seen: [],
+    stylize: stylizeNoColor
+  };
+  // legacy...
+  if (arguments.length >= 3) ctx.depth = arguments[2];
+  if (arguments.length >= 4) ctx.colors = arguments[3];
+  if (isBoolean(opts)) {
+    // legacy...
+    ctx.showHidden = opts;
+  } else if (opts) {
+    // got an "options" object
+    exports._extend(ctx, opts);
+  }
+  // set default options
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  return formatValue(ctx, obj, ctx.depth);
+}
+exports.inspect = inspect;
+
+
+// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+inspect.colors = {
+  'bold' : [1, 22],
+  'italic' : [3, 23],
+  'underline' : [4, 24],
+  'inverse' : [7, 27],
+  'white' : [37, 39],
+  'grey' : [90, 39],
+  'black' : [30, 39],
+  'blue' : [34, 39],
+  'cyan' : [36, 39],
+  'green' : [32, 39],
+  'magenta' : [35, 39],
+  'red' : [31, 39],
+  'yellow' : [33, 39]
+};
+
+// Don't use 'blue' not visible on cmd.exe
+inspect.styles = {
+  'special': 'cyan',
+  'number': 'yellow',
+  'boolean': 'yellow',
+  'undefined': 'grey',
+  'null': 'bold',
+  'string': 'green',
+  'date': 'magenta',
+  // "name": intentionally not styling
+  'regexp': 'red'
+};
+
+
+function stylizeWithColor(str, styleType) {
+  var style = inspect.styles[styleType];
+
+  if (style) {
+    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+           '\u001b[' + inspect.colors[style][1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+
+function stylizeNoColor(str, styleType) {
+  return str;
+}
+
+
+function arrayToHash(array) {
+  var hash = {};
+
+  array.forEach(function(val, idx) {
+    hash[val] = true;
+  });
+
+  return hash;
+}
+
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (ctx.customInspect &&
+      value &&
+      isFunction(value.inspect) &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (!isString(ret)) {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // Look up the keys of the object.
+  var keys = Object.keys(value);
+  var visibleKeys = arrayToHash(keys);
+
+  if (ctx.showHidden) {
+    keys = Object.getOwnPropertyNames(value);
+  }
+
+  // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+  if (isError(value)
+      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
+  }
+
+  // Some type of object without properties can be shortcutted.
+  if (keys.length === 0) {
+    if (isFunction(value)) {
+      var name = value.name ? ': ' + value.name : '';
+      return ctx.stylize('[Function' + name + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = '', array = false, braces = ['{', '}'];
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (isFunction(value)) {
+    var n = value.name ? ': ' + value.name : '';
+    base = ' [Function' + n + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    base = ' ' + formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  if (isUndefined(value))
+    return ctx.stylize('undefined', 'undefined');
+  if (isString(value)) {
+    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                             .replace(/'/g, "\\'")
+                                             .replace(/\\"/g, '"') + '\'';
+    return ctx.stylize(simple, 'string');
+  }
+  if (isNumber(value))
+    return ctx.stylize('' + value, 'number');
+  if (isBoolean(value))
+    return ctx.stylize('' + value, 'boolean');
+  // For some reason typeof null is "object", so special case here.
+  if (isNull(value))
+    return ctx.stylize('null', 'null');
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (hasOwnProperty(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name, str, desc;
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+  if (desc.get) {
+    if (desc.set) {
+      str = ctx.stylize('[Getter/Setter]', 'special');
+    } else {
+      str = ctx.stylize('[Getter]', 'special');
+    }
+  } else {
+    if (desc.set) {
+      str = ctx.stylize('[Setter]', 'special');
+    }
+  }
+  if (!hasOwnProperty(visibleKeys, key)) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
+      if (isNull(recurseTimes)) {
+        str = formatValue(ctx, desc.value, null);
+      } else {
+        str = formatValue(ctx, desc.value, recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (isUndefined(name)) {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+exports.isBuffer = __webpack_require__(/*! ./support/isBuffer */ "./node_modules/assert/node_modules/util/support/isBufferBrowser.js");
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec'];
+
+// 26 Feb 16:19:34
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()),
+              pad(d.getMinutes()),
+              pad(d.getSeconds())].join(':');
+  return [d.getDate(), months[d.getMonth()], time].join(' ');
+}
+
+
+// log is just a thin wrapper to console.log that prepends a timestamp
+exports.log = function() {
+  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+};
+
+
+/**
+ * Inherit the prototype methods from one constructor into another.
+ *
+ * The Function.prototype.inherits from lang.js rewritten as a standalone
+ * function (not on Function.prototype). NOTE: If this file is to be loaded
+ * during bootstrapping this function needs to be rewritten using some native
+ * functions as prototype setup using normal JavaScript does not work as
+ * expected during bootstrapping (see mirror.js in r114903).
+ *
+ * @param {function} ctor Constructor function which needs to inherit the
+ *     prototype.
+ * @param {function} superCtor Constructor function to inherit prototype from.
+ */
+exports.inherits = __webpack_require__(/*! inherits */ "./node_modules/assert/node_modules/inherits/inherits_browser.js");
+
+exports._extend = function(origin, add) {
+  // Don't do anything if add isn't an object
+  if (!add || !isObject(add)) return origin;
+
+  var keys = Object.keys(add);
+  var i = keys.length;
+  while (i--) {
+    origin[keys[i]] = add[keys[i]];
+  }
+  return origin;
+};
+
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -52536,6 +53926,7 @@ module.exports = function spread(callback) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 var VERSION = (__webpack_require__(/*! ../env/data */ "./node_modules/axios/lib/env/data.js").version);
@@ -53428,7 +54819,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @thirdweb-dev/sdk */ "./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-c4f1082a.esm.js");
+/* harmony import */ var _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @thirdweb-dev/sdk */ "./node_modules/@thirdweb-dev/sdk/dist/paper-xyz-1dc52000.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -53445,7 +54836,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     setSDK: function setSDK(chainID) {
       var chain = this.blockchains[chainID];
       var blockchain = this.getSDKBlockchain(chain);
-      this.sdk = new _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.aZ(blockchain);
+      this.sdk = new _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.aY(blockchain);
     },
 
     /**
@@ -53456,7 +54847,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     setSDKFromSigner: function setSDKFromSigner(signer, chainID) {
       var chain = this.blockchains[chainID];
       var blockchain = this.getSDKBlockchain(chain);
-      this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.aZ.fromSigner(signer, blockchain, {});
+      this.sdk = _thirdweb_dev_sdk__WEBPACK_IMPORTED_MODULE_1__.aY.fromSigner(signer, blockchain, {});
     },
 
     /**
@@ -53519,6 +54910,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sentry_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @sentry/vue */ "./node_modules/@sentry/hub/esm/exports.js");
 /* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/web3-provider.js");
 /* harmony import */ var _helpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers.js */ "./resources/js/helpers.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -59488,6 +60880,103 @@ function blitBuffer (src, dst, offset, length) {
 
 function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/console-browserify/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/console-browserify/index.js ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*global window, global*/
+var util = __webpack_require__(/*! util */ "./node_modules/util/util.js")
+var assert = __webpack_require__(/*! assert */ "./node_modules/assert/assert.js")
+function now() { return new Date().getTime() }
+
+var slice = Array.prototype.slice
+var console
+var times = {}
+
+if (typeof __webpack_require__.g !== "undefined" && __webpack_require__.g.console) {
+    console = __webpack_require__.g.console
+} else if (typeof window !== "undefined" && window.console) {
+    console = window.console
+} else {
+    console = {}
+}
+
+var functions = [
+    [log, "log"],
+    [info, "info"],
+    [warn, "warn"],
+    [error, "error"],
+    [time, "time"],
+    [timeEnd, "timeEnd"],
+    [trace, "trace"],
+    [dir, "dir"],
+    [consoleAssert, "assert"]
+]
+
+for (var i = 0; i < functions.length; i++) {
+    var tuple = functions[i]
+    var f = tuple[0]
+    var name = tuple[1]
+
+    if (!console[name]) {
+        console[name] = f
+    }
+}
+
+module.exports = console
+
+function log() {}
+
+function info() {
+    console.log.apply(console, arguments)
+}
+
+function warn() {
+    console.log.apply(console, arguments)
+}
+
+function error() {
+    console.warn.apply(console, arguments)
+}
+
+function time(label) {
+    times[label] = now()
+}
+
+function timeEnd(label) {
+    var time = times[label]
+    if (!time) {
+        throw new Error("No such label: " + label)
+    }
+
+    delete times[label]
+    var duration = now() - time
+    console.log(label + ": " + duration + "ms")
+}
+
+function trace() {
+    var err = new Error()
+    err.name = "Trace"
+    err.message = util.format.apply(null, arguments)
+    console.error(err.stack)
+}
+
+function dir(object) {
+    console.log(util.inspect(object) + "\n")
+}
+
+function consoleAssert(expression) {
+    if (!expression) {
+        var arr = slice.call(arguments, 1)
+        assert.ok(false, util.format.apply(null, arr))
+    }
 }
 
 
@@ -73540,6 +75029,107 @@ assert.equal = function assertEqual(l, r, msg) {
 
 /***/ }),
 
+/***/ "./node_modules/object-assign/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/object-assign/index.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -75015,6 +76605,769 @@ function invariant(condition, message) {
 
 /***/ }),
 
+/***/ "./node_modules/util/node_modules/inherits/inherits_browser.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/util/node_modules/inherits/inherits_browser.js ***!
+  \*********************************************************************/
+/***/ ((module) => {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/util/support/isBufferBrowser.js":
+/*!******************************************************!*\
+  !*** ./node_modules/util/support/isBufferBrowser.js ***!
+  \******************************************************/
+/***/ ((module) => {
+
+module.exports = function isBuffer(arg) {
+  return arg && typeof arg === 'object'
+    && typeof arg.copy === 'function'
+    && typeof arg.fill === 'function'
+    && typeof arg.readUInt8 === 'function';
+}
+
+/***/ }),
+
+/***/ "./node_modules/util/util.js":
+/*!***********************************!*\
+  !*** ./node_modules/util/util.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors ||
+  function getOwnPropertyDescriptors(obj) {
+    var keys = Object.keys(obj);
+    var descriptors = {};
+    for (var i = 0; i < keys.length; i++) {
+      descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+    }
+    return descriptors;
+  };
+
+var formatRegExp = /%[sdj%]/g;
+exports.format = function(f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+    return objects.join(' ');
+  }
+
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function(x) {
+    if (x === '%%') return '%';
+    if (i >= len) return x;
+    switch (x) {
+      case '%s': return String(args[i++]);
+      case '%d': return Number(args[i++]);
+      case '%j':
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return '[Circular]';
+        }
+      default:
+        return x;
+    }
+  });
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += ' ' + x;
+    } else {
+      str += ' ' + inspect(x);
+    }
+  }
+  return str;
+};
+
+
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  if (typeof process !== 'undefined' && process.noDeprecation === true) {
+    return fn;
+  }
+
+  // Allow for deprecating things in the process of starting up.
+  if (typeof process === 'undefined') {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+
+var debugs = {};
+var debugEnviron;
+exports.debuglog = function(set) {
+  if (isUndefined(debugEnviron))
+    debugEnviron = process.env.NODE_DEBUG || '';
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function() {};
+    }
+  }
+  return debugs[set];
+};
+
+
+/**
+ * Echos the value of a value. Trys to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Object} opts Optional options object that alters the output.
+ */
+/* legacy: obj, showHidden, depth, colors*/
+function inspect(obj, opts) {
+  // default options
+  var ctx = {
+    seen: [],
+    stylize: stylizeNoColor
+  };
+  // legacy...
+  if (arguments.length >= 3) ctx.depth = arguments[2];
+  if (arguments.length >= 4) ctx.colors = arguments[3];
+  if (isBoolean(opts)) {
+    // legacy...
+    ctx.showHidden = opts;
+  } else if (opts) {
+    // got an "options" object
+    exports._extend(ctx, opts);
+  }
+  // set default options
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  return formatValue(ctx, obj, ctx.depth);
+}
+exports.inspect = inspect;
+
+
+// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+inspect.colors = {
+  'bold' : [1, 22],
+  'italic' : [3, 23],
+  'underline' : [4, 24],
+  'inverse' : [7, 27],
+  'white' : [37, 39],
+  'grey' : [90, 39],
+  'black' : [30, 39],
+  'blue' : [34, 39],
+  'cyan' : [36, 39],
+  'green' : [32, 39],
+  'magenta' : [35, 39],
+  'red' : [31, 39],
+  'yellow' : [33, 39]
+};
+
+// Don't use 'blue' not visible on cmd.exe
+inspect.styles = {
+  'special': 'cyan',
+  'number': 'yellow',
+  'boolean': 'yellow',
+  'undefined': 'grey',
+  'null': 'bold',
+  'string': 'green',
+  'date': 'magenta',
+  // "name": intentionally not styling
+  'regexp': 'red'
+};
+
+
+function stylizeWithColor(str, styleType) {
+  var style = inspect.styles[styleType];
+
+  if (style) {
+    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+           '\u001b[' + inspect.colors[style][1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+
+function stylizeNoColor(str, styleType) {
+  return str;
+}
+
+
+function arrayToHash(array) {
+  var hash = {};
+
+  array.forEach(function(val, idx) {
+    hash[val] = true;
+  });
+
+  return hash;
+}
+
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (ctx.customInspect &&
+      value &&
+      isFunction(value.inspect) &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (!isString(ret)) {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // Look up the keys of the object.
+  var keys = Object.keys(value);
+  var visibleKeys = arrayToHash(keys);
+
+  if (ctx.showHidden) {
+    keys = Object.getOwnPropertyNames(value);
+  }
+
+  // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+  if (isError(value)
+      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
+  }
+
+  // Some type of object without properties can be shortcutted.
+  if (keys.length === 0) {
+    if (isFunction(value)) {
+      var name = value.name ? ': ' + value.name : '';
+      return ctx.stylize('[Function' + name + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = '', array = false, braces = ['{', '}'];
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (isFunction(value)) {
+    var n = value.name ? ': ' + value.name : '';
+    base = ' [Function' + n + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    base = ' ' + formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  if (isUndefined(value))
+    return ctx.stylize('undefined', 'undefined');
+  if (isString(value)) {
+    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                             .replace(/'/g, "\\'")
+                                             .replace(/\\"/g, '"') + '\'';
+    return ctx.stylize(simple, 'string');
+  }
+  if (isNumber(value))
+    return ctx.stylize('' + value, 'number');
+  if (isBoolean(value))
+    return ctx.stylize('' + value, 'boolean');
+  // For some reason typeof null is "object", so special case here.
+  if (isNull(value))
+    return ctx.stylize('null', 'null');
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (hasOwnProperty(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name, str, desc;
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+  if (desc.get) {
+    if (desc.set) {
+      str = ctx.stylize('[Getter/Setter]', 'special');
+    } else {
+      str = ctx.stylize('[Getter]', 'special');
+    }
+  } else {
+    if (desc.set) {
+      str = ctx.stylize('[Setter]', 'special');
+    }
+  }
+  if (!hasOwnProperty(visibleKeys, key)) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
+      if (isNull(recurseTimes)) {
+        str = formatValue(ctx, desc.value, null);
+      } else {
+        str = formatValue(ctx, desc.value, recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (isUndefined(name)) {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+exports.isBuffer = __webpack_require__(/*! ./support/isBuffer */ "./node_modules/util/support/isBufferBrowser.js");
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec'];
+
+// 26 Feb 16:19:34
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()),
+              pad(d.getMinutes()),
+              pad(d.getSeconds())].join(':');
+  return [d.getDate(), months[d.getMonth()], time].join(' ');
+}
+
+
+// log is just a thin wrapper to console.log that prepends a timestamp
+exports.log = function() {
+  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+};
+
+
+/**
+ * Inherit the prototype methods from one constructor into another.
+ *
+ * The Function.prototype.inherits from lang.js rewritten as a standalone
+ * function (not on Function.prototype). NOTE: If this file is to be loaded
+ * during bootstrapping this function needs to be rewritten using some native
+ * functions as prototype setup using normal JavaScript does not work as
+ * expected during bootstrapping (see mirror.js in r114903).
+ *
+ * @param {function} ctor Constructor function which needs to inherit the
+ *     prototype.
+ * @param {function} superCtor Constructor function to inherit prototype from.
+ */
+exports.inherits = __webpack_require__(/*! inherits */ "./node_modules/util/node_modules/inherits/inherits_browser.js");
+
+exports._extend = function(origin, add) {
+  // Don't do anything if add isn't an object
+  if (!add || !isObject(add)) return origin;
+
+  var keys = Object.keys(add);
+  var i = keys.length;
+  while (i--) {
+    origin[keys[i]] = add[keys[i]];
+  }
+  return origin;
+};
+
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+var kCustomPromisifiedSymbol = typeof Symbol !== 'undefined' ? Symbol('util.promisify.custom') : undefined;
+
+exports.promisify = function promisify(original) {
+  if (typeof original !== 'function')
+    throw new TypeError('The "original" argument must be of type Function');
+
+  if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
+    var fn = original[kCustomPromisifiedSymbol];
+    if (typeof fn !== 'function') {
+      throw new TypeError('The "util.promisify.custom" argument must be of type Function');
+    }
+    Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+      value: fn, enumerable: false, writable: false, configurable: true
+    });
+    return fn;
+  }
+
+  function fn() {
+    var promiseResolve, promiseReject;
+    var promise = new Promise(function (resolve, reject) {
+      promiseResolve = resolve;
+      promiseReject = reject;
+    });
+
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    args.push(function (err, value) {
+      if (err) {
+        promiseReject(err);
+      } else {
+        promiseResolve(value);
+      }
+    });
+
+    try {
+      original.apply(this, args);
+    } catch (err) {
+      promiseReject(err);
+    }
+
+    return promise;
+  }
+
+  Object.setPrototypeOf(fn, Object.getPrototypeOf(original));
+
+  if (kCustomPromisifiedSymbol) Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+    value: fn, enumerable: false, writable: false, configurable: true
+  });
+  return Object.defineProperties(
+    fn,
+    getOwnPropertyDescriptors(original)
+  );
+}
+
+exports.promisify.custom = kCustomPromisifiedSymbol
+
+function callbackifyOnRejected(reason, cb) {
+  // `!reason` guard inspired by bluebird (Ref: https://goo.gl/t5IS6M).
+  // Because `null` is a special error value in callbacks which means "no error
+  // occurred", we error-wrap so the callback consumer can distinguish between
+  // "the promise rejected with null" or "the promise fulfilled with undefined".
+  if (!reason) {
+    var newReason = new Error('Promise was rejected with a falsy value');
+    newReason.reason = reason;
+    reason = newReason;
+  }
+  return cb(reason);
+}
+
+function callbackify(original) {
+  if (typeof original !== 'function') {
+    throw new TypeError('The "original" argument must be of type Function');
+  }
+
+  // We DO NOT return the promise as it gives the user a false sense that
+  // the promise is actually somehow related to the callback's execution
+  // and that the callback throwing will reject the promise.
+  function callbackified() {
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+
+    var maybeCb = args.pop();
+    if (typeof maybeCb !== 'function') {
+      throw new TypeError('The last argument must be of type Function');
+    }
+    var self = this;
+    var cb = function() {
+      return maybeCb.apply(self, arguments);
+    };
+    // In true node style we process the callback on `nextTick` with all the
+    // implications (stack, `uncaughtException`, `async_hooks`)
+    original.apply(this, args)
+      .then(function(ret) { process.nextTick(cb, null, ret) },
+            function(rej) { process.nextTick(callbackifyOnRejected, rej, cb) });
+  }
+
+  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
+  Object.defineProperties(callbackified,
+                          getOwnPropertyDescriptors(original));
+  return callbackified;
+}
+exports.callbackify = callbackify;
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-tippy/dist/vue-tippy.esm.js":
 /*!******************************************************!*\
   !*** ./node_modules/vue-tippy/dist/vue-tippy.esm.js ***!
@@ -75028,6 +77381,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "TippyComponent": () => (/* binding */ TippyComponent),
 /* harmony export */   "tippy": () => (/* binding */ tippy)
 /* harmony export */ });
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version 1.16.1
@@ -80292,6 +82646,7 @@ if (typeof window !== 'undefined' && window.Vue) {
   \******************************************/
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 /*!
  * Vue.js v2.6.14
  * (c) 2014-2021 Evan You
@@ -83572,6 +85927,17 @@ module.exports = JSON.parse('[{"inputs":[],"stateMutability":"nonpayable","type"
 
 /***/ }),
 
+/***/ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IAppURI.json":
+/*!************************************************************************!*\
+  !*** ./node_modules/@thirdweb-dev/contracts-js/dist/abis/IAppURI.json ***!
+  \************************************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"prevURI","type":"string"},{"indexed":false,"internalType":"string","name":"newURI","type":"string"}],"name":"AppURIUpdated","type":"event"},{"inputs":[],"name":"appURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_uri","type":"string"}],"name":"setAppURI","outputs":[],"stateMutability":"nonpayable","type":"function"}]');
+
+/***/ }),
+
 /***/ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IBurnableERC1155.json":
 /*!*********************************************************************************!*\
   !*** ./node_modules/@thirdweb-dev/contracts-js/dist/abis/IBurnableERC1155.json ***!
@@ -83847,6 +86213,17 @@ module.exports = JSON.parse('[{"anonymous":false,"inputs":[{"indexed":true,"inte
 
 /***/ }),
 
+/***/ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPermissionsEnumerable.json":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPermissionsEnumerable.json ***!
+  \***************************************************************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"previousAdminRole","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"newAdminRole","type":"bytes32"}],"name":"RoleAdminChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleGranted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"role","type":"bytes32"},{"indexed":true,"internalType":"address","name":"account","type":"address"},{"indexed":true,"internalType":"address","name":"sender","type":"address"}],"name":"RoleRevoked","type":"event"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleAdmin","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getRoleMember","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"}],"name":"getRoleMemberCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"hasRole","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"renounceRole","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"revokeRole","outputs":[],"stateMutability":"nonpayable","type":"function"}]');
+
+/***/ }),
+
 /***/ "./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json":
 /*!*****************************************************************************!*\
   !*** ./node_modules/@thirdweb-dev/contracts-js/dist/abis/IPlatformFee.json ***!
@@ -84067,7 +86444,7 @@ module.exports = JSON.parse('[{"inputs":[{"internalType":"address","name":"_trus
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"node_modules_merkletreejs_dist_index_js":1,"node_modules_cbor-web_dist_cbor_js":1,"node_modules_multihashes_src_index_js":1,"node_modules_thirdweb-dev_sdk_dist_edition-drop-7ec627ce_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC1155_json":1,"node_modules_thirdweb-dev_sdk_dist_edition-4cf21bf9_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC1155_json":1,"node_modules_thirdweb-dev_sdk_dist_marketplace-3de0e7ea_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Marketplace_json":1,"node_modules_thirdweb-dev_sdk_dist_multiwrap-bead2653_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Multiwrap_json":1,"node_modules_thirdweb-dev_sdk_dist_nft-collection-7596627f_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC721_json":1,"node_modules_thirdweb-dev_sdk_dist_nft-drop-1573ddc5_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC721_json":1,"node_modules_thirdweb-dev_sdk_dist_pack-74eb00dc_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Pack_json":1,"node_modules_thirdweb-dev_sdk_dist_signature-drop-47789447_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_SignatureDrop_json":1,"node_modules_thirdweb-dev_sdk_dist_split-ab0ed0cb_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Split_json":1,"node_modules_thirdweb-dev_sdk_dist_token-drop-032a5def_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC20_json":1,"node_modules_thirdweb-dev_sdk_dist_token-6d923baa_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC20_json":1,"node_modules_thirdweb-dev_sdk_dist_vote-7c2d0cea_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_VoteERC20_json":1,"node_modules_thirdweb-dev_contracts-js_factories_TWProxy__factory_dist_thirdweb-dev-contracts-a26ff3":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"node_modules_merkletreejs_dist_index_js":1,"node_modules_cbor-web_dist_cbor_js":1,"node_modules_multihashes_src_index_js":1,"node_modules_thirdweb-dev_sdk_dist_edition-drop-473113a3_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC1155_json":1,"node_modules_thirdweb-dev_sdk_dist_edition-fff75699_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC1155_json":1,"node_modules_thirdweb-dev_sdk_dist_marketplace-d8cdb871_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Marketplace_json":1,"node_modules_thirdweb-dev_sdk_dist_multiwrap-33220c5a_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Multiwrap_json":1,"node_modules_thirdweb-dev_sdk_dist_nft-collection-c8ac6135_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC721_json":1,"node_modules_thirdweb-dev_sdk_dist_nft-drop-2968fc30_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC721_json":1,"node_modules_thirdweb-dev_sdk_dist_pack-4ed93ec1_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Pack_json":1,"node_modules_thirdweb-dev_sdk_dist_signature-drop-f0733061_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_SignatureDrop_json":1,"node_modules_thirdweb-dev_sdk_dist_split-fdec4f14_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_Split_json":1,"node_modules_thirdweb-dev_sdk_dist_token-drop-12c91479_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_DropERC20_json":1,"node_modules_thirdweb-dev_sdk_dist_token-9ef33b84_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_TokenERC20_json":1,"node_modules_thirdweb-dev_sdk_dist_vote-dcb2bdf0_esm_js":1,"node_modules_thirdweb-dev_contracts-js_dist_abis_VoteERC20_json":1,"node_modules_thirdweb-dev_contracts-js_factories_TWProxy__factory_dist_thirdweb-dev-contracts-a26ff3":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
