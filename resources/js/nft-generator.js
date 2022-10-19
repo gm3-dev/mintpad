@@ -57,7 +57,7 @@ export default {
             socket.disconnect()
         },
         connectSocketio: function() {
-            socket.socket.connect()
+            socket.connect()
         },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
