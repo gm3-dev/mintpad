@@ -9,9 +9,9 @@ axios.defaults.headers.common = {
 import { io } from "socket.io-client";
 const socket = io(process.env.MIX_GENERATOR_URL, {
     'withCredentials': true,
-    'reconnection': true,
-    'reconnectionDelay': 500,
-    'reconnectionAttempts': 10
+    // 'reconnection': true,
+    // 'reconnectionDelay': 500,
+    // 'reconnectionAttempts': 10
 });
 
 export default {
@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             generator: {
-                total: 10,
+                total: 100,
                 base: 'NFT #',
                 description: '',
                 layers: [],
@@ -37,19 +37,28 @@ export default {
         }
     },
     mounted: function() {
+        this.generator.userID = this.$el.getAttribute('data-user')
+
         socket.on('nft-generation-status', (response) => {
             this.handleSocketResponse(response)
         })
         socket.on('connect', () => {
-            console.log('connect', socket.id)
+            console.log('connect to room user-'+this.generator.userID, socket.id)
+            socket.emit('user-reconnect', this.generator.userID);
+        })
+        socket.on('connect_error', (reason) => {
+            console.log('connect_error', reason)
         })
         socket.on('disconnect', (reason) => {
             console.log('disconnect', reason)
+            // if (reason == 'transport close') {
+            //     console.log('disconnect and manual reconnect')
+            //     socket.connect()
+            // }
         })
         socket.on('reconnect', function () {
-            console.log('reconnect', socket.id);
-            // where username is a global variable for the client
-            socket.emit('user-reconnected', username);
+            console.log('reconnect to room user-'+this.generator.userID, socket.id);
+            socket.emit('user-reconnect', this.generator.userID);
         });
     },
     methods: {
@@ -58,7 +67,8 @@ export default {
         },
         connectSocketio: function() {
             socket.connect()
-            socket.emit('user-reconnected', true);
+            console.log('reconnect to room user-'+this.generator.userID)
+            socket.emit('user-reconnect', this.generator.userID);
         },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
@@ -125,7 +135,7 @@ export default {
         uploadTraitJSON: function() {
             return axios.post('/generator/create', {layers: JSON.stringify(this.generator.layers)}).then((response) => {
                 if (response.status == 200) {
-                    this.generator.userID = response.data.user_id
+                    // this.generator.userID = response.data.user_id
                 }
             })
         },
