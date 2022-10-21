@@ -133,15 +133,17 @@ class GeneratorController extends Controller
         }
     }
 
-    public function status()
+    public function status(Request $request)
     {
-        $file = storage_path('app/collections/1/status.json');
-        if (file_exists($file)) {
-            $status = json_decode(file_get_contents($file), true);
-        } else {
-            $status = ['state' => 'missing'];
-        }
+        if ($request->ajax()) {
+            $file = storage_path('app/collections/'.Auth::user()->id.'/status.json');
+            if (file_exists($file)) {
+                $status = json_decode(file_get_contents($file), true);
+            } else {
+                $status = ['state' => 'missing'];
+            }
 
-        return response()->json($status);
+            return response()->json($status);
+        }
     }
 }
