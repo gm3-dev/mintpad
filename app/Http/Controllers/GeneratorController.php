@@ -94,7 +94,7 @@ class GeneratorController extends Controller
             header('Pragma: public');
             header('Content-Length: ' . filesize($file));
             
-            $chunkSize = 1024 * 1024;
+            $chunkSize = 8 * (1024 * 1024); //8MB (highest possible fread length)
             $handle = fopen($file, 'rb');
             while (!feof($handle)) {
                 $buffer = fread($handle, $chunkSize);
