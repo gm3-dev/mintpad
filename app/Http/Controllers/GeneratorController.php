@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class GeneratorController extends Controller
@@ -130,5 +131,17 @@ class GeneratorController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function status()
+    {
+        $file = storage_path('app/collections/1/status.json');
+        if (file_exists($file)) {
+            $status = json_decode(file_get_contents($file), true);
+        } else {
+            $status = ['state' => 'missing'];
+        }
+
+        return response()->json($status);
     }
 }

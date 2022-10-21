@@ -6,13 +6,13 @@ axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
-import { io } from "socket.io-client";
-const socket = io(process.env.MIX_GENERATOR_URL, {
-    'withCredentials': true,
+// import { io } from "socket.io-client";
+// const socket = io(process.env.MIX_GENERATOR_URL, {
+//     'withCredentials': true,
     // 'reconnection': true,
     // 'reconnectionDelay': 500,
     // 'reconnectionAttempts': 10
-});
+// });
 
 export default {
     components: {
@@ -36,39 +36,44 @@ export default {
             }
         }
     },
-    mounted: function() {
+    mounted: async function() {
         this.generator.userID = this.$el.getAttribute('data-user')
 
-        socket.on('nft-generation-status', (response) => {
-            this.handleSocketResponse(response)
-        })
-        socket.on('connect', () => {
-            console.log('connect to room user-'+this.generator.userID, socket.id)
-            socket.emit('user-reconnect', this.generator.userID);
-        })
-        socket.on('connect_error', (reason) => {
-            console.log('connect_error', reason)
-        })
-        socket.on('disconnect', (reason) => {
-            console.log('disconnect', reason)
-            // if (reason == 'transport close') {
-            //     console.log('disconnect and manual reconnect')
-            //     socket.connect()
-            // }
-        })
-        socket.on('reconnect', function () {
-            console.log('reconnect to room user-'+this.generator.userID, socket.id);
-            socket.emit('user-reconnect', this.generator.userID);
-        });
+        // console.time('connect')
+
+        // socket.on('nft-generation-status', (response) => {
+        //     this.handleSocketResponse(response)
+        // })
+        // socket.on('connect', () => {
+        //     console.timeEnd('connect')
+        //     console.time('disconnect')
+        //     console.log('connect to room user-'+this.generator.userID, socket.id)
+        //     // socket.emit('user-reconnect', this.generator.userID);
+        // })
+        // socket.on('connect_error', (reason) => {
+        //     console.log('connect_error', reason)
+        // })
+        // socket.on('disconnect', (reason) => {
+        //     console.log('disconnect', reason)
+        //     console.timeEnd('disconnect')
+        //     // if (reason == 'transport close') {
+        //     //     console.log('disconnect and manual reconnect')
+        //     //     socket.connect()
+        //     // }
+        // })
+        // socket.on('reconnect', function () {
+        //     console.log('reconnect to room user-'+this.generator.userID, socket.id);
+        //     // socket.emit('user-reconnect', this.generator.userID);
+        // });
     },
     methods: {
         disconnectSocketio: function() {
-            socket.disconnect()
+            // socket.disconnect()
         },
         connectSocketio: function() {
-            socket.connect()
-            console.log('reconnect to room user-'+this.generator.userID)
-            socket.emit('user-reconnect', this.generator.userID);
+            // socket.connect()
+            // console.log('reconnect to room user-'+this.generator.userID)
+            // socket.emit('user-reconnect', this.generator.userID);
         },
         handleSocketResponse: function(response) {
             if (response.state == 'error') {
@@ -126,8 +131,30 @@ export default {
 
             // Todo: userID is not dynamic
             if (this.generator.userID) {
-                socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
+                await axios.post(
+                    'https://nft-generator.tnwebsolutions.nl/', 
+                    {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)}, 
+                    {timeout: 2000}
+                ).then((response) => {
+                    console.log(response)
+                }).catch((error) => {
+                    console.log(error)
+                });
+
+                if (interval) {
+                    clearInterval(interval)
+                }
+                var interval = setInterval(async () => {
+                    await axios.get('/generator/images', {timeout: 2000}).then((response) => {
+                        console.log(response.data)
+                        this.generator.loader.state = 'generating'
+                        this.generator.loader.progress = response.data
+                    })
+                }, 3000);
+
+                // socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             } else {
+                console.log('error')
                 this.setErrorMessage('Generation failed, please try again.')
             }
             this.resetButtonLoader()
