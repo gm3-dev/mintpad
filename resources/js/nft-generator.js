@@ -132,11 +132,11 @@ export default {
             // Todo: userID is not dynamic
             if (this.generator.userID) {
                 await axios.post(
-                    'https://nft-generator.tnwebsolutions.nl/', 
+                    process.env.MIX_GENERATOR_URL, 
                     {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)}, 
                     {timeout: 2000}
                 ).then((response) => {
-                    console.log(response)
+                    // console.log(response)
                 }).catch((error) => {
                     console.log(error)
                 });
@@ -145,12 +145,14 @@ export default {
                     clearInterval(interval)
                 }
                 var interval = setInterval(async () => {
-                    await axios.get('/generator/images', {timeout: 2000}).then((response) => {
-                        console.log(response.data)
-                        this.generator.loader.state = 'generating'
-                        this.generator.loader.progress = response.data
+                    await axios.get('/generator/status', {timeout: 2000}).then((response) => {
+                        this.generator.loader.state = response.data.state
+                        this.generator.loader.progress = response.data.value
+                        if (response.data.state == 'finished') {
+                            clearInterval(interval)
+                        }
                     })
-                }, 3000);
+                }, 2000);
 
                 // socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             } else {
