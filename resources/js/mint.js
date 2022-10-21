@@ -1,9 +1,14 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
-import initSentry from './sentry'
+
+// Includes
+import { initSentry, resportError } from './includes/sentry'
 import metamask from './wallets/metamask.js'
-import helpers from './helpers.js'
-import thirdweb from './thirdweb.js'
+import helpers from './includes/helpers.js'
+import thirdweb from './includes/thirdweb.js'
+import { eventBus } from './includes/event-bus'
+
+// Config
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -43,7 +48,16 @@ if (document.getElementById('app')) {
             }
 
             await this.setBlockchains()
-            await this.initMetaMask(false)
+
+            // Listen to connect button
+            eventBus.$on('connect-wallet', async (wallet) =>{
+                await this.connectWallet(wallet)
+            });
+
+            // Check chosen wallet
+            if (localStorage.getItem('walletName')) {
+                await this.initWallet(localStorage.getItem('walletName'))
+            }
 
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
@@ -67,7 +81,7 @@ if (document.getElementById('app')) {
                 this.appReady()
 
                 // Set SDK
-                if (this.wallet.account && this.hasValidChain) {
+                if (this.wallet.account && this.hasValidChain === true) {
                     this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
                 } else {
                     this.setSDK(this.collection.chain_id)
@@ -90,7 +104,7 @@ if (document.getElementById('app')) {
                         this.collection.totalRatio = 0
                     }
                 } catch (error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.', true)
                 }
 
@@ -100,7 +114,7 @@ if (document.getElementById('app')) {
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
                 } catch (error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                 }
 
             }).catch((error) => {
@@ -245,7 +259,7 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('NFT minted!')
                 } catch (error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.', true)
                 }
 

@@ -3,7 +3,7 @@
         <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
         <div v-if="!wallet.account">
-            @include('partials.connect')
+            <connect-wallet></connect-wallet>
         </div>
         <div v-else>
             <div class="text-center mb-10">
@@ -12,11 +12,9 @@
                 <p class="text-center mb-5">{{ __('You can adjust the settings of your collection here.') }}</p>
             </div>
 
-            <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4 dark:border-gray-600 dark:bg-mintpad-700">
-                <p class="text-sm text-center mb-4">Your wallet is not connected to the correct blockchain</p>
-                <p class="text-center"><x-link-button href="#" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-link-button></p>
-            </div>
-            <div v-else>
+            @include('partials.wallet-messages')
+
+            <div v-if="hasValidChain === true">
                 <div class="w-full mx-auto mb-3 pb-3">
                     <div class="flex items-center font-semibold border-b-2 border-mintpad-200">
                         <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 1}">

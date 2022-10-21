@@ -1,14 +1,15 @@
 window.$ = require('jquery')
 import * as Sentry from "@sentry/vue";
 import { ethers } from 'ethers'
-import helpers from '../helpers.js'
+import { chain } from "lodash";
+import helpers from '../includes/helpers.js'
 
 export default {
     mixins: [helpers],
     data() {
         return {
             wallet: {
-                name: 'metamask',
+                name: false,
                 account: false,
                 network: false,
                 provider: false,
@@ -23,6 +24,7 @@ export default {
             }
         },
         initMetaMask: async function(triggerRequest) {
+            localStorage.setItem('walletName', 'metamask');
             await this.getMetaMaskProvider()
             if (this.wallet.provider) {
                 this.setMetaMaskEvents()
@@ -32,7 +34,6 @@ export default {
         getMetaMaskProvider: async function () {
             try {
                 var provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-                // var network = await provider.getNetwork()
                 // this.provider = await detectEthereumProvider() // not used
     
             } catch(error) {
@@ -85,6 +86,7 @@ export default {
             var account = false
             var chainID = false
             var accounts = []
+            var network = false
     
             try {
                 signer = this.wallet.provider.getSigner()
@@ -94,11 +96,11 @@ export default {
                 } else {
                     throw Error('Not connected')
                 }
-                // account = await signer.getAddress()
+                network = await this.wallet.provider.getNetwork()
             } catch (error) {
                 if (error.message != 'Not connected') {
                     this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                    Sentry.captureException(error) 
+                    resportError(error) 
                 }
                 requestAccount = true
             }
@@ -109,16 +111,20 @@ export default {
                         accounts = await ethereum.request({method: 'eth_requestAccounts'})
                     } catch(error) {
                         this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                        Sentry.captureException(error) 
+                        resportError(error) 
                     }
                     if (accounts.length > 0) {
                         account = accounts[0]
                     }
                 }
                 
-                chainID = window.ethereum.networkVersion
+                chainID = parseInt(window.ethereum.networkVersion)
+                // if (chainID == undefined) {
+                //     chainID = parseInt(network.chainId)
+                // }
             }
     
+            this.wallet.name = 'metamask'
             this.wallet.signer = signer
             this.wallet.account = account
             if (chainID && this.blockchains[chainID]) {

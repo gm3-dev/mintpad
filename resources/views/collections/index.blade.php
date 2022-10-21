@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="overflow-hidden">
         <div v-if="!wallet.account">
-            @include('partials.connect')
+            <connect-wallet></connect-wallet>
         </div>
         <div v-else>
             <div class="text-center mb-12">

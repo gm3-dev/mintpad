@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 const tailwindcss = require('tailwindcss');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 // const webpack = require('webpack')
 // if (mix.inProduction()) {
 //     mix.webpackConfig ({
@@ -11,6 +13,12 @@ const tailwindcss = require('tailwindcss');
 //         ],
 //     })
 // }
+
+mix.webpackConfig({
+    plugins: [
+        new NodePolyfillPlugin(),
+    ]
+})
 
 /*
  |--------------------------------------------------------------------------

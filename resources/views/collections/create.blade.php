@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="relative">
         <div v-if="!wallet.account">
-            @include('partials.connect')
+            <connect-wallet></connect-wallet>
         </div>
         <div v-else>
             <form method="POST" action="{{ route('collections.store') }}" enctype="multipart/form-data">
@@ -11,10 +11,11 @@
                     <p class="text-center mb-5">{{ __('This is the start of your NFT collection.') }}</p>
                 </div>
 
-                <div v-if="!hasValidChain" class="border-2 border-primary-600 rounded-lg p-4 py-8 mb-8">
-                    <p class="text-sm text-center mb-4">Your wallet is not connected to the correct blockchain. Switching blockchains will refresh this page and all form data will be lost.</p>
-                    <p class="text-center"><x-link-button href="#" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-link-button></p>
+                <div v-if="collection.chain == 'solana'" class="border-2 border-primary-600 rounded-lg p-4 mb-8">
+                    <p class="text-sm text-center">To deploy on Solana Devnet, you'll need to manually switch networks on the Developer Settings of your Phantom wallet.</p>
                 </div>
+
+                @include('partials.wallet-messages')
 
                 <div class="w-full flex flex-wrap">
                     <div class="basis-1/3 mb-4">
@@ -27,7 +28,7 @@
                     </div>
                     <div class="basis-1/3 mb-4">
                         <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
-                        <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
+                        <x-input id="royalties" class="mt-1 w-full" step=".01" min="0" max="100" type="number" name="royalties" v-model="collection.royalties" required />
                     </div>
                     <div class="basis-full mb-4">
                         <x-label for="name" :value="__('Collection name')" info="This is the name of your NFT collection." />
@@ -41,7 +42,7 @@
 
                 <div class="w-full">
                     <span content="This action will trigger a transaction" v-tippy>
-                        <x-button href="#" @click.prevent="deployContract"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
+                        <x-button href="#" @click.prevent="deployContract" v-bind:disabled="hasValidChain !== true"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Deploy smart contract') }}</x-button>
                     </span>
                 </div>            
             </form>

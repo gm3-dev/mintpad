@@ -1,16 +1,20 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
-import initSentry from './sentry'
-import helpers from './helpers.js'
-import modal from './modal.js'
+import VueTippy from "vue-tippy"
+import {ColorPicker, ColorPanel} from 'one-colorpicker'
+
+// Includes
+import { initSentry, resportError } from './includes/sentry'
+import helpers from './includes/helpers.js'
+import modal from './includes/modal.js'
+
+// Config
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
-import VueTippy from "vue-tippy"
 Vue.use(VueTippy)
-import {ColorPicker, ColorPanel} from 'one-colorpicker'
 initSentry(Vue)
 
 if (document.getElementById('app')) {  
@@ -135,7 +139,6 @@ if (document.getElementById('app')) {
                 formData.append('name', name)
                 axios.post('/editor/'+this.collectionID+'/upload-resource', formData).then(async (response) => {
                     this.collection[name] = response.data.url
-                    console.log('response.data.url', response.data.url)
                     this.edit.loading = false
                     this.setBackground()
                 }).catch((error) => {

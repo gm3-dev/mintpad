@@ -1,12 +1,16 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
-import initSentry from './sentry'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
+
+// Includes
+import { initSentry, resportError } from './includes/sentry'
 import metamask from './wallets/metamask.js'
-import helpers from './helpers.js'
-import modal from './modal.js'
-import thirdweb from './thirdweb.js'
+import helpers from './includes/helpers.js'
+import modal from './includes/modal.js'
+import thirdweb from './includes/thirdweb.js'
+
+// Config
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',

@@ -1,7 +1,7 @@
 <x-mint-layout>
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
-    <div v-if="!hasValidChain" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4">
+    <div v-if="hasValidChain !== true" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4">
         <p class="text-sm text-center">Your wallet is not connected to the correct blockchain.</p>
     </div>
 
@@ -53,7 +53,7 @@
             <p class="font-regular text-center mb-4 text-mintpad-300">{{ __('Start minting by clicking the button below') }}</p>
             <div class="flex gap-2">                    
                 <x-button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full">Connect MetaMask</x-button>
-                <x-button v-else-if="!hasValidChain" @click.prevent="switchBlockchainTo(false)" class="w-full">Switch blockchain</x-button>
+                <x-button v-else-if="hasValidChain !== true" @click.prevent="switchBlockchainTo(false)" class="w-full">Switch blockchain</x-button>
                 <x-button v-else @click.prevent="mintNFT" class="w-full">Start minting</x-button>
             </div>
             <div class="grid grid-cols-2 mt-4 text-sm font-medium text-mintpad-300">

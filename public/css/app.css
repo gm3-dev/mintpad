@@ -1278,6 +1278,9 @@ select {
 .border-l-4 {
   border-left-width: 4px;
 }
+.border-b {
+  border-bottom-width: 1px;
+}
 .border-dashed {
   border-style: dashed;
 }

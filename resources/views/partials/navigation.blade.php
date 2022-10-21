@@ -19,25 +19,29 @@
                     <x-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                         {{ __('Support') }}
                     </x-nav-link>
-                    <x-nav-link :active="request()->routeIs('generator.*')" class="relative">
-                        {{ __('NFT generator') }}<span class="absolute bottom-1 left-7 text-xs text-primary-600">(coming soon)</span>
+                    <x-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')" class="relative">
+                        {{ __('NFT generator') }}
                     </x-nav-link>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <div id="user-address" class="hidden lg:inline-block">
-                    <button href="#" @click.prevent="copyAddress" class="hidden border-2 text-mintpad-400 dark:text-gray-200 text-sm rounded-lg hover:border-primary-600 px-3 py-1 mr-3" content="Copy wallet address" v-tippy></button>
-                </div>
-                <div id="toggle-darkmode">
-                    <a href="#" class="text-lg p-1 mr-2 hover:text-primary-600" @click.prevent="toggleDarkmode">
-                        <i v-if="dark" class="far fa-sun text-white hover:text-primary-600"></i>
-                        <i v-else class="far fa-moon"></i>
-                    </a>
-                </div>
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
+                <wallet-manager></wallet-manager>
+
+                <dropdown v-if="wallet.account" refname="dropdown-1">
+                    <template v-slot:button>
+                        <div><img :src="'/images/'+wallet.name+'.png'" width="26px" class="inline-block mr-1" /> <i class="fas fa-chevron-down mr-2"></i></div>
+                    </template>
+                    <template v-slot:links>
+                        <dropdown-link href="#" @click.prevent.native="disconnectWallet">Disconnect</dropdown-link>
+                    </template>
+                </dropdown>
+
+                <dark-mode></dark-mode>
+
+                <dropdown refname="dropdown-2">
+                    <template v-slot:button>
                         <button class="flex items-center text-mintpad-300 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
                             <div><i class="fas fa-user-circle text-3xl"></i></div>
 
@@ -47,89 +51,80 @@
                                 </svg>
                             </div>
                         </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        @if (Auth::user() && Auth::user()->role == 'admin')
-                            <x-dropdown-link :href="route('admin.dashboard.index')">
-                                {{ __('Admin panel') }}
-                            </x-dropdown-link>
+                    </template>
+                    <template v-slot:links>
+                        @if (Auth::user())
+                            <div class="px-4 py-2 text-xs border-b border-gray-200">
+                                <div class="text-sm text-gray-800 dark:text-white">{{ Auth::user()->name }}</div>
+                                <div class="text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
+                            </div>
                         @endif
-                        <x-dropdown-link :href="route('users.profile')">
+
+                        @if (Auth::user() && Auth::user()->role == 'admin')
+                            <dropdown-link href="{{ route('admin.dashboard.index') }}">
+                                {{ __('Admin panel') }}
+                            </dropdown-link>
+                        @endif
+                        <dropdown-link href="{{ route('users.profile') }}">
                             {{ __('My profile') }}
-                        </x-dropdown-link>
-                        <x-dropdown-link :href="route('users.invoices')">
+                        </dropdown-link>
+                        <dropdown-link href="{{ route('users.invoices') }}">
                             {{ __('Invoices') }}
-                        </x-dropdown-link>
+                        </dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-200 bg-gray-100">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
+                            <dropdown-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            </dropdown-link>
                         </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-mintpad-300 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-mintpad-300 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                    </template>
+                </dropdown>
             </div>
         </div>
-    </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('collections.index')" :active="request()->routeIs('collections.*')">
-                {{ __('Collections') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
-                {{ __('Support') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            @if (Auth::user())
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
-                </div>
-            @endif
-
-            <div class="mt-3 space-y-1">
-                @if (Auth::user() && Auth::user()->role == 'admin')
-                    <x-responsive-nav-link :href="route('admin.dashboard.index')">
-                        {{ __('Admin panel') }}
-                    </x-responsive-nav-link>
+        <hamburger-menu>
+            <template v-slot:main>
+                <hamburger-menu-link href="{{ route('collections.index') }}" active="{{ request()->routeIs('collections.*') }}">
+                    {{ __('Collections') }}
+                </hamburger-menu-link>
+                <hamburger-menu-link href="'https://mintpad.co/support'" target="'_blank'">
+                    {{ __('Support') }}
+                </hamburger-menu-link>
+            </template>
+            <template v-slot:settings>
+                @if (Auth::user())
+                    <div class="px-4">
+                        <div class="font-medium text-base text-gray-800 dark:text-white">{{ Auth::user()->name }}</div>
+                        <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
+                    </div>
                 @endif
-                <x-responsive-nav-link :href="route('users.profile')">
-                    {{ __('My profile') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('users.invoices')">
-                    {{ __('Invoices') }}
-                </x-responsive-nav-link>
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+                <div class="mt-3 space-y-1">
+                    @if (Auth::user() && Auth::user()->role == 'admin')
+                        <hamburger-menu-link href="{{ route('admin.dashboard.index') }}">
+                            {{ __('Admin panel') }}
+                        </hamburger-menu-link>
+                    @endif
+                    <hamburger-menu-link href="{{ route('users.profile') }}">
+                        {{ __('My profile') }}
+                    </hamburger-menu-link>
+                    <hamburger-menu-link href="{{ route('users.invoices') }}">
+                        {{ __('Invoices') }}
+                    </hamburger-menu-link>
+                    <!-- Authentication -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <hamburger-menu-link href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </hamburger-menu-link>
+                    </form>
+                </div>
+            </template>
+        </hamburger-menu>
     </div>
 </nav>

@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container min-h-screen bg-white dark:bg-slate-900">
+        <div id="app" class="main-container min-h-screen bg-white dark:bg-slate-900" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
             @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">
@@ -31,7 +31,7 @@
 
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><i class="fa-solid fa-gear animate-spin"></i></div>
-            <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
+            <main id="app-content" class="hidden">
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto px-6 lg:px-8">
                         {{ $slot }}

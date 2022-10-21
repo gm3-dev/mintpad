@@ -1,15 +1,21 @@
 window.$ = require('jquery')
 import Vue from 'vue/dist/vue.min.js'
-import initSentry from './sentry'
+import { ethers } from 'ethers'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
+
+// Includes
+import { eventBus } from './includes/event-bus'
+import { initSentry, resportError } from './includes/sentry'
 import metamask from './wallets/metamask.js'
 import phantom from './wallets/phantom.js'
-import helpers from './helpers.js'
-import modal from './modal.js'
-import { ethers } from 'ethers'
-import thirdweb from './thirdweb.js'
-import nftgenerator from './nft-generator.js'
+import helpers from './includes/helpers.js'
+import modal from './includes/modal.js'
+import thirdweb from './includes/thirdweb.js'
+import thirdwebWrapper from './includes/thirdweb-wrapper.js'
+import nftgenerator from './includes/nft-generator.js'
+
+// Config
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -21,61 +27,50 @@ Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
 initSentry(Vue)
 
-/**
- * Darkmode support
- */
-if (document.getElementById('toggle-darkmode')) {
-    new Vue({
-        el: '#toggle-darkmode',
-        data: {
-            dark: false
-        },
-        mounted: function() {
-            this.dark = useDarkmode
-        },
-        methods: {
-            toggleDarkmode: function(e) {
-                var mode = document.documentElement.classList.contains('dark')
-                if (mode) {
-                    document.documentElement.classList.remove('dark')
-                    localStorage.theme = 'light'
-                    this.dark = false
-                } else {
-                    document.documentElement.classList.add('dark')
-                    localStorage.theme = 'dark'
-                    this.dark = true
+Vue.directive('closable', {
+    bind (el, binding, vnode) {
+        // Here's the click/touchstart handler
+        // (it is registered below)
+        el.clickOutsideEvent = (e) => {
+            e.stopPropagation()
+            
+            const { handler, exclude } = binding.value
+            let clickedOnExcludedEl = false
+            exclude.forEach(refName => {
+                if (!clickedOnExcludedEl) {
+                    const excludedEl = vnode.context.$refs[refName]
+                    clickedOnExcludedEl = excludedEl.contains(e.target)
                 }
+            })
+            if (!el.contains(e.target) && !clickedOnExcludedEl) {
+                vnode.context[handler]()
             }
         }
-    })
-}
-
-// User address in navigation
-if (document.getElementById('user-address')) {  
-    new Vue({
-        el: '#user-address',
-        methods: {
-            copyAddress: function(e) {
-                var button = $(e.target)
-                var buttonWidth = button.outerWidth()
-                var shortAddress = button.text()
-                button.css('width', buttonWidth+'px').text('Copied')
-                setTimeout(function() {
-                    button.text(shortAddress)
-                }, 1000)
-                navigator.clipboard.writeText(button.data('address'))
-            }
-        }
-    })
-}
+        // Register click/touchstart event listeners on the whole page
+        document.addEventListener('click', el.clickOutsideEvent)
+        document.addEventListener('touchstart', el.clickOutsideEvent)
+    },
+    unbind (el) {
+        // If the element that has v-closable is removed, then
+        // unbind click/touchstart listeners from the whole page
+        document.removeEventListener('click', el.clickOutsideEvent)
+        document.removeEventListener('touchstart', el.clickOutsideEvent)
+    }
+})
 
 if (document.getElementById('app')) {
     Vue.component('tinymce', require('./components/TinyMCE.vue').default);
+    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
     Vue.component('connect-wallet', require('./components/ConnectWallet.vue').default);
+    Vue.component('wallet-manager', require('./components/WalletManager.vue').default);
+    Vue.component('dropdown', require('./components/Dropdown.vue').default);
+    Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
+    Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
+    Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
 
     new Vue({
         el: '#app',
-        mixins: [metamask,phantom,helpers,modal,thirdweb,nftgenerator],
+        mixins: [metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
         data: {
             collectionID: false,
             sdk: false,
@@ -85,6 +80,7 @@ if (document.getElementById('app')) {
             collection: {
                 name: '',
                 chain_id: 1,
+                chain: 'evm',
                 token: 'ETH',
                 symbol: '',
                 fee_recipient: 0,
@@ -95,12 +91,7 @@ if (document.getElementById('app')) {
                 previews: [],
                 totalSupply: 0,
                 totalClaimedSupply: 0,
-                permalink: '',
-                website: '',
-                roadmap: '',
-                twitter: '',
-                discord: '',
-                about: '',
+                permalink: ''
             },
             claimPhases: [],
             claimPhaseInfo: [],
@@ -120,25 +111,61 @@ if (document.getElementById('app')) {
         watch: {
             collectionChain: async function(chainID) {
                 this.hasValidChain = await this.validateMatchingBlockchains(parseInt(chainID))
+                if (this.blockchains[parseInt(chainID)]) {
+                    this.collection.chain = this.blockchains[parseInt(chainID)].chain
+                }
             }
         },
         async mounted() {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
-            
+
             await this.setBlockchains()
-            await this.initMetaMask(false)
-            this.appReady()
-            
-            if (this.wallet.account) {
-                $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
+
+            // Listen to connect button
+            eventBus.$on('connect-wallet', async (wallet) =>{
+                await this.connectWallet(wallet)
+            });
+
+            // Check chosen wallet
+            if (localStorage.getItem('walletName')) {
+                await this.initWallet(localStorage.getItem('walletName'))
             }
 
+            this.appReady()
+            this.setWalletUI()
             this.setPage()
             this.setPageData()
         },
         methods: {
+            disconnectWallet: function() {
+                localStorage.removeItem('walletName')
+                window.location.reload()
+            },
+            setWalletUI: function() {
+                if (this.wallet.account) {
+                    $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
+                }
+            },
+            connectWallet: async function(wallet) {
+                if (wallet == 'metamask') {
+                    await this.connectMetaMask()
+                }
+                if (wallet == 'phantom') {
+                    await this.connectPhantom()
+                }
+                this.setWalletUI()
+            },
+            initWallet: async function(wallet) {
+                if (wallet == 'metamask') {
+                    await this.initMetaMask(false)
+                }
+                if (wallet == 'phantom') {
+                    await this.initPhantom(true)
+                }
+                this.setWalletUI()
+            },
             changeEditTab: async function(tab) {
                 this.page.tab = tab
             },
@@ -162,6 +189,7 @@ if (document.getElementById('app')) {
                     // Set DB data
                     this.contractAddress = response.data.address
                     this.collection.chain_id = response.data.chain_id
+                    this.collection.chain = this.blockchains[this.collection.chain_id].chain
                     this.collection.token = response.data.token
                     this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
 
@@ -169,7 +197,7 @@ if (document.getElementById('app')) {
                     this.collection.permalink = response.data.permalink
 
                     // Check if wallet is connected to the correct blockchain
-                    if (!this.hasValidChain) {
+                    if (this.hasValidChain !== true) {
                         this.page.tab = -1
                         return;
                     } else {
@@ -181,15 +209,15 @@ if (document.getElementById('app')) {
 
                     try {
                         // Global settings
-                        const metadata = await this.contract.metadata.get()
-                        const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                        const metadata = await this.getMetadata()
                         this.collection.name = metadata.name
                         this.collection.description = metadata.description
+                        const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                         this.collection.fee_recipient = royalties.fee_recipient
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                         // Claim phases
-                        var claimConditions = await this.contract.claimConditions.getAll()
+                        var claimConditions = await this.getClaimPhases()
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
                         // Collection
@@ -198,7 +226,8 @@ if (document.getElementById('app')) {
                         this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                         this.collection.nfts = await this.contract.getAll({count: 8})
                     } catch (error) {
-                        Sentry.captureException(error)
+                        console.log(error)
+                        resportError(error)
                         this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
                 })
@@ -237,7 +266,7 @@ if (document.getElementById('app')) {
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
                 
@@ -296,7 +325,7 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('General settings updated')
                 } catch(error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
 
@@ -313,7 +342,7 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('Royalties updated')
                 } catch(error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
 
@@ -341,36 +370,31 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             },
             deployContract: async function(e) {
-                if (!this.hasValidChain) {
+                if (this.hasValidChain !== true) {
                     this.setErrorMessage('Please connect to the correct blockchain')
                     return
                 }
+                resportError('error')
 
                 this.setButtonLoader(e)
 
-                // deploy contract
                 try {
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
-                    const contractAddress = await this.sdk.deployer.deployNFTDrop({
-                        name: this.collection.name,
-                        symbol: this.collection.symbol,
-                        description: this.collection.description,
-                        primary_sale_recipient: this.wallet.account, // primary sales
-                        fee_recipient: this.wallet.account, // royalties address
-                        seller_fee_basis_points: this.collection.royalties * 100, // royalties address
-                        platform_fee_recipient: '0x892a99573583c6490526739bA38BaeFae10a84D4', // platform fee address
-                        platform_fee_basis_points: 250 // platform fee (2,5%)
-                    })
+                    // Deploy contract
+                    const contractAddress = await this.deployNFTDrop()
 
-                    var formData = this.collection
-                    formData.address = contractAddress
-                    await axios.post('/collections', formData).then((response) => {
-                        var data = response.data
-                        window.location.href = "/collections/"+data.id+"/edit"
-                    })
+                    if (contractAddress) {
+                        // Update DB
+                        var formData = this.collection
+                        formData.address = contractAddress
+                        await axios.post('/collections', formData).then((response) => {
+                            var data = response.data
+                            window.location.href = "/collections/"+data.id+"/edit"
+                        })
+                    }
 
                 } catch(error) {
-                    Sentry.captureException(error)
+                    console.log(error)
+                    // resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
 
@@ -407,7 +431,7 @@ if (document.getElementById('app')) {
 
                     this.setSuccessMessage('NFTs added to the collection!')
                 } catch(error) {
-                    Sentry.captureException(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
 
