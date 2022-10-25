@@ -181,7 +181,9 @@ return [
         /*
          * Custom Service Providers...
          */
-        App\Providers\MoneybirdServiceProvider::class
+        App\Providers\MoneybirdServiceProvider::class,
+        App\Providers\PolygonScanServiceProvider::class,
+        App\Providers\CoinbaseServiceProvider::class
     ],
 
     /*

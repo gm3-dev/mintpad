@@ -6,13 +6,11 @@ use Illuminate\Support\Facades\Http;
 
 class PolygonScanApi
 {
-    public $client;
     public $url;
 
     public function __construct()
     {
-        $this->client = new Http();
-        $this->url = 'https://api-testnet.polygonscan.com/api?apikey=PWJKAUJVFPFPGVX2BQYC4NQHSZIET42K6Y';
+        $this->url = $this->getUrl();
     }
 
     public function getBalance($address)
@@ -52,5 +50,10 @@ class PolygonScanApi
     public function wei2eth($wei)
     {
         return bcdiv($wei, '1000000000000000000', 18);
+    }
+
+    public function getUrl()
+    {
+        return config('polygon.url').'/api?apikey='.config('polygon.key');
     }
 }
