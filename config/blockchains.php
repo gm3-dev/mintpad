@@ -32,26 +32,26 @@ return [
         'chain' => 'evm'
     ],
     // Solana (chain ID is made up)
-    11001 => [
-        'name' => 'mainnet-beta',
-        'id' => 11001,
-        'token' => 'SOL',
-        'full' => 'Solana',
-        'testnet' => false,
-        'rpc' => false,
-        'wallet' => ['phantom'],
-        'chain' => 'solana'
-    ],
-    11002 => [
-        'name' => 'devnet',
-        'id' => 11002,
-        'token' => 'SOL',
-        'full' => 'Solana Devnet',
-        'testnet' => true,
-        'rpc' => false,
-        'wallet' => ['phantom'],
-        'chain' => 'solana'
-    ],
+    // 11001 => [
+    //     'name' => 'mainnet-beta',
+    //     'id' => 11001,
+    //     'token' => 'SOL',
+    //     'full' => 'Solana',
+    //     'testnet' => false,
+    //     'rpc' => false,
+    //     'wallet' => ['phantom'],
+    //     'chain' => 'solana'
+    // ],
+    // 11002 => [
+    //     'name' => 'devnet',
+    //     'id' => 11002,
+    //     'token' => 'SOL',
+    //     'full' => 'Solana Devnet',
+    //     'testnet' => true,
+    //     'rpc' => false,
+    //     'wallet' => ['phantom'],
+    //     'chain' => 'solana'
+    // ],
     // Polygon
     137 => [
         'name' => 'polygon',
@@ -137,26 +137,26 @@ return [
         'chain' => 'evm'
     ],
     // Arbitrum
-    // 42161 => [
-    //     'name' => 'arbitrum',
-    //     'id' => 42161,
-    //     'token' => 'ETH',
-    //     'full' => 'Arbitrum',
-    //     'testnet' => false,
-    //     'rpc' => false,
-    //     'wallet' => ['metamask'],
-    //     'chain' => 'evm'
-    // ],
-    // 421611 => [
-    //     'name' => 'arbitrum-testnet',
-    //     'id' => 421611,
-    //     'token' => 'ETH',
-    //     'full' => 'Arbitrum testnet',
-    //     'testnet' => true,
-    //     'rpc' => false,
-    //     'wallet' => ['metamask'],
-    //     'chain' => 'evm'
-    // ],
+    42161 => [
+        'name' => 'arbitrum',
+        'id' => 42161,
+        'token' => 'ETH',
+        'full' => 'Arbitrum',
+        'testnet' => false,
+        'rpc' => false,
+        'wallet' => ['metamask'],
+        'chain' => 'evm'
+    ],
+    421611 => [
+        'name' => 'arbitrum-testnet',
+        'id' => 421611,
+        'token' => 'ETH',
+        'full' => 'Arbitrum Rinkeby',
+        'testnet' => true,
+        'rpc' => false,
+        'wallet' => ['metamask'],
+        'chain' => 'evm'
+    ],
     // BNB
     56 => [
         'name' => 'binance',
