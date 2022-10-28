@@ -62,6 +62,11 @@ class GeneratorController extends Controller
                 $files = $request->file('files');
                 $path = 'traits/' . Auth::user()->id;
 
+                // Delete old traits
+                if (Storage::exists($path)) {
+                    Storage::deleteDirectory();
+                }
+
                 foreach ($files as $file_key => $file) {
                     $dir_path = $_FILES['files']['full_path'][$file_key];
                     if ($full_path = $this->getFullPath($dir_path)) {
