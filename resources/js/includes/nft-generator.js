@@ -38,7 +38,6 @@ export default {
     },
     mounted: async function() {
         this.generator.userID = this.$el.getAttribute('data-user')
-        console.log('this.generator.userID', this.generator.userID)
 
         // console.time('connect')
 
@@ -187,7 +186,6 @@ export default {
             return axios.post('/generator/upload', formData).then(function(response) {
                 // console.log(response.data)
             })
-
         },
         parseTraitFile: function(file) {
             var structure = file.webkitRelativePath.split('/')

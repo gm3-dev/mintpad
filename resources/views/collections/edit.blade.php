@@ -41,7 +41,7 @@
                         </h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full mb-4">
-                                <x-label for="name" :value="__('Collection name')" info="This is the name of your NFT collection." />
+                                <x-label for="name" :value="__('Collection name')" class="relative is-required" info="This is the name of your NFT collection." />
                                 <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                             </div>
                             <div class="basis-full mb-4">
@@ -58,11 +58,11 @@
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
-                                <x-label for="fee_recipient" :value="__('Recipient address')" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
+                                <x-label for="fee_recipient" :value="__('Recipient address')" class="relative is-required" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
                                 <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                             </div>
                             <div class="basis-1/3">
-                                <x-label for="royalties" :value="__('Creator royalties (%)')" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
+                                <x-label for="royalties" :value="__('Creator royalties (%)')" class="relative is-required" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                                 <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                             </div>
                         </div>
@@ -181,7 +181,7 @@
                                 {{ __('Add images to your collection') }}
                                 <!-- <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button> -->
                             </h3>
-                            <!-- <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ route('generator.index') }}">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p> -->
+                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ route('generator.index') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
                             <p class="font-regular text-sm">{{ __('Upload your NFT collection.') }}</b></p>
                             <p class="font-semibold text-sm mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
 

@@ -14333,7 +14333,7 @@ axios.defaults.headers.common = {
               case 0:
                 blockchain = this.blockchains[chainID];
 
-                if (blockchain.wallet.includes(this.wallet.name)) {
+                if (!(!blockchain || !blockchain.wallet.includes(this.wallet.name))) {
                   _context2.next = 5;
                   break;
                 }

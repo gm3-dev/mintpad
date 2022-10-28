@@ -72,7 +72,7 @@
                             {{ __('Invoices') }}
                         </dropdown-link>
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-200 bg-gray-100">
+                        <form method="POST" action="{{ route('logout') }}" class="border-t rounded-b-md border-gray-200 bg-gray-100 dark:bg-mintpad-700">
                             @csrf
                             <dropdown-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

@@ -14,6 +14,7 @@ import modal from './includes/modal.js'
 import thirdweb from './includes/thirdweb.js'
 import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import nftgenerator from './includes/nft-generator.js'
+import validation from './includes/validation.js'
 
 // Config
 const axios = require('axios')
@@ -70,7 +71,7 @@ if (document.getElementById('app')) {
 
     new Vue({
         el: '#app',
-        mixins: [metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
+        mixins: [validation, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
         data: {
             collectionID: false,
             sdk: false,
@@ -156,6 +157,8 @@ if (document.getElementById('app')) {
                     await this.connectPhantom()
                 }
                 this.setWalletUI()
+                this.setPage()
+                this.setPageData()
             },
             initWallet: async function(wallet) {
                 if (wallet == 'metamask') {
@@ -226,7 +229,6 @@ if (document.getElementById('app')) {
                         this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                         this.collection.nfts = await this.contract.getAll({count: 8})
                     } catch (error) {
-                        console.log(error)
                         resportError(error)
                         this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
@@ -240,6 +242,15 @@ if (document.getElementById('app')) {
                 ]
             },
             updateClaimPhases: async function(e) {
+                // Validate form
+                var validation = this.validateUpdateClaimPhases()
+                if (!validation.valid) {
+                    this.setErrorMessage(validation.message)
+                    return
+                }
+
+                return;
+
                 this.setButtonLoader(e)
 
                 var claimPhases = []
@@ -310,6 +321,13 @@ if (document.getElementById('app')) {
                 this.claimPhases[index].modal = state
             },
             updateMetadata: async function(e) {
+                // Validate form
+                var validation = this.validateUpdateMetadata()
+                if (!validation.valid) {
+                    this.setErrorMessage(validation.message)
+                    return
+                }
+
                 this.setButtonLoader(e)
 
                 try {
@@ -332,6 +350,13 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             },
             updateRoyalties: async function(e) {
+                // Validate form
+                var validation = this.validateUpdateRoyalties()
+                if (!validation.valid) {
+                    this.setErrorMessage(validation.message)
+                    return
+                }
+
                 this.setButtonLoader(e)
 
                 try {
@@ -374,7 +399,13 @@ if (document.getElementById('app')) {
                     this.setErrorMessage('Please connect to the correct blockchain')
                     return
                 }
-                resportError('error')
+
+                // Validate form
+                var validation = this.validateDeployContract()
+                if (!validation.valid) {
+                    this.setErrorMessage(validation.message)
+                    return
+                }
 
                 this.setButtonLoader(e)
 
@@ -393,8 +424,7 @@ if (document.getElementById('app')) {
                     }
 
                 } catch(error) {
-                    console.log(error)
-                    // resportError(error)
+                    resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.')
                 }
 

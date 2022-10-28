@@ -23,17 +23,17 @@
             </div>
 
             <!-- Password -->
-            <div class="mt-4">
+            <div class="mt-4 relative">
                 <x-label for="password" :value="__('Password')" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+                @include('partials.show-password')
+                <x-input id="password" class="block mt-1 w-full" v-bind:type="showPassword ? 'text' : 'password'" name="password" required />
             </div>
 
             <!-- Confirm Password -->
-            <div class="mt-4">
+            <div class="mt-4 relative">
                 <x-label for="password_confirmation" :value="__('Confirm Password')" />
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
+                @include('partials.show-confirm-password')
+                <x-input id="password_confirmation" class="block mt-1 w-full" v-bind:type="showConfirmPassword ? 'text' : 'password'" name="password_confirmation" required />
             </div>
 
             <div class="mt-4">

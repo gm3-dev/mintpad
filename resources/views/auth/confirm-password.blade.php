@@ -17,13 +17,10 @@
             @csrf
 
             <!-- Password -->
-            <div>
+            <div class="password">
                 <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+                @include('partials.show-password')
+                <x-input id="password" class="block mt-1 w-full" v-bind:type="showPassword ? 'text' : 'password'" name="password" required autocomplete="current-password" />
             </div>
 
             <div class="flex justify-end mt-4">

@@ -25,14 +25,16 @@
                     <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
                 </div>
                 <!-- Password -->
-                <div>
+                <div class="relative">
                     <x-label for="password" :value="__('Password')" class="relative is-required" />
-                    <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+                    @include('partials.show-password')
+                    <x-input id="password" class="block mt-1 w-full" v-bind:type="showPassword ? 'text' : 'password'" name="password" required />
                 </div>
                 <!-- Confirm Password -->
-                <div>
+                <div class="relative">
                     <x-label for="password_confirmation" :value="__('Confirm Password')" class="relative is-required" />
-                    <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
+                    @include('partials.show-confirm-password')
+                    <x-input id="password_confirmation" class="block mt-1 w-full" v-bind:type="showConfirmPassword ? 'text' : 'password'" name="password_confirmation" required />
                 </div>
 
                 <x-label for="is-company" class="inline-flex items-center flex-auto pt-2">

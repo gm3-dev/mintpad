@@ -5,9 +5,17 @@ import Vue from 'vue/dist/vue.min.js'
 if (document.getElementById('guest-container')) {  
     new Vue({
         el: '#guest-container',
-        data: {},
+        data: {
+            showPassword: false,
+            showConfirmPassword: false
+        },
         methods: {
-
+            toggleShowPassword: function(state) {
+                this.showPassword = state
+            },
+            toggleShowConfirmPassword: function(state) {
+                this.showConfirmPassword = state
+            }
         }
     })
 }

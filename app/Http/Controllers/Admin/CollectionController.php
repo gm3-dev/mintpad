@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\PolygonScanApi;
+use App\Facades\PolygonScan;
+use App\Facades\Coinbase;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use Illuminate\Http\Request;
@@ -16,12 +17,21 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        $api = new PolygonScanApi();
-        $api->getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
-        $api->getInternalTransactions('0x892a99573583c6490526739ba38baefae10a84d4');
+        // dump(Coinbase::getProfile());
+        // Coinbase::getProducts();
+        // Coinbase::getProductByid('SOL-EUR');
+        // Coinbase::postOrder('SOL-EUR', '0.1');
+        // dump(Coinbase::getAccountById('0937b056-2f39-478e-8c3a-0621c8a24906'));
+        // Coinbase::getCoinbaseAccounts();
+        // dump(Coinbase::getAccountByToken('SOL'));
+        // dump(Coinbase::getAccountByToken('SOL'));
+        // Coinbase::postConversion();
 
-        $collections = Collection::all();
-        return view('admin.collections.index')->with(compact('collections'));
+        PolygonScan::getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
+        PolygonScan::getInternalTransactions('0x892a99573583c6490526739ba38baefae10a84d4');
+
+        // $collections = Collection::all();
+        // return view('admin.collections.index')->with(compact('collections'));
     }
 
     /**

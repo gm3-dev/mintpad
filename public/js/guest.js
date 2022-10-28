@@ -13323,8 +13323,18 @@ window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.
 if (document.getElementById('guest-container')) {
   new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default())({
     el: '#guest-container',
-    data: {},
-    methods: {}
+    data: {
+      showPassword: false,
+      showConfirmPassword: false
+    },
+    methods: {
+      toggleShowPassword: function toggleShowPassword(state) {
+        this.showPassword = state;
+      },
+      toggleShowConfirmPassword: function toggleShowConfirmPassword(state) {
+        this.showConfirmPassword = state;
+      }
+    }
   });
 }
 

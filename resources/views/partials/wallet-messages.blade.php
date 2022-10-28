@@ -4,6 +4,6 @@
         <p class="text-center"><x-link-button href="#" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-link-button></p>
     </div>
     <div v-if="hasValidChain == 'wallet'">
-        <p class="text-sm text-center">You are not connected to the wrong wallet, connect to the correct wallet manually.</p>
+        <p class="text-sm text-center">You are connected to the wrong wallet, connect to the correct wallet manually.</p>
     </div>
 </div>
