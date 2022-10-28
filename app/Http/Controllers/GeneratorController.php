@@ -64,7 +64,7 @@ class GeneratorController extends Controller
 
                 // Delete old traits
                 if (Storage::exists($path)) {
-                    Storage::deleteDirectory();
+                    Storage::deleteDirectory($path);
                 }
 
                 foreach ($files as $file_key => $file) {
