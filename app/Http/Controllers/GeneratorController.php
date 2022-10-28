@@ -28,15 +28,24 @@ class GeneratorController extends Controller
     public function create(Request $request)
     {
         if ($request->ajax()) {
+            $path = 'traits/'.Auth::user()->id;
+            
             if (! Storage::exists('traits')) {
                 Storage::makeDirectory('traits', 0775, true);
             }
-            if (! Storage::exists('traits/'.Auth::user()->id)) {
-                Storage::makeDirectory('traits/'.Auth::user()->id, 0775, true);
+
+            // Create path if missing
+            if (! Storage::exists($path)) {
+                Storage::makeDirectory($path, 0775, true);
+            }
+
+            // Delete old traits
+            if (Storage::exists($path)) {
+                Storage::deleteDirectory($path);
             }
 
             if ($request->has('layers')) {
-                Storage::disk('local')->put('traits/'.Auth::user()->id.'/traits.json', $request->get('layers'));
+                Storage::disk('local')->put($path.'/traits.json', $request->get('layers'));
 
                 return response()->json(['user_id' => Auth::user()->id], 200);
             }
@@ -61,11 +70,6 @@ class GeneratorController extends Controller
             if ($request->hasFile('files')) {
                 $files = $request->file('files');
                 $path = 'traits/' . Auth::user()->id;
-
-                // Delete old traits
-                if (Storage::exists($path)) {
-                    Storage::deleteDirectory($path);
-                }
 
                 foreach ($files as $file_key => $file) {
                     $dir_path = $_FILES['files']['full_path'][$file_key];
