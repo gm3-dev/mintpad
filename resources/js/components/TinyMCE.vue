@@ -4,7 +4,7 @@
             :value="value"
             v-on:input="updateValue" 
             :init="{
-                menubar:false,
+                menubar: false,
                 statusbar: false,
                 toolbar: 'undo redo link h1 h2 h3 bold italic alignleft aligncenter alignright numlist bullist',
                 plugins: 'link lists autoresize',
@@ -12,7 +12,7 @@
                 min_height: 300,
                 valid_elements: 'p,h1,h2,h3,ul,ol,li,strong,em',
                 valid_children: 'p[a,em,strong],li[a,em,strong]',
-                extended_valid_elements: 'a[href|target]'
+                extended_valid_elements: 'a[href|target|title|rel]'
             }"
         />
     </div>

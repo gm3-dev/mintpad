@@ -8,6 +8,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\GeneratorController;
+use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,8 +65,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Editor layout
     Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
-    Route::post('editor/{collection}/upload-resource', [EditorController::class, 'uploadResource'])->name('editor.upload');
-    Route::delete('editor/{collection}/delete-resource', [EditorController::class, 'deleteResource'])->name('editor.delete');
+
+    // Resources
+    Route::post('resources/{collection}/upload', [ResourceController::class, 'upload'])->name('resources.upload');
+    Route::delete('resources/{collection}/delete', [ResourceController::class, 'delete'])->name('resources.delete');
 });
 
 // Mint layout

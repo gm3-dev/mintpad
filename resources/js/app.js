@@ -7,10 +7,12 @@ import VueTippy, { TippyComponent } from "vue-tippy"
 // Includes
 import { eventBus } from './includes/event-bus'
 import { initSentry, resportError } from './includes/sentry'
+import wallet from './includes/wallet.js'
 import metamask from './wallets/metamask.js'
 import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
+import resources from './includes/resources'
 import thirdweb from './includes/thirdweb.js'
 import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import nftgenerator from './includes/nft-generator.js'
@@ -71,7 +73,7 @@ if (document.getElementById('app')) {
 
     new Vue({
         el: '#app',
-        mixins: [validation, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
+        mixins: [resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
         data: {
             collectionID: false,
             sdk: false,
@@ -92,7 +94,8 @@ if (document.getElementById('app')) {
                 previews: [],
                 totalSupply: 0,
                 totalClaimedSupply: 0,
-                permalink: ''
+                permalink: '',
+                seo: {},
             },
             claimPhases: [],
             claimPhaseInfo: [],
@@ -138,37 +141,9 @@ if (document.getElementById('app')) {
             this.setWalletUI()
             this.setPage()
             this.setPageData()
+            this.setResource('social-sharing')
         },
         methods: {
-            disconnectWallet: function() {
-                localStorage.removeItem('walletName')
-                window.location.reload()
-            },
-            setWalletUI: function() {
-                if (this.wallet.account) {
-                    $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
-                }
-            },
-            connectWallet: async function(wallet) {
-                if (wallet == 'metamask') {
-                    await this.connectMetaMask()
-                }
-                if (wallet == 'phantom') {
-                    await this.connectPhantom()
-                }
-                this.setWalletUI()
-                this.setPage()
-                this.setPageData()
-            },
-            initWallet: async function(wallet) {
-                if (wallet == 'metamask') {
-                    await this.initMetaMask(false)
-                }
-                if (wallet == 'phantom') {
-                    await this.initPhantom(true)
-                }
-                this.setWalletUI()
-            },
             changeEditTab: async function(tab) {
                 this.page.tab = tab
             },
@@ -195,6 +170,7 @@ if (document.getElementById('app')) {
                     this.collection.chain = this.blockchains[this.collection.chain_id].chain
                     this.collection.token = response.data.token
                     this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
+                    this.collection.seo = response.data.seo
 
                     // Mint settings
                     this.collection.permalink = response.data.permalink
@@ -249,8 +225,6 @@ if (document.getElementById('app')) {
                     return
                 }
 
-                return;
-
                 this.setButtonLoader(e)
 
                 var claimPhases = []
@@ -296,7 +270,8 @@ if (document.getElementById('app')) {
                     whitelist: 0,
                     waitInSeconds: 1,
                     snapshot: [],
-                    modal: false
+                    modal: false,
+                    name: 'Phase ' + (this.claimPhases.length + 1)
                 })
             },
             deleteClaimPhase: function(index) {
@@ -377,7 +352,10 @@ if (document.getElementById('app')) {
                 this.setButtonLoader(e)
 
                 var data = {
-                    permalink: this.collection.permalink
+                    permalink: this.collection.permalink,
+                    title: this.collection.seo.title,
+                    description: this.collection.seo.description,
+                    image: this.collection.seo.image
                 }
 
                 await axios.put('/collections/'+this.collectionID+'/mint', data)
@@ -388,6 +366,9 @@ if (document.getElementById('app')) {
                 })
                 .then((response) => {
                     if (response) {
+                        if (data.image == '') {
+                            this.deleteResource('social-sharing')
+                        }
                         this.setSuccessMessage('Mint settings updated')
                     }
                 })
@@ -466,6 +447,26 @@ if (document.getElementById('app')) {
                 }
 
                 this.resetButtonLoader()
+            },
+            addSocialImage: function(event) {
+                var files = event.target.files
+                var formData = new FormData()
+                formData.append('resource', files[0])
+                formData.append('name', 'social-sharing')
+
+                this.uploadResource('social-sharing', formData).then((response) => {
+                    this.collection.seo.image = response.data.url
+                    this.resources['social-sharing'].loading = false
+                }).catch((error) => {
+                    if (error.response.data.errors != undefined) {
+                        this.setErrorMessage(error.response.data.errors.resource[0])
+                    } else {
+                        this.setErrorMessage('Something went wrong, please try again.')
+                    }
+                })
+            },
+            deleteSocialImage: function(event) {
+                this.collection.seo.image = ''
             },
             prepareFiles: async function(files) {
                 var images = {}

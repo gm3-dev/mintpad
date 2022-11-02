@@ -5,7 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title')</title>
+        <meta name="description" content="@yield('description')">
+        <!-- Twitter -->
+        @hasSection('sharing-image')
+        <meta name="twitter:image:src" content="@yield('sharing-image')">
+        @endif
+        <meta name="twitter:site" content="@mintpadco">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="@yield('title')">
+        <meta name="twitter:description" content="@yield('description')">
+        <!-- Open Graph -->
+        @hasSection('sharing-image')
+        <meta property="og:image" content="@yield('sharing-image')">
+        <meta property="og:image:alt" content="@yield('title')">
+        @endif
+        <meta property="og:site_name" content="Mintpad">
+        <meta property="og:type" content="object">
+        <meta property="og:title" content="@yield('title')">
+        <meta property="og:url" content="{{ url()->full() }}">
+        <meta property="og:description" content="@yield('description')">
+
         <link rel="icon" type="image/png" href="/favicon.png"/>
         @if(config('app.env') == 'production')
             @include('partials.google')

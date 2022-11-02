@@ -1,4 +1,8 @@
 <x-mint-layout>
+    @section('title', $seo['title'])
+    @section('description', $seo['description'])
+    @section('sharing-image', $seo['image'] ?? false)
+
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
     <div v-if="hasValidChain !== true" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-8 mb-4">
@@ -73,13 +77,13 @@
             <p class="font-regular text-mintpad-300" v-html="collection.description"></p>
         </div>
         <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white text-center rounded-xl p-8">
-            <x-link-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }}</x-link-button>
+            <x-link-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1" rel="nofollow">@{{ button.label }}</x-link-button>
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
             <div class="mb-4">
-                <a v-if="collection.about" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
-                <a v-if="collection.roadmap" href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
-                <a v-if="collection.team" href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+                <a v-if="collection.about" rel="nofollow" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
+                <a v-if="collection.roadmap" rel="nofollow" href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
+                <a v-if="collection.team" rel="nofollow" href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
             </div>
             
             <div v-show="tab == 1 && collection.about" class="tinymce-html" v-html="collection.about"></div>

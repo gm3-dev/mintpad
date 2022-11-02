@@ -3,8 +3,11 @@ import Vue from 'vue/dist/vue.min.js'
 
 // Includes
 import { initSentry, resportError } from './includes/sentry'
+import wallet from './includes/wallet.js'
 import metamask from './wallets/metamask.js'
+import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
+import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import thirdweb from './includes/thirdweb.js'
 import { eventBus } from './includes/event-bus'
 
@@ -19,7 +22,7 @@ initSentry(Vue)
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [metamask,helpers,thirdweb],
+        mixins: [wallet,metamask, phantom,helpers,thirdweb, thirdwebWrapper],
         data: {
             style: {},
             tab: 1,
@@ -62,6 +65,7 @@ if (document.getElementById('app')) {
             axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
+                this.collection.chain = this.blockchains[this.collection.chain_id].chain
                 this.collection.token = response.data.token
                 this.collection.buttons = this.setButtons(response.data.buttons ?? [])
                 this.collection.about = response.data.about
@@ -90,12 +94,15 @@ if (document.getElementById('app')) {
                 await this.setSmartContract(this.contractAddress)
 
                 try {
-                    const metadata = await this.contract.metadata.get()
-                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                    // Global settings
+                    const metadata = await this.getMetadata()
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
+                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
                     this.collection.fee_recipient = royalties.fee_recipient
                     this.collection.royalties = royalties.seller_fee_basis_points / 100
+
+                    // Collection
                     this.collection.totalSupply = await this.contract.totalSupply()
                     this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
@@ -103,18 +110,16 @@ if (document.getElementById('app')) {
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
-                } catch (error) {
-                    resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.', true)
-                }
-
-                try {
-                    var claimConditions = await this.contract.claimConditions.getAll()
+                    
+                    // Claim phases
+                    var claimConditions = await this.getClaimPhases()
                     this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
+                    
                 } catch (error) {
                     resportError(error)
+                    this.setErrorMessage('Something went wrong, please try again.', true)
                 }
 
             }).catch((error) => {

@@ -27551,7 +27551,7 @@ var render = function () {
             min_height: 300,
             valid_elements: "p,h1,h2,h3,ul,ol,li,strong,em",
             valid_children: "p[a,em,strong],li[a,em,strong]",
-            extended_valid_elements: "a[href|target]",
+            extended_valid_elements: "a[href|target|title|rel]",
           },
         },
         on: { input: _vm.updateValue },
@@ -33234,9 +33234,6 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
-      /**
-       * Logo management
-       */
       addResource: function addResource(name) {
         this.modal.id = 'edit-' + name;
       },

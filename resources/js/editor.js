@@ -108,9 +108,6 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
-            /**
-             * Logo management
-             */
             addResource: function(name) {
                 this.modal.id = 'edit-'+name
             },

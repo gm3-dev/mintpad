@@ -112,6 +112,15 @@ class CollectionController extends Controller
         $collection->claim_phase_name_2 = $collection->getMeta('claim_phase_name_2');
         $collection->claim_phase_name_3 = $collection->getMeta('claim_phase_name_3');
 
+        // SEO
+        $image = $collection->getMeta('seo.image', false);
+        $image_info = parse_url($image);
+        $collection->seo = [
+            'title' => $collection->getMeta('seo.title', ''),
+            'description' => $collection->getMeta('seo.description', ''),
+            'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? $image : false
+        ];
+
         return response()->json($collection, 200);
     }
 
@@ -207,6 +216,9 @@ class CollectionController extends Controller
             $data = $request->all();
 
             $collection->permalink = $data['permalink'] ?? '';
+            $collection->setMeta('seo.title', $data['title'] ?? '');
+            $collection->setMeta('seo.description', $data['description'] ?? '');
+            $collection->setMeta('seo.image', $data['image'] ?? '');
             $collection->save();
 
             return response()->json($collection, 200);

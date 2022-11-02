@@ -148,7 +148,6 @@ export default {
 
                 // socket.emit('nft-generation', {userID: this.generator.userID, prefix: this.generator.base, description: this.generator.description, total: parseInt(this.generator.total)});
             } else {
-                console.log('error')
                 this.setErrorMessage('Generation failed, please try again.')
             }
             this.resetButtonLoader()
@@ -176,12 +175,15 @@ export default {
         },
         uploadTraitImages: function(files) {
             var formData = new FormData()
+            var imageCount = 0;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i]
                 if (file.type == 'image/png') {
+                    imageCount++;
                     formData.append('files[' + i + ']', file)
                 }
             }
+            formData.append('count', imageCount)
 
             return axios.post('/generator/upload', formData).then(function(response) {
                 // console.log(response.data)

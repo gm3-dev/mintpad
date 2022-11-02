@@ -243,15 +243,40 @@
                                     <x-input id="permalink" class="mt-1" type="text" v-model="collection.permalink" />
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-2 gap-4 mb-6">
+                        <div class="col-span-2">
+                            <h3 class="text-2xl"> {{ __('SEO settings') }}</h3>
+                        </div>
+                        <div class="mb-4">
                             <div class="mb-4">
-                                <h3 class="text-2xl mb-4 mt-6"> {{ __('SEO settings') }}</h3>
-                                <p class="font-regular text-sm mb-4">Coming soon</p>
+                                <x-label for="seo-title" :value="__('Title')" info="You can use up to 60 characters" />
+                                <x-input id="seo-title" class="mt-1 w-full" type="text" v-model="collection.seo.title" />
+                            </div>
+
+                            <div>
+                                <x-label for="seo-description" :value="__('Description')" info="You can use up to 155 characters" />
+                                <x-textarea id="seo-description" rows="2" class="mt-1 w-full" v-model="collection.seo.description"></x-textarea>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <x-label for="seo-title" :value="__('Social share image')" info="This image will be used when sharing your mint page" />
+
+                            <div v-if="collection.seo.image" class="relative">
+                                <x-gray-button href="#" class="absolute top-0 right-0 m-1 !px-3 !py-2 text-lg" @click.prevent="deleteSocialImage"><i class="fas fa-trash-alt"></i></x-gray-button>
+                                <img v-bind:src="collection.seo.image" class="mt-1" />
+                            </div>
+                            <div v-else class="mb-4">
+                                <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>
+                                <input v-else id="upload-logo" type="file" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" class="inline-block mt-1 p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
                             </div>
                         </div>
                     </div>
 
                     <div class="w-full">
-                        <x-link-button href="#" @click.prevent="updateMintSettings">{{ __('Update mint settings') }}</x-link-button>
+                        <x-button @click.prevent="updateMintSettings" v-bind:disabled="loadingResource('social-sharing')">{{ __('Update mint settings') }}</x-button>
                         <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-blue-button>
                         <x-blue-button href="{{ route('editor.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page editor') }}</x-blue-button>
                     </div>
