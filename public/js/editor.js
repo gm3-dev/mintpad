@@ -14187,6 +14187,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
 /* harmony import */ var _sentry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sentry */ "./resources/js/includes/sentry.js");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -14416,6 +14417,7 @@ axios.defaults.headers.common = {
      */
     parseClaimConditions: function parseClaimConditions(claimConditions, data) {
       var output = [];
+      console.log(data.phases);
 
       if (this.collection.chain == 'evm') {
         for (var i = 0; i < claimConditions.length; i++) {
@@ -14426,7 +14428,7 @@ axios.defaults.headers.common = {
           var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex];
           output.push({
             id: nextIndex,
-            name: data['claim_phase_name_' + nextIndex] ? data['claim_phase_name_' + nextIndex] : 'Phase ' + nextIndex,
+            name: data.phases[nextIndex].name ? data.phases[nextIndex].name : 'Phase ' + nextIndex,
             startTime: this.formateDatetimeLocal(claimCondition.startTime),
             endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
             price: this.hexToValue(claimCondition.price._hex),

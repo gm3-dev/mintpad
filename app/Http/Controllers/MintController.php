@@ -58,9 +58,11 @@ class MintController extends Controller
             $collection->team = $collection->getMeta('team');
             $collection->about = $collection->getMeta('about');
             $collection->theme = $collection->getMeta('theme');
-            $collection->claim_phase_name_1 = $collection->getMeta('claim_phase_name_1');
-            $collection->claim_phase_name_2 = $collection->getMeta('claim_phase_name_2');
-            $collection->claim_phase_name_3 = $collection->getMeta('claim_phase_name_3');
+            $collection->phases = [
+                1 => ['name' => $collection->getMeta('phases.1.name')],
+                2 => ['name' => $collection->getMeta('phases.2.name')],
+                3 => ['name' => $collection->getMeta('phases.3.name')]
+            ];
             $collection->logo = $logo;
             $collection->background = $background;
             $collection->thumb = $thumb;

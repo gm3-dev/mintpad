@@ -151,6 +151,8 @@ export default {
         parseClaimConditions: function(claimConditions, data) {
             var output = []
 
+            console.log(data.phases)
+
             if (this.collection.chain == 'evm') {
                 for (var i = 0; i < claimConditions.length; i++) {
                     var claimCondition = claimConditions[i]
@@ -158,7 +160,7 @@ export default {
                     var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
                     output.push({
                         id: nextIndex,
-                        name: data['claim_phase_name_'+nextIndex] ? data['claim_phase_name_'+nextIndex] : 'Phase '+nextIndex,
+                        name: data.phases[nextIndex].name ? data.phases[nextIndex].name : 'Phase '+nextIndex,
                         startTime: this.formateDatetimeLocal(claimCondition.startTime),
                         endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
                         price: this.hexToValue(claimCondition.price._hex),
