@@ -41,7 +41,7 @@
                         </h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full mb-4">
-                                <x-label for="name" :value="__('Collection name')" class="relative is-required" info="This is the name of your NFT collection." />
+                                <x-label for="name" :value="__('Collection name')" class="relative" info="This is the name of your NFT collection." />
                                 <x-input id="name" class="mt-1 w-full" type="text" name="name" v-model="collection.name" required autofocus />
                             </div>
                             <div class="basis-full mb-4">
@@ -58,11 +58,11 @@
                         <h3 class="text-2xl mb-4 mt-6">{{ __('Royalties') }}</h3>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-2/3 mb-4 pr-2">
-                                <x-label for="fee_recipient" :value="__('Recipient address')" class="relative is-required" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
+                                <x-label for="fee_recipient" :value="__('Recipient address')" class="relative" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
                                 <x-input id="fee_recipient" class="mt-1 w-full" type="text" name="fee_recipient" v-model="collection.fee_recipient" />
                             </div>
                             <div class="basis-1/3">
-                                <x-label for="royalties" :value="__('Creator royalties (%)')" class="relative is-required" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
+                                <x-label for="royalties" :value="__('Creator royalties (%)')" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                                 <x-input id="royalties" class="mt-1 w-full" step=".01" type="number" name="royalties" v-model="collection.royalties" required />
                             </div>
                         </div>
@@ -182,7 +182,6 @@
                                 <!-- <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button> -->
                             </h3>
                             <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ route('generator.index') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
-                            <p class="font-regular text-sm">{{ __('Upload your NFT collection.') }}</b></p>
                             <p class="font-semibold text-sm mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
 
                             <label class="block mt-10 text-mintpad-300">
@@ -252,17 +251,17 @@
                         </div>
                         <div class="mb-4">
                             <div class="mb-4">
-                                <x-label for="seo-title" :value="__('Title')" info="You can use up to 60 characters" />
+                                <x-label for="seo-title" :value="__('Title')" info="This is the title that is displayed on search engine result pages, browser tabs, and social media. You can use up to 60 characters." />
                                 <x-input id="seo-title" class="mt-1 w-full" type="text" v-model="collection.seo.title" />
                             </div>
 
                             <div>
-                                <x-label for="seo-description" :value="__('Description')" info="You can use up to 155 characters" />
+                                <x-label for="seo-description" :value="__('Description')" info="This is the description that is displayed on search engine result pages, browser tabs, and social media. You can use up to 155 characters." />
                                 <x-textarea id="seo-description" rows="2" class="mt-1 w-full" v-model="collection.seo.description"></x-textarea>
                             </div>
                         </div>
                         <div class="mb-4">
-                            <x-label for="seo-title" :value="__('Social share image')" info="This image will be used when sharing your mint page" />
+                            <x-label for="seo-image" :value="__('Social share image')" info="This is the thumbnail people see when you share your mintpage link. Thumbnail image size is 1280x720px." />
 
                             <div v-if="collection.seo.image" class="relative">
                                 <x-gray-button href="#" class="absolute top-0 right-0 m-1 !px-3 !py-2 text-lg" @click.prevent="deleteSocialImage"><i class="fas fa-trash-alt"></i></x-gray-button>

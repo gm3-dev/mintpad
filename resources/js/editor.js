@@ -7,6 +7,7 @@ import {ColorPicker, ColorPanel} from 'one-colorpicker'
 import { initSentry, resportError } from './includes/sentry'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
+import resources from './includes/resources'
 
 // Config
 const axios = require('axios')
@@ -24,7 +25,7 @@ if (document.getElementById('app')) {
 
     new Vue({
         el: '#app',
-        mixins: [helpers,modal],
+        mixins: [helpers,resources,modal],
         components: {},
         data: {
             style: {},
@@ -86,7 +87,7 @@ if (document.getElementById('app')) {
                 this.collectionID = $('#collectionID').val()
             }
 
-            axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
+            axios.get('/'+this.collectionID+'/fetch').then(async (response) => {
                 this.collection.buttons = response.data.buttons
                 this.collection.about = response.data.about
                 this.collection.roadmap = response.data.roadmap
@@ -108,45 +109,69 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
-            addResource: function(name) {
-                this.modal.id = 'edit-'+name
+            addBackground: function() {
+                this.modal.id = 'edit-background'
+                this.setResource('background')
             },
-            deleteResource: function(name) {
-                if (confirm("Are you sure you want to delete this "+name+"?") == true) {
-                    var data = {data: {name: name}}
-                    axios.delete('/editor/'+this.collectionID+'/delete-resource', data).then(async (response) => {
-                        this.collection[name] = false
-                        this.setBackground()
-                    }).catch((error) => {
-                        // console.log(error)
-                    });
-                }
-            },
-            dragEnterUploadResource: function(name) {
-                this.edit[name].classes = ['border-mintpad-300']
-            },
-            dragLeaveUploadResource: function(name) {
-                this.edit[name].classes = []
-            },
-            uploadResource: function(name, event) {
-                this.edit.loading = true
+            uploadBackground: function(event) {
                 var files = event.target.files
                 var formData = new FormData()
                 formData.append('resource', files[0])
-                formData.append('name', name)
-                axios.post('/editor/'+this.collectionID+'/upload-resource', formData).then(async (response) => {
-                    this.collection[name] = response.data.url
-                    this.edit.loading = false
+                formData.append('name', 'background')
+
+                this.uploadResource('background', formData).then(async (response) => {
+                    this.collection.background = response.data.url
+                    this.resources.background.loading = false
                     this.setBackground()
+                    
                 }).catch((error) => {
-                    this.edit.loading = false
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors[name][0])
+                        this.setErrorMessage(error.response.data.errors.background[0])
                     } else {
                         this.setErrorMessage('Something went wrong, please try again.')
                     }
                 });
             },
+            deleteBackground: function(event) {
+                if (confirm("Are you sure you want to delete this background?") == true) {
+                    this.deleteResource('background').then((response) => {
+                        this.collection.background = false
+                        this.setBackground()
+                    })
+                }
+            },
+
+
+            addLogo: function() {
+                this.modal.id = 'edit-logo'
+                this.setResource('logo')
+            },
+            uploadLogo: function(event) {
+                var files = event.target.files
+                var formData = new FormData()
+                formData.append('resource', files[0])
+                formData.append('name', 'logo')
+
+                this.uploadResource('logo', formData).then(async (response) => {
+                    this.collection.logo = response.data.url
+                    this.resources.logo.loading = false
+                    
+                }).catch((error) => {
+                    if (error.response.data.errors != undefined) {
+                        this.setErrorMessage(error.response.data.errors.logo[0])
+                    } else {
+                        this.setErrorMessage('Something went wrong, please try again.')
+                    }
+                });
+            },
+            deleteLogo: function(event) {
+                if (confirm("Are you sure you want to delete this logo?") == true) {
+                    this.deleteResource('logo').then((response) => {
+                        this.collection.logo = false
+                    })
+                }
+            },
+
             setColorCode: function(color) {
                 //
             },

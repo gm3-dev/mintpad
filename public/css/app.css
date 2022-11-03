@@ -712,9 +712,6 @@ select {
 .top-6 {
   top: 1.5rem;
 }
-.right-1 {
-  right: 0.25rem;
-}
 .z-0 {
   z-index: 0;
 }
@@ -1341,6 +1338,10 @@ select {
 .border-indigo-400 {
   --tw-border-opacity: 1;
   border-color: rgb(129 140 248 / var(--tw-border-opacity));
+}
+.border-gray-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(75 85 99 / var(--tw-border-opacity));
 }
 .bg-white {
   --tw-bg-opacity: 1;
@@ -10664,6 +10665,14 @@ readers do not read off random characters that represent icons */
 .dark .dark\:text-mintpad-200 {
   --tw-text-opacity: 1;
   color: rgb(225 229 232 / var(--tw-text-opacity));
+}
+.dark .dark\:text-mintpad-500 {
+  --tw-text-opacity: 1;
+  color: rgb(5 18 27 / var(--tw-text-opacity));
+}
+.dark .dark\:text-mintpad-400 {
+  --tw-text-opacity: 1;
+  color: rgb(59 68 76 / var(--tw-text-opacity));
 }
 .dark .dark\:hover\:text-white:hover {
   --tw-text-opacity: 1;

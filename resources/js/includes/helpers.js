@@ -151,8 +151,6 @@ export default {
         parseClaimConditions: function(claimConditions, data) {
             var output = []
 
-            console.log(data.phases)
-
             if (this.collection.chain == 'evm') {
                 for (var i = 0; i < claimConditions.length; i++) {
                     var claimCondition = claimConditions[i]

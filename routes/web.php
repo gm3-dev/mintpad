@@ -25,55 +25,61 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
-Route::group(['middleware' => ['auth']], function () {
-    /**
-     * Admin routes
-     */
-    Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
-        Route::name('admin.')->group(function () {
-            // Dashboard
-            Route::resource('dashboard', AdminDashboardController::class);
-            // Collections
-            Route::resource('collections', AdminCollectionController::class);
+Route::domain(config('app.url'))->group(function () {
+    Route::group(['middleware' => ['auth']], function () {
+        /**
+         * Admin routes
+         */
+        Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
+            Route::name('admin.')->group(function () {
+                // Dashboard
+                Route::resource('dashboard', AdminDashboardController::class);
+                // Collections
+                Route::resource('collections', AdminCollectionController::class);
+            });
         });
+        
+        /**
+         * Customer routes
+         */
+        Route::resource('collections', CollectionController::class);
+        Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
+        Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
+        Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
+        Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update_mint');
+        Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update_metadata');
+        Route::put('collections/{collection}/claim-phases', [CollectionController::class, 'updateClaimPhases'])->name('collections.update_claim_phases');
+        Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
+
+        // User
+        Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+        Route::put('profile', [UserController::class, 'update'])->name('users.update');
+        Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
+        Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
+
+        // NFT generator
+        Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
+        Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
+        Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
+        Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
+        Route::get('generator/status', [GeneratorController::class, 'status'])->name('generator.status');
+
+        // Editor layout
+        Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
+
+        // Resources
+        Route::post('resources/{collection}/upload', [ResourceController::class, 'upload'])->name('resources.upload');
+        Route::delete('resources/{collection}/delete', [ResourceController::class, 'delete'])->name('resources.delete');
     });
-    
-    /**
-     * Customer routes
-     */
-    Route::resource('collections', CollectionController::class);
-    Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
-    Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
-    Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
-    Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update_mint');
-    Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update_metadata');
-    Route::put('collections/{collection}/claim-phases', [CollectionController::class, 'updateClaimPhases'])->name('collections.update_claim_phases');
-    Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
-
-    // User
-    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
-    Route::put('profile', [UserController::class, 'update'])->name('users.update');
-    Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
-    Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
-
-    // NFT generator
-    Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
-    Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
-    Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
-    Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
-    Route::get('generator/status', [GeneratorController::class, 'status'])->name('generator.status');
-
-    // Editor layout
-    Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
-
-    // Resources
-    Route::post('resources/{collection}/upload', [ResourceController::class, 'upload'])->name('resources.upload');
-    Route::delete('resources/{collection}/delete', [ResourceController::class, 'delete'])->name('resources.delete');
 });
 
-// Mint layout
-Route::get('mint/{permalink}', [MintController::class, 'mint'])->name('mint.index');
-Route::get('mint/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
+Route::domain(config('app.mint_url'))->group(function () {
+    // Mint layout
+    Route::get('{permalink}', [MintController::class, 'mint'])->name('mint.index');
+});
+
+Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
+
 
 /**
  * Global routes

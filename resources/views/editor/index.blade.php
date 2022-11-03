@@ -9,7 +9,7 @@
                 <color-picker v-model="theme.box" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Box</span>
                 <color-picker v-model="theme.title" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Titles</span>
                 <color-picker v-model="theme.text" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Text</span>
-                <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addResource('background')">Edit background</x-gray-button>
+                <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Edit background</x-gray-button>
             </div>
             <x-link-button href="#" class="!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</x-link-button>
         </div>
@@ -17,7 +17,7 @@
 
     <div id="custom-style-container" class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="lg:col-span-2 text-center p-3">
-            <a href="#" @click.prevent="addResource('logo')" class="inline-block">
+            <a href="#" @click.prevent="addLogo" class="inline-block">
                 <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
                 <div v-else class="rounded-lg px-6 py-2 border-2 border-gray-300 hover:border-gray-500 hover:text-gray-500 ">
                     <i class="far fa-image text-5xl text-gray-500 mb-1"></i>
@@ -147,7 +147,7 @@
     </div>
     <div v-if="modal.id == 'edit-logo'">
         <x-modal>
-            <div v-if="edit.loading" class="w-full text-center my-10">
+            <div v-if="loadingResource('logo')" class="w-full text-center my-10">
                 <i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...
             </div>
             <div v-else-if="collection.logo" class="text-center my-10">
@@ -156,11 +156,11 @@
             <label v-else for="upload-logo" class="block my-10 text-mintpad-300">
                 <p class="font-regular text-sm text-mintpad-300 mb-2">Uploads are restricted to {{ config('resources.logo.max') }} KB and jpg, jpeg and png.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadResource('logo', $event)" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="edit.logo.classes" accept="image/jpeg, image/png, image/jpg" />
+                <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete logo" v-tippy>
-                    <x-gray-button href="#" class="!px-4" @click.prevent="deleteResource('logo')"><i class="fas fa-trash-alt"></i></x-gray-button>
+                    <x-gray-button href="#" class="!px-4" @click.prevent="deleteLogo"><i class="fas fa-trash-alt"></i></x-gray-button>
                 </span>
                 <span class="float-right" content="Close" v-tippy>
                     <x-button href="#" class="!px-4" @click.prevent="modalClose">Close</x-button>
@@ -170,7 +170,7 @@
     </div>
     <div v-if="modal.id == 'edit-background'">
         <x-modal>
-            <div v-if="edit.loading" class="w-full text-center my-10">
+            <div v-if="loadingResource('background')" class="w-full text-center my-10">
                 <i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...
             </div>
             <div v-else-if="collection.background" class="text-center my-10">
@@ -179,11 +179,11 @@
             <label v-else for="upload-background" class="block my-10 text-mintpad-300">
                 <p class="font-regular text-sm text-mintpad-300 mb-2">Uploads are restricted to {{ config('resources.background.max') }} KB and jpg, jpeg and png.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadResource('background', $event)" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="edit.background.classes" accept="image/jpeg, image/png, image/jpg" />
+                <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete background" v-tippy>
-                    <x-gray-button href="#" class="!px-4" @click.prevent="deleteResource('background')"><i class="fas fa-trash-alt"></i></x-gray-button>
+                    <x-gray-button href="#" class="!px-4" @click.prevent="deleteBackground"><i class="fas fa-trash-alt"></i></x-gray-button>
                 </span>
                 <span class="float-right" content="Close" v-tippy>
                     <x-button href="#" class="!px-4" @click.prevent="modalClose">Close</x-button>

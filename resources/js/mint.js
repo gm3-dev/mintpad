@@ -62,7 +62,7 @@ if (document.getElementById('app')) {
                 await this.initWallet(localStorage.getItem('walletName'))
             }
 
-            axios.get('/mint/'+this.collectionID+'/fetch').then(async (response) => {
+            axios.get('/'+this.collectionID+'/fetch').then(async (response) => {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.chain = this.blockchains[this.collection.chain_id].chain

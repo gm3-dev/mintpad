@@ -19,7 +19,7 @@
                     <x-nav-link :href="'https://mintpad.co/support'" :target="'_blank'">
                         {{ __('Support') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('generator.index')" :active="request()->routeIs('generator.*')" class="relative">
+                    <x-nav-link :href="config('app.generator_url')" :target="'_blank'" class="relative">
                         {{ __('NFT generator') }}
                     </x-nav-link>
                 </div>
@@ -54,7 +54,7 @@
                     </template>
                     <template v-slot:links>
                         @if (Auth::user())
-                            <div class="px-4 py-2 text-xs border-b border-gray-200">
+                            <div class="px-4 py-2 text-xs border-b border-gray-600">
                                 <div class="text-sm text-gray-800 dark:text-white">{{ Auth::user()->name }}</div>
                                 <div class="text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
                             </div>
@@ -72,7 +72,7 @@
                             {{ __('Invoices') }}
                         </dropdown-link>
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}" class="border-t rounded-b-md border-gray-200 bg-gray-100 dark:bg-mintpad-700">
+                        <form method="POST" action="{{ route('logout') }}" class="border-t rounded-b-md border-gray-600 bg-gray-100 dark:bg-mintpad-700">
                             @csrf
                             <dropdown-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

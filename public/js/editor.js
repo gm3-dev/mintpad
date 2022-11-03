@@ -14187,7 +14187,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bytes/lib.esm/index.js");
 /* harmony import */ var _sentry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sentry */ "./resources/js/includes/sentry.js");
-/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -14417,7 +14416,6 @@ axios.defaults.headers.common = {
      */
     parseClaimConditions: function parseClaimConditions(claimConditions, data) {
       var output = [];
-      console.log(data.phases);
 
       if (this.collection.chain == 'evm') {
         for (var i = 0; i < claimConditions.length; i++) {
@@ -14597,6 +14595,119 @@ __webpack_require__.r(__webpack_exports__);
      */
     modalContent: function modalContent(content) {
       this.modal.content = content;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/includes/resources.js":
+/*!********************************************!*\
+  !*** ./resources/js/includes/resources.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _sentry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sentry */ "./resources/js/includes/sentry.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); // Includes
+
+ // Config
+
+var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      resources: {}
+    };
+  },
+  methods: {
+    setResource: function setResource(name) {
+      if (!this.resources[name]) {
+        this.$set(this.resources, name, {
+          classes: [],
+          loading: false
+        });
+      }
+    },
+    loadingResource: function loadingResource(name) {
+      return this.resources[name] && this.resources[name].loading === true;
+    },
+    uploadResource: function () {
+      var _uploadResource = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(name, data) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.setResource(name);
+                this.resources[name].loading = true;
+                return _context.abrupt("return", axios.post('/resources/' + this.collectionID + '/upload', data));
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function uploadResource(_x, _x2) {
+        return _uploadResource.apply(this, arguments);
+      }
+
+      return uploadResource;
+    }(),
+    deleteResource: function () {
+      var _deleteResource = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(name) {
+        var data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                data = {
+                  data: {
+                    name: name
+                  }
+                };
+                return _context2.abrupt("return", axios["delete"]('/resources/' + this.collectionID + '/delete', data));
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function deleteResource(_x3) {
+        return _deleteResource.apply(this, arguments);
+      }
+
+      return deleteResource;
+    }(),
+    dragEnterUploadResource: function dragEnterUploadResource(name) {
+      this.setResource(name);
+      this.resources[name].classes = ['border-mintpad-300'];
+    },
+    dragLeaveUploadResource: function dragLeaveUploadResource(name) {
+      this.setResource(name);
+      this.resources[name].classes = [];
     }
   }
 });
@@ -33078,14 +33189,15 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
-/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var vue_tippy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-tippy */ "./node_modules/vue-tippy/dist/vue-tippy.esm.js");
 /* harmony import */ var one_colorpicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! one-colorpicker */ "./node_modules/one-colorpicker/dist/build.js");
 /* harmony import */ var one_colorpicker__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(one_colorpicker__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _includes_sentry__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./includes/sentry */ "./resources/js/includes/sentry.js");
 /* harmony import */ var _includes_helpers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./includes/helpers.js */ "./resources/js/includes/helpers.js");
 /* harmony import */ var _includes_modal_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./includes/modal.js */ "./resources/js/includes/modal.js");
+/* harmony import */ var _includes_resources__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./includes/resources */ "./resources/js/includes/resources.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -33099,6 +33211,7 @@ window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.
 
 
 
+
  // Config
 
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -33107,16 +33220,16 @@ axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest',
   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 };
-vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default().use(vue_tippy__WEBPACK_IMPORTED_MODULE_1__["default"]);
-(0,_includes_sentry__WEBPACK_IMPORTED_MODULE_3__.initSentry)((vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default()));
+vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default().use(vue_tippy__WEBPACK_IMPORTED_MODULE_1__["default"]);
+(0,_includes_sentry__WEBPACK_IMPORTED_MODULE_3__.initSentry)((vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default()));
 
 if (document.getElementById('app')) {
-  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default().component('tinymce', (__webpack_require__(/*! ./components/TinyMCE.vue */ "./resources/js/components/TinyMCE.vue")["default"]));
-  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default().use(one_colorpicker__WEBPACK_IMPORTED_MODULE_2__.ColorPanel);
-  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default().use(one_colorpicker__WEBPACK_IMPORTED_MODULE_2__.ColorPicker);
-  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_6___default())({
+  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default().component('tinymce', (__webpack_require__(/*! ./components/TinyMCE.vue */ "./resources/js/components/TinyMCE.vue")["default"]));
+  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default().use(one_colorpicker__WEBPACK_IMPORTED_MODULE_2__.ColorPanel);
+  vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default().use(one_colorpicker__WEBPACK_IMPORTED_MODULE_2__.ColorPicker);
+  new (vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_7___default())({
     el: '#app',
-    mixins: [_includes_helpers_js__WEBPACK_IMPORTED_MODULE_4__["default"], _includes_modal_js__WEBPACK_IMPORTED_MODULE_5__["default"]],
+    mixins: [_includes_helpers_js__WEBPACK_IMPORTED_MODULE_4__["default"], _includes_resources__WEBPACK_IMPORTED_MODULE_6__["default"], _includes_modal_js__WEBPACK_IMPORTED_MODULE_5__["default"]],
     components: {},
     data: {
       style: {},
@@ -33189,7 +33302,7 @@ if (document.getElementById('app')) {
                   _this.collectionID = $('#collectionID').val();
                 }
 
-                axios.get('/mint/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
+                axios.get('/' + _this.collectionID + '/fetch').then( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(response) {
                     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
                       while (1) {
@@ -33236,69 +33349,79 @@ if (document.getElementById('app')) {
       }))();
     },
     methods: {
-      addResource: function addResource(name) {
-        this.modal.id = 'edit-' + name;
+      addBackground: function addBackground() {
+        this.modal.id = 'edit-background';
+        this.setResource('background');
       },
-      deleteResource: function deleteResource(name) {
+      uploadBackground: function uploadBackground(event) {
         var _this2 = this;
 
-        if (confirm("Are you sure you want to delete this " + name + "?") == true) {
-          var data = {
-            data: {
-              name: name
-            }
-          };
-          axios["delete"]('/editor/' + this.collectionID + '/delete-resource', data).then( /*#__PURE__*/function () {
-            var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-                while (1) {
-                  switch (_context3.prev = _context3.next) {
-                    case 0:
-                      _this2.collection[name] = false;
-
-                      _this2.setBackground();
-
-                    case 2:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }
-              }, _callee3);
-            }));
-
-            return function (_x2) {
-              return _ref2.apply(this, arguments);
-            };
-          }())["catch"](function (error) {// console.log(error)
-          });
-        }
-      },
-      dragEnterUploadResource: function dragEnterUploadResource(name) {
-        this.edit[name].classes = ['border-mintpad-300'];
-      },
-      dragLeaveUploadResource: function dragLeaveUploadResource(name) {
-        this.edit[name].classes = [];
-      },
-      uploadResource: function uploadResource(name, event) {
-        var _this3 = this;
-
-        this.edit.loading = true;
         var files = event.target.files;
         var formData = new FormData();
         formData.append('resource', files[0]);
-        formData.append('name', name);
-        axios.post('/editor/' + this.collectionID + '/upload-resource', formData).then( /*#__PURE__*/function () {
+        formData.append('name', 'background');
+        this.uploadResource('background', formData).then( /*#__PURE__*/function () {
+          var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(response) {
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+              while (1) {
+                switch (_context3.prev = _context3.next) {
+                  case 0:
+                    _this2.collection.background = response.data.url;
+                    _this2.resources.background.loading = false;
+
+                    _this2.setBackground();
+
+                  case 3:
+                  case "end":
+                    return _context3.stop();
+                }
+              }
+            }, _callee3);
+          }));
+
+          return function (_x2) {
+            return _ref2.apply(this, arguments);
+          };
+        }())["catch"](function (error) {
+          if (error.response.data.errors != undefined) {
+            _this2.setErrorMessage(error.response.data.errors.background[0]);
+          } else {
+            _this2.setErrorMessage('Something went wrong, please try again.');
+          }
+        });
+      },
+      deleteBackground: function deleteBackground(event) {
+        var _this3 = this;
+
+        if (confirm("Are you sure you want to delete this background?") == true) {
+          this.deleteResource('background').then(function (response) {
+            _this3.collection.background = false;
+
+            _this3.setBackground();
+          });
+        }
+      },
+      addLogo: function addLogo() {
+        this.modal.id = 'edit-logo';
+        this.setResource('logo');
+      },
+      uploadLogo: function uploadLogo(event) {
+        var _this4 = this;
+
+        var files = event.target.files;
+        var formData = new FormData();
+        formData.append('resource', files[0]);
+        formData.append('name', 'logo');
+        this.uploadResource('logo', formData).then( /*#__PURE__*/function () {
           var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(response) {
             return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
               while (1) {
                 switch (_context4.prev = _context4.next) {
                   case 0:
-                    _this3.collection[name] = response.data.url;
-                    _this3.edit.loading = false;
+                    _this4.collection.logo = response.data.url;
+                    _this4.resources.logo.loading = false;
 
-                    _this3.setBackground();
-
-                  case 3:
+                  case 2:
                   case "end":
                     return _context4.stop();
                 }
@@ -33310,14 +33433,21 @@ if (document.getElementById('app')) {
             return _ref3.apply(this, arguments);
           };
         }())["catch"](function (error) {
-          _this3.edit.loading = false;
-
           if (error.response.data.errors != undefined) {
-            _this3.setErrorMessage(error.response.data.errors[name][0]);
+            _this4.setErrorMessage(error.response.data.errors.logo[0]);
           } else {
-            _this3.setErrorMessage('Something went wrong, please try again.');
+            _this4.setErrorMessage('Something went wrong, please try again.');
           }
         });
+      },
+      deleteLogo: function deleteLogo(event) {
+        var _this5 = this;
+
+        if (confirm("Are you sure you want to delete this logo?") == true) {
+          this.deleteResource('logo').then(function (response) {
+            _this5.collection.logo = false;
+          });
+        }
       },
       setColorCode: function setColorCode(color) {//
       },
@@ -33363,7 +33493,7 @@ if (document.getElementById('app')) {
       },
       updateMintSettings: function () {
         var _updateMintSettings = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
-          var _this4 = this;
+          var _this6 = this;
 
           var data;
           return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
@@ -33381,11 +33511,11 @@ if (document.getElementById('app')) {
                   _context5.next = 4;
                   return axios.put('/collections/' + this.collectionID, data)["catch"](function (error) {
                     if (error.response.status == 422) {
-                      _this4.setErrorMessage(error.response.data.message);
+                      _this6.setErrorMessage(error.response.data.message);
                     }
                   }).then(function (response) {
                     if (response) {
-                      _this4.setSuccessMessage('Mint settings updated');
+                      _this6.setSuccessMessage('Mint settings updated');
                     }
                   });
 

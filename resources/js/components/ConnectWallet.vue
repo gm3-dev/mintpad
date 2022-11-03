@@ -6,7 +6,7 @@
                 Connect wallet <i class="fas fa-chevron-down ml-2"></i>
             </a>
             <div v-show="open" v-closable="{exclude: ['connect-wallet'], handler: 'hideDropdown'}" class="line-block border-2 py-2 rounded-lg bg-white w-1/5 mx-auto text-left mt-2">
-                <a href="#" class="inline-block px-3 py-1 w-full hover:text-mintpad-300" @click.prevent="connectMetaMask"><img src="/images/metamask.png" width="20px" class="inline-block mr-1" /> <span class="align-middle">MetaMask</span></a>
+                <a href="#" class="inline-block px-3 py-1 w-full hover:text-mintpad-300" @click.prevent="connectMetaMask"><img src="/images/metamask.png" width="20px" class="inline-block mr-1" /> <span class="align-middle dark:text-mintpad-400">MetaMask</span></a>
                 <!-- <a href="#" class="inline-block px-3 py-1 w-full hover:text-mintpad-300" @click.prevent="connectPhantom"><img src="/images/phantom.png" width="20px" class="inline-block mr-1" /> <span class="align-middle">Phantom</span></a> -->
             </div>
         </div>
