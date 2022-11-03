@@ -6,7 +6,7 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         "./resources/**/*.vue",
-        "./resources/js/**/*.js",
+        "./resources/js/**/*.js"
     ],
     darkMode: 'class',
     theme: {
