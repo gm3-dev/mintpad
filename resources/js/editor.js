@@ -86,6 +86,7 @@ if (document.getElementById('app')) {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
+            
             axios.get('/'+this.collectionID+'/fetch').then(async (response) => {
                 this.collection.buttons = response.data.buttons
                 this.collection.about = response.data.about
