@@ -141,7 +141,6 @@ if (document.getElementById('app')) {
                 }
             },
 
-
             addLogo: function() {
                 this.modal.id = 'edit-logo'
                 this.setResource('logo')

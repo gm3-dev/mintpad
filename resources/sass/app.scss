@@ -141,3 +141,10 @@
     padding: 2px 5px;
     width: 30px;
 }
+
+/* Is loading */
+button.is-loading {
+    i {
+        display: inline-block !important;
+    }
+}

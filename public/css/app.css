@@ -712,6 +712,9 @@ select {
 .top-6 {
   top: 1.5rem;
 }
+.left-2 {
+  left: 0.5rem;
+}
 .z-0 {
   z-index: 0;
 }
@@ -732,6 +735,9 @@ select {
 }
 .m-1 {
   margin: 0.25rem;
+}
+.m-2 {
+  margin: 0.5rem;
 }
 .mx-auto {
   margin-left: auto;
@@ -865,6 +871,9 @@ select {
 }
 .mt-12 {
   margin-top: 3rem;
+}
+.mt-\[3px\] {
+  margin-top: 3px;
 }
 .box-border {
   box-sizing: border-box;
@@ -10297,6 +10306,11 @@ readers do not read off random characters that represent icons */
   right: 8px;
   padding: 2px 5px;
   width: 30px;
+}
+
+/* Is loading */
+button.is-loading i {
+  display: inline-block !important;
 }
 .file\:mr-2::-webkit-file-upload-button {
   margin-right: 0.5rem;

@@ -257,15 +257,15 @@
 
                             <div>
                                 <x-label for="seo-description" :value="__('Description')" info="This is the description that is displayed on search engine result pages, browser tabs, and social media. You can use up to 155 characters." />
-                                <x-textarea id="seo-description" rows="2" class="mt-1 w-full" v-model="collection.seo.description"></x-textarea>
+                                <x-textarea id="seo-description" class="mt-1 w-full" v-model="collection.seo.description"></x-textarea>
                             </div>
                         </div>
                         <div class="mb-4">
                             <x-label for="seo-image" :value="__('Social share image')" info="This is the thumbnail people see when you share your mintpage link. Thumbnail image size is 1280x720px." />
 
                             <div v-if="collection.seo.image" class="relative">
-                                <x-gray-button href="#" class="absolute top-0 right-0 m-1 !px-3 !py-2 text-lg" @click.prevent="deleteSocialImage"><i class="fas fa-trash-alt"></i></x-gray-button>
-                                <img v-bind:src="collection.seo.image" class="mt-1" />
+                                <x-gray-button href="#" class="absolute top-0 right-0 m-2 !px-3 !py-2 text-lg" @click.prevent="deleteSocialImage"><i class="fas fa-trash-alt"></i></x-gray-button>
+                                <img v-bind:src="collection.seo.image" class="mt-1 rounded-md" />
                             </div>
                             <div v-else class="mb-4">
                                 <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>

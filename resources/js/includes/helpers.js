@@ -181,12 +181,14 @@ export default {
          */
         setButtonLoader: function(e) {
             var button = $(e.target)
-            var buttonWidth = button.outerWidth()
+            button.prop('disabled', true).addClass('is-loading')
+
+            // var buttonWidth = button.outerWidth()
             this.loader.button = {
                 target: button,
-                label: button.html()
+                // label: button.html()
             }
-            button.css('width', buttonWidth+'px').prop('disabled', true).html('Processing...')
+            // button.css('width', buttonWidth+'px').prop('disabled', true).html('Processing...')
         },
         /**
          * Reset button loader
@@ -194,8 +196,9 @@ export default {
          */
         resetButtonLoader: function(e) {
             var button = this.loader.button.target
-            var buttonWidth = button.outerWidth()
-            button.css('width', buttonWidth+'px').prop('disabled', false).html(this.loader.button.label)
+            button.prop('disabled', false).removeClass('is-loading')
+            // var buttonWidth = button.outerWidth()
+            // button.css('width', buttonWidth+'px').prop('disabled', false).html(this.loader.button.label)
         },
         /**
          * Convert hex to number
