@@ -1,4 +1,5 @@
 {
+    "name": "app.mindpad.co",
     "private": true,
     "scripts": {
         "dev": "npm run development",
