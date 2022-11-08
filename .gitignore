@@ -2,6 +2,10 @@
 /public/hot
 /public/storage
 /public/resources
+/public/js/*.js
+!/public/js/darkmode.js
+/public/css/app.css
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 .env
