@@ -15,6 +15,11 @@ class MintController extends Controller
     public function mint($permalink)
     {
         $collection = Collection::where('permalink', $permalink)->first();
+        
+        if (!$collection) {
+            abort(404);
+        }
+
         $image = $collection->getMeta('seo.image');
         $image_info = parse_url($image);
         $seo = [
@@ -22,10 +27,6 @@ class MintController extends Controller
             'description' => $collection->getMeta('seo.description', $collection->description),
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? url($image) : false
         ];
-        
-        if (!$collection) {
-            abort(404);
-        }
 
         return view('mint.index')->with(compact('collection', 'seo'));
     }
