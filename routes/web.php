@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
+    Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
 Route::domain(config('app.url'))->group(function () {
     Route::group(['middleware' => ['auth']], function () {
