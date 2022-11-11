@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
+use App\Http\Controllers\Admin\ImportController;
+use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\EditorController;
@@ -23,9 +25,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::domain(config('app.url'))->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
 
-Route::domain(config('app.url'))->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         /**
          * Admin routes
@@ -33,9 +35,14 @@ Route::domain(config('app.url'))->group(function () {
         Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
             Route::name('admin.')->group(function () {
                 // Dashboard
+                Route::get('/', [AdminDashboardController::class, 'index']);
                 Route::resource('dashboard', AdminDashboardController::class);
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
+                // Import
+                Route::resource('import', ImportController::class);
+                // Invoices
+                Route::resource('invoices', InvoiceController::class);
             });
         });
         

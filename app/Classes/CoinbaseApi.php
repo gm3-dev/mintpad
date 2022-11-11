@@ -65,6 +65,20 @@ class CoinbaseAPI
         return json_decode($response->body());
     }
 
+    public function getTransfers()
+    {
+        $route = '/transfers';
+        $response = Http::withHeaders($this->getHeaders('GET', $route))->get($this->url.$route);
+        return json_decode($response->body());
+    }
+
+    public function getTransferById($id)
+    {
+        $route = '/transfers/'.$id;
+        $response = Http::withHeaders($this->getHeaders('GET', $route))->get($this->url.$route);
+        return json_decode($response->body());
+    }
+
     public function postOrder($pair, $amount)
     {
         $route = '/orders';

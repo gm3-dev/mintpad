@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
+use App\Models\Import;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -14,7 +17,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.index');
+        $imports = Import::all();
+        $collections = Collection::count();
+        $collection_list = Collection::select('chain_id', DB::raw('COUNT(*) as count'))->groupBy('chain_id')->pluck('count', 'chain_id');
+        return view('admin.dashboard.index')->with(compact('collections', 'collection_list', 'imports'));
     }
 
     /**

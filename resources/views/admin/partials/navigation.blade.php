@@ -1,8 +1,8 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b-2 border-mintpad-200 pb-2">
     <!-- Admin bar -->
-    <div class="w-full bg-primary-600 text-white text-center text-sm">
+    <div class="w-full bg-primary-600 text-center text-sm">
         <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
-            <p>You are logged in as admin</p>
+            <p class="text-white">You are logged in as admin</p>
         </div>
     </div>
 
@@ -24,6 +24,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('admin.collections.index')" :active="request()->routeIs('admin.collections.*')">
                         {{ __('Collections') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
+                        {{ __('Import') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -86,6 +89,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.collections.index')" :active="request()->routeIs('admin.collections.*')">
                 {{ __('Collections') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
+                {{ __('Import') }}
             </x-responsive-nav-link>
         </div>
 

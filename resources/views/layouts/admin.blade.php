@@ -31,6 +31,7 @@
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto mt-4 text-lg"><i class="fa-solid fa-gear animate-spin"></i></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
+                @include('partials.messages')
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto px-6 lg:px-8">
                         {{ $slot }}

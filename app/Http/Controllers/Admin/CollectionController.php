@@ -27,11 +27,17 @@ class CollectionController extends Controller
         // dump(Coinbase::getAccountByToken('SOL'));
         // Coinbase::postConversion();
 
-        PolygonScan::getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
-        PolygonScan::getInternalTransactions('0x892a99573583c6490526739ba38baefae10a84d4');
+        // $transfers = Coinbase::getTransfers();
+        // $transfer = Coinbase::getTransferById('ad4bed40-45d7-408a-bede-c65d6c8d8ff1');
+        // dump($transfers[0]);
+        // dump($transfer);
 
-        // $collections = Collection::all();
-        // return view('admin.collections.index')->with(compact('collections'));
+        // PolygonScan::getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
+        // PolygonScan::getInternalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
+        // PolygonScan::getNormalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
+
+        $collections = Collection::all();
+        return view('admin.collections.index')->with(compact('collections'));
     }
 
     /**

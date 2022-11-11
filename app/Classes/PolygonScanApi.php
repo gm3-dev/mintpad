@@ -21,15 +21,35 @@ class PolygonScanApi
             'address' => $address
         ];
         $response = Http::get($this->url.'&'.http_build_query($params));
-        dump($this->url.'&'.implode('&', $params));
-        dump($this->url.'&'.http_build_query($params));
-        dump($response);
         dump($response['result']);
         dump($this->wei2eth($response['result']));
     }
 
+    public function getNormalTransactions($address)
+    {
+        dump('Normal');
+        $params = [
+            'module' => 'account',
+            'action' => 'txlist',
+            'address' => $address,
+            'startblock' => '0',
+            'endblock' => '99999999',
+            'page' => '1',
+            'sort' => 'asc',
+        ];
+        $response = Http::get($this->url.'&'.http_build_query($params));
+        // dump($response['result'][0]);
+        // foreach ($response['result'] as $transaction) {
+        //     dump(date('Y-m-d', $transaction['timeStamp']).': '.$this->wei2eth($transaction['value']) . ' ('.$transaction['value'].') - ' . $transaction['functionName']);
+        // }
+
+        dump($response['result']);
+        // dump($this->wei2eth(250000000000000));
+    }
+
     public function getInternalTransactions($address)
     {
+        dump('Internal');
         $params = [
             'module' => 'account',
             'action' => 'txlistinternal',
@@ -40,11 +60,13 @@ class PolygonScanApi
             'sort' => 'asc',
         ];
         $response = Http::get($this->url.'&'.http_build_query($params));
-        dump($this->url.'&'.implode('&', $params));
-        dump($this->url.'&'.http_build_query($params));
-        dump($response);
+
+        // foreach ($response['result'] as $transaction) {
+        //     dump(date('Y-m-d', $transaction['timeStamp']).': '.$this->wei2eth($transaction['value']) . ' ('.$transaction['value'].') - ' . $transaction['functionName']);
+        // }
+
         dump($response['result']);
-        dump($this->wei2eth(250000000000000));
+        // dump($this->wei2eth(250000000000000));
     }
 
     public function wei2eth($wei)

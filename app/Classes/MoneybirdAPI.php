@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 
 class MoneybirdAPI
@@ -95,7 +96,7 @@ class MoneybirdAPI
             'contact_id' => $user->moneybird_id,
             'invoice_date' => date('Y-m-d'),
             'reference' => 'Mintpad montly usage',
-            'currency' => 'EUR',
+            'currency' => 'USD',
             'prices_are_incl_tax' => false,
             'details_attributes' => $details_attributes,
             // 'document_style_id' => $this->document_style_id, // Huisstijl
@@ -139,6 +140,7 @@ class MoneybirdAPI
     {
         $invoice = $this->client->post($this->base_url . '/sales_invoices/' . $invoice['id'] . '/payments.json', ['payment' => [
             'price' => $invoice['total_price_incl_tax'],
+            'price_base' => $invoice['total_price_incl_tax_base'],
             'payment_date' => date('Y-m-d')
         ]]);
 
@@ -160,6 +162,22 @@ class MoneybirdAPI
         $invoices = $this->client->get($this->base_url . '/sales_invoices.json?filter=contact_id:'.$contact_id.',state:paid|open');
         if ($invoices->getStatusCode() == 200) {
             return $invoices;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get sales invoice by ID
+     *
+     * @param string $id
+     * @return mixed
+     */
+    public function getSalesInvoiceById($id)
+    {
+        $invoice = $this->client->get($this->base_url . '/sales_invoices/'.$id.'.json');
+        if ($invoice->getStatusCode() == 200) {
+            return $invoice;
         } else {
             return false;
         }
