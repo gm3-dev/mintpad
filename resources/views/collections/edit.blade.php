@@ -181,7 +181,7 @@
                                 {{ __('Add images to your collection') }}
                                 <!-- <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button> -->
                             </h3>
-                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ route('generator.index') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
+                            <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
                             <p class="font-semibold text-sm mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
 
                             <label class="block mt-10 text-mintpad-300">
