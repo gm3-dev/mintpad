@@ -28,6 +28,9 @@
                     <x-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
                         {{ __('Import') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.status.index')" :active="request()->routeIs('admin.status.*')">
+                        {{ __('Status') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -92,6 +95,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
                 {{ __('Import') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.status.index')" :active="request()->routeIs('admin.status.*')">
+                {{ __('Status') }}
             </x-responsive-nav-link>
         </div>
 
