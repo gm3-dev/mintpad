@@ -91,7 +91,7 @@
                         <div v-for="(phase, index) in claimPhases" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                             <div class="col-span-2 md:col-span-3 lg:col-span-4">
                                 <x-gray-button href="#" class="float-right mt-2 !px-3 !py-2 text-lg" @click.prevent="deleteClaimPhase(index)"><i class="fas fa-trash-alt"></i></x-gray-button>
-                                <h3 class="basis-full text-2xl mb-1" v-html="phase.name"></h3>
+                                <h3 class="basis-full text-2xl mb-1" v-html="phase.name.trim() == '' ? 'Phase '+phase.id : phase.name"></h3>
                                 <p class="font-regular text-sm mb-1" v-html="claimPhaseInfo[index]"></p>
                             </div>
                             <div>
@@ -104,8 +104,8 @@
                             </div>
                             <div class="relative">
                                 <x-label for="price" :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
-                                <x-input id="price" class="mt-1 w-full" type="text" v-model="phase.price" required />
-                                <label v-html="collection.token" class="absolute right-0 mr-5 mt-4 text-mintpad-500 dark:text-primary-600"></label>
+                                <x-input id="price" class="mt-1 w-full" step="0.001" type="number" v-model="phase.price" required />
+                                <label v-html="collection.token" class="absolute right-0 mr-12 mt-4 text-mintpad-500 dark:text-primary-600"></label>
                             </div>
                             <div>
                                 <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="Here you can choose whether people can only mint one NFT per wallet or unlimited." />

@@ -31,9 +31,12 @@ export default {
                 // for (var key in val) {
                 //     var phase = val[key]
                 //     for (var field in phase) {
-                //         if (phase[field] === null && phase[field] === '') {
-                //             this.tabs.phases = false
-                //             return false;
+                //         var value = phase[field]
+                //         if ((field == 'price' || field == 'maxClaimableSupply') && value.length === 0) {
+                //             this.claimPhases[key][field] = 0
+                //         }
+                //         if (field == 'name' && value.length === 0) {
+                //             this.claimPhases[key][field] = 'Phase '+(parseInt(key)+1)
                 //         }
                 //     }
                 // }
@@ -79,7 +82,8 @@ export default {
         },
         tabSettings: function(oldVal, newVal) {
             this.tabs.settings = true
-            if (oldVal.name == '' || oldVal.description == '' || oldVal.royalties === '' || oldVal.fee_recipient === '') {
+            console.log(typeof oldVal.fee_recipient)
+            if (oldVal.name.trim() == '' || oldVal.description.trim() == '' || oldVal.royalties === '' || oldVal.fee_recipient.trim() === '') {
                 this.tabs.settings = false
             }
         },

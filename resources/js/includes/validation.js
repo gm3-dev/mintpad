@@ -49,14 +49,16 @@ export default {
                 //     snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                 // }
                 if (claimPhase.name.length < 1) {
-                    return this.setValidationResponse(false, 'Mint phase name must be at least 1 character long')
+                    return this.setValidationResponse(false, 'Phase '+ claimPhase.id +': Mint phase name must be at least 1 character long')
                 } else if (claimPhase.maxClaimableSupply.length < 1) {
                     return this.setValidationResponse(false, claimPhase.name +': Number of NFTs must be a number')
                 } else if (claimPhase.maxClaimableSupply < 0) {
                     return this.setValidationResponse(false, claimPhase.name +': Number of NFTs is not valid')
+                } else if (claimPhase.price.length < 1) {
+                    return this.setValidationResponse(false, claimPhase.name +': Mint price must be a number')
                 } else if (claimPhase.price < 0) {
-                    return this.setValidationResponse(false, 'Mint price is not valid')
-                } 
+                    return this.setValidationResponse(false, claimPhase.name +': Mint price is not valid')
+                }
             }
 
             return this.setValidationResponse(true, 'Valid collection data')

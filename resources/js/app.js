@@ -93,7 +93,7 @@ if (document.getElementById('app')) {
                 chain: 'evm',
                 token: 'ETH',
                 symbol: '',
-                fee_recipient: 0,
+                fee_recipient: '',
                 royalties: 0,
                 description: '',
                 metadata: [],
