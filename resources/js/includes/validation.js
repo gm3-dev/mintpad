@@ -43,16 +43,16 @@ export default {
                 // var newClaimPhase = {
                 //     startTime: new Date(claimPhase.startTime),
                 //     price: claimPhase.price,
-                //     maxQuantity: claimPhase.maxQuantity == 0 ? 'unlimited' : claimPhase.maxQuantity,
+                //     maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
                 //     quantityLimitPerTransaction: 1,
                 //     waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                 //     snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                 // }
                 if (claimPhase.name.length < 1) {
                     return this.setValidationResponse(false, 'Mint phase name must be at least 1 character long')
-                } else if (claimPhase.maxQuantity.length < 1) {
+                } else if (claimPhase.maxClaimableSupply.length < 1) {
                     return this.setValidationResponse(false, claimPhase.name +': Number of NFTs must be a number')
-                } else if (claimPhase.maxQuantity < 0) {
+                } else if (claimPhase.maxClaimableSupply < 0) {
                     return this.setValidationResponse(false, claimPhase.name +': Number of NFTs is not valid')
                 } else if (claimPhase.price < 0) {
                     return this.setValidationResponse(false, 'Mint price is not valid')

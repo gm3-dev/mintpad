@@ -18,16 +18,20 @@
                 <div class="w-full mx-auto mb-3 pb-3">
                     <div class="flex items-center font-semibold border-b-2 border-mintpad-200">
                         <a href="#" @click.prevent="changeEditTab(1)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 1}">
-                            {{ __('1. Settings') }}
+                            <span class="inline-block">{{ __('1. Settings') }}</span><br>
+                            <tab-status :completed="tabs.settings"></tab-status>
                         </a>
                         <a href="#" @click.prevent="changeEditTab(2)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 2}">
-                            {{ __('2. Mint phases') }}
+                            <span class="inline-block">{{ __('2. Mint phases') }}</span><br>
+                            <tab-status :completed="tabs.phases"></tab-status>
                         </a>
                         <a href="#" @click.prevent="changeEditTab(3)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 3}">
-                            {{ __('3. Upload collection') }}
+                            <span class="inline-block">{{ __('3. Upload collection') }}</span><br>
+                            <tab-status :completed="tabs.collection"></tab-status>
                         </a>
                         <a href="#" @click.prevent="changeEditTab(4)" class="py-4 mr-10 text-mintpad-300 dark:text-gray-200 hover:text-mintpad-500 dark:hover:text-white" :class="{'text-mintpad-500 dark:text-white border-b-4 -mb-1 border-primary-600': page.tab == 4}">
-                            {{ __('4. Mint settings') }}
+                            <span class="inline-block">{{ __('4. Mint settings') }}</span><br>
+                            <tab-status :completed="tabs.mint"></tab-status>
                         </a>
                     </div>
                 </div>
@@ -51,7 +55,7 @@
                         </div>
                         <div class="w-full">
                             <span content="This action will trigger a transaction" v-tippy>
-                                <x-button href="#" @click.prevent="updateMetadata"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update settings') }}</x-button>
+                                <x-button href="#" @click.prevent="updateMetadata" v-bind:disabled="buttons.settings"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update settings') }}</x-button>
                             </span>
                         </div>   
 
@@ -68,7 +72,7 @@
                         </div>
                         <div class="w-full">
                             <span content="This action will trigger a transaction" v-tippy>
-                                <x-button href="#" @click.prevent="updateRoyalties"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update royalties') }}</x-button>
+                                <x-button href="#" @click.prevent="updateRoyalties" v-bind:disabled="buttons.royalties"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update royalties') }}</x-button>
                             </span>
                         </div>
                     </form>
@@ -96,7 +100,7 @@
                             </div>
                             <div>
                                 <x-label for="max-quantity" :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
-                                <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxQuantity" required />
+                                <x-input id="max-quantity" class="mt-1 w-full" type="number" v-model="phase.maxClaimableSupply" required />
                             </div>
                             <div class="relative">
                                 <x-label for="price" :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
@@ -167,7 +171,7 @@
                         </div>
                         <div class="w-full mt-10">
                             <span content="This action will trigger a transaction" v-tippy>
-                                <x-button href="#" @click.prevent="updateClaimPhases"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update mint phases') }}</x-button>
+                                <x-button href="#" @click.prevent="updateClaimPhases" v-bind:disabled="buttons.phases"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('Update mint phases') }}</x-button>
                             </span>
                         </div>
                     </form>
@@ -209,14 +213,14 @@
                             <div class="w-full mt-5">
                                 <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
                                 <span content="This action will trigger a transaction" v-tippy>
-                                    <x-button href="#" @click.prevent="updateCollection"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('upload collection') }}</x-button>
+                                    <x-button href="#" @click.prevent="updateCollection" v-bind:disabled="buttons.collection"><i class="fas fa-cloud-upload-alt mr-2"></i> {{ __('upload collection') }}</x-button>
                                 </span>
                             </div>
                         </div>
 
                         <div class="text-sm">
                             <h3 class="text-2xl mb-4 mt-6">{{ __('Your collection') }}</h3>
-                            <p v-if="collection.nfts.length == 0" class="font-regular text-sm">{{ __('Your collection is still empty :(') }}</p>
+                            <p v-if="collection.nfts.length == 0" class="font-regular text-sm">{{ __('Your collection is still empty.') }}</p>
                             <p v-else class="text-sm">Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
                             <div class="grid grid-cols-4 mt-2">
                                 <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
@@ -275,7 +279,7 @@
                     </div>
 
                     <div class="w-full">
-                        <x-button @click.prevent="updateMintSettings" v-bind:disabled="loadingResource('social-sharing')">{{ __('Update mint settings') }}</x-button>
+                        <x-button @click.prevent="updateMintSettings" v-bind:disabled="loadingResource('social-sharing')" v-bind:disabled="buttons.mint">{{ __('Update mint settings') }}</x-button>
                         <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page') }}</x-blue-button>
                         <x-blue-button href="{{ route('editor.index', $collection->permalink) }}" target="_blank" class="ml-2">{{ __('View collection page editor') }}</x-blue-button>
                     </div>

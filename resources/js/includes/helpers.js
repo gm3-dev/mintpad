@@ -162,7 +162,7 @@ export default {
                         startTime: this.formateDatetimeLocal(claimCondition.startTime),
                         endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
                         price: this.hexToValue(claimCondition.price._hex),
-                        maxQuantity: claimCondition.maxQuantity == 'unlimited' ? 0 : parseInt(claimCondition.maxQuantity),
+                        maxClaimableSupply: claimCondition.maxClaimableSupply == 'unlimited' ? 0 : parseInt(claimCondition.maxClaimableSupply),
                         waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0,
                         quantityLimitPerTransaction: parseInt(claimCondition.quantityLimitPerTransaction),
                         whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,

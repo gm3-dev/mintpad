@@ -4,6 +4,10 @@ import { ethers } from 'ethers'
 import Alpine from 'alpinejs'
 import VueTippy, { TippyComponent } from "vue-tippy"
 
+// Mixins
+import computed from './mixins/computed.js'
+import watch from './mixins/watch.js'
+
 // Includes
 import { eventBus } from './includes/event-bus'
 import { initSentry, resportError } from './includes/sentry'
@@ -70,16 +74,19 @@ if (document.getElementById('app')) {
     Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
     Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
     Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
+    Vue.component('tab-status', require('./components/TabStatus.vue').default);
 
     new Vue({
         el: '#app',
-        mixins: [resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
+        mixins: [computed, watch, resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
         data: {
+            forms: {},
             collectionID: false,
             sdk: false,
             contract: false,
             contractAddress: false,
             upload: false,
+            originCollection: {},
             collection: {
                 name: '',
                 chain_id: 1,
@@ -102,22 +109,6 @@ if (document.getElementById('app')) {
             page: {
                 name: '',
                 tab: 0,
-            }
-        },
-        computed: {
-            userAddressShort: function() {
-                return this.wallet.account ? this.wallet.account.substring(0, 5)+'...'+this.wallet.account.substr(this.wallet.account.length - 3) : ''
-            },
-            collectionChain() {
-                return this.collection.chain_id
-            }
-        },
-        watch: {
-            collectionChain: async function(chainID) {
-                this.hasValidChain = await this.validateMatchingBlockchains(parseInt(chainID))
-                if (this.blockchains[parseInt(chainID)]) {
-                    this.collection.chain = this.blockchains[parseInt(chainID)].chain
-                }
             }
         },
         async mounted() {
@@ -234,7 +225,7 @@ if (document.getElementById('app')) {
                     var newClaimPhase = {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
-                        maxQuantity: claimPhase.maxQuantity == 0 ? 'unlimited' : claimPhase.maxQuantity,
+                        maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
                         quantityLimitPerTransaction: 1,
                         waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
@@ -265,7 +256,7 @@ if (document.getElementById('app')) {
                 this.claimPhases.push({
                     startTime: this.formateDatetimeLocal(new Date(Date.now())),
                     price: 0,
-                    maxQuantity: 0,
+                    maxClaimableSupply: 0,
                     // quantityLimitPerTransaction: 0,
                     whitelist: 0,
                     waitInSeconds: 1,
