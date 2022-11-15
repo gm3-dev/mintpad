@@ -101,8 +101,12 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Collection $collection)
     {
-        //
+        if ($request->ajax()) {
+            $collection->delete();
+
+            return response()->json(['succes']);
+        }
     }
 }

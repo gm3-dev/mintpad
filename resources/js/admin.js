@@ -95,6 +95,16 @@ if (document.getElementById('app')) {
                         this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
                 })
+            },
+            deleteCollection: function(collectionID) {
+                if (confirm("Are you sure you want to delete this collection?") == true) {
+
+                    axios.delete('/admin/collections/'+collectionID).then((response) => {
+                        window.location.reload()
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }
             }
         }
     })
