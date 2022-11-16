@@ -140,7 +140,7 @@
                                                         </tr>
                                                         <tr v-for="wallet in phase.snapshot">
                                                             <td class="font-medium">@{{ wallet.address }}</td>
-                                                            <td class="font-medium">@{{ phase.quantityLimitPerTransaction }}</td>
+                                                            <td class="font-medium">@{{ phase.maxClaimablePerWallet }}</td>
                                                         </tr>
                                                     </table>
                                                     <div v-else>

@@ -226,7 +226,7 @@ if (document.getElementById('app')) {
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
                         maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
-                        quantityLimitPerTransaction: 1,
+                        maxClaimablePerWallet: 1,
                         waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
@@ -257,7 +257,7 @@ if (document.getElementById('app')) {
                     startTime: this.formateDatetimeLocal(new Date(Date.now())),
                     price: 0,
                     maxClaimableSupply: 0,
-                    // quantityLimitPerTransaction: 0,
+                    // maxClaimablePerWallet: 0,
                     whitelist: 0,
                     waitInSeconds: 1,
                     snapshot: [],
