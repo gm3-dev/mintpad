@@ -4,7 +4,7 @@
             <h2 class="text-center text-3xl mb-1 font-semibold">{{ __('Invoices') }}</h2>
             <p class="text-center text-lg">{{ __('Download your invoices here.') }}</p>
         </div>
-        <p class="mb-4 font-regular text-sm">{{ __('Are you a company? Add your details to your account on the') }} <x-link href="{{ route('users.profile') }}" class="font-semibold">my profile</x-link> {{ __('page.') }}</p>
+        <p class="mb-4 font-regular text-center text-sm">{{ __('Are you a company? Add your details to your account on the') }} <x-link href="{{ route('users.profile') }}" class="font-semibold">my profile</x-link> {{ __('page.') }}</p>
         
         @if ($invoices->count() == 0)
             <p class="text-sm text-center">{{ __('You don\'t have any invoices yet.') }}</p>
