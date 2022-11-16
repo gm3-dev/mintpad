@@ -15,7 +15,11 @@ class MoneybirdAPI
     {
         $this->client = Http::withToken($token);
         $this->administration = $this->client->get('https://moneybird.com/api/v2/administrations.json');
-        $this->base_url = 'https://moneybird.com/api/v2/' . $this->administration[0]['id'];
+        if (isset($this->administration[0])) {
+            $this->base_url = 'https://moneybird.com/api/v2/' . $this->administration[0]['id'];
+        } else {
+            $this->base_url = false;
+        }
     }
 
     /**
@@ -26,6 +30,10 @@ class MoneybirdAPI
      */
     public function createContact($user)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+
         $contact = $this->client->post($this->base_url . '/contacts.json', $this->getContactData($user));
         
         if ($contact->getStatusCode() == 201) {
@@ -43,6 +51,10 @@ class MoneybirdAPI
      */
     public function updateContact($user)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+
         if (is_null($user->moneybird_id)) {
             return false;
         }
@@ -63,6 +75,10 @@ class MoneybirdAPI
      */
     public function administrationIsValid()
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+
         return $this->administration->successful();
     }
 
@@ -75,6 +91,10 @@ class MoneybirdAPI
      */
     public function createSalesInvoice($user, $details)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         if (is_null($user->moneybird_id)) {
             return false;
         }
@@ -118,6 +138,10 @@ class MoneybirdAPI
      */
     public function sendSalesInvoice($invoice_id)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $invoice = $this->client->patch($this->base_url . '/sales_invoices/' . $invoice_id . '/send_invoice.json', ['sales_invoice_sending' => [
             'delivery_method' => 'Manual',
             'invoice_date' => date('Y-m-d')
@@ -138,6 +162,10 @@ class MoneybirdAPI
      */
     public function createSalesInvoicePayment($invoice)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $invoice = $this->client->post($this->base_url . '/sales_invoices/' . $invoice['id'] . '/payments.json', ['payment' => [
             'price' => $invoice['total_price_incl_tax'],
             'price_base' => $invoice['total_price_incl_tax_base'],
@@ -159,6 +187,10 @@ class MoneybirdAPI
      */
     public function getSalesInvoicesFromContact($contact_id)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $invoices = $this->client->get($this->base_url . '/sales_invoices.json?filter=contact_id:'.$contact_id.',state:paid|open');
         if ($invoices->getStatusCode() == 200) {
             return $invoices;
@@ -175,6 +207,10 @@ class MoneybirdAPI
      */
     public function getSalesInvoiceById($id)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $invoice = $this->client->get($this->base_url . '/sales_invoices/'.$id.'.json');
         if ($invoice->getStatusCode() == 200) {
             return $invoice;
@@ -191,6 +227,10 @@ class MoneybirdAPI
      */
     public function downloadSalesInvoice($invoice_id)
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $invoice = $this->client->get($this->base_url . '/sales_invoices/'.$invoice_id.'/download_pdf.json');
         if ($invoice->getStatusCode() == 200) {
             return $invoice->getBody()->getContents();
@@ -206,6 +246,10 @@ class MoneybirdAPI
      */
     public function getTaxRateIds()
     {
+        if (!$this->validateAPI()) {
+            return false;
+        }
+        
         $tax_rates = $this->client->get($this->base_url . '/tax_rates.json?filter=tax_rate_type:sales_invoice');
         if ($tax_rates->collect()->count() == 0) {
             return null;
@@ -216,6 +260,20 @@ class MoneybirdAPI
             $output->put($tax_rate->percentage, $tax_rate->id);
         }
         return $output;
+    }
+
+    /**
+     * Validate API setup
+     *
+     * @return boolean
+     */
+    public function validateAPI()
+    {
+        if ($this->base_url == false) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
