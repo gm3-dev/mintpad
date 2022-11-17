@@ -8,8 +8,6 @@
 </template>
 
 <script>
-    import { eventBus } from '../includes/event-bus'
-
     export default {
         data() {
             return {

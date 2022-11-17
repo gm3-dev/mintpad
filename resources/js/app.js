@@ -86,7 +86,6 @@ if (document.getElementById('app')) {
             contract: false,
             contractAddress: false,
             upload: false,
-            originCollection: {},
             collection: {
                 name: '',
                 chain_id: 1,
@@ -102,6 +101,9 @@ if (document.getElementById('app')) {
                 totalSupply: 0,
                 totalClaimedSupply: 0,
                 permalink: '',
+                mintUrl: '',
+                editorUrl: '',
+                fullPermalink: '',
                 seo: {},
             },
             claimPhases: [],
@@ -165,6 +167,10 @@ if (document.getElementById('app')) {
 
                     // Mint settings
                     this.collection.permalink = response.data.permalink
+                    this.collection.mintUrl = response.data.mint_url
+                    this.collection.editorUrl = response.data.editor_url
+                    this.collection.fullMintUrl = this.collection.mintUrl+'/'+this.collection.permalink
+                    this.collection.fullEditorUrl = this.collection.editorUrl+'/'+this.collection.permalink
 
                     // Check if wallet is connected to the correct blockchain
                     if (this.hasValidChain !== true) {
@@ -199,6 +205,8 @@ if (document.getElementById('app')) {
                         resportError(error)
                         this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
+
+                    this.validateTabStatus()
                 })
             },
             setClaimPhasesInfo: function() {
@@ -237,7 +245,7 @@ if (document.getElementById('app')) {
                 try {
                     await this.contract.claimConditions.set(claimPhases)
                     await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
-                        //
+                        this.validateTabStatus()
                     })
                     
                     this.setSuccessMessage('Claim phases updated')
@@ -304,7 +312,7 @@ if (document.getElementById('app')) {
 
                     var formData = this.collection
                     await axios.put('/collections/'+this.collectionID+'/metadata', formData).then((response) => {
-                        //
+                        this.validateTabStatus()
                     })
 
                     this.setSuccessMessage('General settings updated')
@@ -330,6 +338,8 @@ if (document.getElementById('app')) {
                         seller_fee_basis_points: this.collection.royalties * 100, // 1% royalty fee
                         fee_recipient: this.collection.fee_recipient, // the fee recipient
                     })
+
+                    this.validateTabStatus()
 
                     this.setSuccessMessage('Royalties updated')
                 } catch(error) {
@@ -360,6 +370,12 @@ if (document.getElementById('app')) {
                         if (data.image == '') {
                             this.deleteResource('social-sharing')
                         }
+
+                        this.collection.fullMintUrl = this.collection.mintUrl+'/'+this.collection.permalink
+                        this.collection.fullEditorUrl = this.collection.editorUrl+'/'+this.collection.permalink
+
+                        this.validateTabStatus()
+
                         this.setSuccessMessage('Mint settings updated')
                     }
                 })
@@ -415,19 +431,23 @@ if (document.getElementById('app')) {
                 this.collection.previews = this.collection.metadata.slice(0, 8)
                 this.upload = false
 
-                this.setSuccessMessage('NFTs uploaded')
+                this.setSuccessMessage('NFTs received')
             },
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
 
                 try {
                     await this.contract.createBatch(this.collection.metadata)
-                    var images = await this.contract.getAll({count: 1})
+                    this.collection.totalSupply = await this.contract.totalSupply()
+                    this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                    this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                    this.collection.nfts = await this.contract.getAll({count: 8})
+                    this.collection.previews = []
                     
-                    if (images.length > 0) {
-                        var data = {url: images[0].metadata.image}
+                    if (this.collection.nfts.length > 0) {
+                        var data = {url: this.collection.nfts[0].metadata.image}
                         await axios.post('/collections/'+this.collectionID+'/thumb', data).then((response) => {
-                            //
+                            this.validateTabStatus()
                         })
                     }
 

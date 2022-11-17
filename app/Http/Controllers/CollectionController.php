@@ -122,6 +122,8 @@ class CollectionController extends Controller
             'description' => $collection->getMeta('seo.description', ''),
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? $image : false
         ];
+        $collection->mint_url = config('app.mint_url');
+        $collection->editor_url = config('app.url').'/editor';
 
         return response()->json($collection, 200);
     }
@@ -212,7 +214,9 @@ class CollectionController extends Controller
             $this->authorize('update', $collection);
 
             $request->validate([
-                'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id]
+                'permalink' => ['required', 'max:255', 'unique:collections,permalink,'.$collection->id],
+                'title' => ['max:60'],
+                'description' => ['max:155']
             ]);
 
             $data = $request->all();

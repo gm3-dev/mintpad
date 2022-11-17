@@ -42,6 +42,7 @@ export default {
                 // Set from EVM chain
                 if (this.collection.chain == 'evm') {
                     contract = await this.sdk.getNFTDrop(address)
+                    // await contract.contractWrapper.readContract.contractVersion()
                 }
 
                 // Set from Solana chain
