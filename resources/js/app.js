@@ -235,7 +235,7 @@ if (document.getElementById('app')) {
                         price: claimPhase.price,
                         maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
                         maxClaimablePerWallet: 1,
-                        waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
+                        waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, v3
                         snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
                     claimPhases.push(newClaimPhase)
