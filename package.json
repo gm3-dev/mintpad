@@ -39,7 +39,6 @@
         "jquery": "^3.6.0",
         "node-polyfill-webpack-plugin": "^2.0.1",
         "one-colorpicker": "^1.0.12",
-        "socket.io-client": "^4.5.1",
         "tippy.js": "^6.3.7",
         "vue": "^2.6.14",
         "vue-tippy": "^4.14.0",

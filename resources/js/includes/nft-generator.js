@@ -33,16 +33,6 @@ export default {
         this.generator.userID = this.$el.getAttribute('data-user')
     },
     methods: {
-        handleSocketResponse: function(response) {
-            if (response.state == 'error') {
-                this.setErrorMessage(response.value)
-            } else if (response.state == undefined) {
-                // console.log(response)
-            } else {
-                this.generator.loader.state = response.state
-                this.generator.loader.progress = response.value
-            }
-        },
         dragEnterUploader: function() {
             this.generator.uploadClasses = ['border-mintpad-300']
         },
