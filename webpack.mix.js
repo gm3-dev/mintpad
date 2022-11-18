@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 const tailwindcss = require('tailwindcss');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+var path = require('path');
 
 // const webpack = require('webpack')
 // if (mix.inProduction()) {
@@ -17,7 +18,12 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 mix.webpackConfig({
     plugins: [
         new NodePolyfillPlugin(),
-    ]
+    ],
+    resolve: {
+        alias: {
+            '@': path.join(__dirname, 'resources/js')
+        }
+    }
 })
 
 /*
@@ -45,3 +51,6 @@ mix.js('resources/js/app.js', 'public/js')
     })
     .version();
 mix.copyDirectory('resources/fonts', 'public/fonts');
+mix.alias({
+    '@': path.join(__dirname, 'resources/js')
+});

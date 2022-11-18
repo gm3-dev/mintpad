@@ -44,19 +44,9 @@ export default {
             }
         },
         validateUpdateClaimPhases: function() {
-            console.log(this.collection)
-            console.log(this.claimPhases)
-
             for (var i = 0; i < this.claimPhases.length; i++) {
                 var claimPhase = this.claimPhases[i]
-                // var newClaimPhase = {
-                //     startTime: new Date(claimPhase.startTime),
-                //     price: claimPhase.price,
-                //     maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
-                //     maxClaimablePerWallet: 1,
-                //     waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5,
-                //     snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
-                // }
+                
                 if (claimPhase.name.length < 1) {
                     return this.setValidationResponse(false, 'Phase '+ claimPhase.id +': Mint phase name must be at least 1 character long')
                 } else if (claimPhase.maxClaimableSupply.length < 1) {

@@ -112,7 +112,7 @@ if (document.getElementById('app')) {
                     }
                     
                     // Claim phases
-                    var claimConditions = await this.getClaimPhases()
+                    var claimConditions = await this.getClaimPhases({withAllowList: false})
                     this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()

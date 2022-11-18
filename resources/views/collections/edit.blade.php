@@ -109,7 +109,7 @@
                             </div>
                             <div>
                                 <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="Here you can choose whether people can only mint one NFT per wallet or unlimited." />
-                                <x-select class="mt-1 !w-full" v-model="phase.waitInSeconds" :options="['1 claim', 'Unlimited claims']"></x-select>
+                                <x-select class="mt-1 !w-full" v-model="phase.maxClaimablePerWallet" :options="['Unlimited claims', '1 claim']"></x-select>
                             </div>
                             <div>
                                 <x-label for="phase-name" :value="__('Phase name')" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
@@ -136,11 +136,9 @@
                                                     <table v-if="phase.snapshot != 0" class="w-full font-medium">
                                                         <tr>
                                                             <th class="font-semibold">Address</th>
-                                                            <th class="font-semibold">Max claimable</th>
                                                         </tr>
                                                         <tr v-for="wallet in phase.snapshot">
                                                             <td class="font-medium">@{{ wallet.address }}</td>
-                                                            <td class="font-medium">@{{ phase.maxClaimablePerWallet }}</td>
                                                         </tr>
                                                     </table>
                                                     <div v-else>

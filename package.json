@@ -33,7 +33,7 @@
         "@sentry/tracing": "^7.14.1",
         "@sentry/vue": "^7.14.1",
         "@solana/web3.js": "^1.64.0",
-        "@thirdweb-dev/sdk": "^3.5.2",
+        "@thirdweb-dev/sdk": "^3.6.0",
         "@tinymce/tinymce-vue": "^3.2.8",
         "ethers": "^5.7.0",
         "jquery": "^3.6.0",

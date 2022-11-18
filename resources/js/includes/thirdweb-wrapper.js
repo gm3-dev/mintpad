@@ -41,7 +41,7 @@ export default {
             try {
                 // Set from EVM chain
                 if (this.collection.chain == 'evm') {
-                    contract = await this.sdk.getNFTDrop(address)
+                    contract = await this.sdk.getContract(address, 'nft-drop')
                     // await contract.contractWrapper.readContract.contractVersion()
                 }
 
@@ -77,18 +77,17 @@ export default {
 
             return metadata
         },
-        getClaimPhases: async function() {
+        getClaimPhases: async function(options) {
             var claimConditions = false
             try {
                 // Get from EVM chain
                 if (this.collection.chain == 'evm') {
-                    claimConditions = await this.contract.claimConditions.getAll()
+                    claimConditions = await this.contract.claimConditions.getAll({withAllowList: options.withAllowList})
                 }
 
                 // Get from Solana chain
                 if (this.collection.chain == 'solana') { 
                     const claimCondition = await this.contract.claimConditions.get()
-                    console.log(claimCondition)
                     if (claimCondition.price != undefined) {
                         claimConditions = [claimCondition]
                     }

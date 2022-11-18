@@ -82,7 +82,7 @@ if (document.getElementById('app')) {
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                         // Claim phases
-                        var claimConditions = await this.getClaimPhases()
+                        var claimConditions = await this.getClaimPhases({withAllowList: false})
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
                         // Collection

@@ -22,7 +22,7 @@
                     <h2 class="text-lg font-semibold mb-1 text-mintpad-500" v-html="phase.name"></h2>
                     <p class="text-sm mb-3 text-mintpad-300">
                         <span v-if="phase.whitelist">• Whitelist <span class="text-primary-600" v-html="phase.snapshot.length"></span></span>
-                        <span v-if="phase.waitInSeconds == 0">• Max <span class="text-primary-600" v-html="phase.maxClaimablePerWallet"></span> token</span>
+                        <span v-if="phase.maxClaimablePerWallet !== 0">• Max <span class="text-primary-600" v-html="phase.maxClaimablePerWallet"></span> token</span>
                         • Price <span class="text-primary-600" v-html="phase.price"></span> <span class="text-primary-600" v-html="collection.token"></span>
                     </p>
                     <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="text-sm flex">

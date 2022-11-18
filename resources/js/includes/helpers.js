@@ -154,6 +154,7 @@ export default {
             if (this.collection.chain == 'evm') {
                 for (var i = 0; i < claimConditions.length; i++) {
                     var claimCondition = claimConditions[i]
+                    console.log('claimCondition', claimCondition)
                     var nextIndex = i + 1
                     var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
                     output.push({
@@ -164,7 +165,7 @@ export default {
                         price: this.hexToValue(claimCondition.price._hex),
                         maxClaimableSupply: claimCondition.maxClaimableSupply == 'unlimited' ? 0 : parseInt(claimCondition.maxClaimableSupply),
                         maxClaimablePerWallet: claimCondition.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(claimCondition.maxClaimablePerWallet),
-                        waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0, // Contract v2, v3
+                        // waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
                         whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
                         snapshot: claimCondition.snapshot ?? [],
                         modal: false,

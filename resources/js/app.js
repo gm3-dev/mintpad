@@ -193,7 +193,7 @@ if (document.getElementById('app')) {
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                         // Claim phases
-                        var claimConditions = await this.getClaimPhases()
+                        var claimConditions = await this.getClaimPhases({withAllowList: true})
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
                         // Collection
@@ -231,16 +231,21 @@ if (document.getElementById('app')) {
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
                     var newClaimPhase = {
+                        metadata: {
+                            name: claimPhase.name
+                        },
                         startTime: new Date(claimPhase.startTime),
                         price: claimPhase.price,
                         maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
-                        maxClaimablePerWallet: 1,
-                        waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, v3
-                        snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
+                        maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 ? 'unlimited' : claimPhase.maxClaimablePerWallet,
+                        // waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, Contract v3
+                        // snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
                     claimPhases.push(newClaimPhase)
                     formData['phase'+(i+1)] = claimPhase.name
                 }
+
+                console.log(claimPhases)
 
                 try {
                     await this.contract.claimConditions.set(claimPhases)
@@ -265,9 +270,9 @@ if (document.getElementById('app')) {
                     startTime: this.formateDatetimeLocal(new Date(Date.now())),
                     price: 0,
                     maxClaimableSupply: 0,
-                    // maxClaimablePerWallet: 0,
+                    maxClaimablePerWallet: 0,
                     whitelist: 0,
-                    waitInSeconds: 1,
+                    // waitInSeconds: 1, Contract v2, Contract v3
                     snapshot: [],
                     modal: false,
                     name: 'Phase ' + (this.claimPhases.length + 1)
