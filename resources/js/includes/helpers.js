@@ -102,8 +102,6 @@ export default {
         },
         validateMatchingBlockchains: async function(chainID) {
             const blockchain = this.blockchains[chainID]
-            console.log('blockchain', blockchain)
-            console.log('this.wallet.name', this.wallet.name)
             if (!blockchain || !blockchain.wallet.includes(this.wallet.name)) {
                 return 'wallet'
             } else if (chainID != this.wallet.network.id && this.wallet.name == 'metamask') {
@@ -156,7 +154,6 @@ export default {
             if (this.collection.chain == 'evm') {
                 for (var i = 0; i < claimConditions.length; i++) {
                     var claimCondition = claimConditions[i]
-                    console.log('claimCondition', claimCondition)
                     var nextIndex = i + 1
                     var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
                     output.push({
