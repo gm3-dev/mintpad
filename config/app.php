@@ -185,7 +185,8 @@ return [
          */
         App\Providers\MoneybirdServiceProvider::class,
         App\Providers\PolygonScanServiceProvider::class,
-        App\Providers\CoinbaseServiceProvider::class
+        App\Providers\CoinbaseServiceProvider::class,
+        App\Providers\SlackServiceProvider::class,
     ],
 
     /*
@@ -200,7 +201,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Slack' => App\Facades\Slack::class,
     ])->toArray(),
 
 ];

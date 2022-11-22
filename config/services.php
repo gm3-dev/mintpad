@@ -34,4 +34,8 @@ return [
         'api_key' => env('SENDGRID_API_KEY'),
         // 'endpoint' => 'https://custom.example.com/send',
     ],
+
+    'slack' => [
+        'token' => env('SLACK_TOKEN')
+    ],
 ];
