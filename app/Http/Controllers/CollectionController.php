@@ -254,19 +254,6 @@ class CollectionController extends Controller
     }
 
     /**
-     * Show the claim page
-     *
-     * @param Collection $collection
-     * @return Response
-     */
-    public function claim(Collection $collection)
-    {
-        $this->authorize('view', $collection);
-
-        return view('collections.claim')->with(compact('collection'));
-    }
-
-    /**
      * Get whitelist data
      *
      * @param Request $request

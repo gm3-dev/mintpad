@@ -150,7 +150,7 @@ if (document.getElementById('app')) {
                     this.collection.chain_id = this.wallet.network.id
                     this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
 
-                } else if (this.page.name == 'collections.edit' || this.page.name == 'collections.claim') {
+                } else if (this.page.name == 'collections.edit') {
                     this.setClaimPhasesInfo()
                     await this.setCollectionData()
                 }
