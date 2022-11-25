@@ -7,7 +7,7 @@
         <div class="w-1/2">
             <div class="mb-10 grid grid-cols-2 gap-4">
                 <div class="text-mintpad-300 text-sm px-1">Server</div><div class="text-mintpad-300 text-sm px-1">Status</div>
-                <div class="p-1">Generator live</div><div class="p-1 text-green-700">Finished</div>
+                <div class="p-1">Generator live</div><div class="p-1 text-red-700">Maintenance</div>
                 <div class="p-1">Platform live</div><div class="p-1 text-green-700">Finished</div>
                 <div class="p-1">Generator development</div><div class="p-1 text-red-700">In progress (0%)</div>
                 <div class="p-1">Platform development</div><div class="p-1 text-red-700">In progress (0%)</div>
