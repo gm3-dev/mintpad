@@ -1,4 +1,4 @@
-name: Deploy to forge
+name: Deploy to demo
 run-name: Deploy ${{ github.sha }} to forge by @${{ github.actor }}
 on:
   push:
