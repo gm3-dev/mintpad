@@ -75,7 +75,7 @@ class UserController extends Controller
      */
     public function invoices()
     {
-        $user = User::find(1);
+        $user = Auth::user();
         if ($invoices = Moneybird::getSalesInvoicesFromContact($user->moneybird_id)) {
             $invoices = $invoices->collect();
         } else {
