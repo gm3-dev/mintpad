@@ -191,4 +191,9 @@
             </div>
         </x-modal>
     </div>
+    <div class="fixed z-40 left-0 bottom-0 p-2 w-full bg-primary-600 text-white">
+        <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
+            <p class="text-white text-center text-sm">WE USE DEMO DATA FOR THE MINT PHASES</p>
+        </div>
+    </div>
 </x-app-layout>

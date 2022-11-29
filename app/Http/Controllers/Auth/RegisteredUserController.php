@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Facades\Moneybird;
+use App\Facades\Slack;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -81,6 +82,8 @@ class RegisteredUserController extends Controller
         $user->save();
 
         Auth::login($user);
+
+        Slack::send('#registrations', $user->name . ' joined Mintpad!');
 
         return redirect(RouteServiceProvider::HOME);
     }

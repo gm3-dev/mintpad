@@ -19,6 +19,7 @@ class CollectionController extends Controller
     public function index()
     {
         $collections = Collection::where('user_id', Auth::user()->id)->get();
+        // $collections = [];
         return view('collections.index')->with(compact('collections'));
     }
 
