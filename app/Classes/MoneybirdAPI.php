@@ -13,12 +13,14 @@ class MoneybirdAPI
 
     public function __construct($token)
     {
-        $this->client = Http::withToken($token);
-        $this->administration = $this->client->get('https://moneybird.com/api/v2/administrations.json');
-        if (isset($this->administration[0])) {
-            $this->base_url = 'https://moneybird.com/api/v2/' . $this->administration[0]['id'];
-        } else {
-            $this->base_url = false;
+        if ($token) {
+            $this->client = Http::withToken($token);
+            $this->administration = $this->client->get('https://moneybird.com/api/v2/administrations.json');
+            if (isset($this->administration[0])) {
+                $this->base_url = 'https://moneybird.com/api/v2/' . $this->administration[0]['id'];
+            } else {
+                $this->base_url = false;
+            }
         }
     }
 

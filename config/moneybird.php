@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'token' => env('MB_TOKEN', '')
+    'token' => env('MB_TOKEN')
 ];
