@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    <div class="w-full bg-primary-400 py-12 mt-12">
+    <div class="w-full bg-primary-400 dark:bg-mintpad-700 py-12 mt-12">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center">
                 <h3 class="text-2xl mb-1">{{ __('Platform overview') }}</h3>
