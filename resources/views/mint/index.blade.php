@@ -6,7 +6,7 @@
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
     <div id="custom-style-container" class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="col-span-2">
+        <div class="col-span-1 lg:col-span-2">
             <div v-if="!wallet.account" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-6 mb-4 text-center">
                 <p class="text-sm mb-1">Your wallet is not connected.</p>
                 <x-button href="#" class="!py-1 !px-3" @click.prevent="connectMetaMask">Connect MetaMask</x-button>
@@ -89,9 +89,9 @@
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
             <div class="mb-4">
-                <a v-if="collection.about" rel="nofollow" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
+                <a v-if="collection.about" rel="nofollow" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-4 lg:mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
                 <a v-if="collection.roadmap" rel="nofollow" href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
-                <a v-if="collection.team" rel="nofollow" href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
+                <a v-if="collection.team" rel="nofollow" href="#" @click.prevent="changeTab(3)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-4 lg:mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 3}">Team</a>
             </div>
             
             <div v-show="tab == 1 && collection.about" class="tinymce-html" v-html="collection.about"></div>
