@@ -44,8 +44,8 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center">
                 <h3 class="text-2xl mb-1">{{ __('Platform overview') }}</h3>
-                <p class="text-lg mb-4">{!! __('Launching a collection can seem complicated. That is why we have <br>made a video where we explain the entire process step by step.') !!}</p>
-                <iframe class="inline-block" width="650" height="366" src="https://www.youtube.com/embed/95tJuaWhE6g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <p class="font-regular text-sm mb-4">{!! __('Launching a collection can seem complicated. That is why we have <br>made a video where we explain the entire process step by step.') !!}</p>
+                <iframe class="inline-block" width="650" height="366" src="https://www.youtube.com/embed/Kl8C6RtJmis" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </div>
