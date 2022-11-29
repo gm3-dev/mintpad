@@ -3,6 +3,7 @@
         <div class="mb-12 px-2">
             <div class="text-center mb-12">
                 <h2 class="text-center text-3xl mb-1 font-semibold">{{ __('My profile') }}</h2>
+                <x-blue-button href="#" class="absolute right-0 top-0 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/4HVmvaBeYIs')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                 <p class="text-center text-lg">{{ __('Enter your details here.') }}</p>
             </div>
 

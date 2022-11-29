@@ -42,7 +42,7 @@
 
                             <h3 class="text-2xl mb-4 mt-6">
                                 {{ __('General Settings') }}
-                                <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/RLKfq9vb9AQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                                <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/14NQiW9vQIs')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                             </h3>
                             <div class="w-full flex flex-wrap">
                                 <div class="basis-full mb-4">
@@ -84,7 +84,7 @@
 
                             <h3 class="text-2xl mb-4 mt-6">
                                 {{ __('Mint phases') }} 
-                                <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/wSGxNAaQaT0')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                                <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Lh1mT6XDjHg')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                             </h3>
                             <p class="font-regular text-sm">{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                             <p class="font-regular text-sm mb-8">{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
@@ -182,7 +182,7 @@
                             <div class="w-full">
                                 <h3 class="text-2xl mb-4 mt-6">
                                     {{ __('Add images to your collection') }}
-                                    <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                                    <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/U6C7a_gGc-4')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                                 </h3>
                                 <p class="font-regular text-sm">{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="font-semibold text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</b></p>
                                 <p class="font-semibold text-sm mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
@@ -232,7 +232,7 @@
                     <div v-show="page.tab == 4">
                         <h3 class="text-2xl mb-4 mt-6">
                             {{ __('Mint settings') }}
-                            <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/95tJuaWhE6g')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+                            <x-blue-button href="#" class="ml-6 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/U5hdZk_5T2c')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
                         </h3>
                         <p class="font-regular text-sm mb-4">{{ __('Here you can customize your mint page. Add SEO to your page and customize the design.') }}</p>
 

@@ -233,6 +233,10 @@ if (document.getElementById('app')) {
                 })
 
                 this.resetButtonLoader()
+            },
+            openYouTubeModal: function(url) {
+                this.modalToggle(true)
+                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }
     });

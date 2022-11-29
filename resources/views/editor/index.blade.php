@@ -11,6 +11,7 @@
                 <color-picker v-model="theme.text" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Text</span>
                 <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Edit background</x-gray-button>
             </div>
+            <x-blue-button href="#" class="align-middle !rounded-full !px-4 !py-1 !text-xs mr-2 !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/pNR-FvMcvGo')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
             <x-link-button href="#" class="!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</x-link-button>
         </div>
     </div>

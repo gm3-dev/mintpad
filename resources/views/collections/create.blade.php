@@ -8,7 +8,11 @@
                 <form method="POST" action="{{ route('collections.store') }}" enctype="multipart/form-data">
                     <div class="text-center mb-10">
                         <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
-                        <h2 class="text-3xl text-center mb-1">{{ __('Create NFT collection') }}</h2>
+                        <h2 class="text-3xl text-center mb-1">
+                            {{ __('Create NFT collection') }}
+                        </h2>
+                        <x-blue-button href="#" class="absolute right-0 top-0 align-middle !rounded-full !px-4 !py-1 !text-xs" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/NtpD1_uUXEo')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle">{{ __('Watch tutorial') }}</span></x-blue-button>
+
                         <p class="text-center mb-5">{{ __('This is the start of your NFT collection.') }}</p>
                     </div>
 
