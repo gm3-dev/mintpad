@@ -12,7 +12,7 @@ class ImportController extends Controller
 {
     public function index()
     {
-        $blockchains = ['Mainnets' => [], 'Testnets' => []];
+        $blockchains = [];
         foreach (config('blockchains') as $blockchain) {
             if ($blockchain['chain'] == 'evm') {
                 $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';

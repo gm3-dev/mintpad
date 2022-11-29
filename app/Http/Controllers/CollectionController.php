@@ -19,7 +19,6 @@ class CollectionController extends Controller
     public function index()
     {
         $collections = Collection::where('user_id', Auth::user()->id)->get();
-        // $collections = [];
         return view('collections.index')->with(compact('collections'));
     }
 
@@ -30,10 +29,14 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        $blockchains = ['Mainnets' => [], 'Testnets' => []];
+        $blockchains = [];
         foreach (config('blockchains') as $blockchain) {
             $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';
-            $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
+            if (config('app.env') != 'production') {
+                $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
+            } elseif ($blockchain['testnet'] == false) {
+                $blockchains[$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
+            }
         }
         return view('collections.create')->with(compact('blockchains'));
     }

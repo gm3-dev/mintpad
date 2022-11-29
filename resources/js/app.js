@@ -147,7 +147,7 @@ if (document.getElementById('app')) {
 
                 // Collection pages
                 if (this.page.name == 'collections.create') {
-                    this.collection.chain_id = this.wallet.network.id
+                    // this.collection.chain_id = this.wallet.network.id
                     this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
 
                 } else if (this.page.name == 'collections.edit') {
