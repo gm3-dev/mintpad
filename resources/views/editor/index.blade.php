@@ -155,7 +155,8 @@
                 <img :src="collection.logo" class="inline-block w-auto max-h-40" />
             </div>
             <label v-else for="upload-logo" class="block my-10 text-mintpad-300">
-                <p class="font-regular text-sm text-mintpad-300 mb-2">Uploads are restricted to {{ config('resources.logo.max') }} KB and jpg, jpeg and png.</p>
+                <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.logo.max') }} KB and jpg, jpeg and png.</p>
+                <p class="font-regular text-sm text-mintpad-300 mb-2">This logo will be resized to an image with a width of {{ config('resources.logo.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
                 <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
@@ -178,7 +179,8 @@
                 <img :src="collection.background" class="inline-block w-auto max-h-40" />
             </div>
             <label v-else for="upload-background" class="block my-10 text-mintpad-300">
-                <p class="font-regular text-sm text-mintpad-300 mb-2">Uploads are restricted to {{ config('resources.background.max') }} KB and jpg, jpeg and png.</p>
+                <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.background.max') }} KB and jpg, jpeg and png.</p>
+                <p class="font-regular text-sm text-mintpad-300 mb-2">This background will be resized to an image with a width of {{ config('resources.background.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
                 <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
