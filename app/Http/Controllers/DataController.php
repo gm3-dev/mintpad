@@ -8,6 +8,14 @@ class DataController extends Controller
 {
     public function blockchains()
     {
-        return response()->json(config('blockchains'));
+        $blockchains = [];
+        foreach (config('blockchains') as $blockchain) {
+            if (config('app.env') != 'production') {
+                $blockchains[$blockchain['id']] = $blockchain;
+            } elseif ($blockchain['testnet'] == false) {
+                $blockchains[$blockchain['id']] = $blockchain;
+            }
+        }
+        return response()->json($blockchains);
     }
 }

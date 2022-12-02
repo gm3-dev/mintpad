@@ -102,7 +102,7 @@ export default {
         },
         validateMatchingBlockchains: async function(chainID) {
             const blockchain = this.blockchains[chainID]
-            if (!blockchain || !blockchain.wallet.includes(this.wallet.name)) {
+            if (!blockchain || (blockchain && !blockchain.wallet.includes(this.wallet.name))) {
                 return 'wallet'
             } else if (chainID != this.wallet.network.id && this.wallet.name == 'metamask') {
                 return 'chain'

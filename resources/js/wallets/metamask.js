@@ -130,7 +130,7 @@ export default {
             if (chainID && this.blockchains[chainID]) {
                 this.wallet.network = this.blockchains[chainID]
             } else {
-                this.wallet.network = this.blockchains[1]
+                this.wallet.network = {id: chainID}
             }
         }
     }

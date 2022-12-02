@@ -44,6 +44,6 @@ export default {
             if (this.wallet.account) {
                 $('#user-address > button').text(this.userAddressShort).data('address', this.wallet.account).removeClass('hidden')
             }
-        },
+        }
     }
 }
