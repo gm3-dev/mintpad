@@ -22,11 +22,7 @@ const tailwindcss = require('tailwindcss');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/mint.js', 'public/js')
-    .js('resources/js/editor.js', 'public/js')
-    .js('resources/js/guest.js', 'public/js')
-    .js('resources/js/admin.js', 'public/js')
+mix.js('resources/js/guest.js', 'public/js')
     .vue()
     .sass('resources/sass/app.scss', 'public/css')
     .options({
