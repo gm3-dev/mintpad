@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Slack;
 use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,8 @@ class CollectionController extends Controller
         if (! File::exists($public)) {
             File::makeDirectory($public, 0775, true);
         }
+
+        Slack::send('#collections', '`'.$collection->name . '` added to Mintpad!');
 
         return response()->json($collection, 200);
     }

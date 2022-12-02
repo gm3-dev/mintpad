@@ -83,7 +83,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        Slack::send('#registrations', $user->name . ' joined Mintpad!');
+        Slack::send('#registrations', '`'.$user->name . '` joined Mintpad!');
 
         return redirect(RouteServiceProvider::HOME);
     }
