@@ -41,17 +41,17 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'country' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'postalcode' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ];
 
         // Validate company info
         if ($request->has('is_company')) {
             $rules['company_name'] = ['required', 'string', 'max:255'];
             $rules['vat_id'] = ['required', 'string', 'max:255'];
-            $rules['country'] = ['required', 'string', 'max:255'];
-            $rules['city'] = ['required', 'string', 'max:255'];
-            $rules['state'] = ['required', 'string', 'max:255'];
-            $rules['postalcode'] = ['required', 'string', 'max:255'];
-            $rules['address'] = ['required', 'string', 'max:255'];
         }
 
         $request->validate($rules, [

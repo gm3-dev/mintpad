@@ -22,6 +22,36 @@
                         <x-label for="email" :value="__('Email')" />
                         <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" disabled />
                     </div>
+                    <!-- Country -->
+                    <div>
+                        <x-label for="country" :value="__('Country')" class="relative is-required" />
+                        <x-select id="country" class="block mt-1 !w-full" name="country" :selected="old('country', $user->country)" :options="$countries"></x-select>
+                    </div>
+                    <!-- City -->
+                    <div>
+                        <x-label for="city" :value="__('City')" class="relative is-required" />
+                        <x-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $user->city)" required />
+                    </div>
+                    <!-- State/Province -->
+                    <div>
+                        <x-label for="state" :value="__('State/Province')" class="relative is-required" />
+                        <x-input id="state" class="block mt-1 w-full" type="text" name="state" :value="old('state', $user->state)" required />
+                    </div>
+                    <!-- Postal code -->
+                    <div>
+                        <x-label for="postalcode" :value="__('Postal code')" class="relative is-required" />
+                        <x-input id="postalcode" class="block mt-1 w-full" type="text" name="postalcode" :value="old('postalcode', $user->postalcode)" required />
+                    </div>
+                    <!-- Streetaddress -->
+                    <div>
+                        <x-label for="address" :value="__('Street address')" class="relative is-required" />
+                        <x-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address', $user->address)" required />
+                    </div>
+                    <!-- Street address 2 -->
+                    <div>
+                        <x-label for="address2" :value="__('Street address 2')" />
+                        <x-input id="address2" class="block mt-1 w-full" type="text" name="address2" :value="old('address2', $user->address2)" />
+                    </div>
                 </div>
 
                 <!-- Is company -->
@@ -42,36 +72,6 @@
                     <div>
                         <x-label for="vat_id" :value="__('VAT ID number')" class="relative is-required" />
                         <x-input id="vat_id" class="block mt-1 w-full" type="text" name="vat_id" :value="old('vat_id', $user->vat_id)" />
-                    </div>
-                    <!-- Country -->
-                    <div>
-                        <x-label for="country" :value="__('Country')" class="relative is-required" />
-                        <x-select id="country" class="block mt-1 !w-full" name="country" :selected="old('country', $user->country)" :options="$countries"></x-select>
-                    </div>
-                    <!-- City -->
-                    <div>
-                        <x-label for="city" :value="__('City')" class="relative is-required" />
-                        <x-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $user->city)" />
-                    </div>
-                    <!-- State/Province -->
-                    <div>
-                        <x-label for="state" :value="__('State/Province')" class="relative is-required" />
-                        <x-input id="state" class="block mt-1 w-full" type="text" name="state" :value="old('state', $user->state)" />
-                    </div>
-                    <!-- Postal code -->
-                    <div>
-                        <x-label for="postalcode" :value="__('Postal code')" class="relative is-required" />
-                        <x-input id="postalcode" class="block mt-1 w-full" type="text" name="postalcode" :value="old('postalcode', $user->postalcode)" />
-                    </div>
-                    <!-- Streetaddress -->
-                    <div>
-                        <x-label for="address" :value="__('Street address')" class="relative is-required" />
-                        <x-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address', $user->address)" />
-                    </div>
-                    <!-- Street address 2 -->
-                    <div>
-                        <x-label for="address2" :value="__('Street address 2')" />
-                        <x-input id="address2" class="block mt-1 w-full" type="text" name="address2" :value="old('address2', $user->address2)" />
                     </div>
                 </div>
 
