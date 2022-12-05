@@ -29,6 +29,14 @@
                     @endforeach
                 </div>
             </div>
+
+            <div class="p-6 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100">
+                <h3 class="text-xl text-center mb-4 font-semibold">Users</h3>
+                <div class="flex flex-wrap">
+                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>Total</p></div>
+                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>{{ $users }}</p></div>
+                </div>
+            </div>
         </div>
     </div>
 </x-admin-layout>
