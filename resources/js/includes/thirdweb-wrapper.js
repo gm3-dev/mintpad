@@ -13,7 +13,7 @@ export default {
                 primary_sale_recipient: this.wallet.account, // primary sales
                 fee_recipient: this.wallet.account, // royalties address
                 seller_fee_basis_points: this.collection.royalties * 100, // royalties address
-                platform_fee_recipient: '0x892a99573583c6490526739bA38BaeFae10a84D4', // platform fee address
+                platform_fee_recipient: process.env.MIX_WALLET, // platform fee address
                 platform_fee_basis_points: 500, // platform fee (5%)
                 totalSupply: this.collection.totalSupply // Solana only
             }
