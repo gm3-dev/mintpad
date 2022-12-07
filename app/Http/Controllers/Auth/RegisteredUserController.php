@@ -22,7 +22,9 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        $countries = config('countries');
+        $countries = collect(config('countries'))->map(function ($country) {
+            return $country['full'];
+        });
         return view('auth.register')->with(compact('countries'));
     }
 

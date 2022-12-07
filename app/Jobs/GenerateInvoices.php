@@ -59,20 +59,25 @@ class GenerateInvoices implements ShouldQueue
         }
 
         if (Moneybird::administrationIsValid()) {
-            $vat = 371047370954115028; // 21% BTW
-
             foreach ($invoices as $address => $invoice) {
                 $collection = Collection::where('address', $address)->first();
 
                 if ($collection) {
                     $user = $collection->user;
+                    $country = config('countries.'.$user->country);
+
+                    // Set vat ID
+                    if ($country['eu'] == false) {
+                        $vat = config('moneybird.vat.other'); // Product buiten EU (btw verlegd)
+                    } else {
+                        $vat = config('moneybird.vat.eu'); // Product binnen EU (btw verlegd)
+                    }
 
                     $details = collect();
                     $details->push(['amount' => 1, 'price' => $invoice['amount'], 'description' => $collection->name .':<br>address '.$collection->address, 'tax_rate_id' => $vat]);
                 
                     $invoice = Moneybird::createSalesInvoice($user, $details);
                     if ($invoice['id']) {
-                        dump($invoice);
                         Moneybird::sendSalesInvoice($invoice['id']);
                         Moneybird::createSalesInvoicePayment($invoice);
                     }

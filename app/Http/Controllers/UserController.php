@@ -20,7 +20,9 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        $countries = config('countries');
+        $countries = collect(config('countries'))->map(function ($country) {
+            return $country['full'];
+        });
 
         return view('users.profile')->with(compact('user', 'countries'));
     }
