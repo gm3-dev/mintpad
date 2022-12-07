@@ -153,20 +153,20 @@ export default {
 
             if (this.collection.chain == 'evm') {
                 for (var i = 0; i < claimConditions.length; i++) {
-                    var claimCondition = claimConditions[i]
+                    var cc = claimConditions[i]
                     var nextIndex = i + 1
-                    var nextClaimCondition = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
+                    var nextCc = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
                     output.push({
                         id: nextIndex,
-                        name: data.phases[nextIndex].name ? data.phases[nextIndex].name : 'Phase '+nextIndex,
-                        startTime: this.formateDatetimeLocal(claimCondition.startTime),
-                        endTime: nextClaimCondition ? this.formateDatetimeLocal(nextClaimCondition.startTime) : false,
-                        price: this.hexToValue(claimCondition.price._hex),
-                        maxClaimableSupply: claimCondition.maxClaimableSupply == 'unlimited' ? 0 : parseInt(claimCondition.maxClaimableSupply),
-                        maxClaimablePerWallet: claimCondition.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(claimCondition.maxClaimablePerWallet),
-                        // waitInSeconds: parseInt(claimCondition.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
-                        whitelist: claimCondition.snapshot == undefined || claimCondition.snapshot.length == 0 ? 0 : 1,
-                        snapshot: claimCondition.snapshot ?? [],
+                        name: cc.metadata != undefined && typeof cc.metadata.name !== 'undefined' ? cc.metadata.name : 'Phase '+nextIndex,
+                        startTime: this.formateDatetimeLocal(cc.startTime),
+                        endTime: nextCc ? this.formateDatetimeLocal(nextCc.startTime) : false,
+                        price: this.hexToValue(cc.price._hex),
+                        maxClaimableSupply: cc.maxClaimableSupply == 'unlimited' ? 0 : parseInt(cc.maxClaimableSupply),
+                        maxClaimablePerWallet: cc.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(cc.maxClaimablePerWallet),
+                        // waitInSeconds: parseInt(cc.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
+                        whitelist: cc.snapshot == undefined || cc.snapshot.length == 0 ? 0 : 1,
+                        snapshot: cc.snapshot ?? [],
                         modal: false,
                         countdown: ''
                     })

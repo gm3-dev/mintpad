@@ -205,6 +205,7 @@ if (document.getElementById('app')) {
                         this.collection.nfts = await this.contract.getAll({count: 8})
                     } catch (error) {
                         resportError(error)
+                        console.log('error', error)
                         this.setErrorMessage('Contract could not be loaded, please try again.', true)
                     }
 
@@ -244,16 +245,14 @@ if (document.getElementById('app')) {
                         // snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
                     claimPhases.push(newClaimPhase)
-                    formData['phase'+(i+1)] = claimPhase.name
                 }
-
-                console.log(claimPhases)
 
                 try {
                     await this.contract.claimConditions.set(claimPhases)
-                    await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
-                        this.validateTabStatus()
-                    })
+                    this.validateTabStatus()
+                    // await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
+                    //     this.validateTabStatus()
+                    // })
                     
                     this.setSuccessMessage('Claim phases updated')
                 } catch(error) {

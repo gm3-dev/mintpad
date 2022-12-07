@@ -115,11 +115,6 @@ class CollectionController extends Controller
         $this->authorize('view', $collection);
 
         $collection->token = config('blockchains.'.$collection->chain_id.'.token');
-        $collection->phases = [
-            1 => ['name' => $collection->getMeta('phases.1.name')],
-            2 => ['name' => $collection->getMeta('phases.2.name')],
-            3 => ['name' => $collection->getMeta('phases.3.name')]
-        ];
 
         // SEO
         $image = $collection->getMeta('seo.image', false);
@@ -197,12 +192,7 @@ class CollectionController extends Controller
         if ($request->ajax()) {
             $this->authorize('update', $collection);
 
-            $data = $request->all();
-            $collection->setMeta('phases.1.name', $data['phase1'] ?? '');
-            $collection->setMeta('phases.2.name', $data['phase2'] ?? '');
-            $collection->setMeta('phases.3.name', $data['phase3'] ?? '');
-
-            $collection->save();
+            //
 
             return response()->json($collection, 200);
         }
