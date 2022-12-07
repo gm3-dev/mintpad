@@ -33,7 +33,7 @@ Route::domain(config('app.url'))->group(function () {
         /**
          * Admin routes
          */
-        Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
+        Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'password.confirm']], function () {
             Route::name('admin.')->group(function () {
                 // Dashboard
                 Route::get('/', [AdminDashboardController::class, 'index']);
