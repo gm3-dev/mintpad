@@ -9,7 +9,7 @@ export function initSentry(Vue) {
             integrations: [
                 new BrowserTracing({
                     // routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-                    tracingOrigins: ["mintpad.tnwebsolutions.nl", "mplp.tnwebsolutions.nl", "beta.mintpad.co", /^\//],
+                    tracingOrigins: ["app.mintpad.co", "on.mintpad.co", "beta.mintpad.co", /^\//],
                 }),
             ],
             // Set tracesSampleRate to 1.0 to capture 100%
