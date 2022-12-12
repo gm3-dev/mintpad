@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/vue";
 import { BrowserTracing } from "@sentry/tracing";
 
 export function initSentry(Vue) {
-    if (process.env.MIX_SENTRY_ENABLED == 'true') {
+    if (process.env.MIX_SENTRY_LARAVEL_DSN) {
         Sentry.init({
             Vue,
             dsn: process.env.MIX_SENTRY_LARAVEL_DSN,
@@ -21,7 +21,7 @@ export function initSentry(Vue) {
 }
 
 export function resportError(error) {
-    if (process.env.MIX_SENTRY_ENABLED == 'true') {
+    if (process.env.MIX_SENTRY_LARAVEL_DSN) {
         Sentry.captureException(error)
     }
 }
