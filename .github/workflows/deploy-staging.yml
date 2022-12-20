@@ -1,0 +1,14 @@
+name: Deploy to staging
+run-name: Deploy ${{ github.sha }} to forge by @${{ github.actor }}
+on:
+  push:
+    branches:
+      - 'staging'
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - name: curl
+      uses: wei/curl@master
+      with:
+        args: https://forge.laravel.com/servers/606396/sites/1800818/deploy/http?token=xdejDJ6m7aPosGeOsse6nFyP0UuzBCH7ow3c1p7J
