@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div id="app" class="main-container min-h-screen bg-white dark:bg-slate-900" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
+        <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-slate-900" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
             @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">
@@ -27,27 +27,12 @@
             @endisset
 
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
             <main id="app-content" class="hidden">
                 <div class="py-12">
                     {{ $slot }}
                 </div>
-                <div v-if="modal.show" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                    <div class="fixed z-10 inset-0 overflow-y-auto">
-                        <div class="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0">
-                            <div class="relative bg-white dark:bg-slate-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-3xl sm:w-full">
-                                <div class="bg-white dark:bg-slate-900 p-14">
-                                    <a href="#" class="absolute right-4 top-3 text-3xl text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalToggle(false)"><i class="fas fa-times"></i></a>
-                                    <div class="overflow-y-auto">
-                                        <h3 v-if="modal.title" v-html="modal.title" class="text-2xl mb-4 mt-6"></h3>
-                                        <div v-html="modal.content"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-modal-vue></x-modal-vue>
                 @include('partials.messages')
             </main>
         </div>

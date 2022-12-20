@@ -7,11 +7,11 @@
 
     <div id="custom-style-container" class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="col-span-1 lg:col-span-2">
-            <div v-if="!wallet.account" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-6 mb-4 text-center">
+            <div v-if="!wallet.account" class="border border-primary-600 bg-white rounded-lg p-4 py-6 mb-4 text-center">
                 <p class="text-sm mb-1">Your wallet is not connected.</p>
                 <x-button href="#" class="!py-1 !px-3" @click.prevent="connectMetaMask">Connect MetaMask</x-button>
             </div>
-            <div v-else-if="hasValidChain !== true" class="border-2 border-primary-600 bg-white rounded-lg p-4 py-6 mb-4 text-center">
+            <div v-else-if="hasValidChain !== true" class="border border-primary-600 bg-white rounded-lg p-4 py-6 mb-4 text-center">
                 <p class="text-sm mb-1">Your wallet is not connected to the correct blockchain.</p>
                 <x-button href="#" class="!py-1 !px-3" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button>
             </div>

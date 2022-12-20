@@ -1,7 +1,7 @@
 <x-editor-layout>
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
-    <div class="fixed z-40 left-0 top-0 p-2 w-full bg-white border-b-2 border-mintpad-200">
+    <div class="fixed z-40 left-0 top-0 p-2 w-full bg-white border-b border-mintpad-200">
         <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0 flex">
             <div class="grow">
                 <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Primary</span>
@@ -20,7 +20,7 @@
         <div class="lg:col-span-2 text-center p-3">
             <a href="#" @click.prevent="addLogo" class="inline-block">
                 <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
-                <div v-else class="rounded-lg px-6 py-2 border-2 border-gray-300 hover:border-gray-500 hover:text-gray-500 ">
+                <div v-else class="rounded-lg px-6 py-2 border border-gray-300 hover:border-gray-500 hover:text-gray-500 ">
                     <i class="far fa-image text-5xl text-gray-500 mb-1"></i>
                     <p class="text-sm text-gray-500">add logo</p>
                 </div>
@@ -158,7 +158,7 @@
                 <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.logo.max') }} KB and jpg, jpeg and png.</p>
                 <p class="font-regular text-sm text-mintpad-300 mb-2">This logo will be resized to an image with a width of {{ config('resources.logo.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
+                <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete logo" v-tippy>
@@ -182,7 +182,7 @@
                 <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.background.max') }} KB and jpg, jpeg and png.</p>
                 <p class="font-regular text-sm text-mintpad-300 mb-2">This background will be resized to an image with a width of {{ config('resources.background.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" class="inline-block p-6 w-full border-2 border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
+                <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete background" v-tippy>

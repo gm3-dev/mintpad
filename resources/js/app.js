@@ -74,7 +74,7 @@ if (document.getElementById('app')) {
     Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
     Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
     Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
-    Vue.component('tab-status', require('./components/TabStatus.vue').default);
+    Vue.component('status-button', require('./components/StatusButton.vue').default);
 
     new Vue({
         el: '#app',
@@ -111,7 +111,8 @@ if (document.getElementById('app')) {
             page: {
                 name: '',
                 tab: 0,
-            }
+            },
+            validation: {}
         },
         async mounted() {
             if ($('#collectionID').length) {
@@ -139,6 +140,20 @@ if (document.getElementById('app')) {
         methods: {
             changeEditTab: async function(tab) {
                 this.page.tab = tab
+            },
+            nextEditTab: async function() {
+                if (this.page.tab == 4) {
+                    //
+                } else {
+                    this.page.tab++
+                }
+            },
+            previousEditTab: async function() {
+                if (this.page.tab == 1) {
+                    //
+                } else {
+                    this.page.tab--
+                }
             },
             setPage: function() {
                 this.page.name = this.$el.getAttribute('data-page')
@@ -298,6 +313,8 @@ if (document.getElementById('app')) {
                 this.claimPhases[index].snapshot = []
             },
             toggleWhitelistModal: function(index, state) {
+                console.log('index', index)
+                console.log('state', state)
                 this.claimPhases[index].modal = state
             },
             updateMetadata: async function(e) {
@@ -582,7 +599,8 @@ if (document.getElementById('app')) {
             },
             openYouTubeModal: function(url) {
                 this.modalToggle(true)
-                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
+                this.modalTitle('Tutorial video')
+                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="560" height="315" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }
     })

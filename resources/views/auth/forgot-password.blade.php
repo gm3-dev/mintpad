@@ -1,10 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/" class="relative text-4xl font-jpegdev">
-                mintpad
-                @include('partials.beta')
-            </a>
+            @include('partials.logo')
         </x-slot>
 
         <div class="mb-4 text-sm text-mintpad-300">
@@ -24,7 +21,7 @@
             <div>
                 <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                <x-input id="email" class="mb-4" type="email" name="email" :value="old('email')" required autofocus />
             </div>
 
             <div class="mt-4">

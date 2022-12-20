@@ -1,8 +1,8 @@
 <template>
     <div>
-        <a href="#" class="text-lg p-1 mr-2 hover:text-primary-600" @click.prevent="toggleDarkmode">
-            <i v-if="dark" class="far fa-sun text-white hover:text-primary-600"></i>
-            <i v-else class="far fa-moon"></i>
+        <a href="#" class="text-lg p-1 mr-4 rounded-md border border-mintpad-200 text-mintpad-700 hover:text-primary-600" @click.prevent="toggleDarkmode">
+            <i v-if="dark" class="fa fa-sun text-white hover:text-primary-600"></i>
+            <i v-else class="pl-1 pt-1 pb-1 fa-solid fa-moon"></i>
         </a>
     </div>
 </template>

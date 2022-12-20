@@ -8,29 +8,35 @@ module.exports = {
         "./resources/**/*.vue",
         "./resources/js/**/*.js"
     ],
+    safelist: [
+        'addon-left', 'addon-right'
+    ],
     darkMode: 'class',
     theme: {
         extend: {
+            backgroundImage: {
+                'waves': "url('/images/background-2.jpg')",
+            },
             padding: {
                 'full': '100%',
             },
             colors: {
                 'primary': {
-                    100: '#f9fcff',
-                    200: '#f0f4fe',
+                    100: '#f8f9ff', // new
+                    200: '#E0E7FF', // new
                     300: '#cce2fc',
                     400: '#eef2fd',
-                    600: '#0071f9',
+                    600: '#0077FF',
                     700: '#0265dd',
                 },
                 'mintpad': {
-                    100: '#e8e8e8',
-                    200: '#e1e5e8',
+                    100: '#FAFAFA', // new
+                    200: '#ECEDEF', // new
                     300: '#656f77',
-                    400: '#3b444c',
+                    400: '#8C98A9', // new
                     500: '#05121b',
                     600: '#000000',
-                    700: '#182235',
+                    700: '#2E384D', // new
                 }
             },
             fontFamily: {
@@ -39,7 +45,8 @@ module.exports = {
                 semibold: ['Graphik-Semibold'],
                 medium: ['Graphik-Medium'],
                 regular: ['Graphik-Regular'],
-                jpegdev: ['JPEGDEVFONTBlack'],
+                jpegdev: ['JPEGDEVFONT-Black'],
+                jpegdevmd: ['JPEGDEVFONT-Medium']
             },
         },
     },

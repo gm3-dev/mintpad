@@ -21,7 +21,7 @@
             <div class="password relative">
                 <x-label for="password" :value="__('Password')" />
                 @include('partials.show-password')
-                <x-input id="password" class="block mt-1 w-full" v-bind:type="showPassword ? 'text' : 'password'" name="password" required autocomplete="current-password" />
+                <x-input id="password" v-bind:type="showPassword ? 'text' : 'password'" name="password" required autocomplete="current-password" />
             </div>
 
             <div class="flex items-center justify-end mt-4">

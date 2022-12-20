@@ -22,7 +22,7 @@
         <script src="{{ mix('js/guest.js') }}" defer></script>
     </head>
     <body>
-        <div id="guest-container" class="font-sans antialiased">
+        <div id="guest-container" class="font-sans antialiased bg-waves bg-cover">
             {{ $slot }}
         </div>
     </body>

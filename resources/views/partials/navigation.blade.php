@@ -1,14 +1,11 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b-2 border-mintpad-200 dark:border-gray-600 p-2">
+<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b border-mintpad-200 dark:border-gray-600 p-2">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center text-4xl font-jpegdev dark:text-white">
-                    <a href="{{ route('collections.index') }}" class="relative">
-                        mintpad
-                        @include('partials.beta')
-                    </a>
+                    @include('partials.logo')
                 </div>
 
                 <!-- Navigation Links -->
@@ -29,20 +26,20 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <wallet-manager></wallet-manager>
 
+                <dark-mode></dark-mode>
+
                 <dropdown v-if="wallet.account" refname="dropdown-1">
                     <template v-slot:button>
-                        <div><img :src="'/images/'+wallet.name+'.png'" width="26px" class="inline-block mr-1" /> <i class="fas fa-chevron-down mr-2"></i></div>
+                        <div><img :src="'/images/'+wallet.name+'.png'" width="30px" class="inline-block mr-4" /></div>
                     </template>
                     <template v-slot:links>
                         <dropdown-link href="#" @click.prevent.native="disconnectWallet">Disconnect</dropdown-link>
                     </template>
                 </dropdown>
 
-                <dark-mode></dark-mode>
-
                 <dropdown refname="dropdown-2">
                     <template v-slot:button>
-                        <button class="flex items-center text-mintpad-300 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
+                        <button class="flex items-center text-mintpad-700 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
                             <div><i class="fas fa-user-circle text-3xl"></i></div>
 
                             <div class="ml-1">
@@ -55,8 +52,7 @@
                     <template v-slot:links>
                         @if (Auth::user())
                             <div class="px-4 py-2 text-xs border-b border-gray-200 dark:border-gray-600">
-                                <div class="text-sm text-gray-800 dark:text-white">{{ Auth::user()->name }}</div>
-                                <div class="text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
+                                <div class="text-sm text-mintpad-700 dark:text-white">{{ Auth::user()->name }}</div>
                             </div>
                         @endif
 
@@ -72,7 +68,7 @@
                             {{ __('Invoices') }}
                         </dropdown-link>
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}" class="border-t rounded-b-md border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-mintpad-700">
+                        <form method="POST" action="{{ route('logout') }}" class="rounded-b-md bg-gray-100 dark:bg-mintpad-700">
                             @csrf
                             <dropdown-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
@@ -98,7 +94,6 @@
                 @if (Auth::user())
                     <div class="px-4">
                         <div class="font-medium text-base text-gray-800 dark:text-white">{{ Auth::user()->name }}</div>
-                        <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
                     </div>
                 @endif
 

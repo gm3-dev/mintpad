@@ -1,1 +1,1 @@
-<span class="absolute text-white text-xs bg-primary-600 rounded right-0 -bottom-3 px-2 py-0">BETA</span>
+<span class="absolute text-white text-xs bg-primary-600 rounded -right-1 -bottom-3 px-2 py-0">BETA</span>

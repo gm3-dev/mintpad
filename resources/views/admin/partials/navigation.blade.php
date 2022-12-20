@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b-2 border-mintpad-200 pb-2">
+<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b border-mintpad-200 pb-2">
     <!-- Admin bar -->
     <div class="w-full bg-primary-600 text-center text-sm">
         <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
@@ -105,7 +105,6 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-mintpad-300">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

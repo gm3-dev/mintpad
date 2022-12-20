@@ -19,12 +19,23 @@
     font-family: Graphik-Regular; src: url('/fonts/Graphik-Regular.woff2');
 }
 @font-face { 
-    font-family: JPEGDEVFONTBlack; src: url('/fonts/JPEGDEVFONTBlack.woff2');
+    font-family: JPEGDEVFONT-Black; src: url('/fonts/JPEGDEVFONT-Black.woff2');
+}
+@font-face { 
+    font-family: JPEGDEVFONT-Medium; src: url('/fonts/JPEGDEVFONT-Medium.woff2');
 }
 
 @layer base {
     html {
-        @apply text-mintpad-500;
+        @apply text-mintpad-400 font-regular;
+
+        /* Input addon */
+        .addon-right {
+            @apply border-r-0 rounded-r-none flex-1;
+        }
+        .addon-left {
+            @apply border-l-0 rounded-l-none flex-1;
+        }
         
         &.dark {
 			@apply text-gray-100;
@@ -41,11 +52,36 @@
             }
 		}
 
-        h2, h3 {
-            @apply text-mintpad-500;
+        /* Global elements */
+        h1 {
+            @apply text-mintpad-700 text-3xl mb-4 font-jpegdevmd;
+        }
+        h2 {
+            @apply text-mintpad-700 text-xl mb-4 font-jpegdevmd;
+        }
+        h3 {
+            @apply text-mintpad-700 text-lg mb-4 font-jpegdevmd;
         }
         p {
-            @apply text-mintpad-300;
+            @apply text-mintpad-400 mb-1 text-sm font-regular;
+        }
+        label {
+            @apply font-jpegdevmd;
+        }
+
+        /* Warning */
+        span.warning input {
+            @apply border border-red-500;
+        }
+        span.warning::after {
+            content: '\f06a';
+            font: var(--fa-font-solid);
+            position: absolute;
+            right: 10px;
+            top: 0;
+            font-size: 18px;
+            line-height: 46px;
+            color: theme('colors.red.500');
         }
 
         .tinymce-html {
@@ -129,6 +165,7 @@
     right: -7px;
 }
 
+/* Vue Tippy */
 .tippy-popper .tippy-content {
     text-align: left;
 }

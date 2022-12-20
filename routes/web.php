@@ -10,9 +10,9 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\MintController;
-use App\Http\Controllers\GeneratorController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ValidationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,9 +49,7 @@ Route::domain(config('app.url'))->group(function () {
             });
         });
         
-        /**
-         * Customer routes
-         */
+        // Customer
         Route::resource('collections', CollectionController::class);
         Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
         Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
@@ -67,19 +65,15 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
         Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
-        // NFT generator
-        Route::get('generator', [GeneratorController::class, 'index'])->name('generator.index');
-        Route::post('generator/create', [GeneratorController::class, 'create'])->name('generator.create');
-        Route::post('generator/upload', [GeneratorController::class, 'upload'])->name('generator.upload');
-        Route::get('generator/download', [GeneratorController::class, 'download'])->name('generator.download');
-        Route::get('generator/status', [GeneratorController::class, 'status'])->name('generator.status');
-
         // Editor layout
         Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
 
         // Resources
         Route::post('resources/{collection}/upload', [ResourceController::class, 'upload'])->name('resources.upload');
         Route::delete('resources/{collection}/delete', [ResourceController::class, 'delete'])->name('resources.delete');
+
+        // Validation
+        Route::post('validate', [ValidationController::class, 'index'])->name('validate.index');
     });
 });
 
