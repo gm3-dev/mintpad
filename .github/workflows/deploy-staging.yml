@@ -11,4 +11,4 @@ jobs:
     - name: curl
       uses: wei/curl@master
       with:
-        args: https://forge.laravel.com/servers/606396/sites/1800818/deploy/http?token=xdejDJ6m7aPosGeOsse6nFyP0UuzBCH7ow3c1p7J
+        args: https://forge.laravel.com/servers/619584/sites/1835799/deploy/http?token=1Gp0IJVlNDIp7x0TTKdoMbTBC4pYVXDHAtOvJMr1
