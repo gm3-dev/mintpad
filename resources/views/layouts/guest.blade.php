@@ -19,10 +19,11 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
         <!-- Scripts -->
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
         <script src="{{ mix('js/guest.js') }}" defer></script>
     </head>
     <body>
-        <div id="guest-container" class="font-sans antialiased bg-waves bg-cover">
+        <div id="guest-container" class="font-sans antialiased bg-waves dark:bg-waves-dark bg-cover">
             {{ $slot }}
         </div>
     </body>

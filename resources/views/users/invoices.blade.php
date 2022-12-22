@@ -25,13 +25,13 @@
                                 <p>{{ __('You don\'t have any invoices yet.') }}</p>
                             </x-slot>
                         @else
-                            <x-box-row class="flex flex-wrap text-sm font-jpegdevmd">
+                            <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
                                 <div class="basis-1/5">{{ __('Month') }}</div>
                                 <div class="basis-3/5">{{ __('Collection name') }}</div>
                                 <div class="basis-1/5"></div>
                             </x-box-row>
                             @foreach ($invoices as $invoice)
-                                <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 font-medium">
+                                <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                                     <div class="basis-1/5">{{ date('F', strtotime($invoice['created_at'])) }}</div>
                                     <div class="basis-3/5">{{ $invoice['reference'] }}</div>
                                     <div class="basis-1/5 text-right">

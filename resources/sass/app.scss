@@ -36,11 +36,29 @@
         .addon-left {
             @apply border-l-0 rounded-l-none flex-1;
         }
+
+        .header-logo {
+            img {
+                @apply hidden;
+            }
+            .darkmode-off {
+                @apply inline-block;
+            }
+        }
         
         &.dark {
 			@apply text-gray-100;
 
-            h2, h3 {
+            .header-logo {
+                .darkmode-on {
+                    @apply inline-block;
+                }
+                .darkmode-off {
+                    @apply hidden;
+                }
+            }
+            
+            h1, h2, h3 {
                 @apply text-white;
             }
             p {

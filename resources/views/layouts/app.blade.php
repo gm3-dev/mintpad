@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-slate-900" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
+        <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
             @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">

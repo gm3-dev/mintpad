@@ -15,7 +15,8 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: {
-                'waves': "url('/images/background-2.jpg')",
+                'waves': "url('/images/background.jpg')",
+                'waves-dark': "url('/images/background-dark.jpg')",
             },
             padding: {
                 'full': '100%',
@@ -26,6 +27,7 @@ module.exports = {
                     200: '#E0E7FF', // new
                     300: '#cce2fc',
                     400: '#eef2fd',
+                    500: '#151E29',
                     600: '#0077FF',
                     700: '#0265dd',
                 },
@@ -37,6 +39,7 @@ module.exports = {
                     500: '#05121b',
                     600: '#000000',
                     700: '#2E384D', // new
+                    800: '#151E29', // new
                 }
             },
             fontFamily: {

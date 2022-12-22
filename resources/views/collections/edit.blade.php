@@ -153,11 +153,11 @@
                                             </x-modal>
                                         </div>
                                     </div>
+                                    <div v-if="claimPhases.length == 0">
+                                        <p class="">{{ __('No mint phases set yet.') }}</p>
+                                    </div>
                                 </x-slot>
                             </x-box>
-                            <div v-if="claimPhases.length == 0">
-                                <p class="">{{ __('No mint phases set yet.') }}</p>
-                            </div>
                             <div class="w-full text-center mb-4">
                                 <x-default-button href="#" @click.prevent="addClaimPhase"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add another mint phase</x-default-button>
                             </div>

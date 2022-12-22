@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b border-mintpad-200 dark:border-gray-600 p-2">
+<nav x-data="{ open: false }" class="bg-white dark:bg-mintpad-500 border-b border-mintpad-200 dark:border-mintpad-700 p-2">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -51,7 +51,7 @@
                     </template>
                     <template v-slot:links>
                         @if (Auth::user())
-                            <div class="px-4 py-2 text-xs border-b border-gray-200 dark:border-gray-600">
+                            <div class="px-4 py-2 text-xs border-b border-gray-200 dark:border-mintpad-700">
                                 <div class="text-sm text-mintpad-700 dark:text-white">{{ Auth::user()->name }}</div>
                             </div>
                         @endif

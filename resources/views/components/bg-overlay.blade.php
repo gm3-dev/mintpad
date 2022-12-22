@@ -1,1 +1,1 @@
-<div  {{ $attributes->merge(['class' => 'fixed z-40 inset-0 bg-gray-200 bg-opacity-50 transition-opacity']) }}></div>
+<div  {{ $attributes->merge(['class' => 'fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 transition-opacity']) }}></div>
