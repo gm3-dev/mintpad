@@ -11,7 +11,7 @@
                     <x-box class="text-left md:text-center p-12">
                         <h1>Let’s get started</h1>
                         <div v-if="!wallet.account">
-                            <p>You have to connect your wallet to start creating your collection.</p>
+                            <p class="mb-4">You have to connect your wallet to start creating your collection.</p>
                             <connect-wallet></connect-wallet>
                         </div>
                         <div v-else>
