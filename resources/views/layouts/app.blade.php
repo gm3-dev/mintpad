@@ -28,7 +28,13 @@
 
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
+            <x-bg-overlay id="app-loader-bg" class="hidden"></x-bg-overlay>
             <main id="app-content" class="hidden">
+                <div class="col-span-1 lg:col-span-2">
+                    <div v-if="hasValidChain !== true" class="bg-mintpad-200 p-2 mb-4 text-center">
+                        <p class="text-sm text-mintpad-700">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
+                    </div>
+                </div>
                 <div class="py-12">
                     {{ $slot }}
                 </div>

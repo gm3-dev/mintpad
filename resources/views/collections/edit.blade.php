@@ -8,15 +8,12 @@
             </div>
             <div v-else>
                 <div class="text-center mb-10">
-                    <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0">{{ __('Back') }}</x-gray-button>
                     <h1>{{ __('Manage NFT collection') }}</h1>
                     <p>{{ __('You can adjust the settings of your collection here.') }}</p>
                 </div>
 
-                @include('partials.wallet-messages')
-
                 <div v-if="hasValidChain === true">
-                    <div class="w-full mb-12 text-center">
+                    <div class="w-full grid grid-cols-2 gap-4 sm:block mb-8 text-left sm:text-center">
                         <status-button @click.prevent.native="changeEditTab(1)" :label="'Settings'" :complete="tabs.settings"></status-button>
                         <status-button @click.prevent.native="changeEditTab(2)" :label="'Mint phases'" :complete="tabs.phases"></status-button>
                         <status-button @click.prevent.native="changeEditTab(3)" :label="'Upload collection'" :complete="tabs.collection"></status-button>
@@ -24,17 +21,17 @@
                     </div>
                     <div class="w-full mb-6 text-center">
                         <x-gray-button href="#" @click.prevent="previousEditTab" v-bind:class="{'!text-mintpad-400': page.tab == 1}">Previous step</x-gray-button>
-                        <h2 v-if="page.tab == 1" class="inline-block text-2xl mx-10 w-1/4">Settings</h2>
-                        <h2 v-if="page.tab == 2" class="inline-block text-2xl mx-10 w-1/4">Mint phases</h2>
-                        <h2 v-if="page.tab == 3" class="inline-block text-2xl mx-10 w-1/4">Upload collection</h2>
-                        <h2 v-if="page.tab == 4" class="inline-block text-2xl mx-10 w-1/4">Mint settings</h2>
+                        <h2 v-if="page.tab == 1" class="hidden sm:inline-block text-2xl w-1/4">Settings</h2>
+                        <h2 v-if="page.tab == 2" class="hidden sm:inline-block text-2xl w-1/4">Mint phases</h2>
+                        <h2 v-if="page.tab == 3" class="hidden sm:inline-block text-2xl w-1/4">Upload collection</h2>
+                        <h2 v-if="page.tab == 4" class="hidden sm:inline-block text-2xl w-1/4">Mint settings</h2>
                         <x-gray-button href="#" @click.prevent="nextEditTab" v-bind:class="{'!text-mintpad-400': page.tab == 4}">Next step</x-gray-button>
                     </div>
                     <div v-show="page.tab == 1">
                         <form method="POST" action="{{ route('collections.update', $collection->id) }}" enctype="multipart/form-data">
                             @method('PUT')
 
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="flex flex-col">
                                     <x-box class="flex-1 mb-4">
                                         <x-slot name="title">General Settings</x-slot>
@@ -142,15 +139,16 @@
                                                         <p v-for="wallet in phase.snapshot">@{{ wallet.address }}</p>
                                                     </div>
                                                     <div v-else>
-                                                        <label class="block mb-2 text-mintpad-300">
+                                                        <label class="block mb-4 text-mintpad-300">
                                                             <span class="sr-only">Choose File</span>
-                                                            <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="whitelist_file" />
+                                                            <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="whitelist_file" />
                                                         </label>
                                                         <p>{{ __('Upload a .CSV file. One wallet address per row.') }}</p>
                                                     </div>
                                                 </div>
-                                                <div v-if="phase.snapshot != 0" class="w-full text-right mt-4">
-                                                    <x-gray-button href="#" @click.prevent="resetWhitelist(index)">Reset list</x-gray-button>
+                                                <div v-if="phase.snapshot != 0" class="w-full mt-4">
+                                                    <x-gray-button href="#" @click.prevent="resetWhitelist(index)">Delete</x-gray-button>
+                                                    <x-button href="#" @click.prevent="toggleWhitelistModal(index, false)" class="ml-2">Save</x-button>
                                                 </div>
                                             </x-modal>
                                         </div>
@@ -176,20 +174,15 @@
 
                             <div class="w-full">
                                 <x-box class="mb-4">
-                                    <x-slot name="title">Add images to your collection</x-slot>
+                                    <x-slot name="title">Upload collection</x-slot>
                                     <x-slot name="tutorial">https://www.youtube.com/embed/U6C7a_gGc-4</x-slot>
                                     <x-slot name="content">
                                         <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
-                                        <p><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
-                                    </x-slot>
-                                </x-box>
-
-                                <x-box class="mb-4">
-                                    <x-slot name="title">Upload collection</x-slot>
-                                    <x-slot name="content">
-                                        <label class="block text-mintpad-300 mb-2">
+                                        <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
+    
+                                        <label class="block text-mintpad-300 mb-4">
                                             <span class="sr-only">Choose Files</span>
-                                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                                         </label>
                                         <p>{{ __('Your upload must contain images and JSON files.') }}</p>
 
@@ -208,8 +201,8 @@
                                 <x-slot name="content">
                                     <div class="grid grid-cols-4">
                                         <div v-for="preview in collection.previews">
-                                            <div class="p-1 text-sm rounded-lg">
-                                                <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="preview.image.src" />
+                                            <div class="p-1 text-sm rounded-md">
+                                                <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="preview.image.src" />
                                             </div>
                                         </div>
                                     </div>
@@ -230,7 +223,7 @@
                                         <p v-else>Total minted @{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</p>
                                         <div class="grid grid-cols-4 mt-2">
                                             <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
-                                                <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="nft.metadata.image" />
+                                                <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="nft.metadata.image" />
                                             </div>
                                         </div> 
                                     </div> 
@@ -281,7 +274,7 @@
                                         </div>
                                         <div v-else class="mb-4">
                                             <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>
-                                            <input v-else id="upload-logo" type="file" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-lg file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-lg file:text-sm file:text-center file:border-0" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
+                                            <input v-else id="upload-logo" type="file" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-md file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
                                         </div>
                                     </div>
                                 </div>

@@ -119,7 +119,7 @@ if (document.getElementById('app')) {
                     
                 } catch (error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.', true)
+                    this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
 
             }).catch((error) => {
@@ -262,10 +262,10 @@ if (document.getElementById('app')) {
                 try {
                     await this.contract.claim(this.mintAmount)
 
-                    this.setSuccessMessage('NFT minted!')
+                    this.setMessage('NFT minted!', 'success')
                 } catch (error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.', true)
+                    this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
 
                 this.resetButtonLoader()

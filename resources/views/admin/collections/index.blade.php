@@ -19,7 +19,7 @@
                         <div class="p-2 basis-4/12 font-semibold">{{ $collection->name }}</div>
                         <div class="p-2 basis-4/12 font-semibold">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
                         <div class="p-2 basis-6/12 text-right">
-                            <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm border-2 border-mintpad-200 hover:border-primary-600 px-3 py-1 text-mintpad-400 rounded-lg" v-tippy><i class="fas fa-copy mr-2 text-mintpad-300"></i>{{ shorten_address($collection->address, 5, 7) }}</button>
+                            <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm border-2 border-mintpad-200 hover:border-primary-600 px-3 py-1 text-mintpad-400 rounded-md" v-tippy><i class="fas fa-copy mr-2 text-mintpad-300"></i>{{ shorten_address($collection->address, 5, 7) }}</button>
                             <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2 !px-2">{{ __('Mint page') }}</x-blue-button>
                             <span v-if="this.wallet.network.id != {{ $collection->chain_id }}" content="You need to switch to {{ config('blockchains.'.$collection->chain_id.'.token') }}" v-tippy>
                                 <x-gray-button href="#" @click.prevent="switchBlockchainTo({{ $collection->chain_id }})" class="ml-2 !px-2 w-24">Switch</x-gray-button>
@@ -39,7 +39,7 @@
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
         <div class="fixed z-10 inset-0 overflow-y-auto">
             <div class="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0">
-                <div class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-6xl sm:w-full">
+                <div class="relative bg-white rounded-md text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-6xl sm:w-full">
                     <div class="bg-white p-8">
                         <a href="#" class="absolute right-4 top-3 text-3xl text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalToggle(false)"><i class="fas fa-times"></i></a>
                         <div class="overflow-y-auto">
@@ -53,7 +53,7 @@
                                 <p v-else>Total minted: <span class="text-mintpad-500">@{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</span></p>
                                 <div class="grid grid-cols-4 mt-2">
                                     <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
-                                        <img class="w-full max-w-max transition-all duration-500 rounded-lg" :src="nft.metadata.image" />
+                                        <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="nft.metadata.image" />
                                     </div>
                                 </div> 
                                 <pre>

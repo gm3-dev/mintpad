@@ -7,31 +7,28 @@
             <div v-else>
                 <form method="POST" action="{{ route('collections.store') }}" enctype="multipart/form-data">
                     <div class="text-center mb-10">
-                        <x-gray-button href="{{ route('collections.index') }}" class="absolute left-0 mt-1">{{ __('Back') }}</x-gray-button>
                         <h1>{{ __('Create NFT collection') }}</h1>
                         <p>{{ __('This is the start of your NFT collection.') }}</p>
                     </div>
 
-                    <div v-if="collection.chain == 'solana'" class="border border-primary-600 rounded-lg p-4 mb-8">
+                    <!-- <div v-if="collection.chain == 'solana'" class="border border-primary-600 rounded-md p-4 mb-8">
                         <p class="text-sm text-center">To deploy on Solana Devnet, you'll need to manually switch networks on the Developer Settings of your Phantom wallet.</p>
-                    </div>
-
-                    @include('partials.wallet-messages')
+                    </div> -->
 
                     <x-box class="w-full mb-4">
                         <x-slot name="title">Smart contract settings</x-slot>
                         <x-slot name="tutorial">https://www.youtube.com/embed/NtpD1_uUXEo</x-slot>
                         <x-slot name="content">
                             <div class="w-full flex flex-wrap">
-                                <div class="basis-1/3">
+                                <div class="w-full sm:basis-1/3">
                                     <x-label for="symbol" :value="__('Blockchain')" class="relative" info="Choose which blockchain you want to launch your NFT collection on." />
                                     <x-select class="!w-full mb-4" v-model="collection.chain_id" :options="$blockchains"></x-select>
                                 </div>
-                                <div class="basis-1/3 px-4">
+                                <div class="w-full sm:basis-1/3 px-0 sm:px-4">
                                     <x-label for="symbol" :value="__('Symbol / Ticker')" class="relative" info="The symbol of the token contract is the symbol by which the token contract should be known, for example “DOGGY” or “BAYC”. It is broadly equivalent to a stock ticker." />
                                     <x-input id="symbol" class="mb-4" type="text" name="symbol" v-model="collection.symbol" />
                                 </div>
-                                <div class="basis-1/3">
+                                <div class="w-full sm:basis-1/3">
                                     <x-label for="royalties" :value="__('Creator royalties (%)')" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                                     <x-input id="royalties" addon="%" class="mb-4" step=".01" min="0" max="100" type="number" name="royalties" v-model="collection.royalties" />
                                 </div>

@@ -118,7 +118,7 @@ if (document.getElementById('app')) {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
-
+            
             await this.setBlockchains()
 
             // Listen to connect button
@@ -192,6 +192,7 @@ if (document.getElementById('app')) {
                     // Check if wallet is connected to the correct blockchain
                     if (this.hasValidChain !== true) {
                         this.page.tab = -1
+                        this.setMessage('Switch to the correct blockchain', 'error', true)
                         return;
                     } else {
                         this.page.tab = 1
@@ -221,7 +222,7 @@ if (document.getElementById('app')) {
                     } catch (error) {
                         resportError(error)
                         console.log('error', error)
-                        this.setErrorMessage('Contract could not be loaded, please try again.', true)
+                        this.setMessage('Contract could not be loaded, please try again.', 'error', true)
                     }
 
                     this.validateTabStatus()
@@ -238,7 +239,7 @@ if (document.getElementById('app')) {
                 // Validate form
                 var validation = this.validateUpdateClaimPhases()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -269,17 +270,17 @@ if (document.getElementById('app')) {
                     //     this.validateTabStatus()
                     // })
                     
-                    this.setSuccessMessage('Claim phases updated')
+                    this.setMessage('Claim phases updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
                 
                 this.resetButtonLoader()
             },
             addClaimPhase: function(e) {
                 if (this.claimPhases.length >= 3) {
-                    this.setErrorMessage('You can only have 3 mint phases')
+                    this.setMessage('You can only have 3 mint phases', 'error')
                     return
                 }
                 this.claimPhases.push({
@@ -321,7 +322,7 @@ if (document.getElementById('app')) {
                 // Validate form
                 var validation = this.validateUpdateMetadata()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -338,10 +339,10 @@ if (document.getElementById('app')) {
                         this.validateTabStatus()
                     })
 
-                    this.setSuccessMessage('General settings updated')
+                    this.setMessage('General settings updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -350,7 +351,7 @@ if (document.getElementById('app')) {
                 // Validate form
                 var validation = this.validateUpdateRoyalties()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -364,10 +365,10 @@ if (document.getElementById('app')) {
 
                     this.validateTabStatus()
 
-                    this.setSuccessMessage('Royalties updated')
+                    this.setMessage('Royalties updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -385,7 +386,7 @@ if (document.getElementById('app')) {
                 await axios.put('/collections/'+this.collectionID+'/mint', data)
                 .catch((error) => {
                     if (error.response.status == 422) {
-                        this.setErrorMessage(error.response.data.message)
+                        this.setMessage(error.response.data.message, 'error')
                     }
                 })
                 .then((response) => {
@@ -399,7 +400,7 @@ if (document.getElementById('app')) {
 
                         this.validateTabStatus()
 
-                        this.setSuccessMessage('Mint settings updated')
+                        this.setMessage('Mint settings updated', 'success')
                     }
                 })
 
@@ -407,14 +408,14 @@ if (document.getElementById('app')) {
             },
             deployContract: async function(e) {
                 if (this.hasValidChain !== true) {
-                    this.setErrorMessage('Please connect to the correct blockchain')
+                    this.setMessage('Please connect to the correct blockchain', 'error')
                     return
                 }
 
                 // Validate form
                 var validation = this.validateDeployContract()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -436,7 +437,7 @@ if (document.getElementById('app')) {
 
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -446,7 +447,7 @@ if (document.getElementById('app')) {
                 var metadata = await this.prepareFiles(files)
 
                 if (metadata.status == 'error') {
-                    this.setErrorMessage('Invalid collection data')
+                    this.setMessage('Invalid collection data', 'error')
                     return;
                 }
 
@@ -454,7 +455,7 @@ if (document.getElementById('app')) {
                 this.collection.previews = this.collection.metadata.slice(0, 8)
                 this.upload = false
 
-                this.setSuccessMessage('NFTs received')
+                this.setMessage('NFTs received', 'success')
             },
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
@@ -474,10 +475,10 @@ if (document.getElementById('app')) {
                         })
                     }
 
-                    this.setSuccessMessage('NFTs added to the collection!')
+                    this.setMessage('NFTs added to the collection!', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -493,9 +494,9 @@ if (document.getElementById('app')) {
                     this.resources['social-sharing'].loading = false
                 }).catch((error) => {
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors.resource[0])
+                        this.setMessage(error.response.data.errors.resource[0], 'error')
                     } else {
-                        this.setErrorMessage('Something went wrong, please try again.')
+                        this.setMessage('Something went wrong, please try again.', 'error')
                     }
                 })
             },

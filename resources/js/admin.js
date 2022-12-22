@@ -92,7 +92,7 @@ if (document.getElementById('app')) {
                         this.collection.nfts = await this.contract.getAll({count: 8})
                     } catch (error) {
                         resportError(error)
-                        this.setErrorMessage('Contract could not be loaded, please try again.', true)
+                        this.setMessage('Contract could not be loaded, please try again.', 'error', true)
                     }
                 })
             },

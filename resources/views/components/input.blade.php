@@ -11,7 +11,7 @@
         </span>
     @endif
 
-    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classes.'inline-block w-full mb-4 rounded-md px-3 py-2 font-regular text-sm text-mintpad-700 dark:text-white bg-primary-100 border border-primary-200 dark:border-gray-600 placeholder:text-gray-400 focus:border-primary-600 dark:focus:border-gray-600 dark:bg-mintpad-700 disabled:bg-mintpad-200 disabled:text-mintpad-300 dark:disabled:text-mintpad-300 dark:disabled:bg-mintpad-500']) !!}>
+    <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classes.'inline-block w-full mb-4 rounded-md px-3 py-2 font-regular text-sm text-mintpad-700 dark:text-white bg-primary-100 border border-primary-200 dark:border-gray-600 placeholder:text-gray-400 focus:ring-0 focus:border-primary-600 dark:focus:border-gray-600 dark:bg-mintpad-700 disabled:bg-mintpad-200 disabled:text-mintpad-300 disabled:border-primary-100 dark:disabled:text-mintpad-300 dark:disabled:bg-mintpad-500']) !!}>
     
     @if ($addon && $position == 'right')
         <span class="inline-flex mb-4 rounded-r-md font-regular text-sm text-mintpad-700 dark:text-white bg-primary-100 border border-l-0 border-primary-200 dark:border-gray-600">

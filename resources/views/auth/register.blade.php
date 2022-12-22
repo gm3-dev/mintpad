@@ -7,7 +7,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form id="registration-form" method="POST" action="{{ route('register') }}">
             @csrf
             <h1>Sign Up</h1>
             <div class="flex flex-row gap-2 mb-4">
@@ -26,13 +26,13 @@
                     <x-label for="name" :value="__('Date of birth')" />
                     <div class="flex flex-row gap-2">
                         <div class="basis-1/3">
-                            <x-select id="birth-month" class="!w-full" name="birth_month" :selected="old('birth_month', date('n'))" :options="array_combine(range(1,12),range(1,12))"></x-select>
+                            <x-select id="birth-month" class="!w-full" name="birth_month" v-model="form.birth_month" :options="array_combine(range(1,12),range(1,12))"></x-select>
                         </div>
                         <div class="basis-1/3">
-                            <x-select id="birth-day" class="!w-full" name="birth_day" :selected="old('birth_day', date('d'))" :options="array_combine(range(1,31),range(1,31))"></x-select>
+                            <x-select id="birth-day" class="!w-full" name="birth_day" v-model="form.birth_day" :options="array_combine(range(1,31),range(1,31))"></x-select>
                         </div>
                         <div class="basis-1/3">
-                            <x-select id="birth-year" class="!w-full" name="birth_year" :selected="old('birth_year', date('Y'))" :options="array_combine(range(1920,date('Y')),range(1920,date('Y')))"></x-select>
+                            <x-select id="birth-year" class="!w-full" name="birth_year" v-model="form.birth_year" :options="array_combine(range(1920,date('Y')),range(1920,date('Y')))"></x-select>
                         </div>
                     </div>
                     <!-- Reference -->
@@ -44,8 +44,8 @@
                     <div>
                         <x-label >{{ __('Are you a company?') }}</x-label>
                         <x-radio-group>
-                            <x-radio id="is-company-no" type="radio" v-model="isCompany" value="0" class="inline-block" /><x-label for="is-company-no" class="inline-block mr-2" :value="__('No')" />
-                            <x-radio id="is-company-yes" type="radio" v-model="isCompany" value="1" class="inline-block" /><x-label for="is-company-yes" class="inline-block" :value="__('Yes')" /> 
+                            <x-radio id="is-company-no" type="radio" v-model="form.is_company" value="0" class="inline-block" /><x-label for="is-company-no" class="inline-block mr-2" :value="__('No')" />
+                            <x-radio id="is-company-yes" type="radio" v-model="form.is_company" value="1" class="inline-block" /><x-label for="is-company-yes" class="inline-block" :value="__('Yes')" /> 
                         </x-radio-group>      
                     </div>
                 </div>
@@ -109,9 +109,10 @@
                         <x-input id="password_confirmation" class="mb-0" v-bind:type="showConfirmPassword ? 'text' : 'password'" name="password_confirmation" v-model="form.password_confirmation" required />
                     </div>
 
-                    <label for="accept-tos" class="inline-flex items-center flex-auto mt-4">
-                        <x-checkbox id="accept-tos" class="align-top" type="checkbox" name="accept_tos" value="1" checked="{{ old('accept_tos') !== null ? true : false }}" />
+                    <label for="accept-tos" class="relative inline-flex items-center flex-auto mt-4">
+                        <x-checkbox id="accept-tos" class="align-top" type="checkbox" name="accept_tos" value="1" v-model="form.accept_tos" />
                         <x-label for="accept-tos" class="ml-2">{{ __('I agree to the') }} <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-xs">Terms of Service</x-link> {{ __('and the') }} <x-link href="https://mintpad.co/privacy-policy/" target="_blank" class="text-xs">Privacy Policy</x-link> {{ __('from Mintpad') }}</x-label>
+                        <span v-if="validation.accept_tos && validation.accept_tos != false" class="absolute left-0 -bottom-3 text-red-500 text-xs" v-html="validation.accept_tos"></span>
                     </label>
                 </div>
             </div>

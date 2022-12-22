@@ -21,15 +21,13 @@ export default {
                 }
             },
             blockchains: {},
-            errorMessage: false,
-            showRefreshButton: false,
-            successMessage: false,
+            messageBag: [],
             showModal: false,
             hasValidChain: true,
             theme: {
-                primary: 'rgba(0, 113, 249, 1)',
-                background: 'rgba(238, 242, 253, 1)',
-                title: 'rgba(5, 18, 27, 1)',
+                primary: 'rgba(0, 119, 255, 1)',
+                background: 'rgba(248, 249, 255, 1)',
+                title: 'rgba(46, 56, 77, 1)',
                 text: 'rgba(101, 111, 119, 1)',
                 box: 'rgba(255, 255, 255, 1)',
             }
@@ -97,7 +95,7 @@ export default {
                 })
             } catch(error) {
                 resportError(error)
-                this.setErrorMessage('Failed to switch to the correct blockchain, try to do it manually.')
+                this.setMessage('Failed to switch to the correct blockchain, try to do it manually.', 'error')
             }
         },
         validateMatchingBlockchains: async function(chainID) {
@@ -119,29 +117,21 @@ export default {
          * Set error message
          * @param {string} message 
          */
-        setErrorMessage: function(message, showRefreshButton) {
-            this.showRefreshButton = showRefreshButton == undefined ? false : showRefreshButton
+        setMessage: function(message, type, refresh) {
+            console.log('refresh', refresh)
+            refresh = refresh == undefined ? false : refresh
+            console.log('refresh', refresh)
             if (message.code) {
-                this.errorMessage = message.message
+                this.messageBag.push({type: type, message: message.message, refresh: refresh})
             } else {
-                this.errorMessage = message
+                this.messageBag.push({type: type, message: message, refresh: refresh})
             }
-            if (!this.showRefreshButton) {
+
+            if (!refresh) {
                 setTimeout(() => {
-                    this.errorMessage = false
-                    this.showRefreshButton = false
+                    this.messageBag.splice(0, 1)
                 }, 5000)
             }
-        },
-        /**
-         * Set success message
-         * @param {string} message 
-         */
-        setSuccessMessage: function(message) {
-            this.successMessage = message
-            setTimeout(() => {
-                this.successMessage = false
-            }, 5000)
         },
         /**
          * Parses claim conditions
@@ -181,7 +171,8 @@ export default {
          */
         setButtonLoader: function(e) {
             var button = $(e.target)
-            button.prop('disabled', true).addClass('is-loading')
+            button.prop('disabled', true).addClass('is-loading z-50')
+            $('#app-loader-bg').removeClass('hidden')
 
             // var buttonWidth = button.outerWidth()
             this.loader.button = {
@@ -196,7 +187,8 @@ export default {
          */
         resetButtonLoader: function(e) {
             var button = this.loader.button.target
-            button.prop('disabled', false).removeClass('is-loading')
+            button.prop('disabled', false).removeClass('is-loading z-50')
+            $('#app-loader-bg').addClass('hidden')
             // var buttonWidth = button.outerWidth()
             // button.css('width', buttonWidth+'px').prop('disabled', false).html(this.loader.button.label)
         },

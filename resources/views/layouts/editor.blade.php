@@ -19,32 +19,24 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container min-h-screen bg-primary-400">
+        <div class="main-container min-h-screen bg-primary-100">
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
+            <x-bg-overlay id="app-loader-bg" class="hidden"></x-bg-overlay>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}" v-bind:style="style">
-                <div class="py-16">
-                    <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
+                <div class="pt-16">
+                    <div class="max-w-7xl mx-auto px-6 lg:px-8">
                         {{ $slot }}
                     </div>
                 </div>
-                <div v-if="modal.show" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                    <div class="fixed z-10 inset-0 overflow-y-auto">
-                        <div class="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0">
-                            <div class="relative bg-white rounded-lg text-left overflow-hidden transform transition-all sm:my-8 sm:max-w-3xl sm:w-full">
-                                <div class="bg-white p-14">
-                                    <a href="#" class="absolute right-4 top-3 text-3xl text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalToggle(false)"><i class="fas fa-times"></i></a>
-                                    <div class="overflow-y-auto">
-                                        <h3 v-if="modal.title" v-html="modal.title" class="text-2xl mb-4 mt-6"></h3>
-                                        <div v-html="modal.content"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <x-modal-vue></x-modal-vue>
+                @include('partials.messages')
+
+                <div class="p-2 w-full bg-primary-600 text-white">
+                    <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
+                        <p class="text-white text-center font-medium text-sm !mb-0">We use demo data for the mint phases</p>
                     </div>
                 </div>
-                @include('partials.messages')
             </main>
         </div>
 

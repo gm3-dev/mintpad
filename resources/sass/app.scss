@@ -80,10 +80,9 @@
             right: 10px;
             top: 0;
             font-size: 18px;
-            line-height: 46px;
+            line-height: 38px;
             color: theme('colors.red.500');
         }
-
         .tinymce-html {
             h1, h2, h3, p, ul, ol {
                 @apply mb-2;
@@ -111,6 +110,11 @@
             }
         }
     }
+}
+
+/* TinyMCE */
+.tox-tinymce {
+    border: none !important;
 }
 
 /* Colorpicker */
@@ -143,8 +147,8 @@
         height: 30px;
 
         .value {
-            border-radius: 10px;
-            border: 2px solid rgb(101, 111, 119);
+            border-radius: 6px;
+            border: 1px solid rgb(236, 237, 239);
         }
         .bg {
             background: none;
