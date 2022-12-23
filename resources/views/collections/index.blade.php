@@ -3,7 +3,7 @@
         <div class="overflow-hidden">
             <div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
-                    <x-box class="bg-waves dark:bg-none bg-cover p-12">
+                    <x-box class="bg-waves dark:bg-waves-dark bg-cover p-12">
                         <h1>Welcome</h1>
                         <p class="mb-4">Launching a collection can seem complicated. That is why we have made a video where we explain the entire process step by step.</p>
                         <x-link-button href="#" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Kl8C6RtJmis')">Watch video</x-link-button>
@@ -12,7 +12,7 @@
                         <h1>Let’s get started</h1>
                         <div v-if="!wallet.account">
                             <p class="mb-4">You have to connect your wallet to start creating your collection.</p>
-                            <connect-wallet></connect-wallet>
+                            <x-button href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-button>
                         </div>
                         <div v-else>
                             <p class="mb-4">We are connected to your wallet.</p>

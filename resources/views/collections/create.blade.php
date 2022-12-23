@@ -1,9 +1,7 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="relative">
-            <div v-if="!wallet.account">
-                <connect-wallet></connect-wallet>
-            </div>
+            <div v-if="!wallet.account"></div>
             <div v-else>
                 <form method="POST" action="{{ route('collections.store') }}" enctype="multipart/form-data">
                     <div class="text-center mb-10">

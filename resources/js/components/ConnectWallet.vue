@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <a ref="connect-wallet" href="#" @click.prevent="toggleDropdown" class="inline-block relative px-3 xl:px-10 py-3 text-sm bg-primary-600 border border-transparent rounded-md text-white text-center hover:bg-primary-700 active:bg-primary-700 focus:outline-none focus:border-primary-700 disabled:opacity-25 transition ease-in-out duration-150">
+        <a ref="connect-wallet" href="#" @click.prevent="toggleDropdown" class="inline-block font-medium relative px-3 xl:px-10 py-2.5 text-xs bg-primary-600 border border-transparent rounded-md text-white text-center hover:bg-primary-700 active:bg-primary-700 focus:outline-none focus:border-primary-700 disabled:opacity-25 transition ease-in-out duration-150">
             Connect your wallet <i class="fas fa-chevron-down ml-2"></i>
         </a>
         <div v-show="open" v-closable="{exclude: ['connect-wallet'], handler: 'hideDropdown'}" class="line-block border py-2 rounded-md bg-white w-1/5 mx-auto text-left mt-2">

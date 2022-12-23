@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a href="#" class="text-base p-1.5 mr-4 rounded-md border border-mintpad-200 dark:border-0 dark:bg-mintpad-700 text-mintpad-700 hover:text-primary-600" @click.prevent="toggleDarkmode">
+        <a href="#" class="text-base p-1.5 mr-4 rounded-md border border-mintpad-200 dark:border-0 dark:bg-mintpad-800 text-mintpad-700 hover:text-primary-600" @click.prevent="toggleDarkmode">
             <i v-if="dark" class="fa fa-sun text-white hover:text-primary-600"></i>
             <i v-else class="pl-0.5 fa-solid fa-moon"></i>
         </a>

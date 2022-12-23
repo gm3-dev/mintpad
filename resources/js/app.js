@@ -192,7 +192,7 @@ if (document.getElementById('app')) {
                     // Check if wallet is connected to the correct blockchain
                     if (this.hasValidChain !== true) {
                         this.page.tab = -1
-                        this.setMessage('Switch to the correct blockchain', 'error', true)
+                        this.setMessage('There is a problem with your wallet', 'error', true)
                         return;
                     } else {
                         this.page.tab = 1

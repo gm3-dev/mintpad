@@ -40,6 +40,7 @@ module.exports = {
                     600: '#000000',
                     700: '#2E384D', // new
                     800: '#151E29', // new
+                    900: '#21272E', // new
                 }
             },
             fontFamily: {

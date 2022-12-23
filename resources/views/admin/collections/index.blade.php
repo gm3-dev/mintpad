@@ -1,9 +1,5 @@
 <x-admin-layout>
     <div class="overflow-hidden">
-        <div v-if="!wallet.account" class="mb-8">
-            <connect-wallet></connect-wallet>
-        </div>
-
         <div class="text-center mb-12">
             <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('Collections') }}</h2>
         </div>

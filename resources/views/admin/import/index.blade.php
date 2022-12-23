@@ -10,7 +10,7 @@
 
                 <form method="POST" action="{{ route('admin.import.store') }}" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="file" class="inline-block mb-4 p-2 w-full border-2 border-mintpad-200 rounded-md file:mr-2 file:px-4 file:py-3 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" />
+                    <input type="file" name="file" class="inline-block mb-4 p-2 w-full border-2 border-mintpad-200 rounded-md file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" />
                     
                     <div class="grid grid-cols-2 gap-2 mb-4">
                         <div>
