@@ -37,7 +37,8 @@ if (document.getElementById('app')) {
             },
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
-            mintAmount: 1
+            mintAmount: 1,
+            loadComplete: false
         },
         async mounted() {
             this.collectionID = false
@@ -121,6 +122,7 @@ if (document.getElementById('app')) {
                     resportError(error)
                     this.setErrorMessage('Something went wrong, please try again.', true)
                 }
+                this.loadComplete = true
 
             }).catch((error) => {
                 console.log('error', error)

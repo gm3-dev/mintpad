@@ -24,7 +24,7 @@
             </div>
         </div>
         <div v-if="claimPhases.length > 0" class="flex-row grid-cols-1 -my-2">
-            <div v-for="(phase, index) in claimPhases" class="relative py-2 h-1/3">
+            <div v-for="(phase, index) in claimPhases" class="relative py-2 h-auto lg:h-1/3">
                 <div class="bg-white rounded-xl px-8 py-6 h-full">
                     <i v-if="phase.active" class="far fa-check-circle text-primary-600 absolute right-3 top-5 text-xl"></i>
                     <h2 class="text-lg font-semibold mb-1 text-mintpad-500" v-html="phase.name"></h2>
@@ -48,6 +48,13 @@
                     <p v-else class="text-sm text-mintpad-300">&nbsp;</p>
                 </div>
             </div>
+        </div>        
+        <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
+            <div class="relative py-2 h-auto lg:h-1/3">
+                <div class="bg-white rounded-xl px-8 py-6 h-full">
+                    <p>Mint phases not set yet</p>
+                </div>
+            </div>
         </div>
         <div v-else class="grid grid-cols-1 gap-4">
             <div v-for="(phase, index) in [1,2,3]" class="relative bg-white rounded-xl px-8 py-6">
@@ -58,7 +65,10 @@
         </div>
         <div class="bg-white rounded-xl text-center">
             <img v-if="collection.image" v-bind:src="collection.image" class="inline-block rounded-xl" />
-            <i v-else class="far fa-image text-9xl text-primary-300 mb-1 mt-36 rounded-xl animate-pulse"></i>
+            <div v-else class="relative">
+                <i class="far fa-image absolute inset-0 top-1/3 text-9xl text-primary-300 rounded-xl animate-pulse"></i>
+                <img src="/images/transparent.png" class="inline-block rounded-xl" />
+            </div>
         </div>
         <div class="bg-white rounded-xl p-8">
             <h2 class="text-xl font-semibold text-center mb-1 text-mintpad-500">{{ __('Mint an NFT') }}</h2>
@@ -87,7 +97,7 @@
         <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white text-center rounded-xl p-8">
             <x-link-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1" rel="nofollow">@{{ button.label }}</x-link-button>
         </div>
-        <div class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
+        <div v-if="collection.about || collection.roadmap || collection.team" class="lg:col-span-2 p-4 px-8 bg-white rounded-xl">
             <div class="mb-4">
                 <a v-if="collection.about" rel="nofollow" href="#" @click.prevent="changeTab(1)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-4 lg:mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
                 <a v-if="collection.roadmap" rel="nofollow" href="#" @click.prevent="changeTab(2)" class="inline-block text-xl mb-4 border-b-4 border-primary-300 mr-12 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
