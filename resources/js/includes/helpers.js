@@ -78,10 +78,10 @@ export default {
         copyContractAddress: function(e) {
             var button = $(e.target)
             var buttonWidth = button.outerWidth()
-            var buttonText = button.text()
+            var buttonText = button.html()
             button.css('width', buttonWidth+'px').text('Copied')
             setTimeout(function() {
-                button.html('<i class="far fa-copy mr-2"></i>'+buttonText)
+                button.html(buttonText)
             }, 1000)
             navigator.clipboard.writeText(button.data('address'))
         },
