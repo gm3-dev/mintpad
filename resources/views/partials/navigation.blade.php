@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center text-4xl font-jpegdev dark:text-white">
+                <div class="flex items-center">
                     @include('partials.logo')
                 </div>
 

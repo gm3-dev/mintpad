@@ -1,7 +1,7 @@
 @props(['width' => 'sm:max-w-md'])
 
 <div class="min-h-screen flex flex-col sm:justify-center items-center pt-10 px-6 sm:pt-0">
-    <div>
+    <div class="flex items-center"> 
         {{ $logo }}
     </div>
 
