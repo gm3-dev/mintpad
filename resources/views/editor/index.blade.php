@@ -2,7 +2,7 @@
     <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
     <div class="fixed z-40 left-0 top-0 p-2 w-full bg-white border-b border-mintpad-200">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex">
+        <div class="max-w-7xl mx-auto px-6 flex">
             <div class="grow pt-1 text-mintpad-700">
                 <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Primary color</span>
                 <color-picker v-model="theme.background" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Background</span>

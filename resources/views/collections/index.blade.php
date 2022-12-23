@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-6">
         <div class="overflow-hidden">
             <div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">

@@ -13,7 +13,7 @@
             </div>
         </div>
         <div v-if="claimPhases.length > 0" class="flex-row grid-cols-1 -my-2">
-            <div v-for="(phase, index) in claimPhases" class="relative py-2 h-1/3">
+            <div v-for="(phase, index) in claimPhases" class="relative py-2 h-auto lg:h-1/3">
                 <div class="bg-white border border-mintpad-200 rounded-md px-8 py-6 h-full" v-bind:class="{'border-2 border-primary-600': phase.active}">
                     <h2 class="text-lg font-semibold mb-1 text-mintpad-500" v-html="phase.name"></h2>
                     <p class="text-sm mb-3 text-mintpad-300">
@@ -37,6 +37,14 @@
                 </div>
             </div>
         </div>
+        <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
+            <div class="relative py-2 h-auto lg:h-1/3">
+                <div class="bg-white border border-mintpad-200 rounded-md px-8 py-6 h-full">
+                    <h2 class="text-lg font-semibold mb-1 text-mintpad-500">Mint phases</h2>
+                    <p class="font-regular text-mintpad-300">No mint phases are set yet.</p>
+                </div>
+            </div>
+        </div>
         <div v-else class="grid grid-cols-1 gap-4">
             <div v-for="(phase, index) in [1,2,3]" class="relative bg-white border border-mintpad-200 rounded-md px-8 py-6">
                 <div class="bg-gray-300 rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
@@ -46,7 +54,10 @@
         </div>
         <div class="bg-white border border-mintpad-200 rounded-md text-center">
             <img v-if="collection.image" v-bind:src="collection.image" class="inline-block rounded-md" />
-            <i v-else class="far fa-image text-9xl text-primary-300 mb-1 mt-36 rounded-md animate-pulse"></i>
+            <div v-else class="relative">
+                <i class="far fa-image absolute inset-0 top-1/3 text-9xl text-primary-300 rounded-md animate-pulse"></i>
+                <img src="/images/transparent.png" class="inline-block rounded-xl" />
+            </div>
         </div>
         <div class="bg-white border border-mintpad-200 rounded-md p-8">
             <h2 class="text-xl font-semibold text-center mb-1 text-mintpad-500">{{ __('Mint an NFT') }}</h2>

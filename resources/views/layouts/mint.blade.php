@@ -44,7 +44,7 @@
     <body class="font-sans antialiased">
         <div class="main-container min-h-screen bg-primary-100">
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
+            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}" v-bind:style="style">
                 <div class="col-span-1 lg:col-span-2">
                     <div v-if="!wallet.account" class="bg-mintpad-200 p-2 mb-4 text-center">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="py-12">
-                    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div class="max-w-5xl mx-auto px-6">
                         {{ $slot }}
                     </div>
                 </div>

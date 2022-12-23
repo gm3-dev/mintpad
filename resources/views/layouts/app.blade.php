@@ -27,7 +27,7 @@
             @endisset
 
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
+            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
             <x-bg-overlay id="app-loader-bg" class="hidden"></x-bg-overlay>
             <main id="app-content" class="hidden">
                 <div class="col-span-1 lg:col-span-2">

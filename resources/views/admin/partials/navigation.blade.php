@@ -1,13 +1,13 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 border-b border-mintpad-200 pb-2">
     <!-- Admin bar -->
     <div class="w-full bg-primary-600 text-center text-sm">
-        <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto py-1 px-4 sm:px-6">
             <p class="text-white">You are logged in as admin</p>
         </div>
     </div>
 
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->

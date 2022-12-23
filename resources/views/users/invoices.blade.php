@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-6">
         <div class="relative mb-12 px-2">
             <div class="text-center mb-10">
                 <h1>{{ __('Invoices') }}</h1>

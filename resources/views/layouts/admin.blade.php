@@ -33,7 +33,7 @@
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
                 @include('partials.messages')
                 <div class="py-12">
-                    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div class="max-w-7xl mx-auto px-6">
                         {{ $slot }}
                     </div>
                 </div>
