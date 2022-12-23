@@ -5,7 +5,7 @@
             <i v-if="message.type == 'error'" class="fa-solid fa-circle-exclamation text-xl text-red-400 align-middle"></i>
             <i v-if="message.type == 'success'" class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
             <div class="inline ml-3 text-sm text-mintpad-700 dark:text-white" v-html="message.message"></div>
-            <a v-if="message.refresh" class="text-sm float-right mt-1 underline text-mintpad-700 dark:text-white" href="/{{ request()->path() }}">refresh</a>
+            <a v-if="message.refresh" class="text-sm float-right mt-0.5 underline text-mintpad-700 dark:text-white" href="/{{ request()->path() }}">refresh</a>
         </div>
     </div>
 </div>
