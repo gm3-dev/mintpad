@@ -86,7 +86,7 @@
             <div v-show="tab == 3 && collection.team" class="tinymce-html" v-html="collection.team"></div>
         </div>
     </div>
-    <div class="mt-8 text-center">
+    <div class="my-8 text-center">
         <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white p-2 px-4 rounded-md !text-mintpad-300 ">Terms of Service</x-link>
     </div>
 </x-app-layout>

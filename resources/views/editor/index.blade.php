@@ -21,7 +21,7 @@
         <div class="lg:col-span-2 text-center p-3">
             <a href="#" @click.prevent="addLogo" class="inline-block">
                 <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
-                <x-default-button v-else href="#"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add logo</x-default-button>
+                <x-default-button v-else href="#" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add logo</x-default-button>
             </a>
         </div>
         <div class="grid grid-cols-1 gap-4">
@@ -103,7 +103,7 @@
                 <x-button @click.prevent="editButton(index)" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }} <i class="fas fa-edit"></i></x-button>
             </span>
             <span content="Add button" v-tippy>
-                <a href="#" @click.prevent="newButton" class="p-2 rounded-md text-mintpad-300"><i class="fas fa-plus"></i></a>
+                <x-default-button href="#" @click.prevent="newButton" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add button</x-default-button>
             </span>
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white border border-mintpad-200 rounded-md">
@@ -123,12 +123,12 @@
             </div>
         </div>
     </div>
-    <div class="mt-8 text-center">
+    <div class="my-8 text-center">
         <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white border border-mintpad-200 p-2 px-4 rounded-md !text-mintpad-300 ">Terms of Service</x-link>
     </div>
 
     <div v-if="modal.id == 'edit-button'">
-        <x-modal title="Edit button">
+        <x-modal title="Button">
             <div class="flex gap-2">
                 <x-input type="text" v-model="edit.button.label" placeholder="Label" />
                 <x-input type="text" v-model="edit.button.href" placeholder="https://www.example.com" />
