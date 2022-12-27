@@ -91,7 +91,6 @@
 
                             <x-box v-for="(phase, index) in claimPhases" class="mb-4">
                                 <x-slot name="title">@{{ 'Phase '+(index+1) }}</x-slot>
-                                <x-slot name="tutorial">https://www.youtube.com/embed/Lh1mT6XDjHg</x-slot>
                                 <x-slot name="action"><a href="#" class="absolute right-8 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="deleteClaimPhase(index)">Delete phase</a></x-slot>
                                 <x-slot name="content">
                                     <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
@@ -105,7 +104,7 @@
                                         </div>
                                         <div class="relative">
                                             <x-label for="price" :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
-                                            <x-input id="price" addon="ToDo" step="0.001" type="number" v-model="phase.price" />
+                                            <x-input id="price" addon="{{ $collection->token }}" step="0.001" type="number" v-model="phase.price" />
                                         </div>
                                         <div>
                                             <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="Here you can choose whether people can only mint one NFT per wallet or unlimited." />
@@ -116,7 +115,7 @@
                                             <x-input id="phase-name" type="text" v-model="phase.name" />
                                         </div>
                                         <div>
-                                            <x-label for="whitelist" :value="__('Enable whitelist')" class="mb-4" info="Here you can choose whether to enable a whitelist or not." />
+                                            <x-label for="whitelist" :value="__('Enable whitelist')" info="Here you can choose whether to enable a whitelist or not." />
                                             <x-radio-group>
                                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
                                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />

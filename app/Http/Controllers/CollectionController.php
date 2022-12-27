@@ -19,7 +19,7 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        $collections = Collection::where('user_id', Auth::user()->id)->get();
+        $collections = Collection::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         return view('collections.index')->with(compact('collections'));
     }
 
@@ -113,8 +113,6 @@ class CollectionController extends Controller
     public function fetch(Collection $collection)
     {
         $this->authorize('view', $collection);
-
-        $collection->token = config('blockchains.'.$collection->chain_id.'.token');
 
         // SEO
         $image = $collection->getMeta('seo.image', false);
