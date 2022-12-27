@@ -19,7 +19,10 @@ export default {
          */
         setSDKFromSigner: function(signer, chainID) {
             var chain = this.blockchains[chainID]
+            console.log('chain', chain)
             var blockchain = this.getSDKBlockchain(chain)
+            console.log('blockchain', blockchain)
+            console.log('chain.chain', chain.chain)
 
             // If EVM chain
             if (chain.chain == 'evm') {

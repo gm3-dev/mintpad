@@ -118,9 +118,7 @@ export default {
          * @param {string} message 
          */
         setMessage: function(message, type, refresh) {
-            console.log('refresh', refresh)
             refresh = refresh == undefined ? false : refresh
-            console.log('refresh', refresh)
             if (message.code) {
                 this.messageBag.push({type: type, message: message.message, refresh: refresh})
             } else {
