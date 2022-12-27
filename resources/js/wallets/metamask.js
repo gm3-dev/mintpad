@@ -1,8 +1,8 @@
 window.$ = require('jquery')
-import * as Sentry from "@sentry/vue";
 import { ethers } from 'ethers'
-import { chain } from "lodash";
 import helpers from '../includes/helpers.js'
+import { initSentry, resportError } from '../includes/sentry'
+initSentry(undefined)
 
 export default {
     mixins: [helpers],

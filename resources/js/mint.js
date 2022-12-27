@@ -22,7 +22,7 @@ initSentry(Vue)
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [wallet,metamask, phantom,helpers,thirdweb, thirdwebWrapper],
+        mixins: [wallet, metamask, phantom,helpers,thirdweb, thirdwebWrapper],
         data: {
             style: {},
             tab: 1,
@@ -99,9 +99,6 @@ if (document.getElementById('app')) {
                     const metadata = await this.getMetadata()
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
-                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
-                    this.collection.fee_recipient = royalties.fee_recipient
-                    this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                     // Collection
                     this.collection.totalSupply = await this.contract.totalSupply()
