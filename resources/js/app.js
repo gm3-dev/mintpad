@@ -254,9 +254,9 @@ if (document.getElementById('app')) {
                             name: claimPhase.name
                         },
                         startTime: new Date(claimPhase.startTime),
-                        price: claimPhase.price,
-                        maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
-                        maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 ? 'unlimited' : claimPhase.maxClaimablePerWallet,
+                        price: parseFloat(claimPhase.price),
+                        maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimableSupply),
+                        maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimablePerWallet),
                         // waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, Contract v3
                         // snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
