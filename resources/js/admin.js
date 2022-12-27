@@ -23,7 +23,13 @@ Vue.use(VueTippy)
 Vue.component("tippy", TippyComponent)
 initSentry(Vue)
 
-if (document.getElementById('app')) {    
+if (document.getElementById('app')) {
+    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
+    Vue.component('dropdown', require('./components/Dropdown.vue').default);
+    Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
+    Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
+    Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
+    
     new Vue({
         el: '#app',
         mixins: [metamask,helpers,modal,thirdweb, thirdwebWrapper],
@@ -52,15 +58,17 @@ if (document.getElementById('app')) {
                     }
 
                     this.collection = { nfts: [] }
-                    this.modalToggle(true)
                     // Set DB data
                     this.chainData = this.blockchains[response.data.chain_id]
                     this.contractAddress = response.data.address
+                    this.collection.name = response.data.name
                     this.collection.chain_id = response.data.chain_id
                     this.collection.chain = this.blockchains[this.collection.chain_id].chain
                     this.collection.token = response.data.token
                     this.hasValidChain = await this.validateMatchingBlockchains(this.collection.chain_id)
                     this.collection.seo = response.data.seo
+
+                    this.modalToggle(true)
 
                     // Mint settings
                     this.collection.permalink = response.data.permalink

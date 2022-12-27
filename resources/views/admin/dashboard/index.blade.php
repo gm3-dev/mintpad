@@ -1,42 +1,53 @@
 <x-admin-layout>
     <div class="overflow-hidden">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('Dashboard') }}</h2>
+        <div class="text-center mb-10">
+            <h1>{{ __('Dashboard') }}</h1>
         </div>
 
-        <div class="mb-10 grid grid-cols-2 gap-4">
-            <div class="p-6 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100">
-                <h3 class="text-xl text-center mb-4 font-semibold">Collections</h3>
-                <div class="flex flex-wrap">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+            <x-box>
+                <x-slot name="title">Collections</x-slot>
+                <div>
                     @foreach ($collection_list as $chain_id => $count)
-                        <div class="basis-1/2 p-1">{{ config('blockchains.'.$chain_id.'.full') }}</div><div class="basis-1/2 p-1">{{ $count }}</div>
+                        <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                            <div class="basis-2/3">{{ config('blockchains.'.$chain_id.'.full') }}</div>
+                            <div class="basis-1/3">{{ $count }}</div>
+                        </x-box-row>
                     @endforeach
-                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>Total</p></div>
-                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>{{ $collections }}</p></div>
+                    <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                        <div class="basis-2/3 pr-4 text-right">Total</div>
+                        <div class="basis-1/3">{{ $collections }}</div>
+                    </x-box-row>
                 </div>
-            </div>
+            </x-box>
 
-            <div class="p-6 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100">
-                <h3 class="text-xl text-center mb-4 font-semibold">Recent imports</h3>
-                <div class="flex flex-wrap">
-                    <div class="basis-2/4 text-mintpad-300 text-sm px-1">Blockchain</div>
-                    <div class="basis-1/4 text-mintpad-300 text-sm px-1">Total USD</div>
-                    <div class="basis-1/4 text-mintpad-300 text-sm px-1 text-right">Period</div>
+            <x-box>
+                <x-slot name="title">Recent imports</x-slot>
+                <div>
+                    <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
+                        <div class="basis-2/4">Blockchain</div>
+                        <div class="basis-1/4">Total USD</div>
+                        <div class="basis-1/4 text-right">Period</div>
+                    </x-box-row>
                     @foreach ($imports as $import)
-                        <div class="basis-2/4 p-1">{{ config('blockchains.'.$import->chain_id.'.full') }}</div>
-                        <div class="basis-1/4 p-1">${{ $import->total }}</div>
-                        <div class="basis-1/4 p-1 text-right">{{ date('m-Y', strtotime($import->import_at)) }}</div>
+                        <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                            <div class="basis-2/4">{{ config('blockchains.'.$import->chain_id.'.full') }}</div>
+                            <div class="basis-1/4">${{ $import->total }}</div>
+                            <div class="basis-1/4 text-right">{{ date('m-Y', strtotime($import->import_at)) }}</div>
+                        </x-box-row>
                     @endforeach
                 </div>
-            </div>
+            </x-box>
 
-            <div class="p-6 mb-4 rounded-2xl border-2 border-mintpad-200 bg-primary-100">
-                <h3 class="text-xl text-center mb-4 font-semibold">Users</h3>
-                <div class="flex flex-wrap">
-                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>Total</p></div>
-                    <div class="basis-1/2 border-t-2 border-mintpad-200 p-1"><p>{{ $users }}</p></div>
+            <x-box>
+                <x-slot name="title">Users</x-slot>
+                <div>
+                    <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                        <div class="basis-1/2">Total</div>
+                        <div class="basis-1/2">{{ $users }}</div>
+                    </x-box-row>
                 </div>
-            </div>
+            </x-box>
         </div>
     </div>
 </x-admin-layout>

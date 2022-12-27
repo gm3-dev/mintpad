@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        props: ['href','active','target'],
+        props: ['href', 'active', 'target'],
         computed: {
             // a computed getter
             classList() {

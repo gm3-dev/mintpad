@@ -1,4 +1,4 @@
-<div v-if="messageBag" class="fixed w-1/3 bottom-2 inset-x-0 mx-auto">
+<div v-if="messageBag" class="fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto">
     <div v-for="message in messageBag" class="px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
         <div class="w-full">
             <i v-if="message.type == 'info'" class="fa-solid fa-circle-exclamation text-xl text-mintpad-700 align-middle"></i>
@@ -10,13 +10,13 @@
     </div>
 </div>
 @if ($message = Session::get('success'))
-    <div class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+    <div class="flex fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
         <i class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
         <div class="ml-3 text-sm text-mintpad-700 dark:text-white">{{ $message }}</div>
     </div>
 @endif
 @if ($message = Session::get('error'))
-    <div class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+    <div class="flex fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
         <i class="fa-solid fa-circle-exclamation text-xl text-red-400 align-middle"></i>
         <div class="ml-3 text-sm text-mintpad-700 dark:text-white">{{ $message }}</div>
     </div>
