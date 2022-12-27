@@ -17,8 +17,6 @@ export default {
                 platform_fee_basis_points: 500, // platform fee (5%)
                 totalSupply: this.collection.totalSupply // Solana only
             }
-            console.log('parameters', parameters)
-            console.log('this.collection.chain', this.collection.chain)
             
             var contractAddress = false
             try {
@@ -33,7 +31,6 @@ export default {
                 }
 
             } catch (error) {
-                console.log('error 1', error)
                 resportError(error)
             }
 

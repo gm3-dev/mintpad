@@ -424,7 +424,6 @@ if (document.getElementById('app')) {
                 try {
                     // Deploy contract
                     const contractAddress = await this.deployNFTDrop()
-                    console.log('contractAddress', contractAddress)
 
                     if (contractAddress) {
                         // Update DB
