@@ -1,9 +1,9 @@
-@props(['disabled' => false])
+@props(['disabled' => false, 'width' => 'w-full'])
 
 @if (isset($attributes['required']))
     <span v-bind:class="{warning: validation.{{ $attributes['name'] }} && validation.{{ $attributes['name'] }} != false}" class="relative inline-flex w-full">
 @else
-    <span class="relative w-full inline-flex">
+    <span class="relative {{ $width }} inline-flex">
 @endif
     @if ($addon && $position == 'left')
         <span class="inline-flex mb-4 rounded-l-md font-regular text-sm text-mintpad-700 dark:text-white bg-primary-100 dark:bg-mintpad-500 border border-r-0 border-primary-200 dark:border-mintpad-900">
