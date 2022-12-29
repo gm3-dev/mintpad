@@ -48,12 +48,12 @@
                     <div class="bg-white dark:bg-mintpad-800 px-10 py-6">
                         <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalToggle(false)">close</a>
                         <div class="overflow-y-auto">
-                            <p>Chain: <span class="text-mintpad-500">@{{ chainData.full }} (@{{ chainData.token }}) with ID @{{ chainData.id }}</span></p>
-                            <p>Primary sales: <span class="text-mintpad-500">@{{ collection.primary_sales_recipient }}</span></p>
-                            <p>Royalties: <span class="text-mintpad-500">@{{ collection.royalties }}% to @{{ collection.fee_recipient }}</span></p>
-                            <p>Platform fees: <span class="text-mintpad-500">@{{ collection.platform_fee }}% to @{{ collection.platform_fee_recipient }}</span></p>
-                            <p v-if="collection.nfts.length == 0">Total minted: <span class="text-mintpad-500">NFT list empty</span></p>
-                            <p v-else>Total minted: <span class="text-mintpad-500">@{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</span></p>
+                            <p>Chain: <span class="text-mintpad-500 dark:text-white">@{{ chainData.full }} (@{{ chainData.token }}) with ID @{{ chainData.id }}</span></p>
+                            <p>Primary sales: <span class="text-mintpad-500 dark:text-white">@{{ collection.primary_sales_recipient }}</span></p>
+                            <p>Royalties: <span class="text-mintpad-500 dark:text-white">@{{ collection.royalties }}% to @{{ collection.fee_recipient }}</span></p>
+                            <p>Platform fees: <span class="text-mintpad-500 dark:text-white">@{{ collection.platform_fee }}% to @{{ collection.platform_fee_recipient }}</span></p>
+                            <p v-if="collection.nfts.length == 0">Total minted: <span class="text-mintpad-500 dark:text-white">NFT list empty</span></p>
+                            <p v-else>Total minted: <span class="text-mintpad-500 dark:text-white">@{{ collection.totalRatio }}% (@{{ collection.totalClaimedSupply}}/@{{ collection.totalSupply }})</span></p>
                             <div class="grid grid-cols-4 mt-2">
                                 <div class="p-1 text-center text-sm" v-for="nft in collection.nfts">
                                     <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="nft.metadata.image" />
