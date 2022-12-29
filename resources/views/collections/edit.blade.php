@@ -210,7 +210,7 @@
                                     <div class="w-full mt-5">
                                         <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
                                         <span content="This action will trigger a transaction" v-tippy>
-                                            <x-button href="#" @click.prevent="updateCollection">{{ __('upload collection') }}</x-button>
+                                            <x-button href="#" @click.prevent="updateCollection">{{ __('Upload collection') }}</x-button>
                                         </span>
                                     </div>
                                 </x-slot>
