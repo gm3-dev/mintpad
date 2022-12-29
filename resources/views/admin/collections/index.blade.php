@@ -23,7 +23,7 @@
                                     <span v-if="this.wallet.network.id != {{ $collection->chain_id }}" content="You need to switch to {{ config('blockchains.'.$collection->chain_id.'.token') }}" v-tippy>
                                         <x-gray-button href="#" @click.prevent="switchBlockchainTo({{ $collection->chain_id }})" class="ml-2 !px-2 w-24">Switch</x-gray-button>
                                     </span>
-                                    <x-link-button v-else href="#" @click.prevent="openCollectionModal({{ $collection->id }})" class="ml-2  w-24">More info</x-link-button>
+                                    <x-link-button v-else href="#" @click.prevent="openCollectionModal({{ $collection->id }})" class="ml-2 !px-2 w-24">More info</x-link-button>
                                     <a href="#" @click.prevent="deleteCollection({{ $collection->id }})" class="ml-2 hover:text-red-700"><i class="fas fa-trash-alt"></i></a>
                                 </div>
                             </x-box-row>
