@@ -48,7 +48,6 @@
 
         <!-- Scripts -->
         <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
-        <!-- <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script> -->
         <script src="https://cdn.tiny.cloud/1/6zk5wmqbfgxkjqvqyh5f1y44fqollc7y639edh5dt2295z6r/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </body>

@@ -13,9 +13,6 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-        <!-- Scripts -->
-        <script src="{{ mix('js/admin.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
         <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">
@@ -46,5 +43,9 @@
                 </div>
             </main>
         </div>
+
+        <!-- Scripts -->
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
+        <script src="{{ mix('js/admin.js') }}" defer></script>
     </body>
 </html>
