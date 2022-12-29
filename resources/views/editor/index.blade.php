@@ -39,7 +39,7 @@
                 <p class="text-sm mb-3 text-mintpad-300">
                     <span>• Whitelist <span class="text-primary-600 font-medium">300</span></span>
                     <span>• Max <span class="text-primary-600 font-medium">1</span> token</span>
-                    • Price <span class="text-primary-600 font-medium">0.2</span> <span class="text-primary-60 font-medium0">ETH</span>
+                    • Price <span class="text-primary-600 font-medium">0.2</span> <span class="text-primary-600 font-medium0">ETH</span>
                 </p>
                 <div class="text-sm flex">
                     <div class="w-1/5">
