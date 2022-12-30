@@ -101,10 +101,10 @@ if (document.getElementById('app')) {
                     this.collection.description = metadata.description
 
                     // Collection
+                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
                     this.collection.totalSupply = await this.contract.totalSupply()
                     this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }

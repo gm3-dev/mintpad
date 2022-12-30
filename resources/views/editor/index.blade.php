@@ -4,11 +4,11 @@
     <div class="fixed z-40 left-0 top-0 p-2 w-full bg-white border-b border-mintpad-200">
         <div class="max-w-7xl mx-auto px-6 flex">
             <div class="grow pt-1 text-mintpad-700">
-                <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Primary color</span>
-                <color-picker v-model="theme.background" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Background</span>
-                <color-picker v-model="theme.box" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Boxes</span>
-                <color-picker v-model="theme.title" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Titles</span>
-                <color-picker v-model="theme.text" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2">Body text</span>
+                <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2 align-middle">Primary color</span>
+                <color-picker v-model="theme.background" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2 align-middle">Background</span>
+                <color-picker v-model="theme.box" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2 align-middle">Boxes</span>
+                <color-picker v-model="theme.title" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2 align-middle">Titles</span>
+                <color-picker v-model="theme.text" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-2 align-middle">Body text</span>
             </div>
 
             <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Change background</x-gray-button>
@@ -21,7 +21,7 @@
         <div class="lg:col-span-2 text-center p-3">
             <a href="#" @click.prevent="addLogo" class="inline-block">
                 <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
-                <x-default-button v-else href="#" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add logo</x-default-button>
+                <x-default-button v-else href="#" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> <span class="align-middle">Add logo</span></x-default-button>
             </a>
         </div>
         <div class="grid grid-cols-1 gap-4">
@@ -103,7 +103,7 @@
                 <x-button @click.prevent="editButton(index)" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }} <i class="fas fa-edit"></i></x-button>
             </span>
             <span content="Add button" v-tippy>
-                <x-default-button href="#" @click.prevent="newButton" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add button</x-default-button>
+                <x-default-button href="#" @click.prevent="newButton" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> <span class="align-middle">Add button</span></x-default-button>
             </span>
         </div>
         <div class="lg:col-span-2 p-4 px-8 bg-white border border-mintpad-200 rounded-md">
