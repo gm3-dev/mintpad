@@ -66,6 +66,7 @@ class MintController extends Controller
             $collection->logo = $logo;
             $collection->background = $background;
             $collection->thumb = $thumb;
+            $collection->minturl = config('app.mint_url').'/'.$collection->permalink;
 
             return response()->json($collection, 200);
         }

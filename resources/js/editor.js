@@ -96,6 +96,7 @@ if (document.getElementById('app')) {
                 this.collection.logo = response.data.logo
                 this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
+                this.collection.mintUrl = response.data.minturl
                 
                 // Set theme
                 if (response.data.theme) {
