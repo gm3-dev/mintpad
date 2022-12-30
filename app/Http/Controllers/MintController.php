@@ -53,7 +53,7 @@ class MintController extends Controller
             $backgrounds = glob(public_path('resources/'.$collection->id.'/background.*'));
             $background = count($backgrounds) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($backgrounds[0], PATHINFO_BASENAME).'?v='.filemtime($backgrounds[0]) : false;
 
-            $collection->buttons = $collection->getMeta('buttons');
+            $collection->buttons = $collection->getMeta('buttons') ?? [];
             $collection->roadmap = $collection->getMeta('roadmap');
             $collection->team = $collection->getMeta('team');
             $collection->about = $collection->getMeta('about');
