@@ -19,6 +19,9 @@
                     <x-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
                         {{ __('Import') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.upcoming.index')" :active="request()->routeIs('admin.upcoming.*')">
+                        {{ __('Upcoming') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('admin.status.index')" :active="request()->routeIs('admin.status.*')">
                         {{ __('Status') }}
                     </x-nav-link>
@@ -81,6 +84,9 @@
                 </hamburger-menu-link>
                 <hamburger-menu-link href="{{ route('admin.import.index') }}" active="{{ request()->routeIs('admin.import.*') }}">
                     {{ __('Import') }}
+                </hamburger-menu-link>
+                <hamburger-menu-link href="{{ route('admin.upcoming.index') }}" active="{{ request()->routeIs('admin.upcoming.*') }}">
+                    {{ __('Upcoming') }}
                 </hamburger-menu-link>
                 <hamburger-menu-link href="{{ route('admin.status.index') }}" active="{{ request()->routeIs('admin.status.*') }}">
                     {{ __('Status') }}

@@ -12,7 +12,7 @@ class Collection extends Model
 
     protected $hidden = ['user_id', 'created_at', 'updated_at'];
 
-    protected $appends = ['token'];
+    protected $appends = ['token', 'chain_name'];
 
     public function user()
     {
@@ -22,5 +22,10 @@ class Collection extends Model
     public function getTokenAttribute()
     {
         return config('blockchains.'.$this->chain_id.'.token');
+    }
+
+    public function getChainNameAttribute()
+    {
+        return config('blockchains.'.$this->chain_id.'.name');
     }
 }

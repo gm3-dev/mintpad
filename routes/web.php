@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\UpcomingController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\DataController;
@@ -44,6 +45,8 @@ Route::domain(config('app.url'))->group(function () {
                 Route::resource('import', ImportController::class);
                 // Invoices
                 Route::resource('invoices', InvoiceController::class);
+                // Invoices
+                Route::resource('upcoming', UpcomingController::class);
                 // Invoices
                 Route::resource('status', StatusController::class);
             });

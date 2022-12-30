@@ -15,7 +15,7 @@ class InvoiceController extends Controller
     {
         $data = $request->all();
 
-        GenerateInvoices::dispatch($data['month'], $data['year'])->onQueue('low');
+        GenerateInvoices::dispatch($data['month'], $data['year'])->onQueue('default');
 
         return redirect()->back()->with('success', 'Job added to queue');
     }
