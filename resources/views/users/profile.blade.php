@@ -12,7 +12,6 @@
 
                 <x-box class="w-full">
                     <x-slot name="title">Personal information</x-slot>
-                    <x-slot name="tutorial">https://www.youtube.com/embed/4HVmvaBeYIs</x-slot>
                     <x-slot name="content">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                             <!-- Name -->

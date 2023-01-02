@@ -15,7 +15,6 @@
 
                     <x-box class="w-full mb-4">
                         <x-slot name="title">Smart contract settings</x-slot>
-                        <x-slot name="tutorial">https://www.youtube.com/embed/NtpD1_uUXEo</x-slot>
                         <x-slot name="content">
                             <div class="w-full flex flex-wrap">
                                 <div class="w-full sm:basis-1/3">

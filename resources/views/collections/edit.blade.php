@@ -33,7 +33,6 @@
                                 <div class="flex flex-col">
                                     <x-box class="flex-1 mb-4">
                                         <x-slot name="title">General Settings</x-slot>
-                                        <x-slot name="tutorial">https://www.youtube.com/embed/14NQiW9vQIs</x-slot>
                                         <x-slot name="content">
                                             <div class="w-full flex flex-wrap">
                                                 <div class="basis-full">
@@ -82,7 +81,6 @@
 
                             <x-box class="mb-4">
                                 <x-slot name="title">Mint phases</x-slot>
-                                <x-slot name="tutorial">https://www.youtube.com/embed/Lh1mT6XDjHg</x-slot>
                                 <x-slot name="content">
                                     <p>{{ __('On this page you can set mint phases. You can set whitelist phases and the public mint.') }} <b>{{ __('You must have set at least one mint phase with a maximum of 3.') }}</b></p>
                                     <p>{{ __('When you only set one mint phase, this will be the date and time that people can mint your collection.') }}</p>
@@ -176,7 +174,6 @@
                             <div class="w-full">
                                 <x-box class="mb-4">
                                     <x-slot name="title">Upload collection</x-slot>
-                                    <x-slot name="tutorial">https://www.youtube.com/embed/U6C7a_gGc-4</x-slot>
                                     <x-slot name="content">
                                         <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
                                         <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
@@ -235,7 +232,6 @@
                     <div v-show="page.tab == 4">
                         <x-box class="mb-4">
                             <x-slot name="title">Mint settings</x-slot>
-                            <x-slot name="tutorial">https://www.youtube.com/embed/U5hdZk_5T2c</x-slot>
                             <x-slot name="content">
                                 <p>{{ __('Here you can customize your mint page. Add SEO to your page and customize the design.') }}</p>
                             </x-slot>
