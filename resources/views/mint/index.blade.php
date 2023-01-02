@@ -14,7 +14,7 @@
         </div>
         <div v-if="claimPhases.length > 0" class="flex-row grid-cols-1 -my-2">
             <div v-for="(phase, index) in claimPhases" class="relative py-2 h-auto lg:h-1/3">
-                <div class="bg-white border border-mintpad-200 rounded-md px-8 py-6 h-full" v-bind:class="{'border-2 border-primary-600': phase.active}">
+                <div class="bg-white rounded-md px-8 py-6 h-full" v-bind:class="{'border-2 border-primary-600': phase.active}">
                     <h2 class="text-lg font-semibold mb-1 text-mintpad-500" v-html="phase.name"></h2>
                     <p class="text-sm mb-3 text-mintpad-300">
                         <span v-if="phase.whitelist">• Whitelist <span class="text-primary-600 font-medium" v-html="phase.snapshot.length"></span></span>
@@ -46,27 +46,27 @@
         </div>
         <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
             <div class="relative py-2 h-auto lg:h-1/3">
-                <div class="bg-white border border-mintpad-200 rounded-md px-8 py-6 h-full">
+                <div class="bg-white rounded-md px-8 py-6 h-full">
                     <h2 class="text-lg font-semibold mb-1 text-mintpad-500">Mint phases</h2>
                     <p class="font-regular text-mintpad-300">No mint phases are set yet.</p>
                 </div>
             </div>
         </div>
         <div v-else class="grid grid-cols-1 gap-4">
-            <div v-for="(phase, index) in [1,2,3]" class="relative bg-white border border-mintpad-200 rounded-md px-8 py-6">
+            <div v-for="(phase, index) in [1,2,3]" class="relative bg-white rounded-md px-8 py-6">
                 <div class="bg-gray-300 rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
                 <div class="bg-gray-300 rounded-md w-full h-5 mb-4 animate-pulse"></div>
                 <div class="bg-gray-300 rounded-md w-2/3 h-5 animate-pulse"></div>
             </div>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md text-center">
+        <div class="bg-white rounded-md text-center">
             <img v-if="collection.image" v-bind:src="collection.image" class="inline-block rounded-md" />
             <div v-else class="relative">
                 <i class="far fa-image absolute inset-0 top-1/3 text-9xl text-primary-300 rounded-md animate-pulse"></i>
                 <img src="/images/transparent.png" class="inline-block rounded-xl" />
             </div>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md p-8">
+        <div class="bg-white rounded-md p-8">
             <h2 class="text-xl font-semibold text-center mb-1 text-mintpad-500">{{ __('Mint an NFT') }}</h2>
             <p class="font-regular text-center mb-4 text-mintpad-300">{{ __('Start minting by clicking the button below') }}</p>
             <div class="flex gap-2">                    
@@ -86,14 +86,14 @@
                 <div class="rounded-full bg-primary-600 p-1" v-bind:style="{width: collection.totalRatio+'%'}"></div>
             </div>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md p-8">
+        <div class="bg-white rounded-md p-8">
             <h2 class="text-xl font-semibold mb-1 text-mintpad-500" v-html="collection.name"></h2>
             <p class="font-regular text-mintpad-300" v-html="collection.description"></p>
         </div>
-        <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white border border-mintpad-200 text-center rounded-md p-6">
+        <div v-if="collection.buttons.length" class="lg:col-span-2 bg-white text-center rounded-md p-6">
             <x-link-button v-for="button in collection.buttons" v-bind:href="button.href" :target="'_blank'" class="m-1" rel="nofollow">@{{ button.label }}</x-link-button>
         </div>
-        <div v-if="collection.about || collection.roadmap || collection.team" class="lg:col-span-2 p-4 px-8 bg-white border border-mintpad-200 rounded-md">
+        <div v-if="collection.about || collection.roadmap || collection.team" class="lg:col-span-2 p-4 px-8 bg-white rounded-md">
             <div class="mb-4 border-b border-mintpad-200">
                 <a href="#" v-if="collection.about" @click.prevent="changeTab(1)" class="inline-block text-base -mb-[1px] border-b-2 hover:border-primary-300 mr-4 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
                 <a href="#" v-if="collection.roadmap" @click.prevent="changeTab(2)" class="inline-block text-base -mb-[1px] border-b-2 hover:border-primary-300 mr-4 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
