@@ -1,51 +1,61 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-6">
         <div class="overflow-hidden">
-            <div v-if="!wallet.account">
-                <connect-wallet></connect-wallet>
-            </div>
-            <div v-else>
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl text-center mb-1 font-semibold">{{ __('Collections') }}</h2>
-                    <p class="text-center text-lg">{{ __('Create and manage your NFT collections.') }}</p>
-                </div>
-                <div class="mb-10">
-                    @if (count($collections))
-                        <div class="px-6 mb-1 text-mintpad-300 dark:text-gray-200 flex flex-row text-sm">
-                            <div class="p-2 basis-3/12 lg:basis-4/12">{{ __('Collection name') }}</div>
-                            <div class="p-2 basis-1/12">{{ __('Symbol') }}</div>
-                            <div class="p-2 basis-2/12">{{ __('Blockchain') }}</div>
-                            <div class="p-2 basis-4/12 lg:basis-3/12">{{ __('Contract address') }}</div>
-                            <div class="p-2 basis-2/12"></div>
+            <div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+                    <x-box class="bg-waves dark:bg-waves-dark bg-cover p-12">
+                        <h1>Welcome</h1>
+                        <p class="mb-4">Launching a collection can seem complicated. That is why we have made a video where we explain the entire process step by step.</p>
+                        <x-link-button href="#" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Kl8C6RtJmis')">Watch video</x-link-button>
+                    </x-box>
+                    <x-box class="text-left md:text-center p-12">
+                        <h1>Let’s get started</h1>
+                        <div v-if="!wallet.account">
+                            <p class="mb-4">You have to connect your wallet to start creating your collection.</p>
+                            <x-button href="#" @click.prevent="connectMetaMask">Connect MetaMask</x-button>
                         </div>
-                        @foreach ($collections as $collection)
-                            <div class="px-6 py-1 mb-4 rounded-2xl text-mintpad-500 dark:text-white border-2 border-mintpad-200 dark:border-gray-600 bg-primary-100 dark:bg-mintpad-700 flex flex-row text-left items-center">
-                                <div class="p-2 basis-3/12 lg:basis-4/12 font-semibold">{{ $collection->name }}</div>
-                                <div class="p-2 basis-1/12 font-semibold">{{ $collection->symbol }}</div>
-                                <div class="p-2 basis-2/12 font-semibold">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
-                                <div class="p-2 basis-4/12 lg:basis-3/12">
-                                    <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm border-2 border-mintpad-200 hover:border-primary-600 px-3 py-1 text-mintpad-400 dark:text-white rounded-lg mr-3" v-tippy><i class="fas fa-copy mr-2 text-mintpad-300"></i>{{ shorten_address($collection->address) }}</button>
-                                </div>
-                                <div class="p-2 basis-2/12 text-right">
-                                    <x-link-button href="{{ route('collections.edit', $collection->id) }}">Manage</x-link-button>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endif
+                        <div v-else>
+                            <p class="mb-4">We are connected to your wallet.</p>
+                            <x-link-button href="{{ route('collections.create') }}">Create collection</x-link-button>
+                        </div>
+                    </x-box>
                 </div>
+
+                <x-box class="w-full mb-12">
+                    <x-slot name="title">Your collections</x-slot>
+                        @if (count($collections))
+                            <div>
+                                <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
+                                    <div class="basis-full sm:basis-3/12">{{ __('Collection name') }}</div>
+                                    <div class="hidden sm:block basis-2/12">{{ __('Symbol') }}</div>
+                                    <div class="hidden sm:block basis-3/12">{{ __('Blockchain') }}</div>
+                                    <div class="hidden sm:block basis-4/12 lg:basis-2/12">{{ __('Contract address') }}</div>
+                                    <div class="hidden sm:block basis-2/12"></div>
+                                </x-box-row>
+                                @foreach ($collections as $collection)
+                                    <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                                        <div class="basis-full sm:basis-3/12">{{ $collection->name }}</div>
+                                        <div class="hidden sm:block basis-1/2 sm:basis-2/12">{{ $collection->symbol }}</div>
+                                        <div class="hidden sm:block basis-1/2 sm:basis-3/12">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
+                                        <div class="basis-1/2 sm:basis-4/12 lg:basis-2/12">
+                                            <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm g-mintpad-100 dark:bg-mintpad-700 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shorten_address($collection->address) }}</button>
+                                        </div>
+                                        <div class="basis-1/2 sm:basis-2/12 text-right">
+                                            <x-link-button href="{{ route('collections.edit', $collection->id) }}" class="!py-2">Manage</x-link-button>
+                                        </div>
+                                    </x-box-row>
+                                @endforeach
+                            </div>
+                        @else
+                            <x-slot name="content">
+                                <p>You don't have any collections yet</p>
+                            </x-slot>
+                        @endif
+                </x-box>
 
                 <div class="text-center mt-10">
                     <x-link-button href="{{ route('collections.create') }}">Create collection</x-link-button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="w-full bg-primary-400 dark:bg-mintpad-700 py-12 mt-12">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center">
-                <h3 class="text-2xl mb-1">{{ __('Platform overview') }}</h3>
-                <p class="font-regular text-sm mb-4">{!! __('Launching a collection can seem complicated. That is why we have <br>made a video where we explain the entire process step by step.') !!}</p>
-                <iframe class="inline-block" width="650" height="366" src="https://www.youtube.com/embed/Kl8C6RtJmis" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="user-address" class="hidden lg:inline-block">
-            <button href="#" @click.prevent="copyAddress" class="hidden border-2 text-mintpad-400 dark:text-gray-200 text-sm rounded-lg hover:border-primary-600 px-3 py-1 mr-3" content="Copy wallet address" v-tippy></button>
+            <button href="#" @click.prevent="copyAddress" class="hidden bg-mintpad-100 dark:bg-mintpad-800 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 text-sm rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1 mr-4" content="Copy wallet address" v-tippy></button>
         </div>      
     </div>
 </template>

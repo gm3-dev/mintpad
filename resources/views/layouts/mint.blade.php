@@ -42,12 +42,20 @@
         <script src="{{ mix('js/mint.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container min-h-screen bg-primary-400">
+        <div class="main-container min-h-screen bg-primary-100">
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}" v-bind:style="style">
+                <div class="col-span-1 lg:col-span-2">
+                    <div v-if="!wallet.account" class="bg-mintpad-200 p-2 mb-4 text-center">
+                        <p class="text-sm text-mintpad-700">Your wallet is not connected <x-button href="#" class="ml-4" @click.prevent="connectMetaMask">Connect MetaMask</x-button></p>
+                    </div>
+                    <div v-else-if="hasValidChain !== true" class="bg-mintpad-200 p-2 mb-4 text-center">
+                        <p class="text-sm text-mintpad-700">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
+                    </div>
+                </div>
                 <div class="py-12">
-                    <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
+                    <div class="max-w-5xl mx-auto px-6">
                         {{ $slot }}
                     </div>
                 </div>

@@ -1,23 +1,23 @@
-<div v-if="errorMessage" class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-red-100 border-t-4 border-red-500 dark:bg-red-200" role="alert">
-    <div class="w-full">
-        <i class="fas fa-info-circle text-red-700"></i>
-        <div class="inline ml-3 text-sm font-medium text-red-700" v-html="errorMessage"></div>
-        <a v-if="showRefreshButton" class="text-sm float-right mt-1 text-red-700 underline" href="/{{ request()->path() }}">Refresh</a>
+<div v-if="messageBag" class="fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto">
+    <div v-for="message in messageBag" class="px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+        <div class="w-full">
+            <i v-if="message.type == 'info'" class="fa-solid fa-circle-exclamation text-xl text-mintpad-700 align-middle"></i>
+            <i v-if="message.type == 'error'" class="fa-solid fa-circle-exclamation text-xl text-red-400 align-middle"></i>
+            <i v-if="message.type == 'success'" class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
+            <div class="inline ml-3 text-sm text-mintpad-700 dark:text-white" v-html="message.message"></div>
+            <a v-if="message.refresh" class="text-sm float-right mt-0.5 underline text-mintpad-700 dark:text-white" href="/{{ request()->path() }}">refresh</a>
+        </div>
     </div>
 </div>
-<div v-if="successMessage" class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-green-100 border-t-4 border-green-500 dark:bg-green-200" role="alert">
-    <i class="fas fa-info-circle text-green-700"></i>
-    <div class="ml-3 text-sm font-medium text-green-700" v-html="successMessage"></div>
-</div>
 @if ($message = Session::get('success'))
-    <div class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-green-100 border-t-4 border-green-500 dark:bg-green-200" role="alert">
-        <i class="fas fa-info-circle text-green-700"></i>
-        <div class="ml-3 text-sm font-medium text-green-700">{{ $message }}</div>
+    <div class="flex fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+        <i class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
+        <div class="ml-3 text-sm text-mintpad-700 dark:text-white">{{ $message }}</div>
     </div>
 @endif
 @if ($message = Session::get('error'))
-    <div class="flex fixed w-1/3 bottom-2 inset-x-0 mx-auto p-3 mb-4 bg-red-100 border-t-4 border-red-500 dark:bg-red-200" role="alert">
-        <i class="fas fa-info-circle text-red-700"></i>
-        <div class="ml-3 text-sm font-medium text-red-700">{{ $message }}</div>
+    <div class="flex fixed w-11/12 sm:w-1/3 bottom-2 inset-x-0 mx-auto px-6 py-2 mb-2 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+        <i class="fa-solid fa-circle-exclamation text-xl text-red-400 align-middle"></i>
+        <div class="ml-3 text-sm text-mintpad-700 dark:text-white">{{ $message }}</div>
     </div>
 @endif

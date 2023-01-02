@@ -20,6 +20,7 @@ initSentry(Vue)
 
 if (document.getElementById('app')) {  
     Vue.component('tinymce', require('./components/TinyMCE.vue').default);
+
     Vue.use(ColorPanel)
     Vue.use(ColorPicker)
 
@@ -95,6 +96,7 @@ if (document.getElementById('app')) {
                 this.collection.logo = response.data.logo
                 this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
+                this.collection.mintUrl = response.data.minturl
                 
                 // Set theme
                 if (response.data.theme) {
@@ -111,6 +113,7 @@ if (document.getElementById('app')) {
         methods: {
             addBackground: function() {
                 this.modal.id = 'edit-background'
+                this.modalTitle('Edit background')
                 this.setResource('background')
             },
             uploadBackground: function(event) {
@@ -126,9 +129,9 @@ if (document.getElementById('app')) {
                     
                 }).catch((error) => {
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors.background[0])
+                        this.setMessage(error.response.data.errors.background[0], 'error')
                     } else {
-                        this.setErrorMessage('Something went wrong, please try again.')
+                        this.setMessage('Something went wrong, please try again.', 'error')
                     }
                 });
             },
@@ -143,6 +146,7 @@ if (document.getElementById('app')) {
 
             addLogo: function() {
                 this.modal.id = 'edit-logo'
+                this.modal.title = 'Edit logo'
                 this.setResource('logo')
             },
             uploadLogo: function(event) {
@@ -157,9 +161,9 @@ if (document.getElementById('app')) {
                     
                 }).catch((error) => {
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors.logo[0])
+                        this.setMessage(error.response.data.errors.logo[0], 'error')
                     } else {
-                        this.setErrorMessage('Something went wrong, please try again.')
+                        this.setMessage('Something went wrong, please try again.', 'error')
                     }
                 });
             },
@@ -201,7 +205,7 @@ if (document.getElementById('app')) {
             },
             addNewButton: function() {
                 if (this.newButton.label == '' || this.newButton.label == '') {
-                    this.setErrorMessage('Label and link are both required')
+                    this.setMessage('Label and link are both required', 'error')
                 } else {
                     this.collection.buttons.push({label: this.newButton.label, href: this.newButton.href})
 
@@ -223,12 +227,12 @@ if (document.getElementById('app')) {
                 await axios.put('/collections/'+this.collectionID, data)
                 .catch((error) => {
                     if (error.response.status == 422) {
-                        this.setErrorMessage(error.response.data.message)
+                        this.setMessage(error.response.data.message, 'error')
                     }
                 })
                 .then((response) => {
                     if (response) {
-                        this.setSuccessMessage('Mint settings updated')
+                        this.setMessage('Mint settings updated', 'success')
                     }
                 })
 
@@ -236,6 +240,7 @@ if (document.getElementById('app')) {
             },
             openYouTubeModal: function(url) {
                 this.modalToggle(true)
+                this.modalTitle('Tutorial video')
                 this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }

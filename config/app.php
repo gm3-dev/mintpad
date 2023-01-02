@@ -45,7 +45,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application URL
+    | Application URLs
     |--------------------------------------------------------------------------
     |
     | This URL is used by the console to properly generate URLs when using
@@ -58,6 +58,13 @@ return [
     'mint_url' => env('MINT_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
     'generator_url' => env('GENERATOR_URL', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | NodeJS path
+    |--------------------------------------------------------------------------
+    */
+    'node_path' => env('NODE_PATH', 'node'),
 
     /*
     |--------------------------------------------------------------------------

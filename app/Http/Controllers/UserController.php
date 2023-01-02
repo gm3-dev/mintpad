@@ -23,6 +23,9 @@ class UserController extends Controller
         $countries = collect(config('countries'))->map(function ($country) {
             return $country['full'];
         });
+        $user->birth_day = $user->birthday->day ?? date('d');
+        $user->birth_month = $user->birthday->month ?? date('n');
+        $user->birth_year = $user->birthday->year ?? date('Y');
 
         return view('users.profile')->with(compact('user', 'countries'));
     }
@@ -57,12 +60,12 @@ class UserController extends Controller
         $user->is_company = $request->has('is_company');
         $user->company_name = $request->company_name ?? null;
         $user->vat_id = $request->vat_id ?? null;
+        $user->birthday = date('Y-m-d', strtotime($request->birth_year.'-'.$request->birth_month.'-'.$request->birth_day));
         $user->country = $request->country ?? null;
         $user->city = $request->city ?? null;
         $user->state = $request->state ?? null;
         $user->postalcode = $request->postalcode ?? null;
         $user->address = $request->address ?? null;
-        $user->address2 = $request->address2 ?? null;
         $user->save();
 
         Moneybird::updateContact($user);

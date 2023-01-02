@@ -1,8 +1,8 @@
 window.$ = require('jquery')
-import * as Sentry from "@sentry/vue";
 import { ethers } from 'ethers'
-import { chain } from "lodash";
 import helpers from '../includes/helpers.js'
+import { initSentry, resportError } from '../includes/sentry'
+initSentry(undefined)
 
 export default {
     mixins: [helpers],
@@ -37,7 +37,7 @@ export default {
                 // this.provider = await detectEthereumProvider() // not used
     
             } catch(error) {
-                this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
+                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', true)
             }
     
             if (provider) {
@@ -49,7 +49,7 @@ export default {
                     console.log(e)
                 })
             } else {
-                this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
+                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', true)
             }
         },
         setMetaMaskEvents: function () {
@@ -99,7 +99,7 @@ export default {
                 network = await this.wallet.provider.getNetwork()
             } catch (error) {
                 if (error.message != 'Not connected') {
-                    this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                    this.setMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', 'error', true)
                     resportError(error) 
                 }
                 requestAccount = true
@@ -110,7 +110,7 @@ export default {
                     try {
                         accounts = await ethereum.request({method: 'eth_requestAccounts'})
                     } catch(error) {
-                        this.setErrorMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                        this.setMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', 'error', true)
                         resportError(error) 
                     }
                     if (accounts.length > 0) {

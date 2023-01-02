@@ -22,7 +22,7 @@ initSentry(Vue)
 if (document.getElementById('app')) {    
     new Vue({
         el: '#app',
-        mixins: [wallet,metamask, phantom,helpers,thirdweb, thirdwebWrapper],
+        mixins: [wallet, metamask, phantom,helpers,thirdweb, thirdwebWrapper],
         data: {
             style: {},
             tab: 1,
@@ -99,15 +99,12 @@ if (document.getElementById('app')) {
                     const metadata = await this.getMetadata()
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
-                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
-                    this.collection.fee_recipient = royalties.fee_recipient
-                    this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                     // Collection
+                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
                     this.collection.totalSupply = await this.contract.totalSupply()
                     this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
                     if (isNaN(this.collection.totalRatio)) {
                         this.collection.totalRatio = 0
                     }
@@ -120,8 +117,10 @@ if (document.getElementById('app')) {
                     
                 } catch (error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.', true)
+                    this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
+                this.loadComplete = true
+
                 this.loadComplete = true
 
             }).catch((error) => {
@@ -264,10 +263,10 @@ if (document.getElementById('app')) {
                 try {
                     await this.contract.claim(this.mintAmount)
 
-                    this.setSuccessMessage('NFT minted!')
+                    this.setMessage('NFT minted!', 'success')
                 } catch (error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.', true)
+                    this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
 
                 this.resetButtonLoader()

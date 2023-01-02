@@ -77,7 +77,6 @@ export default {
             await this.uploadTraitJSON()
             await this.uploadTraitImages(this.generator.files)
 
-            // Todo: userID is not dynamic
             if (this.generator.userID) {
                 await axios.post(
                     process.env.MIX_GENERATOR_URL, 
@@ -103,7 +102,7 @@ export default {
                 }, 2000);
 
             } else {
-                this.setErrorMessage('Generation failed, please try again.')
+                this.setMessage('Generation failed, please try again.', 'error')
             }
             this.resetButtonLoader()
         },

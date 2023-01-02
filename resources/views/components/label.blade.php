@@ -1,6 +1,6 @@
 @props(['value' => false, 'info' => false])
 
-<label {{ $attributes->merge(['class' => 'inline-block text-sm text-mintpad-400 dark:text-gray-200']) }}>
+<label {{ $attributes->merge(['class' => 'inline-block text-xs font-medium mb-1 text-mintpad-400 dark:text-gray-400']) }}>
     {{ $value ? $value : $slot }}
 </label>
 @if ($info)

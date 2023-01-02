@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
-        <div id="app" class="main-container min-h-screen bg-white dark:bg-slate-900" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
+        <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
             @include('partials.navigation')
             @isset($header)
                 <div class="p-6 text-left w-full mx-auto bg-gray-100">
@@ -27,34 +27,27 @@
             @endisset
 
             <!-- Page Content -->
-            <div id="app-loader" class="w-10 mx-auto mt-4 text-lg dark:text-white"><i class="fa-solid fa-gear animate-spin"></i></div>
+            <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
+            <x-bg-overlay id="app-loader-bg" class="hidden"></x-bg-overlay>
             <main id="app-content" class="hidden">
+                <div class="col-span-1 lg:col-span-2">
+                    <div v-if="!wallet.account" class="bg-mintpad-200 dark:bg-mintpad-700 p-2 mb-4 text-center">
+                        <p class="text-sm text-mintpad-700 dark:text-white">Your wallet is not connected <x-button href="#" class="ml-4" @click.prevent="connectMetaMask">Connect MetaMask</x-button></p>
+                    </div>
+                    <div v-else-if="hasValidChain !== true" class="bg-mintpad-200 dark:bg-mintpad-700 p-2 mb-4 text-center">
+                        <p class="text-sm text-mintpad-700 dark:text-white">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
+                    </div>
+                </div>
                 <div class="py-12">
                     {{ $slot }}
                 </div>
-                <div v-if="modal.show" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                    <div class="fixed z-10 inset-0 overflow-y-auto">
-                        <div class="flex items-end sm:items-center justify-center min-h-full p-4 sm:p-0">
-                            <div class="relative bg-white dark:bg-slate-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-3xl sm:w-full">
-                                <div class="bg-white dark:bg-slate-900 p-14">
-                                    <a href="#" class="absolute right-4 top-3 text-3xl text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalToggle(false)"><i class="fas fa-times"></i></a>
-                                    <div class="overflow-y-auto">
-                                        <h3 v-if="modal.title" v-html="modal.title" class="text-2xl mb-4 mt-6"></h3>
-                                        <div v-html="modal.content"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-modal-vue></x-modal-vue>
                 @include('partials.messages')
             </main>
         </div>
 
         <!-- Scripts -->
         <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
-        <!-- <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script> -->
         <script src="https://cdn.tiny.cloud/1/6zk5wmqbfgxkjqvqyh5f1y44fqollc7y639edh5dt2295z6r/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </body>

@@ -74,7 +74,7 @@ if (document.getElementById('app')) {
     Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
     Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
     Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
-    Vue.component('tab-status', require('./components/TabStatus.vue').default);
+    Vue.component('status-button', require('./components/StatusButton.vue').default);
 
     new Vue({
         el: '#app',
@@ -111,13 +111,14 @@ if (document.getElementById('app')) {
             page: {
                 name: '',
                 tab: 0,
-            }
+            },
+            validation: {}
         },
         async mounted() {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
-
+            
             await this.setBlockchains()
 
             // Listen to connect button
@@ -139,6 +140,20 @@ if (document.getElementById('app')) {
         methods: {
             changeEditTab: async function(tab) {
                 this.page.tab = tab
+            },
+            nextEditTab: async function() {
+                if (this.page.tab == 4) {
+                    //
+                } else {
+                    this.page.tab++
+                }
+            },
+            previousEditTab: async function() {
+                if (this.page.tab == 1) {
+                    //
+                } else {
+                    this.page.tab--
+                }
             },
             setPage: function() {
                 this.page.name = this.$el.getAttribute('data-page')
@@ -177,6 +192,7 @@ if (document.getElementById('app')) {
                     // Check if wallet is connected to the correct blockchain
                     if (this.hasValidChain !== true) {
                         this.page.tab = -1
+                        this.setMessage('There is a problem with your wallet', 'error', true)
                         return;
                     } else {
                         this.page.tab = 1
@@ -206,7 +222,7 @@ if (document.getElementById('app')) {
                     } catch (error) {
                         resportError(error)
                         console.log('error', error)
-                        this.setErrorMessage('Contract could not be loaded, please try again.', true)
+                        this.setMessage('Contract could not be loaded, please try again.', 'error', true)
                     }
 
                     this.validateTabStatus()
@@ -223,7 +239,7 @@ if (document.getElementById('app')) {
                 // Validate form
                 var validation = this.validateUpdateClaimPhases()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -238,9 +254,9 @@ if (document.getElementById('app')) {
                             name: claimPhase.name
                         },
                         startTime: new Date(claimPhase.startTime),
-                        price: claimPhase.price,
-                        maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : claimPhase.maxClaimableSupply,
-                        maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 ? 'unlimited' : claimPhase.maxClaimablePerWallet,
+                        price: parseFloat(claimPhase.price),
+                        maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimableSupply),
+                        maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimablePerWallet),
                         // waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, Contract v3
                         // snapshot: claimPhase.whitelist == 0 ? [] : claimPhase.snapshot,
                     }
@@ -254,17 +270,17 @@ if (document.getElementById('app')) {
                     //     this.validateTabStatus()
                     // })
                     
-                    this.setSuccessMessage('Claim phases updated')
+                    this.setMessage('Claim phases updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
                 
                 this.resetButtonLoader()
             },
             addClaimPhase: function(e) {
                 if (this.claimPhases.length >= 3) {
-                    this.setErrorMessage('You can only have 3 mint phases')
+                    this.setMessage('You can only have 3 mint phases', 'error')
                     return
                 }
                 this.claimPhases.push({
@@ -298,13 +314,15 @@ if (document.getElementById('app')) {
                 this.claimPhases[index].snapshot = []
             },
             toggleWhitelistModal: function(index, state) {
+                console.log('index', index)
+                console.log('state', state)
                 this.claimPhases[index].modal = state
             },
             updateMetadata: async function(e) {
                 // Validate form
                 var validation = this.validateUpdateMetadata()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -321,10 +339,10 @@ if (document.getElementById('app')) {
                         this.validateTabStatus()
                     })
 
-                    this.setSuccessMessage('General settings updated')
+                    this.setMessage('General settings updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -333,7 +351,7 @@ if (document.getElementById('app')) {
                 // Validate form
                 var validation = this.validateUpdateRoyalties()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -347,10 +365,10 @@ if (document.getElementById('app')) {
 
                     this.validateTabStatus()
 
-                    this.setSuccessMessage('Royalties updated')
+                    this.setMessage('Royalties updated', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -368,7 +386,7 @@ if (document.getElementById('app')) {
                 await axios.put('/collections/'+this.collectionID+'/mint', data)
                 .catch((error) => {
                     if (error.response.status == 422) {
-                        this.setErrorMessage(error.response.data.message)
+                        this.setMessage(error.response.data.message, 'error')
                     }
                 })
                 .then((response) => {
@@ -382,7 +400,7 @@ if (document.getElementById('app')) {
 
                         this.validateTabStatus()
 
-                        this.setSuccessMessage('Mint settings updated')
+                        this.setMessage('Mint settings updated', 'success')
                     }
                 })
 
@@ -390,14 +408,14 @@ if (document.getElementById('app')) {
             },
             deployContract: async function(e) {
                 if (this.hasValidChain !== true) {
-                    this.setErrorMessage('Please connect to the correct blockchain')
+                    this.setMessage('Please connect to the correct blockchain', 'error')
                     return
                 }
 
                 // Validate form
                 var validation = this.validateDeployContract()
                 if (!validation.valid) {
-                    this.setErrorMessage(validation.message)
+                    this.setMessage(validation.message, 'error')
                     return
                 }
 
@@ -419,7 +437,7 @@ if (document.getElementById('app')) {
 
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -429,7 +447,7 @@ if (document.getElementById('app')) {
                 var metadata = await this.prepareFiles(files)
 
                 if (metadata.status == 'error') {
-                    this.setErrorMessage('Invalid collection data')
+                    this.setMessage('Invalid collection data', 'error')
                     return;
                 }
 
@@ -437,7 +455,7 @@ if (document.getElementById('app')) {
                 this.collection.previews = this.collection.metadata.slice(0, 8)
                 this.upload = false
 
-                this.setSuccessMessage('NFTs received')
+                this.setMessage('NFTs received', 'success')
             },
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
@@ -457,10 +475,10 @@ if (document.getElementById('app')) {
                         })
                     }
 
-                    this.setSuccessMessage('NFTs added to the collection!')
+                    this.setMessage('NFTs added to the collection!', 'success')
                 } catch(error) {
                     resportError(error)
-                    this.setErrorMessage('Something went wrong, please try again.')
+                    this.setMessage('Something went wrong, please try again.', 'error')
                 }
 
                 this.resetButtonLoader()
@@ -476,9 +494,9 @@ if (document.getElementById('app')) {
                     this.resources['social-sharing'].loading = false
                 }).catch((error) => {
                     if (error.response.data.errors != undefined) {
-                        this.setErrorMessage(error.response.data.errors.resource[0])
+                        this.setMessage(error.response.data.errors.resource[0], 'error')
                     } else {
-                        this.setErrorMessage('Something went wrong, please try again.')
+                        this.setMessage('Something went wrong, please try again.', 'error')
                     }
                 })
             },
@@ -582,7 +600,8 @@ if (document.getElementById('app')) {
             },
             openYouTubeModal: function(url) {
                 this.modalToggle(true)
-                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
+                this.modalTitle('Tutorial video')
+                this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="560" height="315" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }
     })

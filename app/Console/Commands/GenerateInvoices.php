@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Facades\Moneybird;
-use App\Jobs\GenerateInvoices as JobsGenerateInvoices;
-use App\Models\User;
+use App\Jobs\GenerateInvoices as JobGenerateInvoices;
 use Illuminate\Console\Command;
 
 class GenerateInvoices extends Command
@@ -47,7 +45,7 @@ class GenerateInvoices extends Command
             $month = 12;
         }
 
-        JobsGenerateInvoices::dispatch($month, $year)->onQueue('low');
+        JobGenerateInvoices::dispatch($month, $year)->onQueue('default');
 
         return;
     }
