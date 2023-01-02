@@ -26,7 +26,7 @@
             </a>
         </div>
         <div class="grid grid-cols-1 gap-4">
-            <div class="relative border border-mintpad-200 bg-white rounded-md px-8 py-6">
+            <div class="relative bg-white rounded-md px-8 py-6">
                 <h2 class="text-lg font-semibold mb-1 text-mintpad-500"><span>{{ __('Premium whitelist') }}</span></h2>
                 <p class="text-sm mb-3 text-mintpad-300">
                     <span>• Whitelist <span class="text-primary-600 font-medium">100</span></span>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="relative border border-mintpad-200 bg-white rounded-md px-8 py-6">
+            <div class="relative bg-white rounded-md px-8 py-6">
                 <h2 class="text-lg font-semibold mb-1 text-mintpad-500"><span>{{ __('Public') }}</span></h2>
                 <p class="text-sm mb-3 text-mintpad-300">
                     <span>• Whitelist <span class="text-primary-600 font-medium">600</span></span>
@@ -73,11 +73,11 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md text-center">
+        <div class="bg-white rounded-md text-center">
             <img v-if="collection.thumb" :src="collection.thumb" class="inline-block rounded-md" />
             <i v-else class="far fa-image text-9xl text-primary-300 mb-1 mt-36 rounded-md animate-pulse"></i>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md p-8">
+        <div class="bg-white rounded-md p-8">
             <h2 class="text-xl font-semibold text-center mb-1 text-mintpad-500">{{ __('Mint an NFT') }}</h2>
             <p class="font-regular text-center mb-4 text-mintpad-300">{{ __('Start minting by clicking the button below') }}</p>
             <div class="flex gap-2">
@@ -95,11 +95,11 @@
                 <div class="rounded-full bg-primary-600 p-1 w-1/2"></div>
             </div>
         </div>
-        <div class="bg-white border border-mintpad-200 rounded-md p-8">
+        <div class="bg-white rounded-md p-8">
             <h2 class="text-xl font-semibold mb-1 text-mintpad-500">{{ $collection->name }}</h2>
             <p class="font-regular text-mintpad-300">{{ $collection->description }}</p>
         </div>
-        <div class="lg:col-span-2 bg-white border border-mintpad-200 text-center rounded-md p-6">
+        <div class="lg:col-span-2 bg-white text-center rounded-md p-6">
             <span v-for="(button,index) in collection.buttons" content="Edit button" v-tippy>
                 <x-button @click.prevent="editButton(index)" v-bind:href="button.href" :target="'_blank'" class="m-1">@{{ button.label }} <i class="fas fa-edit"></i></x-button>
             </span>
@@ -107,7 +107,7 @@
                 <x-default-button href="#" @click.prevent="newButton" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> <span class="align-middle">Add button</span></x-default-button>
             </span>
         </div>
-        <div class="lg:col-span-2 p-4 px-8 bg-white border border-mintpad-200 rounded-md">
+        <div class="lg:col-span-2 p-4 px-8 bg-white rounded-md">
             <div class="mb-2 border-b border-mintpad-200">
                 <a href="#" @click.prevent="changeTab(1)" class="inline-block text-base -mb-[1px] border-b-2 hover:border-primary-300 mr-4 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 1}">About the collection</a>
                 <a href="#" @click.prevent="changeTab(2)" class="inline-block text-base -mb-[1px] border-b-2 hover:border-primary-300 mr-4 pb-2 text-mintpad-500" :class="{'border-primary-600': tab == 2}">Roadmap</a>
@@ -125,7 +125,7 @@
         </div>
     </div>
     <div class="my-8 text-center">
-        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white border border-mintpad-200 p-2 px-4 rounded-md !text-mintpad-300 ">Terms of Service</x-link>
+        <x-link href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm bg-white p-2 px-4 rounded-md !text-mintpad-300 ">Terms of Service</x-link>
     </div>
 
     <div v-if="modal.id == 'edit-button'">
