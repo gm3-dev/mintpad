@@ -119,6 +119,7 @@ if (document.getElementById('app')) {
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
+                this.loadComplete = true
 
                 this.loadComplete = true
 

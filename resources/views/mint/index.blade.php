@@ -36,6 +36,13 @@
                     <p v-else class="text-sm text-mintpad-300">&nbsp;</p>
                 </div>
             </div>
+        </div>        
+        <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
+            <div class="relative py-2 h-auto lg:h-1/3">
+                <div class="bg-white rounded-xl px-8 py-6 h-full">
+                    <p>Mint phases not set yet</p>
+                </div>
+            </div>
         </div>
         <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
             <div class="relative py-2 h-auto lg:h-1/3">
