@@ -138,7 +138,7 @@
                                                         <p class="mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a demo whitelist.') }}</x-link></p>
                                                         <label class="block mb-4 text-mintpad-300">
                                                             <span class="sr-only">Choose File</span>
-                                                            <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="whitelist_file" />
+                                                            <x-input-file @change="uploadWhitelist($event, index)" name="whitelist_file" />
                                                         </label>
                                                         <p>{{ __('Upload a .CSV file. One wallet address per row.') }}</p>
                                                     </div>
@@ -182,7 +182,7 @@
     
                                         <label class="block text-mintpad-300 mb-4">
                                             <span class="sr-only">Choose Files</span>
-                                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                                            <x-input-file @change="uploadCollection" id="image_collection" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                                         </label>
                                         <p>{{ __('Your upload must contain images and JSON files.') }}</p>
 
@@ -273,7 +273,7 @@
                                         </div>
                                         <div v-else class="mb-4">
                                             <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>
-                                            <input v-else id="upload-logo" type="file" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-md file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
+                                            <x-input-file v-else id="upload-logo" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
                                         </div>
                                     </div>
                                 </div>
