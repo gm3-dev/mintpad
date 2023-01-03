@@ -48,8 +48,6 @@ export default {
                 provider.on("pending", function(e) {
                     console.log(e)
                 })
-            } else {
-                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', true)
             }
         },
         setMetaMaskEvents: function () {
