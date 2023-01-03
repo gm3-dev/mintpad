@@ -175,7 +175,7 @@
 
                             <div class="w-full">
                                 <x-box class="mb-4">
-                                    <x-slot name="title">Upload collection</x-slot>
+                                    <x-slot name="title">Add your collection files</x-slot>
                                     <x-slot name="content">
                                         <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
                                         <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
@@ -209,7 +209,7 @@
                                     <div class="w-full mt-5">
                                         <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
                                         <span content="This action will trigger a transaction" v-tippy>
-                                            <x-button href="#" @click.prevent="updateCollection">{{ __('Upload collection') }}</x-button>
+                                            <x-button href="#" @click.prevent="updateCollection">{{ __('Add to collection') }}</x-button>
                                         </span>
                                     </div>
                                 </x-slot>
