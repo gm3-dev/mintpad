@@ -2,10 +2,10 @@ export default {
     data() {
         return {
             tabs: {
-                settings: false,
-                phases: false,
-                collection: false,
-                mint: false,
+                settings: -1,
+                phases: -1,
+                collection: -1,
+                mint: -1,
             },
         }
     },

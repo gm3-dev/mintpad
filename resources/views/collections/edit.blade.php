@@ -17,7 +17,7 @@
                         <status-button @click.prevent.native="changeEditTab(3)" :label="'Upload collection'" :complete="tabs.collection"></status-button>
                         <status-button @click.prevent.native="changeEditTab(4)" :label="'Mint settings'" :complete="tabs.mint"></status-button>
                     </div>
-                    <div class="w-full mb-6 text-center">
+                    <div v-if="page.tab > 0" class="w-full mb-6 text-center">
                         <x-gray-button href="#" @click.prevent="previousEditTab" v-bind:class="{'!text-mintpad-400': page.tab == 1}">Previous step</x-gray-button>
                         <h2 v-if="page.tab == 1" class="hidden sm:inline-block text-2xl w-1/4">Settings</h2>
                         <h2 v-if="page.tab == 2" class="hidden sm:inline-block text-2xl w-1/4">Mint phases</h2>
