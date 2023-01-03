@@ -7,13 +7,16 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" type="image/png" href="/favicon.png"/>
+        
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
+        
+        <!-- Styles -->
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        
         @if(config('app.env') == 'production')
             @include('partials.google')
             @include('partials.hotjar')
         @endif
-        
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-sans antialiased">
         <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500" data-page="{{ Route::currentRouteName() }}" data-user="{{ Auth::user()->id }}">
@@ -47,7 +50,6 @@
         </div>
 
         <!-- Scripts -->
-        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
         <script src="https://cdn.tiny.cloud/1/6zk5wmqbfgxkjqvqyh5f1y44fqollc7y639edh5dt2295z6r/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </body>
