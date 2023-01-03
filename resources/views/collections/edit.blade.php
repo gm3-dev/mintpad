@@ -134,6 +134,8 @@
                                                         <p v-for="wallet in phase.snapshot">@{{ wallet.address }}</p>
                                                     </div>
                                                     <div v-else>
+                                                        <p>Here you can upload a .CSV file with all whitelisted wallets. Not sure what your .CSV should contain?</p>
+                                                        <p class="mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a demo whitelist.') }}</x-link></p>
                                                         <label class="block mb-4 text-mintpad-300">
                                                             <span class="sr-only">Choose File</span>
                                                             <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="whitelist_file" />
