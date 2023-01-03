@@ -10,7 +10,7 @@
                     <h2 class="!mb-0"> {{ $title }}</h2>
                 </div>
                 @endif
-                <div class="bg-white dark:bg-slate-900 px-10 py-6">
+                <div class="bg-white dark:bg-mintpad-800 px-10 py-6">
                     @if(isset($close))
                         {{ $close }}
                     @else
