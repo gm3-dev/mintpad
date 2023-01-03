@@ -40,7 +40,7 @@
         <div v-else-if="claimPhases.length == 0 && loadComplete" class="flex-row grid-cols-1 -my-2">
             <div class="relative py-2 h-auto lg:h-1/3">
                 <div class="bg-white rounded-xl px-8 py-6 h-full">
-                    <p>Mint phases not set yet</p>
+                    <p>Minting is disabled because no mint phases are active at the moment.</p>
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
             <div class="flex gap-2">                    
                 <x-button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full">Connect MetaMask</x-button>
                 <x-button v-else-if="hasValidChain !== true" @click.prevent="switchBlockchainTo(false)" class="w-full">Switch blockchain</x-button>
-                <x-button v-else @click.prevent="mintNFT" class="w-full">Start minting</x-button>
+                <x-button v-else @click.prevent="mintNFT" v-bind:disabled="claimPhases.length == 0" class="w-full">Start minting</x-button>
             </div>
             <div class="grid grid-cols-2 mt-4 text-sm font-medium text-mintpad-300">
                 <div>

@@ -258,6 +258,10 @@ if (document.getElementById('app')) {
                 return output;
             },
             mintNFT: async function(e) {
+                if (this.claimPhases.length == 0) {
+                    this.setMessage('You cannot mint this NFT yet because no mint phases have been set yet', 'error')
+                    return
+                }
                 this.setButtonLoader(e)
 
                 try {
