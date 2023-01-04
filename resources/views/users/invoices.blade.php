@@ -18,7 +18,7 @@
                 @method('PUT')
 
                 <x-box class="w-full">
-                    <x-slot name="title">Your invoices</x-slot>
+                    <x-slot name="title">Downloads</x-slot>
                         @if ($invoices->count() == 0)
                             <x-slot name="content">
                                 <p>{{ __('You don\'t have any invoices yet.') }}</p>

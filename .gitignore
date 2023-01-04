@@ -8,6 +8,7 @@
 /public/mix-manifest.json
 /storage/*.key
 /vendor
+.npmrc
 .env
 .env.backup
 .phpunit.result.cache

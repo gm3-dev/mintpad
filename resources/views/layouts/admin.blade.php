@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,11 +8,14 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" type="image/png" href="/favicon.png"/>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+
     </head>
     <body class="font-sans antialiased">
         <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">
@@ -45,7 +48,6 @@
         </div>
 
         <!-- Scripts -->
-        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
         <script src="{{ mix('js/admin.js') }}" defer></script>
     </body>
 </html>

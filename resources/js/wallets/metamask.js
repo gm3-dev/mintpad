@@ -37,7 +37,7 @@ export default {
                 // this.provider = await detectEthereumProvider() // not used
     
             } catch(error) {
-                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', true)
+                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', false)
             }
     
             if (provider) {
@@ -48,8 +48,6 @@ export default {
                 provider.on("pending", function(e) {
                     console.log(e)
                 })
-            } else {
-                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', true)
             }
         },
         setMetaMaskEvents: function () {
@@ -78,6 +76,21 @@ export default {
                     console.log('Disconnected from network', error)
                     window.location.reload()
                 })
+            }
+        },
+        setMetaMaskError: function(error) {
+            switch (error.code) {
+                case -32002: 
+                    this.setMessage('Request already pending: open MetaMask to see the request.', 'error')
+                    return true
+                case 4001:
+                    this.setMessage('Request canceled: you rejected the request.', 'error')
+                    return true
+                case 4902:
+                    this.setMessage('Unrecognized chain ID: try adding the chain to MetaMask.', 'error')
+                    return true
+                default:
+                    return false
             }
         },
         loadMetaMaskAccount: async function (triggerRequest) {

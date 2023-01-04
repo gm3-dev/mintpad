@@ -13,7 +13,6 @@
 
             <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Change background</x-gray-button>
             <x-link-button href="#" class="!px-4 text-center ml-2" @click.prevent="updateMintSettings">Publish changes</x-link-button>
-            <x-blue-button v-bind:href="collection.mintUrl" class="!px-4 text-center ml-2" target="_blank">Preview</x-blue-button>
             <x-blue-button href="#" class="align-middle ml-2 !rounded-full !px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/pNR-FvMcvGo')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
         </div>
     </div>
@@ -156,7 +155,7 @@
                 <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.logo.max') }} KB and jpg, jpeg and png.</p>
                 <p class="font-regular text-sm text-mintpad-300 mb-2">This logo will be resized to an image with a width of {{ config('resources.logo.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-logo" type="file" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-md file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
+                <x-input-file id="upload-logo" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete logo" v-tippy>
@@ -180,7 +179,7 @@
                 <p class="font-regular text-sm text-mintpad-300 mb-1">Uploads are restricted to {{ config('resources.background.max') }} KB and jpg, jpeg and png.</p>
                 <p class="font-regular text-sm text-mintpad-300 mb-2">This background will be resized to an image with a width of {{ config('resources.background.width') }} pixels.</p>
                 <span class="sr-only">Choose File</span>
-                <input id="upload-background" type="file" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-md file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
+                <x-input-file id="upload-background" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
             </label>
             <div class="mt-4">
                 <span content="Delete background" v-tippy>

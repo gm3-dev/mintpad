@@ -94,8 +94,10 @@ export default {
                     params: [{ chainId: ethers.utils.hexValue(parseInt(chainID)) }],
                 })
             } catch(error) {
-                resportError(error)
-                this.setMessage('Failed to switch to the correct blockchain, try to do it manually.', 'error')
+                if (! this.setMetaMaskError(error)) {
+                    resportError(error)
+                    this.setMessage('Failed to switch to the correct blockchain, try to do it manually.', 'error')
+                }
             }
         },
         validateMatchingBlockchains: async function(chainID) {

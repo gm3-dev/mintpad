@@ -99,15 +99,13 @@ if (document.getElementById('app')) {
                     const metadata = await this.getMetadata()
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
-
-                    // Collection
                     this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
-                    this.collection.totalSupply = await this.contract.totalSupply()
-                    this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
-                    this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    if (isNaN(this.collection.totalRatio)) {
-                        this.collection.totalRatio = 0
-                    }
+
+                    // Collection supply
+                    this.setSupplyData()
+                    setInterval(() => {
+                        this.setSupplyData()
+                    }, 10000)
                     
                     // Claim phases
                     var claimConditions = await this.getClaimPhases({withAllowList: false})
@@ -139,6 +137,14 @@ if (document.getElementById('app')) {
             },
             changeTab: function(index) {
                 this.tab = index
+            },
+            setSupplyData: async function() {
+                this.collection.totalSupply = await this.contract.totalSupply()
+                this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                if (isNaN(this.collection.totalRatio)) {
+                    this.collection.totalRatio = 0
+                }
             },
             setActiveClaimPhase: function() {
                 for (var i = 0; i < this.claimPhases.length; i++) {
@@ -258,12 +264,17 @@ if (document.getElementById('app')) {
                 return output;
             },
             mintNFT: async function(e) {
+                if (this.claimPhases.length == 0) {
+                    this.setMessage('You cannot mint this NFT yet because no mint phases have been set yet', 'error')
+                    return
+                }
                 this.setButtonLoader(e)
 
                 try {
                     await this.contract.claim(this.mintAmount)
 
                     this.setMessage('NFT minted!', 'success')
+                    this.setSupplyData()
                 } catch (error) {
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error', true)

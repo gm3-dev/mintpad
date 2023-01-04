@@ -265,9 +265,9 @@ if (document.getElementById('app')) {
 
                 try {
                     await this.contract.claimConditions.set(claimPhases)
-                    this.validateTabStatus()
+                    this.validateTabClaimPhases()
                     // await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
-                    //     this.validateTabStatus()
+                    //     this.validateTabClaimPhases()
                     // })
                     
                     this.setMessage('Claim phases updated', 'success')
@@ -314,8 +314,6 @@ if (document.getElementById('app')) {
                 this.claimPhases[index].snapshot = []
             },
             toggleWhitelistModal: function(index, state) {
-                console.log('index', index)
-                console.log('state', state)
                 this.claimPhases[index].modal = state
             },
             updateMetadata: async function(e) {
@@ -336,7 +334,7 @@ if (document.getElementById('app')) {
 
                     var formData = this.collection
                     await axios.put('/collections/'+this.collectionID+'/metadata', formData).then((response) => {
-                        this.validateTabStatus()
+                        this.validateTabSettings()
                     })
 
                     this.setMessage('General settings updated', 'success')
@@ -363,7 +361,7 @@ if (document.getElementById('app')) {
                         fee_recipient: this.collection.fee_recipient, // the fee recipient
                     })
 
-                    this.validateTabStatus()
+                    this.validateTabSettings()
 
                     this.setMessage('Royalties updated', 'success')
                 } catch(error) {
@@ -398,7 +396,7 @@ if (document.getElementById('app')) {
                         this.collection.fullMintUrl = this.collection.mintUrl+'/'+this.collection.permalink
                         this.collection.fullEditorUrl = this.collection.editorUrl+'/'+this.collection.permalink
 
-                        this.validateTabStatus()
+                        this.validateTabMintPage()
 
                         this.setMessage('Mint settings updated', 'success')
                     }
@@ -471,7 +469,7 @@ if (document.getElementById('app')) {
                     if (this.collection.nfts.length > 0) {
                         var data = {url: this.collection.nfts[0].metadata.image}
                         await axios.post('/collections/'+this.collectionID+'/thumb', data).then((response) => {
-                            this.validateTabStatus()
+                            this.validateTabCollection()
                         })
                     }
 

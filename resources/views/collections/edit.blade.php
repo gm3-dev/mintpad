@@ -17,7 +17,7 @@
                         <status-button @click.prevent.native="changeEditTab(3)" :label="'Upload collection'" :complete="tabs.collection"></status-button>
                         <status-button @click.prevent.native="changeEditTab(4)" :label="'Mint settings'" :complete="tabs.mint"></status-button>
                     </div>
-                    <div class="w-full mb-6 text-center">
+                    <div v-if="page.tab > 0" class="w-full mb-6 text-center">
                         <x-gray-button href="#" @click.prevent="previousEditTab" v-bind:class="{'!text-mintpad-400': page.tab == 1}">Previous step</x-gray-button>
                         <h2 v-if="page.tab == 1" class="hidden sm:inline-block text-2xl w-1/4">Settings</h2>
                         <h2 v-if="page.tab == 2" class="hidden sm:inline-block text-2xl w-1/4">Mint phases</h2>
@@ -134,9 +134,11 @@
                                                         <p v-for="wallet in phase.snapshot">@{{ wallet.address }}</p>
                                                     </div>
                                                     <div v-else>
+                                                        <p>Here you can upload a .CSV file with all whitelisted wallets. Not sure what your .CSV should contain?</p>
+                                                        <p class="mb-4"><x-link href="/examples/snapshot.csv">{{ __('Download a demo whitelist.') }}</x-link></p>
                                                         <label class="block mb-4 text-mintpad-300">
                                                             <span class="sr-only">Choose File</span>
-                                                            <input type="file" @change="uploadWhitelist($event, index)" class="inline-block file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="whitelist_file" />
+                                                            <x-input-file @change="uploadWhitelist($event, index)" name="whitelist_file" />
                                                         </label>
                                                         <p>{{ __('Upload a .CSV file. One wallet address per row.') }}</p>
                                                     </div>
@@ -173,14 +175,14 @@
 
                             <div class="w-full">
                                 <x-box class="mb-4">
-                                    <x-slot name="title">Upload collection</x-slot>
+                                    <x-slot name="title">Add your collection files</x-slot>
                                     <x-slot name="content">
                                         <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
                                         <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
     
                                         <label class="block text-mintpad-300 mb-4">
                                             <span class="sr-only">Choose Files</span>
-                                            <input type="file" @change="uploadCollection" id="image_collection" class="inline-block file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                                            <x-input-file @change="uploadCollection" id="image_collection" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
                                         </label>
                                         <p>{{ __('Your upload must contain images and JSON files.') }}</p>
 
@@ -207,7 +209,7 @@
                                     <div class="w-full mt-5">
                                         <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
                                         <span content="This action will trigger a transaction" v-tippy>
-                                            <x-button href="#" @click.prevent="updateCollection">{{ __('Upload collection') }}</x-button>
+                                            <x-button href="#" @click.prevent="updateCollection">{{ __('Add to collection') }}</x-button>
                                         </span>
                                     </div>
                                 </x-slot>
@@ -271,7 +273,7 @@
                                         </div>
                                         <div v-else class="mb-4">
                                             <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>
-                                            <input v-else id="upload-logo" type="file" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" class="inline-block p-6 w-full border border-mintpad-200 border-dashed rounded-md file:mr-2 file:px-4 file:py-2.5 file:bg-mintpad-200 file:text-mintpad-300 hover:text-mintpad-400 file:rounded-md file:text-sm file:text-center file:border-0" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
+                                            <x-input-file v-else id="upload-logo" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
                                         </div>
                                     </div>
                                 </div>

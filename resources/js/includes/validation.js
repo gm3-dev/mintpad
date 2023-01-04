@@ -2,10 +2,10 @@ export default {
     data() {
         return {
             tabs: {
-                settings: false,
-                phases: false,
-                collection: false,
-                mint: false,
+                settings: -1,
+                phases: -1,
+                collection: -1,
+                mint: -1,
             },
         }
     },
@@ -69,24 +69,24 @@ export default {
          * Tab validation
          */
         validateTabStatus: function() {
-            this.tabSettings()
-            this.tabClaimPhases()
-            this.tabCollection()
-            this.tabMintPage()
+            this.validateTabSettings()
+            this.validateTabClaimPhases()
+            this.validateTabCollection()
+            this.validateTabMintPage()
         },
-        tabSettings: function() {
+        validateTabSettings: function() {
             this.tabs.settings = true
             if (this.collection.name.trim() == '' || this.collection.description.trim() == '' || this.collection.royalties === '' || this.collection.fee_recipient.trim() === '') {
                 this.tabs.settings = false
             }
         },
-        tabClaimPhases: function() {
+        validateTabClaimPhases: function() {
             this.tabs.phases = this.claimPhases.length > 0
         },
-        tabCollection: function() {
+        validateTabCollection: function() {
             this.tabs.collection = this.collection.nfts.length > 0
         },
-        tabMintPage: function() {
+        validateTabMintPage: function() {
             this.tabs.mint = true
             if (this.collection.permalink.trim() === '' || this.collection.seo.title.trim() === '' || this.collection.seo.description.trim() === '') {
                 this.tabs.mint = false
