@@ -13,7 +13,7 @@
 
             <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Change background</x-gray-button>
             <x-link-button href="#" class="!px-4 text-center ml-2" @click.prevent="updateMintSettings">Publish changes</x-link-button>
-            <x-blue-button href="#" class="align-middle ml-2 !rounded-full !px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/pNR-FvMcvGo')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
+            <x-blue-button href="#" class="align-middle ml-2 !rounded-full !px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Qn2-nY0vZfQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
         </div>
     </div>
 

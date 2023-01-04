@@ -8,6 +8,7 @@
 
             <x-box class="w-full">
                 <x-slot name="title">Your invoices</x-slot>
+                <x-slot name="tutorial">https://www.youtube.com/embed/vXF1pNhEJCg</x-slot>
                 <x-slot name="content">
                     <p>{{ __('Are you a company? Add your details to your account ') }} <x-link href="{{ route('users.profile') }}">here</x-link>.</p>
                 </x-slot>
