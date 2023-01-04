@@ -122,7 +122,7 @@ if (document.getElementById('app')) {
                 this.loadComplete = true
 
             }).catch((error) => {
-                console.log('error', error)
+                //
             });
         },
         methods: {
