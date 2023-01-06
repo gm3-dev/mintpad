@@ -24,6 +24,9 @@
 @font-face { 
     font-family: JPEGDEVFONT-Medium; src: url('/fonts/JPEGDEVFONT-Medium.woff2');
 }
+@font-face { 
+    font-family: JPEGDEVFONT-Bold; src: url('/fonts/JPEGDEVFONT-Bold.woff2');
+}
 
 @layer base {
     html {
@@ -75,7 +78,7 @@
             @apply text-mintpad-700 text-3xl mb-4 font-jpegdevmd;
         }
         h2 {
-            @apply text-mintpad-700 text-xl mb-4 font-jpegdevmd;
+            @apply text-mintpad-700 text-lg mb-4 font-jpegdevbold;
         }
         h3 {
             @apply text-mintpad-700 text-lg mb-4 font-jpegdevmd;
@@ -161,8 +164,8 @@
     vertical-align: middle !important;
 
     .color-block {
-        width: 30px; 
-        height: 30px;
+        width: 25px; 
+        height: 25px;
 
         .value {
             border-radius: 6px;

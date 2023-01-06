@@ -7,6 +7,7 @@ import wallet from './includes/wallet.js'
 import metamask from './wallets/metamask.js'
 import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
+import modal from './includes/modal.js'
 import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import thirdweb from './includes/thirdweb.js'
 import { eventBus } from './includes/event-bus'
@@ -19,13 +20,15 @@ axios.defaults.headers.common = {
 }
 initSentry(Vue)
 
-if (document.getElementById('app')) {    
+if (document.getElementById('app')) {
+    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
+
     new Vue({
         el: '#app',
-        mixins: [wallet, metamask, phantom,helpers,thirdweb, thirdwebWrapper],
+        mixins: [modal, wallet, metamask, phantom,helpers,thirdweb, thirdwebWrapper],
         data: {
+            editMode: false,
             style: {},
-            tab: 1,
             collection: {
                 totalSupply: 0,
                 totalClaimedSupply: 0,
@@ -47,7 +50,6 @@ if (document.getElementById('app')) {
             }
 
             if (!this.collectionID) {
-                this.setFatalError()
                 return
             }
 
@@ -67,11 +69,9 @@ if (document.getElementById('app')) {
                 this.contractAddress = response.data.address
                 this.collection.chain_id = response.data.chain_id
                 this.collection.chain = this.blockchains[this.collection.chain_id].chain
+                this.collection.chainName = this.blockchains[this.collection.chain_id].full
                 this.collection.token = response.data.token
                 this.collection.buttons = this.setButtons(response.data.buttons ?? [])
-                this.collection.about = response.data.about
-                this.collection.roadmap = response.data.roadmap
-                this.collection.team = response.data.team
                 this.collection.logo = response.data.logo
                 this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
@@ -79,10 +79,7 @@ if (document.getElementById('app')) {
                 
                 // Set theme
                 this.theme = response.data.theme
-                this.setBackground()
                 this.setStyling()
-                this.setTab()
-            
                 this.appReady()
 
                 // Set SDK
@@ -100,6 +97,8 @@ if (document.getElementById('app')) {
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
                     this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
+                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                    this.collection.royalties = Math.round((royalties.seller_fee_basis_points / 100) * 10) / 10 + '%'
 
                     // Collection supply
                     this.setSupplyData()
@@ -119,25 +118,11 @@ if (document.getElementById('app')) {
                 }
                 this.loadComplete = true
 
-                this.loadComplete = true
-
             }).catch((error) => {
                 //
             });
         },
         methods: {
-            setTab: function() {
-                if (this.collection.about) {
-                    this.tab = 1
-                } else if (this.collection.roadmap) {
-                    this.tab = 2
-                } else if (this.collection.team) {
-                    this.tab = 3
-                }
-            },
-            changeTab: function(index) {
-                this.tab = index
-            },
             setSupplyData: async function() {
                 this.collection.totalSupply = await this.contract.totalSupply()
                 this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
@@ -242,27 +227,6 @@ if (document.getElementById('app')) {
                     }, 1000)
                 }
             },
-            createButtonList: function(data) {
-                var output = [];
-                if (data.website != '' && data.website != null) {
-                    output.push({name: 'Visit the website', url: data.website})
-                }
-                if (data.roadmap != '' && data.roadmap != null) {
-                    output.push({name: 'Roadmap', url: data.roadmap})
-                }
-                if (data.twitter != '' && data.twitter != null) {
-                    output.push({name: 'Twitter', url: data.twitter})
-                }
-                if (data.discord != '' && data.discord != null) {
-                    output.push({name: 'Discord', url: data.discord})
-                }
-
-                if (output.length == 0) {
-                    output = false
-                }
-
-                return output;
-            },
             mintNFT: async function(e) {
                 if (this.claimPhases.length == 0) {
                     this.setMessage('You cannot mint this NFT yet because no mint phases have been set yet', 'error')
@@ -273,11 +237,14 @@ if (document.getElementById('app')) {
                 try {
                     await this.contract.claim(this.mintAmount)
 
+                    this.modal.id = 'mint-successful'
                     this.setMessage('NFT minted!', 'success')
                     this.setSupplyData()
                 } catch (error) {
-                    resportError(error)
-                    this.setMessage('Something went wrong, please try again.', 'error', true)
+                    if (! this.setMetaMaskError(error)) {
+                        resportError(error)
+                        this.setMessage('Something went wrong, please try again.', 'error', true)
+                    }
                 }
 
                 this.resetButtonLoader()

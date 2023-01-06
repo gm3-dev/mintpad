@@ -19,7 +19,7 @@ Vue.use(VueTippy)
 initSentry(Vue)
 
 if (document.getElementById('app')) {  
-    Vue.component('tinymce', require('./components/TinyMCE.vue').default);
+    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
 
     Vue.use(ColorPanel)
     Vue.use(ColorPicker)
@@ -29,19 +29,19 @@ if (document.getElementById('app')) {
         mixins: [helpers,resources,modal],
         components: {},
         data: {
+            editMode: true,
             style: {},
             colors: false,
             collectionID: false,
             collection: {
                 permalink: '',
-                about: '',
-                roadmap: '',
-                team: '',
                 buttons: [],
                 logo: false,
                 background: false
             },
-            tab: 1,
+            claimPhases: [],
+            timers: {0: {}, 1: {}, 2: {}},
+            loadComplete: false,
             edit: {
                 logo: {classes: []},
                 background: {classes: []},
@@ -52,34 +52,10 @@ if (document.getElementById('app')) {
         computed: {
             primaryColor() {
                 return this.theme.primary;
-            },
-            backgroundColor() {
-                return this.theme.background
-            },
-            boxColor() {
-                return this.theme.box
-            },
-            titleColor() {
-                return this.theme.title
-            },
-            textColor() {
-                return this.theme.text
-            },
+            }
         },
         watch: {
             primaryColor() {
-                this.setStyling()
-            },
-            backgroundColor() {
-                this.setStyling()
-            },
-            boxColor() {
-                this.setStyling()
-            },
-            titleColor() {
-                this.setStyling()
-            },
-            textColor() {
                 this.setStyling()
             }
         },
@@ -90,27 +66,77 @@ if (document.getElementById('app')) {
             
             axios.get('/'+this.collectionID+'/fetch').then(async (response) => {
                 this.collection.buttons = response.data.buttons
-                this.collection.about = response.data.about
-                this.collection.roadmap = response.data.roadmap
-                this.collection.team = response.data.team
                 this.collection.logo = response.data.logo
                 this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
                 this.collection.mintUrl = response.data.minturl
+                this.collection.token = response.data.token
+
+                this.setDummyData()
                 
                 // Set theme
                 if (response.data.theme) {
                     this.theme = response.data.theme
                 }
-                this.setBackground()
                 this.setStyling()
                 this.appReady()
+                this.loadComplete = true
 
             }).catch((error) => {
                 //
             });
         },
         methods: {
+            setDummyData: function() {
+                this.collection.totalSupply = 1000
+                this.collection.totalClaimedSupply = 256
+                this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                this.collection.royalties = '7.5%'
+                this.collection.chainName = 'Ethereum'
+                this.claimPhases = [
+                    {
+                        id: 1,
+                        name: 'Premium whitelist',
+                        price: 0.1,
+                        maxClaimableSupply: 100,
+                        maxClaimablePerWallet: 1,
+                        whitelist: 1,
+                        snapshot: Array.from(Array(100).keys()),
+                        countdown: '',
+                        active: false
+                    },
+                    {
+                        id: 2,
+                        name: 'Whitelist',
+                        price: 0.2,
+                        maxClaimableSupply: 300,
+                        maxClaimablePerWallet: 1,
+                        whitelist: 1,
+                        snapshot: Array.from(Array(300).keys()),
+                        countdown: '',
+                        active: true
+                    },
+                    {
+                        id: 3,
+                        name: 'Public',
+                        price: 0.2,
+                        maxClaimableSupply: 600,
+                        maxClaimablePerWallet: 0,
+                        whitelist: 0,
+                        snapshot: [],
+                        countdown: '',
+                        active: false
+                    }
+                ]
+                this.timers = {
+                    0: Infinity,
+                    1: {state: 'Ends', days: '00', hours: '11', minutes: '22', seconds: '33'},
+                    2: {state: 'Starts', days: '00', hours: '11', minutes: '22', seconds: '33'},
+                }
+            },
+            /**
+             * Background
+             */
             addBackground: function() {
                 this.modal.id = 'edit-background'
                 this.modalTitle('Edit background')
@@ -125,7 +151,6 @@ if (document.getElementById('app')) {
                 this.uploadResource('background', formData).then(async (response) => {
                     this.collection.background = response.data.url
                     this.resources.background.loading = false
-                    this.setBackground()
                     
                 }).catch((error) => {
                     if (error.response.data.errors != undefined) {
@@ -139,11 +164,13 @@ if (document.getElementById('app')) {
                 if (confirm("Are you sure you want to delete this background?") == true) {
                     this.deleteResource('background').then((response) => {
                         this.collection.background = false
-                        this.setBackground()
                     })
                 }
             },
 
+            /**
+             * Logo
+             */
             addLogo: function() {
                 this.modal.id = 'edit-logo'
                 this.modal.title = 'Edit logo'
@@ -174,53 +201,44 @@ if (document.getElementById('app')) {
                     })
                 }
             },
-
-            setColorCode: function(color) {
-                //
-            },
-            RGBAtoRGB: function (r, g, b, a, r2,g2,b2){
-                var r3 = Math.round(((1 - a) * r2) + (a * r))
-                var g3 = Math.round(((1 - a) * g2) + (a * g))
-                var b3 = Math.round(((1 - a) * b2) + (a * b))
-                return "rgb("+r3+","+g3+","+b3+")";
-            },
-            changeBackgroundColor: function() {
-                this.theme.primary = '59, 149, 13'
-            },
-            changeTab: function(index) {
-                this.tab = index
-            },
+            /**
+             * Buttons
+             */
             deleteButton: function() {
                 this.collection.buttons.splice(this.edit.button.index, 1)
                 this.modal.id = false
             },
             editButton: function(index) {
-                this.edit.button = this.collection.buttons[index]
+                this.edit.button = JSON.parse(JSON.stringify(this.collection.buttons[index]))
                 this.edit.button.index = index
                 this.modal.id = 'edit-button'
             },
             newButton: function() {
-                this.collection.buttons.push({label: 'Button', href: ''})
-                this.editButton(this.collection.buttons.length-1)
+                // this.collection.buttons.push({label: 'Button', href: ''})
+                // this.editButton(this.collection.buttons.length-1)
+                this.edit.button = {label: '', href: '', index: -1}
+                this.modal.id = 'edit-button'
             },
             addNewButton: function() {
-                if (this.newButton.label == '' || this.newButton.label == '') {
+                if (this.edit.button.label == '' || this.edit.button.href == '') {
                     this.setMessage('Label and link are both required', 'error')
                 } else {
-                    this.collection.buttons.push({label: this.newButton.label, href: this.newButton.href})
-
-                    this.newButton.label = ''
-                    this.newButton.href = ''
+                    if (this.edit.button.index == -1) {
+                        this.collection.buttons.push({label: this.edit.button.label, href: this.edit.button.href})
+                    } else {
+                        this.collection.buttons[this.edit.button.index] = {label: this.edit.button.label, href: this.edit.button.href}
+                    }
+                    this.modal.id = false
                 }
             },
+            /**
+             * Update settings
+             */
             updateMintSettings: async function(e) {
                 this.setButtonLoader(e)
 
                 var data = {
                     buttons: this.collection.buttons,
-                    about: this.collection.about,
-                    team: this.collection.team,
-                    roadmap: this.collection.roadmap,
                     theme: this.theme
                 }
 
@@ -237,6 +255,9 @@ if (document.getElementById('app')) {
                 })
 
                 this.resetButtonLoader()
+            },
+            mintNFT: function() {
+                this.modal.id = 'mint-successful'
             },
             openYouTubeModal: function(url) {
                 this.modalToggle(true)

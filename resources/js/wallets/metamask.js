@@ -89,9 +89,22 @@ export default {
                 case 4902:
                     this.setMessage('Unrecognized chain ID: try adding the chain to MetaMask.', 'error')
                     return true
-                default:
-                    return false
             }
+
+            switch(error.reason) {
+                case 'user rejected transaction': 
+                    this.setMessage('Request canceled: you rejected the request.', 'error')
+                    return true
+                case 'Internal JSON-RPC error.':
+                    if (error.message.search('execution reverted: !MaxSupply') !== -1) {
+                        this.setMessage('There are no more NFTs left to claim in this mint phase.', 'error')
+                        return true
+                    } else if (error.message.search('execution reverted: !Qty') !== -1) {
+                        this.setMessage('You reached the maximum number of claimable NFTs per wallet.', 'error')
+                        return true
+                    }
+            }
+            return false
         },
         loadMetaMaskAccount: async function (triggerRequest) {
             var requestAccount = false
