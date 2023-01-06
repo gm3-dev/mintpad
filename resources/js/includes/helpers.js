@@ -25,11 +25,7 @@ export default {
             showModal: false,
             hasValidChain: true,
             theme: {
-                primary: 'rgba(0, 119, 255, 1)',
-                background: 'rgba(248, 249, 255, 1)',
-                title: 'rgba(46, 56, 77, 1)',
-                text: 'rgba(101, 111, 119, 1)',
-                box: 'rgba(255, 255, 255, 1)',
+                primary: 'rgba(0, 119, 255, 1)'
             }
         }
     },
@@ -41,32 +37,16 @@ export default {
         setStyling: function() {
             if (this.theme) {
                 var css = ''
-                css += '.main-container { background-color: '+this.theme.background+' !important; } '
-                css += '#custom-style-container .text-primary-600 { color: '+this.theme.primary+' !important; } '
-                css += '#custom-style-container .text-primary-300 { color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+' !important; } '
-                css += '#custom-style-container .bg-primary-600 { background-color: '+this.theme.primary+' !important; } '
-                css += '#custom-style-container .bg-primary-300 { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
-                css += '#custom-style-container .bg-gray-300 { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
-                css += '#custom-style-container .border-primary-600 { border-color: '+this.theme.primary+' !important; } '
-                css += '#custom-style-container .border-primary-300 { border-color: '+this.replaceOpacityValue(this.theme.primary, '0.3')+'; } '
-                css += '#custom-style-container .text-mintpad-500 { color: '+this.theme.title+'; } '
-                css += '#custom-style-container .text-mintpad-300 { color: '+this.theme.text+'; } '
-                css += '#custom-style-container .bg-white { background-color: '+this.theme.box+'; } '
-                css += '.tinymce-html h1, .tinymce-html h2, .tinymce-html h3 { color: '+this.theme.title+'; } '
-                css += '.tinymce-html a { color: '+this.theme.primary+'; } '
-                css += '.tinymce-html p, ul, ol { color: '+this.theme.text+'; } '
+                css += '.mint-text-primary { color: '+this.theme.primary+' !important; } '
+                css += '.mint-bg-primary { background-color: '+this.theme.primary+' !important; } '
+                css += '.mint-bg-primary:hover { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.9')+' !important; } '
+                css += '.mint-bg-primary-sm { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.25')+' !important; } '
+                css += '.mint-bg-primary-md { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.5')+' !important; } '
+                css += '.mint-bg-primary-lg { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.75')+' !important; } '
     
                 this.styleTag = document.createElement('style')
                 this.styleTag.appendChild(document.createTextNode(css))
                 document.head.appendChild(this.styleTag)
-            }
-        },
-        setBackground: function() {
-            if (this.collection.background) {
-                // this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center'}
-                this.style = {background: 'url("'+this.collection.background+'")', backgroundPosition: 'top center', backgroundSize: 'cover'}
-            } else {
-                this.style = {}
             }
         },
         replaceOpacityValue(string, opacity) {
@@ -122,16 +102,31 @@ export default {
         setMessage: function(message, type, refresh) {
             refresh = refresh == undefined ? false : refresh
             if (message.code) {
-                this.messageBag.push({type: type, message: message.message, refresh: refresh})
+                var messageObject = {type: type, message: message.message, refresh: refresh}
             } else {
-                this.messageBag.push({type: type, message: message, refresh: refresh})
+                var messageObject = {type: type, message: message, refresh: refresh}
             }
 
-            if (!refresh) {
-                setTimeout(() => {
-                    this.messageBag.splice(0, 1)
-                }, 5000)
+            if (this.searchMessageBag(message) === false) {
+                this.messageBag.push(messageObject)
+
+                if (!refresh) {
+                    setTimeout(() => {
+                        var messageIndex = this.searchMessageBag(message)
+                        if (this.searchMessageBag(message) !== false) {
+                            this.messageBag.splice(messageIndex, 1)
+                        }
+                    }, 5000, message)
+                }
             }
+        },
+        searchMessageBag: function (message) {
+            for (var messageIndex in this.messageBag) {
+                if (this.messageBag[messageIndex].message == message) {
+                    return messageIndex
+                }
+            }
+            return false
         },
         /**
          * Parses claim conditions

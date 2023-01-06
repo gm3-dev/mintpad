@@ -7,7 +7,6 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" type="image/png" href="/favicon.png"/>
-        
         <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
         
         <!-- Styles -->

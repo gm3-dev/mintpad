@@ -54,9 +54,6 @@ class MintController extends Controller
             $background = count($backgrounds) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($backgrounds[0], PATHINFO_BASENAME).'?v='.filemtime($backgrounds[0]) : false;
 
             $collection->buttons = $collection->getMeta('buttons') ?? [];
-            $collection->roadmap = $collection->getMeta('roadmap');
-            $collection->team = $collection->getMeta('team');
-            $collection->about = $collection->getMeta('about');
             $collection->theme = $collection->getMeta('theme');
             $collection->phases = [
                 1 => ['name' => $collection->getMeta('phases.1.name')],

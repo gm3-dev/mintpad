@@ -50,7 +50,8 @@ module.exports = {
                 medium: ['Graphik-Medium'],
                 regular: ['Graphik-Regular'],
                 jpegdev: ['JPEGDEVFONT-Black'],
-                jpegdevmd: ['JPEGDEVFONT-Medium']
+                jpegdevmd: ['JPEGDEVFONT-Medium'],
+                jpegdevbold: ['JPEGDEVFONT-Bold']
             },
         },
     },

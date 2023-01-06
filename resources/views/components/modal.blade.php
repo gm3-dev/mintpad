@@ -14,7 +14,7 @@
                     @if(isset($close))
                         {{ $close }}
                     @else
-                        <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="modalClose">close</a>
+                        <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @keyup.esc="modalClose" @click.prevent="modalClose">close</a>
                     @endif
                     <div class="overflow-y-auto">
                         {{ $slot }}

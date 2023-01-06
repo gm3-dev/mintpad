@@ -27,6 +27,8 @@
         <meta property="og:description" content="@yield('description')">
 
         <link rel="icon" type="image/png" href="/favicon.png"/>
+        <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
+
         @if(config('app.env') == 'production')
             @include('partials.google')
             @include('partials.hotjar')
@@ -42,23 +44,19 @@
         <script src="{{ mix('js/mint.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="main-container min-h-screen bg-primary-100">
+        <div class="main-container min-h-screen bg-white dark:bg-mintpad-500">
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
-            <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}" v-bind:style="style">
+            <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
                 <div class="col-span-1 lg:col-span-2">
-                    <div v-if="!wallet.account" class="bg-mintpad-200 p-2 mb-4 text-center">
-                        <p class="text-sm text-mintpad-700">Your wallet is not connected <x-button href="#" class="ml-4" @click.prevent="connectMetaMask">Connect MetaMask</x-button></p>
+                    <div v-if="!wallet.account" class="bg-mintpad-200 dark:bg-mintpad-800 p-2 text-center">
+                        <p class="text-sm text-mintpad-700 m-0">Your wallet is not connected <x-button href="#" class="ml-4" @click.prevent="connectMetaMask">Connect MetaMask</x-button></p>
                     </div>
-                    <div v-else-if="hasValidChain !== true" class="bg-mintpad-200 p-2 mb-4 text-center">
-                        <p class="text-sm text-mintpad-700">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
-                    </div>
-                </div>
-                <div class="py-12">
-                    <div class="max-w-5xl mx-auto px-6">
-                        {{ $slot }}
+                    <div v-else-if="hasValidChain !== true" class="bg-mintpad-200 dark:bg-mintpad-800 p-2 text-center">
+                        <p class="text-sm text-mintpad-700 m-0">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
                     </div>
                 </div>
+                {{ $slot }}
                 @include('partials.messages')
             </main>
         </div>

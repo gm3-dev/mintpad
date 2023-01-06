@@ -141,9 +141,6 @@ class CollectionController extends Controller
 
         $data = $request->all();
 
-        $collection->setMeta('about', $data['about'] ?? '');
-        $collection->setMeta('team', $data['team'] ?? '');
-        $collection->setMeta('roadmap', $data['roadmap'] ?? '');
         $collection->setMeta('buttons', $data['buttons'] ?? []);
         $collection->setMeta('theme', $data['theme'] ?? []);
 
