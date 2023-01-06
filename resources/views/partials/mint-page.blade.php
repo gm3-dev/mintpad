@@ -1,43 +1,43 @@
 <input type="hidden" id="collectionID" name="collectionID" :value="{{ $collection->id }}" />
 
-<div v-if="editMode" class="fixed z-40 h-14 left-0 top-0 p-2 w-full bg-white dark:bg-mintpad-500 border-b border-mintpad-200 dark:border-mintpad-900">
-    <div class="max-w-7xl mx-auto px-6 flex items-center">
-        <div class="grow text-mintpad-700">
+<div v-if="editMode" class="relative sm:fixed z-40 h-auto sm:h-14 left-0 top-0 p-2 w-full bg-white dark:bg-mintpad-500 border-b border-mintpad-200 dark:border-mintpad-900">
+    <div class="max-w-7xl mx-auto px-6 flex flex-wrap gap-4 items-center">
+        <div class="grow w-full sm:w-auto text-mintpad-700">
             <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm ml-4 align-middle dark:text-mintpad-200">Primary color</span>
         </div>
 
-        <x-gray-button href="#" class="!px-4 text-center" @click.prevent="addBackground">Change background</x-gray-button>
-        <x-link-button href="#" class="!px-4 text-center ml-4" @click.prevent="updateMintSettings">Publish changes</x-link-button>
-        <x-blue-button href="#" class="align-middle ml-4 !rounded-full !px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Qn2-nY0vZfQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
+        <x-gray-button href="#" class="px-2 sm:!px-4 text-center" @click.prevent="addBackground">Change background</x-gray-button>
+        <x-link-button href="#" class="px-2 sm:!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</x-link-button>
+        <x-blue-button href="#" class="align-middle !rounded-full px-2 sm:!px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Qn2-nY0vZfQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
     </div>
 </div>
 
-<div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" v-bind:class="{'mt-14': editMode}" v-bind:style="{backgroundImage: 'url(' + collection.background + ')'}">
+<div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" v-bind:class="{'sm:mt-14': editMode}" v-bind:style="{backgroundImage: 'url(' + collection.background + ')'}">
     <div class="relative max-w-7xl mx-auto px-6 pb-4 h-full flex gap-4 items-end">
         <a v-if="editMode" href="#" @click.prevent="addLogo" class="absolute top-4 left-6">
-            <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20 max-w-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
+            <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-10 sm:max-h-16 md:max-h-20 max-w-10 sm:max-w-16 md:max-w-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
             <x-default-button v-else href="#" class="!px-3"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> <span class="align-middle">Add logo</span></x-default-button>
         </a>
         <div v-if="!editMode" class="absolute top-4 left-6">
-            <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-20 max-w-20" />
+            <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-10 sm:max-h-16 md:max-h-20 max-w-10 sm:max-w-16 md:max-w-20" />
         </div>
 
         <dark-mode class="absolute top-4 right-6"></dark-mode>
 
-        <div class="w-48 h-48 bg-white rounded-md p-1 text-center">
+        <div class="w-24 sm:w-36 md:w-48 h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
             <img v-if="collection.thumb" :src="collection.thumb" class="inline-block rounded-md" />
         </div>
-        <h2 class="text-5xl text-white">{{ $collection->name }}</h2>
+        <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ $collection->name }}</h2>
     </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 mt-12">
 
-    <div v-if="claimPhases.length > 0" class="grid grid-cols-3 gap-x-4">
+    <div v-if="claimPhases.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
         <x-box v-for="(phase, index) in claimPhases" class="min-h-[12rem]">
             <x-slot name="title">@{{ phase.name }}</x-slot>
             <x-slot name="action"><span v-if="phase.active" class="inline-block absolute top-3.5 right-4 sm:w-auto mx-0 sm:mx-3 px-4 py-1 text-xs border border-green-600 bg-green-100 text-green-600 dark:text-green-600 dark:border-0 dark:bg-[#0F391D] rounded-full">Active</span></x-slot>
             <x-slot name="content">
-                <div class="grid grid-cols-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2">
                     <p>NFTs: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimableSupply"></span></p>
                     <p>Price: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.price"></span> <span class="text-primary-600 mint-text-primary font-medium" v-html="collection.token"></span></p>
                     <p v-if="phase.maxClaimablePerWallet !== 0">Max claims: <span class="text-primary-600 mint-text-primary font-medium">1</span></p>
@@ -45,7 +45,7 @@
                     <p v-if="phase.whitelist">Whitelist: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.snapshot.length"></span></p>
                 </div>
                 <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="mt-3 text-sm text-mintpad-700">
-                    <div class="relative w-full text-center font-regular">
+                    <div class="relative w-full text-right sm:text-center font-regular">
                         <p class="absolute left-0 top-2 font-medium text-mintpad-500"><span v-html="timers[index].state"></span> in</p>
                         <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].days">00</span>
                         <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].hours">02</span>
@@ -63,7 +63,7 @@
             <p>Minting is disabled because no mint phases are active at the moment.</p>
         </x-slot>
     </x-box>
-    <div v-else class="grid grid-cols-3 gap-x-4">
+    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
         <x-box v-for="(phase, index) in [1,2,3]" class="min-h-[12rem]">
             <x-slot name="title">Phase @{{ index+1 }}</x-slot>
             <x-slot name="content">
@@ -73,8 +73,8 @@
             </x-slot>
         </x-box>
     </div>
-    <div class="grid grid-cols-3 gap-x-4">
-        <x-box class="col-span-2">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
+        <x-box class="sm:col-span-2">
             <x-slot name="title">Mint an NFT</x-slot>
             <x-slot name="content">
                 <p class="font-regular text-center mb-4">{{ __('Start minting by clicking the button below') }}</p>
@@ -86,7 +86,7 @@
                 <div v-else class="flex gap-2">
                     <x-button @click.prevent="mintNFT" class="w-full mint-bg-primary">Start minting</x-button>
                 </div>
-                <div class="grid grid-cols-2 mt-4 text-sm font-medium">
+                <div class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
                     <div>
                         <p>Total minted</p>
                     </div>
@@ -110,7 +110,7 @@
                 </div>
             </x-slot>
         </x-box>
-        <x-box v-if="editMode || collection.buttons.length" class="col-span-3">
+        <x-box v-if="editMode || collection.buttons.length" class="sm:col-span-3">
             <x-slot name="content">
                 <div v-if="editMode">
                     <span v-for="(button,index) in collection.buttons" content="Edit button" v-tippy>
@@ -125,7 +125,7 @@
                 </div>
             </x-slot>
         </x-box>
-        <x-box class="col-span-3">
+        <x-box class="sm:col-span-3">
             <x-slot name="title">Description</x-slot>
             <x-slot name="content">
                 <p class="font-regular">{{ $collection->description }}</p>
