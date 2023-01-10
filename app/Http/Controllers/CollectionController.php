@@ -123,7 +123,8 @@ class CollectionController extends Controller
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? $image : false
         ];
         $collection->mint_url = config('app.mint_url');
-        $collection->editor_url = config('app.url').'/editor';
+        $collection->mint_editor_url = config('app.url').'/mint-editor';
+        $collection->embed_editor_url = config('app.url').'/embed-editor';
 
         return response()->json($collection, 200);
     }
@@ -141,8 +142,18 @@ class CollectionController extends Controller
 
         $data = $request->all();
 
-        $collection->setMeta('buttons', $data['buttons'] ?? []);
-        $collection->setMeta('theme', $data['theme'] ?? []);
+        if (isset($data['buttons'])) {
+            $collection->setMeta('buttons', $data['buttons'] ?? []);
+        }
+        if (isset($data['theme']['mint'])) {
+            $collection->setMeta('theme.mint', $data['theme']['mint'] ?? []);
+        }
+        if (isset($data['theme']['embed'])) {
+            $collection->setMeta('theme.embed', $data['theme']['embed'] ?? []);
+        }
+        if (isset($data['settings']['embed'])) {
+            $collection->setMeta('settings.embed', $data['settings']['embed'] ?? []);
+        }
 
         $collection->save();
 

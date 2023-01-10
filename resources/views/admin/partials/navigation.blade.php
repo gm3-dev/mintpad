@@ -30,7 +30,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <dark-mode></dark-mode>
+                <dark-mode clas="mr-4"></dark-mode>
 
                 <dropdown refname="dropdown-2">
                     <template v-slot:button>

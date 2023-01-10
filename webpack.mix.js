@@ -38,7 +38,8 @@ mix.webpackConfig({
  */
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/mint.js', 'public/js')
-    .js('resources/js/editor.js', 'public/js')
+    .js('resources/js/mint-editor.js', 'public/js')
+    .js('resources/js/embed-editor.js', 'public/js')
     .js('resources/js/guest.js', 'public/js')
     .js('resources/js/admin.js', 'public/js')
     .vue()

@@ -27,15 +27,15 @@
         <meta property="og:description" content="@yield('description')">
 
         <link rel="icon" type="image/png" href="/favicon.png"/>
+
+        @if (Route::currentRouteName() == 'mint.index')
         <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
+        @endif
 
         @if(config('app.env') == 'production')
             @include('partials.google')
             @include('partials.hotjar')
         @endif
-
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
@@ -44,10 +44,15 @@
         <script src="{{ mix('js/mint.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+        @if (Route::currentRouteName() == 'mint.index')
         <div class="main-container min-h-screen bg-white dark:bg-mintpad-500">
+        @else
+        <div class="main-container min-h-screen bg-transparent">
+        @endif
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
             <main id="app" class="hidden" data-page="{{ Route::currentRouteName() }}">
+                @if (Route::currentRouteName() == 'mint.index')
                 <div class="col-span-1 lg:col-span-2">
                     <div v-if="!wallet.account" class="bg-mintpad-200 dark:bg-mintpad-800 p-2 text-center">
                         <p class="text-sm text-mintpad-700 m-0">Your wallet is not connected <x-button href="#" class="ml-4" @click.prevent="connectMetaMask">Connect MetaMask</x-button></p>
@@ -56,6 +61,7 @@
                         <p class="text-sm text-mintpad-700 m-0">Your wallet is not connected to the correct blockchain <x-button href="#" class="ml-4" @click.prevent="switchBlockchainTo(false)">Switch blockchain</x-button></p>
                     </div>
                 </div>
+                @endif
                 {{ $slot }}
                 @include('partials.messages')
             </main>

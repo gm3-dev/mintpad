@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" v-bind:class="{'sm:mt-14': editMode}" v-bind:style="{backgroundImage: 'url(' + collection.background + ')'}">
+<div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" v-bind:class="{'sm:mt-14': editMode}" v-bind:style="[collection.background ? {backgroundImage: 'url(' + collection.background + ')'} : {}]">
     <div class="relative max-w-7xl mx-auto px-6 pb-4 h-full flex gap-4 items-end">
         <a v-if="editMode" href="#" @click.prevent="addLogo" class="absolute top-4 left-6">
             <img v-if="collection.logo" :src="collection.logo" class="inline-block h-full max-h-10 sm:max-h-16 md:max-h-20 max-w-10 sm:max-w-16 md:max-w-20" content="Edit logo" v-tippy="{placement: 'bottom'}" />
@@ -47,10 +47,10 @@
                 <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="mt-3 text-sm text-mintpad-700">
                     <div class="relative w-full text-right sm:text-center font-regular">
                         <p class="absolute left-0 top-2 font-medium text-mintpad-500"><span v-html="timers[index].state"></span> in</p>
-                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].days">00</span>
-                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].hours">02</span>
-                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].minutes">03</span>
-                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary-lg rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].seconds">04</span>
+                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].days">00</span>
+                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].hours">02</span>
+                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].minutes">03</span>
+                        <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].seconds">04</span>
                     </div>
                 </div>
                 <p v-else-if="timers[index] !== Infinity && typeof timers[index] !== 'object'" class="mt-6 text-sm text-mintpad-700 font-medium">{{ __('Phase ended') }}</p>
@@ -67,9 +67,9 @@
         <x-box v-for="(phase, index) in [1,2,3]" class="min-h-[12rem]">
             <x-slot name="title">Phase @{{ index+1 }}</x-slot>
             <x-slot name="content">
-                <div class="bg-gray-300 dark:bg-mintpad-700 rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
-                <div class="bg-gray-300 dark:bg-mintpad-700 rounded-md w-full h-5 mb-4 animate-pulse"></div>
-                <div class="bg-gray-300 dark:bg-mintpad-700 rounded-md w-2/3 h-5 animate-pulse"></div>
+                <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
+                <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-5 mb-4 animate-pulse"></div>
+                <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-2/3 h-5 animate-pulse"></div>
             </x-slot>
         </x-box>
     </div>
@@ -113,10 +113,10 @@
         <x-box v-if="editMode || collection.buttons.length" class="sm:col-span-3">
             <x-slot name="content">
                 <div v-if="editMode">
-                    <span v-for="(button,index) in collection.buttons" content="Edit button" v-tippy>
+                    <span class="inline-block" v-for="(button,index) in collection.buttons" content="Edit button" v-tippy>
                         <x-button @click.prevent="editButton(index)" v-bind:href="button.href" :target="'_blank'" class="m-2 mint-bg-primary">@{{ button.label }} <i class="fas fa-edit"></i></x-button>
                     </span>
-                    <span content="Add button" v-tippy>
+                    <span class="inline-block" content="Add button" v-tippy>
                         <x-default-button href="#" @click.prevent="newButton" class="!px-3"><i class="fa-solid fa-plus mr-4 text-lg align-middle"></i> <span class="align-middle">Add button</span></x-default-button>
                     </span>
                 </div>
@@ -157,10 +157,10 @@
             <x-input type="text" v-model="edit.button.href" placeholder="Link" />
         </div>
         <div class="mt-4">
-            <span content="Delete button" v-tippy>
+            <span class="inline-block" content="Delete button" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteButton"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="float-right" content="Save" v-tippy>
+            <span class="inline-block" class="float-right" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="addNewButton">Save</x-button>
             </span>
         </div>
@@ -181,10 +181,10 @@
             <x-input-file id="upload-logo" @dragenter="dragEnterUploadResource('logo')" @dragleave="dragLeaveUploadResource('logo')" @change="uploadLogo" v-bind:class="resources.logo.classes" accept="image/jpeg, image/png, image/jpg" />
         </label>
         <div class="mt-4">
-            <span content="Delete logo" v-tippy>
+            <span class="inline-block" content="Delete logo" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteLogo"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="float-right" content="Save" v-tippy>
+            <span class="inline-block" class="float-right" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="modalClose">Save</x-button>
             </span>
         </div>
@@ -205,10 +205,10 @@
             <x-input-file id="upload-background" @dragenter="dragEnterUploadResource('background')" @dragleave="dragLeaveUploadResource('background')" @change="uploadBackground" v-bind:class="resources.background.classes" accept="image/jpeg, image/png, image/jpg" />
         </label>
         <div class="mt-4">
-            <span content="Delete background" v-tippy>
+            <span class="inline-block" content="Delete background" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteBackground"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="float-right" content="Save" v-tippy>
+            <span class="inline-block" class="float-right" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="modalClose">Save</x-button>
             </span>
         </div>

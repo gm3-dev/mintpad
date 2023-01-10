@@ -31,7 +31,6 @@ if (document.getElementById('app')) {
         data: {
             editMode: true,
             style: {},
-            colors: false,
             collectionID: false,
             collection: {
                 permalink: '',
@@ -69,14 +68,15 @@ if (document.getElementById('app')) {
                 this.collection.logo = response.data.logo
                 this.collection.background = response.data.background
                 this.collection.thumb = response.data.thumb
-                this.collection.mintUrl = response.data.minturl
                 this.collection.token = response.data.token
 
                 this.setDummyData()
                 
                 // Set theme
-                if (response.data.theme) {
-                    this.theme = response.data.theme
+                if (response.data.theme.mint) {
+                    this.theme = response.data.theme.mint
+                } else {
+                    this.theme = this.theme.mint
                 }
                 this.setStyling()
                 this.appReady()
@@ -88,51 +88,10 @@ if (document.getElementById('app')) {
         },
         methods: {
             setDummyData: function() {
-                this.collection.totalSupply = 1000
-                this.collection.totalClaimedSupply = 256
-                this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                this.collection.royalties = '7.5%'
-                this.collection.chainName = 'Ethereum'
-                this.claimPhases = [
-                    {
-                        id: 1,
-                        name: 'Premium whitelist',
-                        price: 0.1,
-                        maxClaimableSupply: 100,
-                        maxClaimablePerWallet: 1,
-                        whitelist: 1,
-                        snapshot: Array.from(Array(100).keys()),
-                        countdown: '',
-                        active: false
-                    },
-                    {
-                        id: 2,
-                        name: 'Whitelist',
-                        price: 0.2,
-                        maxClaimableSupply: 300,
-                        maxClaimablePerWallet: 1,
-                        whitelist: 1,
-                        snapshot: Array.from(Array(300).keys()),
-                        countdown: '',
-                        active: true
-                    },
-                    {
-                        id: 3,
-                        name: 'Public',
-                        price: 0.2,
-                        maxClaimableSupply: 600,
-                        maxClaimablePerWallet: 0,
-                        whitelist: 0,
-                        snapshot: [],
-                        countdown: '',
-                        active: false
-                    }
-                ]
-                this.timers = {
-                    0: Infinity,
-                    1: {state: 'Ends', days: '00', hours: '11', minutes: '22', seconds: '33'},
-                    2: {state: 'Starts', days: '00', hours: '11', minutes: '22', seconds: '33'},
-                }
+                const dummyData = this.getDummyCollection()
+                this.collection = {...this.collection, ...dummyData.collection}
+                this.claimPhases = dummyData.claimPhases
+                this.timers = dummyData.timers
             },
             /**
              * Background
@@ -239,7 +198,7 @@ if (document.getElementById('app')) {
 
                 var data = {
                     buttons: this.collection.buttons,
-                    theme: this.theme
+                    theme: {mint: this.theme}
                 }
 
                 await axios.put('/collections/'+this.collectionID, data)

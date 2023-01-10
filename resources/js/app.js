@@ -185,9 +185,11 @@ if (document.getElementById('app')) {
                     // Mint settings
                     this.collection.permalink = response.data.permalink
                     this.collection.mintUrl = response.data.mint_url
-                    this.collection.editorUrl = response.data.editor_url
+                    this.collection.mintEditorUrl = response.data.mint_editor_url
+                    this.collection.embedEditorUrl = response.data.embed_editor_url
                     this.collection.fullMintUrl = this.collection.mintUrl+'/'+this.collection.permalink
-                    this.collection.fullEditorUrl = this.collection.editorUrl+'/'+this.collection.permalink
+                    this.collection.fullMintEditorUrl = this.collection.mintEditorUrl+'/'+this.collection.permalink
+                    this.collection.fullEmbedEditorUrl = this.collection.embedEditorUrl+'/'+this.collection.permalink
 
                     // Check if wallet is connected to the correct blockchain
                     if (this.hasValidChain !== true) {
@@ -371,6 +373,11 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             },
             updateMintSettings: async function(e) {
+                if (/[^A-Za-z0-9-]+/g.test(this.collection.permalink)) {
+                    this.setMessage('Only characters and dashes are allowed.', 'error')
+                    return
+                }
+
                 this.setButtonLoader(e)
 
                 var data = {
@@ -393,7 +400,8 @@ if (document.getElementById('app')) {
                         }
 
                         this.collection.fullMintUrl = this.collection.mintUrl+'/'+this.collection.permalink
-                        this.collection.fullEditorUrl = this.collection.editorUrl+'/'+this.collection.permalink
+                        this.collection.fullMintEditorUrl = this.collection.mintEditorUrl+'/'+this.collection.permalink
+                        this.collection.fullEmbedEditorUrl = this.collection.embedEditorUrl+'/'+this.collection.permalink
 
                         this.validateTabMintPage()
 

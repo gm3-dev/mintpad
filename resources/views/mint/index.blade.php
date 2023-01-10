@@ -4,4 +4,4 @@
     @section('sharing-image', $seo['image'] ?? false)
 
     @include('partials.mint-page')
-</x-app-layout>
+</x-mint-layout>

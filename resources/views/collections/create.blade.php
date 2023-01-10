@@ -43,7 +43,7 @@
                     </x-box>
 
                     <div class="w-full">
-                        <span content="This action will trigger a transaction" v-tippy>
+                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                             <x-button href="#" @click.prevent="deployContract" v-bind:disabled="hasValidChain !== true">{{ __('Deploy smart contract') }}</x-button>
                         </span>
                     </div>            
