@@ -96,7 +96,7 @@
 
                 @if ($user->role == 'affiliate')
                 <x-box class="w-full">
-                    <x-slot name="title">affiliate information</x-slot>
+                    <x-slot name="title">Affiliate information</x-slot>
                     <x-slot name="content">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                             <!-- Affiliate code -->
