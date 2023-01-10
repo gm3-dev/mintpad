@@ -98,7 +98,7 @@
                 <x-box class="w-full">
                     <x-slot name="title">Affiliate information</x-slot>
                     <x-slot name="content">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                             <!-- Affiliate code -->
                             <div>
                                 <x-label for="affiliate_code" :value="__('Affiliate code')" />
@@ -109,6 +109,7 @@
                                 <x-label for="affiliate_url" :value="__('Your register URL')" />
                                 <p class="mt-2"><x-link target="_blank" href="{{ route('register') }}/?affiliate={{ $user->affiliate_code }}">{{ route('register') }}/?affiliate={{ $user->affiliate_code }}</x-link></p>
                             </div>
+                        </div>
                     </x-slot>
                 </x-box>
                 @endif
