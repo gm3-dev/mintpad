@@ -160,7 +160,7 @@
             <span class="inline-block" content="Delete button" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteButton"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="inline-block" class="float-right" content="Save" v-tippy>
+            <span class="float-right inline-block" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="addNewButton">Save</x-button>
             </span>
         </div>
@@ -184,7 +184,7 @@
             <span class="inline-block" content="Delete logo" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteLogo"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="inline-block" class="float-right" content="Save" v-tippy>
+            <span class="float-right inline-block" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="modalClose">Save</x-button>
             </span>
         </div>
@@ -208,7 +208,7 @@
             <span class="inline-block" content="Delete background" v-tippy>
                 <x-gray-button href="#" class="!px-4" @click.prevent="deleteBackground"><i class="fas fa-trash-alt"></i></x-gray-button>
             </span>
-            <span class="inline-block" class="float-right" content="Save" v-tippy>
+            <span class="float-right inline-block" content="Save" v-tippy>
                 <x-button href="#" class="!px-4" @click.prevent="modalClose">Save</x-button>
             </span>
         </div>
