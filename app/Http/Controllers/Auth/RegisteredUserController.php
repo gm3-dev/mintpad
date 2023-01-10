@@ -82,6 +82,14 @@ class RegisteredUserController extends Controller
             if ($moneybird_id !== false) {
                 $user->moneybird_id = $moneybird_id;
             }
+
+            // Check affiliate code
+            if ($request->affiliate != '') {
+                $affiliate = User::where('role', 'affiliate')->where('affiliate_code', $request->affiliate)->first();
+                if ($affiliate) {
+                    $user->affiliate_id = $affiliate->id;
+                }
+            }
     
             $user->save();
     

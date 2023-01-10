@@ -15,6 +15,7 @@
                 <h3 class="basis-1/2 border-b-2 border-primary-200 pb-1 mb-1" :class="{'border-primary-600': signUpStep > 3}">Account Details</h3>
             </div>
 
+            <input id="affiliate-code" type="hidden" name="affiliate" value="{{ request()->get('affiliate') ?? '' }}" />
             <div class="">
                 <div v-show="signUpStep == 1">
                     <!-- Full name -->

@@ -94,6 +94,25 @@
                     </x-slot>
                 </x-box>
 
+                @if ($user->role == 'affiliate')
+                <x-box class="w-full">
+                    <x-slot name="title">affiliate information</x-slot>
+                    <x-slot name="content">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                            <!-- Affiliate code -->
+                            <div>
+                                <x-label for="affiliate_code" :value="__('Affiliate code')" />
+                                <x-input id="affiliate_code" type="text" name="affiliate_code" :value="old('affiliate_code', $user->affiliate_code)" disabled />
+                            </div>
+                            <!-- Affiliate code -->
+                            <div>
+                                <x-label for="affiliate_url" :value="__('Your register URL')" />
+                                <p class="mt-2"><x-link target="_blank" href="{{ route('register') }}/?affiliate={{ $user->affiliate_code }}">{{ route('register') }}/?affiliate={{ $user->affiliate_code }}</x-link></p>
+                            </div>
+                    </x-slot>
+                </x-box>
+                @endif
+
                 <div class="w-full">
                     <x-button>{{ __('Update profile') }}</x-button>
                 </div>

@@ -32,6 +32,7 @@ if (document.getElementById('guest-container')) {
                 password: '',
                 password_confirmation: '',
                 accept_tos: false,
+                affiliate: ''
             },
             validForm: true,
             validation: {},
@@ -40,6 +41,9 @@ if (document.getElementById('guest-container')) {
             }
         },
         mounted() {
+            if ($('#affiliate-code').length) {
+                this.form.affiliate = $('#affiliate-code').val()
+            }
             const now = new Date()
             this.form.birth_day = now.getDate()
             this.form.birth_month = now.getMonth()+1
