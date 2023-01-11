@@ -1,5 +1,5 @@
 <div id="embed-mint-box" class="sm:col-span-2">
-    <x-box class="mint-bg-box">
+    <x-box class="mint-bg-box mb-0">
         <x-slot name="title">Mint an NFT</x-slot>
         <x-slot name="action"><span class="inline-block absolute top-3 right-8" content="Check contract address" v-tippy><a href="{{ $contract_url }}" target="_blank" class="text-lg"><i class="fa-regular fa-file-contract"></i></a></span></x-slot>
         <div>

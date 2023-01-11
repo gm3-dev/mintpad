@@ -17,7 +17,7 @@
     <div class="max-w-7xl mx-auto px-6 pt-28">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
             @include('partials.embed-page')
-            <x-box>
+            <x-box class="mb-0">
                 <x-slot name="title">Settings</x-slot>
                 <x-slot name="content">
                     <div class="mb-2">
