@@ -1,10 +1,11 @@
 <div id="embed-mint-box" class="sm:col-span-2">
     <x-box class="mint-bg-box">
         <x-slot name="title">Mint an NFT</x-slot>
+        <x-slot name="action"><span class="inline-block absolute top-3 right-8" content="Check contract address" v-tippy><a href="{{ $contract_url }}" target="_blank" class="text-lg"><i class="fa-regular fa-file-contract"></i></a></span></x-slot>
         <div>
             <div v-if="settings.phases" class="w-full bg-mintpad-400/10 mint-bg-phase">
                 <div v-if="claimPhases.length > 0" class="flex items-center">
-                    <div class="p-6">
+                    <div class="py-6 pl-8">
                         <a href="#" @click.prevent="previousPhase" class="align-middle text-xl text-mintpad-500 dark:text-white"><i class="fa-solid fa-arrow-left"></i></a>
                     </div>
                     <div class="grow px-6 py-4">
@@ -30,7 +31,7 @@
                             <p v-else-if="timers[index] !== Infinity && typeof timers[index] !== 'object'" class="mt-6 text-sm text-mintpad-700 font-medium">{{ __('Phase ended') }}</p>
                         </div>
                     </div>
-                    <div class="p-6">
+                    <div class="py-6 pr-8">
                         <a href="#" @click.prevent="nextPhase" class="align-middle text-xl text-mintpad-500 dark:text-white"><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>

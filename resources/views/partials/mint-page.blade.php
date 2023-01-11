@@ -102,7 +102,8 @@
         <x-box>
             <x-slot name="title">Collection details</x-slot>
             <x-slot name="content">
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-1">
+                    <p>Contract address</p><p class="font-medium !text-primary-600 mint-text-primary"><a href="{{ $contract_url }}" target="_blank" class="underline">{{ shorten_address($collection->address) }}</a></p>
                     <p>Collection Size</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collection.totalSupply">1000</p>
                     <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collection.royalties">0.0%</p>
                     <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">ERC-721</p>

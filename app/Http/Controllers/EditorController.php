@@ -20,8 +20,9 @@ class EditorController extends Controller
         }
 
         $this->authorize('view', $collection);
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('editor.mint')->with(compact('collection'));
+        return view('editor.mint')->with(compact('collection', 'contract_url'));
     }
 
     public function embed($permalink)
@@ -33,7 +34,8 @@ class EditorController extends Controller
         }
 
         $this->authorize('view', $collection);
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('editor.embed')->with(compact('collection'));
+        return view('editor.embed')->with(compact('collection', 'contract_url'));
     }
 }

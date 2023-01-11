@@ -10,7 +10,8 @@ return [
         'testnet' => false,
         'rpc' => 'https://eth-mainnet.g.alchemy.com/v2/ZVtoxx-JliMx1W7Ui1NoDn2Fmjs59DCa',
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://etherscan.io/address/'
     ],
     // 4 => [ // deprecated
     //     'name' => 'rinkeby',
@@ -29,7 +30,8 @@ return [
         'testnet' => true,
         'rpc' => 'https://eth-goerli.g.alchemy.com/v2/yx3q1Jhb-P5seWxrD0tzcuIFZg01A3_F',
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://goerli.etherscan.io/address/'
     ],
     // Solana (chain ID is made up)
     // 11001 => [
@@ -61,7 +63,8 @@ return [
         'testnet' => false,
         'rpc' => 'https://polygon-mainnet.g.alchemy.com/v2/8r-nRwRsVh-xJuiaT3U179oIHbIKm0mW',
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://polygonscan.com/address/'
     ],
     80001 => [
         'name' => 'mumbai',
@@ -71,7 +74,8 @@ return [
         'testnet' => true,
         'rpc' => 'https://polygon-mumbai.g.alchemy.com/v2/4-no0a1q4yrq3-vtoByaqB2qbKdpGrZf',
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://mumbai.polygonscan.com/address/'
     ],
     // Fantom
     250 => [
@@ -82,7 +86,8 @@ return [
         'testnet' => false,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://ftmscan.com/address/'
     ],
     4002 => [
         'name' => 'fantom-testnet',
@@ -92,7 +97,8 @@ return [
         'testnet' => true,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://testnet.ftmscan.com/address/'
     ],
     // Avalanche
     43114 => [
@@ -103,7 +109,8 @@ return [
         'testnet' => false,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://avascan.info/blockchain/stepnetwork/address/'
     ],
     43113 => [
         'name' => 'avalanche-testnet',
@@ -113,7 +120,8 @@ return [
         'testnet' => true,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://testnet.avascan.info/blockchain/c/address/'
     ],
     // Optimism
     10 => [
@@ -124,7 +132,8 @@ return [
         'testnet' => false,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://optimistic.etherscan.io/address/'
     ],
     420 => [
         'name' => 'optimism-testnet',
@@ -134,7 +143,8 @@ return [
         'testnet' => true,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://goerli-optimism.etherscan.io/address/'
     ],
     // Arbitrum
     42161 => [
@@ -145,7 +155,8 @@ return [
         'testnet' => false,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://arbiscan.io/address/'
     ],
     421611 => [
         'name' => 'arbitrum-testnet',
@@ -155,7 +166,8 @@ return [
         'testnet' => true,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://testnet.arbiscan.io/address/'
     ],
     // BNB
     56 => [
@@ -166,7 +178,8 @@ return [
         'testnet' => false,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://bscscan.com/address/'
     ],
     97 => [
         'name' => 'binance-testnet',
@@ -176,6 +189,7 @@ return [
         'testnet' => true,
         'rpc' => false,
         'wallet' => ['metamask'],
-        'chain' => 'evm'
+        'chain' => 'evm',
+        'explorer' => 'https://testnet.bscscan.com/address/'
     ],
 ];

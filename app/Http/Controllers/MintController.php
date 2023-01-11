@@ -26,8 +26,9 @@ class MintController extends Controller
             'description' => $collection->getMeta('seo.description', $collection->description),
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? url($image) : false
         ];
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('mint.index')->with(compact('collection', 'seo'));
+        return view('mint.index')->with(compact('collection', 'seo', 'contract_url'));
     }
 
     public function embed(Request $request, $address)
@@ -36,8 +37,9 @@ class MintController extends Controller
         if (!$collection) {
             abort(404);
         }
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('mint.embed')->with(compact('collection'));
+        return view('mint.embed')->with(compact('collection', 'contract_url'));
     }
 
     /**
