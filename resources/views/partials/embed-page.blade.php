@@ -1,17 +1,17 @@
 <div id="embed-mint-box" class="sm:col-span-2">
-    <x-box class="mint-bg-box mb-0">
-        <x-slot name="title">Mint an NFT</x-slot>
-        <x-slot name="action"><span class="inline-block absolute top-3 right-8" content="Check contract address" v-tippy><a href="{{ $contract_url }}" target="_blank" class="text-lg"><i class="fa-regular fa-file-contract"></i></a></span></x-slot>
+    <x-box class="mint-bg-box mb-0 mint-border-dark">
+        <x-slot name="title" class="mint-border-dark"><span class="mint-text-dark">Mint an NFT</span></x-slot>
+        <x-slot name="action"><span class="inline-block absolute top-3 right-8 mint-text-dark" content="Check contract address" v-tippy><a href="{{ $contract_url }}" target="_blank" class="text-lg"><i class="fa-regular fa-file-contract"></i></a></span></x-slot>
         <div>
             <div v-if="settings.phases" class="w-full bg-mintpad-400/10 mint-bg-phase">
                 <div v-if="claimPhases.length > 0" class="flex items-center">
                     <div class="py-6 pl-8">
-                        <a href="#" @click.prevent="previousPhase" class="align-middle text-xl text-mintpad-500 dark:text-white"><i class="fa-solid fa-arrow-left"></i></a>
+                        <a href="#" @click.prevent="previousPhase" class="align-middle text-xl mint-text-dark"><i class="fa-solid fa-arrow-left"></i></a>
                     </div>
                     <div class="grow px-6 py-4">
                         <div v-for="(phase, index) in claimPhases" class="relative min-h-[6.5rem]" v-bind:class="[activeMintPhase == index ? 'block' : 'hidden']">
-                            <h3 class="mb-2">@{{ phase.name }}</h3>
-                            <span v-if="phase.active" class="inline-block absolute top-0 right-0 sm:w-auto mx-0 sm:mx-3 px-4 py-1 text-xs border border-green-600 bg-green-100 text-green-600 dark:text-green-600 dark:border-0 dark:bg-[#0F391D] rounded-full">Active</span>
+                            <h3 class="mb-2 mint-text-dark">@{{ phase.name }}</h3>
+                            <span v-if="phase.active" class="inline-block absolute top-0 right-0 sm:w-auto mx-0 sm:mx-3 px-4 py-1 text-xs border mint-active-button rounded-full">Active</span>
                             <div>
                                 <p>NFTs: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimableSupply"></span> 
                                 • Price: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.price"></span> <span class="text-primary-600 mint-text-primary font-medium" v-html="collection.token"></span> 
@@ -21,7 +21,7 @@
                             </div>
                             <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="mt-2 text-sm text-mintpad-700">
                                 <div class="relative w-full text-center font-regular">
-                                    <p class="absolute left-0 top-2 font-medium text-mintpad-500"><span v-html="timers[index].state"></span> in</p>
+                                    <p class="absolute left-0 top-2 font-medium mint-text-dark"><span v-html="timers[index].state"></span> in</p>
                                     <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].days">00</span>
                                     <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].hours">02</span>
                                     <span class="bg-primary-300 text-mintpad-200 mint-bg-primary rounded px-1.5 py-2 mr-1 inline-block w-8" v-html="timers[index].minutes">03</span>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="py-6 pr-8">
-                        <a href="#" @click.prevent="nextPhase" class="align-middle text-xl text-mintpad-500 dark:text-white"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#" @click.prevent="nextPhase" class="align-middle text-xl mint-text-dark"><i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
                 <div v-else-if="claimPhases.length == 0 && loadComplete" class="w-full px-6 py-4">

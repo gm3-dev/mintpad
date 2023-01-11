@@ -9,6 +9,7 @@
                 <color-picker v-model="theme.phases" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Mint phase background</span>
             </div>
 
+            <dark-mode></dark-mode>
             <x-link-button href="#" class="px-2 sm:!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</x-link-button>
             <x-blue-button href="#" class="align-middle !rounded-full px-2 sm:!px-5 !py-1 !text-xs !leading-6" @click.prevent="openYouTubeModal('https://www.youtube.com/embed/Qn2-nY0vZfQ')"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">{{ __('Watch tutorial') }}</span></x-blue-button>
         </div>
