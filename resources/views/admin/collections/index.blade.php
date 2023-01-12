@@ -9,16 +9,16 @@
                 @if (count($collections))
                     <div>
                         <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
-                            <div class="basis-4/12">{{ __('Collection name') }}</div>
-                            <div class="basis-3/12">{{ __('Blockchain') }}</div>
+                            <div class="basis-1/2 sm:basis-4/12">{{ __('Collection name') }}</div>
+                            <div class="hidden sm:block basis-3/12">{{ __('Blockchain') }}</div>
                             <div class="basis-5/12"></div>
                         </x-box-row>
                         @foreach ($collections as $collection)
                             <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
-                                <div class="basis-4/12 font-semibold">{{ $collection->name }}</div>
-                                <div class="basis-3/12 font-semibold">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
-                                <div class="basis-5/12 text-right">
-                                    <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="ttext-sm g-mintpad-100 dark:bg-mintpad-700 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shorten_address($collection->address, 5, 7) }}</button>
+                                <div class="basis-full sm:basis-4/12 font-semibold">{{ $collection->name }}</div>
+                                <div class="basis-full sm:basis-3/12 font-semibold">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
+                                <div class="basis-full sm:basis-5/12 text-center sm:text-right">
+                                    <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="w-full my-2 sm:my-0 sm:w-auto text-sm g-mintpad-100 dark:bg-mintpad-700 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shorten_address($collection->address, 5, 7) }}</button>
                                     <x-blue-button href="{{ route('mint.index', $collection->permalink) }}" target="_blank" class="ml-2 !px-2">{{ __('Mint page') }}</x-blue-button>
                                     <span v-if="this.wallet.network.id != {{ $collection->chain_id }}" content="You need to switch to {{ config('blockchains.'.$collection->chain_id.'.token') }}" v-tippy>
                                         <x-gray-button href="#" @click.prevent="switchBlockchainTo({{ $collection->chain_id }})" class="ml-2 !px-2 w-24">Switch</x-gray-button>
