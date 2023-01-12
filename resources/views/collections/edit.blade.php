@@ -131,8 +131,8 @@
                                                 <x-slot name="close">
                                                     <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="toggleWhitelistModal(index, false)">close</a>
                                                 </x-slot>
-                                                <div class="overflow-y-auto" v-bind:class="{'h-96': phase.snapshot != 0}">
-                                                    <div v-if="phase.snapshot != 0" class="p-4 bg-primary-100 rounded-md border border-primary-200">
+                                                <div class="overflow-y-auto" v-bind:class="{'max-h-80 bg-primary-100 rounded-md border border-primary-200': phase.snapshot != 0}">
+                                                    <div v-if="phase.snapshot != 0" class="p-4">
                                                         <p v-for="wallet in phase.snapshot">@{{ wallet.address }}</p>
                                                     </div>
                                                     <div v-else>
