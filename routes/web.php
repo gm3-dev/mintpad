@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
+use App\Http\Controllers\Admin\UserController as UserCollectionController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\UpcomingController;
@@ -41,6 +42,8 @@ Route::domain(config('app.url'))->group(function () {
                 Route::resource('dashboard', AdminDashboardController::class);
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
+                // Users
+                Route::resource('users', UserCollectionController::class);
                 // Import
                 Route::resource('import', ImportController::class);
                 // Invoices
