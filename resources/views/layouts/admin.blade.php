@@ -12,10 +12,6 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
     </head>
     <body class="font-sans antialiased">
         <div id="app" class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">

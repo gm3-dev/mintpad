@@ -25,7 +25,14 @@ export default {
             showModal: false,
             hasValidChain: true,
             theme: {
-                primary: 'rgba(0, 119, 255, 1)'
+                mint: {
+                    primary: 'rgba(0, 119, 255, 1)'
+                },
+                embed: {
+                    primary: 'rgba(0, 119, 255, 1)',
+                    background: 'rgba(255, 255, 255, 1)',
+                    phases: 'rgba(241, 243, 244, 1)'
+                }
             }
         }
     },
@@ -35,22 +42,98 @@ export default {
             $('#app-loader').remove()
         },
         setStyling: function() {
-            if (this.theme) {
-                var css = ''
-                css += '.mint-text-primary { color: '+this.theme.primary+' !important; } '
-                css += '.mint-bg-primary { background-color: '+this.theme.primary+' !important; } '
-                css += '.mint-bg-primary:hover { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.9')+' !important; } '
-                css += '.mint-bg-primary-sm { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.25')+' !important; } '
-                css += '.mint-bg-primary-md { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.5')+' !important; } '
-                css += '.mint-bg-primary-lg { background-color: '+this.replaceOpacityValue(this.theme.primary, '0.75')+' !important; } '
-    
-                this.styleTag = document.createElement('style')
-                this.styleTag.appendChild(document.createTextNode(css))
-                document.head.appendChild(this.styleTag)
+            var css = ''
+            
+            // Set primary colors
+            const primary = this.theme.primary
+            css += '.mint-text-primary { color: '+primary+' !important; } '
+            css += '.mint-bg-primary { background-color: '+primary+' !important; } '
+            css += '.mint-bg-primary:hover { background-color: '+this.replaceOpacityValue(primary, '0.9')+' !important; } '
+            css += '.mint-bg-primary-sm { background-color: '+this.replaceOpacityValue(primary, '0.25')+' !important; } '
+            css += '.mint-bg-primary-md { background-color: '+this.replaceOpacityValue(primary, '0.5')+' !important; } '
+            css += '.mint-bg-primary-lg { background-color: '+this.replaceOpacityValue(primary, '0.75')+' !important; } '
+
+            // Set background colors
+            if (this.theme.background) {
+                const background = this.theme.background
+                css += '.mint-bg-box { background-color: '+background+' !important; } '
+            }
+
+            // Set phase background colors
+            if (this.theme.phases) {
+                const phases = this.theme.phases
+                css += '.mint-bg-phase { background-color: '+phases+' !important; } '
+            }
+
+            this.styleTag = document.createElement('style')
+            this.styleTag.appendChild(document.createTextNode(css))
+            document.head.appendChild(this.styleTag)
+        },
+        setDarkmode: function(darkmode) {
+            if (darkmode == true) {
+                $('#embed-mint-box').addClass('dark')
+            } else {
+                $('#embed-mint-box').removeClass('dark')
             }
         },
         replaceOpacityValue(string, opacity) {
             return string.replace(/[^,]+(?=\))/, opacity)
+        },
+        getURLparams: function() {
+            const queryString = window.location.search
+            const urlParams = new URLSearchParams(queryString)
+            console.log('urlParams', urlParams)
+        },
+        getDummyCollection: function() {
+
+            const collection = {
+                totalSupply: 1000,
+                totalClaimedSupply: 256,
+                totalRatio: Math.round((100/256)*100),
+                royalties: '7.5%',
+                chainName: 'Ethereum'
+            }
+            const claimPhases = [
+                {
+                    id: 1,
+                    name: 'Premium whitelist',
+                    price: 0.1,
+                    maxClaimableSupply: 100,
+                    maxClaimablePerWallet: 1,
+                    whitelist: 1,
+                    snapshot: Array.from(Array(100).keys()),
+                    countdown: '',
+                    active: false
+                },
+                {
+                    id: 2,
+                    name: 'Whitelist',
+                    price: 0.2,
+                    maxClaimableSupply: 300,
+                    maxClaimablePerWallet: 1,
+                    whitelist: 1,
+                    snapshot: Array.from(Array(300).keys()),
+                    countdown: '',
+                    active: true
+                },
+                {
+                    id: 3,
+                    name: 'Public',
+                    price: 0.2,
+                    maxClaimableSupply: 600,
+                    maxClaimablePerWallet: 0,
+                    whitelist: 0,
+                    snapshot: [],
+                    countdown: '',
+                    active: false
+                }
+            ]
+            const timers = {
+                0: Infinity,
+                1: {state: 'Ends', days: '00', hours: '11', minutes: '22', seconds: '33'},
+                2: {state: 'Starts', days: '00', hours: '11', minutes: '22', seconds: '33'},
+            }
+            return {collection, claimPhases, timers}
         },
         /**
          * Should be rewritten in 1 method together with wallet copier

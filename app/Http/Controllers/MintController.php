@@ -15,7 +15,6 @@ class MintController extends Controller
     public function mint($permalink)
     {
         $collection = Collection::where('permalink', $permalink)->first();
-        
         if (!$collection) {
             abort(404);
         }
@@ -27,8 +26,20 @@ class MintController extends Controller
             'description' => $collection->getMeta('seo.description', $collection->description),
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? url($image) : false
         ];
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('mint.index')->with(compact('collection', 'seo'));
+        return view('mint.index')->with(compact('collection', 'seo', 'contract_url'));
+    }
+
+    public function embed(Request $request, $address)
+    {
+        $collection = Collection::where('address', $address)->first();
+        if (!$collection) {
+            abort(404);
+        }
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
+
+        return view('mint.embed')->with(compact('collection', 'contract_url'));
     }
 
     /**
@@ -54,7 +65,13 @@ class MintController extends Controller
             $background = count($backgrounds) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($backgrounds[0], PATHINFO_BASENAME).'?v='.filemtime($backgrounds[0]) : false;
 
             $collection->buttons = $collection->getMeta('buttons') ?? [];
-            $collection->theme = $collection->getMeta('theme');
+            $collection->theme = [
+                'mint' => $collection->getMeta('theme.mint'),
+                'embed' => $collection->getMeta('theme.embed')
+            ];
+            $collection->settings = [
+                'embed' => $collection->getMeta('settings.embed')
+            ];
             $collection->phases = [
                 1 => ['name' => $collection->getMeta('phases.1.name')],
                 2 => ['name' => $collection->getMeta('phases.2.name')],
@@ -63,7 +80,7 @@ class MintController extends Controller
             $collection->logo = $logo;
             $collection->background = $background;
             $collection->thumb = $thumb;
-            $collection->minturl = config('app.mint_url').'/'.$collection->permalink;
+            $collection->embed_url = route('mint.embed', $collection->address);
 
             return response()->json($collection, 200);
         }

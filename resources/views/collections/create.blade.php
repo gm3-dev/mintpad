@@ -23,7 +23,7 @@
                                     <x-select class="!w-full mb-4" v-model="collection.chain_id" :options="$blockchains"></x-select>
                                 </div>
                                 <div class="w-full sm:basis-1/3 px-0 sm:px-4">
-                                    <x-label for="symbol" :value="__('Symbol / Ticker')" class="relative" info="The symbol of the token contract is the symbol by which the token contract should be known, for example “DOGGY” or “BAYC”. It is broadly equivalent to a stock ticker." />
+                                    <x-label for="symbol" :value="__('Symbol / Ticker')" class="relative" info="You can compare the symbol with a stock ticker. We recommend making this a shortened version of your collection's name. For example, for the collection name 'Mintpad NFT', the Symbol/Ticker could be 'MPNFT'. Keep it under 5 characters." />
                                     <x-input id="symbol" class="mb-4" type="text" name="symbol" v-model="collection.symbol" />
                                 </div>
                                 <div class="w-full sm:basis-1/3">
@@ -43,7 +43,7 @@
                     </x-box>
 
                     <div class="w-full">
-                        <span content="This action will trigger a transaction" v-tippy>
+                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                             <x-button href="#" @click.prevent="deployContract" v-bind:disabled="hasValidChain !== true">{{ __('Deploy smart contract') }}</x-button>
                         </span>
                     </div>            

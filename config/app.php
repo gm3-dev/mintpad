@@ -56,6 +56,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
     'mint_url' => env('MINT_URL', 'http://localhost'),
+    'embed_url' => env('EMBED_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
     'generator_url' => env('GENERATOR_URL', null),
 

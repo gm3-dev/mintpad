@@ -14,9 +14,6 @@
             @include('partials.hotjar')
         @endif
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
@@ -33,6 +30,10 @@
         </div>
 
         <!-- Scripts -->
-        <script src="{{ mix('js/editor.js') }}" defer></script>
+        @if (Route::currentRouteName() == 'editor.mint')
+            <script src="{{ mix('js/mint-editor.js') }}" defer></script>
+        @else
+            <script src="{{ mix('js/embed-editor.js') }}" defer></script>
+        @endif
     </body>
 </html>

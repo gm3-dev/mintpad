@@ -11,7 +11,7 @@ class EditorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($permalink)
+    public function mint($permalink)
     {
         $collection = Collection::where('permalink', $permalink)->first();
 
@@ -20,7 +20,22 @@ class EditorController extends Controller
         }
 
         $this->authorize('view', $collection);
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('editor.index')->with(compact('collection'));
+        return view('editor.mint')->with(compact('collection', 'contract_url'));
+    }
+
+    public function embed($permalink)
+    {
+        $collection = Collection::where('permalink', $permalink)->first();
+
+        if (!$collection) {
+            abort(404);
+        }
+
+        $this->authorize('view', $collection);
+        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
+
+        return view('editor.embed')->with(compact('collection', 'contract_url'));
     }
 }

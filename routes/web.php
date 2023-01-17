@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
+use App\Http\Controllers\Admin\UserController as UserCollectionController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\UpcomingController;
@@ -41,6 +42,8 @@ Route::domain(config('app.url'))->group(function () {
                 Route::resource('dashboard', AdminDashboardController::class);
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
+                // Users
+                Route::resource('users', UserCollectionController::class);
                 // Import
                 Route::resource('import', ImportController::class);
                 // Invoices
@@ -69,7 +72,8 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
         // Editor layout
-        Route::get('editor/{collection}', [EditorController::class, 'index'])->name('editor.index');
+        Route::get('mint-editor/{collection}', [EditorController::class, 'mint'])->name('editor.mint');
+        Route::get('embed-editor/{collection}', [EditorController::class, 'embed'])->name('editor.embed');
 
         // Resources
         Route::post('resources/{collection}/upload', [ResourceController::class, 'upload'])->name('resources.upload');
@@ -83,6 +87,11 @@ Route::domain(config('app.url'))->group(function () {
 Route::domain(config('app.mint_url'))->group(function () {
     // Mint layout
     Route::get('{permalink}', [MintController::class, 'mint'])->name('mint.index');
+});
+
+Route::domain(config('app.embed_url'))->group(function () {
+    // Mint layout
+    Route::get('{address}', [MintController::class, 'embed'])->name('mint.embed');
 });
 
 Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');

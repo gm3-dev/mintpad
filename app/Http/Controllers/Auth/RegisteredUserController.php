@@ -65,6 +65,7 @@ class RegisteredUserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->role = 'user';
+            $user->status = 'active';
             $user->password = Hash::make($request->password);
             $user->is_company = $request->is_company;
             $user->company_name = $request->company_name ?? null;
@@ -81,6 +82,14 @@ class RegisteredUserController extends Controller
             $moneybird_id = Moneybird::createContact($user);
             if ($moneybird_id !== false) {
                 $user->moneybird_id = $moneybird_id;
+            }
+
+            // Check affiliate code
+            if ($request->affiliate != '') {
+                $affiliate = User::where('role', 'affiliate')->where('affiliate_code', $request->affiliate)->first();
+                if ($affiliate) {
+                    $user->affiliate_id = $affiliate->id;
+                }
             }
     
             $user->save();

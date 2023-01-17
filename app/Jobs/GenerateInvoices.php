@@ -67,7 +67,9 @@ class GenerateInvoices implements ShouldQueue
                     $country = config('countries.'.$user->country);
 
                     // Set vat ID
-                    if ($country && $country['eu'] == false) {
+                    if ($user->country == 'NL') {
+                        $vat = config('moneybird.vat.nl'); // Product binnen NL
+                    } elseif ($country && $country['eu'] == false) {
                         $vat = config('moneybird.vat.other'); // Product buiten EU (btw verlegd)
                     } else {
                         $vat = config('moneybird.vat.eu'); // Product binnen EU (btw verlegd)

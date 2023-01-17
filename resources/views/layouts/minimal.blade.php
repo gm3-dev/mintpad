@@ -12,9 +12,6 @@
             @include('partials.hotjar')
         @endif
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
@@ -22,7 +19,7 @@
         <script src="{{ mix('js/guest.js') }}" defer></script>
     </head>
     <body>
-        <div id="guest-container" class="font-sans antialiased">
+        <div class="font-sans antialiased">
             {{ $slot }}
         </div>
     </body>

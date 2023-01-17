@@ -35,12 +35,12 @@
                                 @foreach ($collections as $collection)
                                     <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                                         <div class="basis-full sm:basis-3/12">{{ $collection->name }}</div>
-                                        <div class="hidden sm:block basis-1/2 sm:basis-2/12">{{ $collection->symbol }}</div>
-                                        <div class="hidden sm:block basis-1/2 sm:basis-3/12">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
-                                        <div class="basis-1/2 sm:basis-4/12 lg:basis-2/12">
-                                            <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="text-sm g-mintpad-100 dark:bg-mintpad-700 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shorten_address($collection->address) }}</button>
+                                        <div class="hidden sm:block basis-2/12">{{ $collection->symbol }}</div>
+                                        <div class="basis-full sm:basis-3/12">{!! config('blockchains.'.$collection->chain_id.'.full') !!} ({{ config('blockchains.'.$collection->chain_id.'.token') }})</div>
+                                        <div class="basis-full sm:basis-4/12 lg:basis-2/12">
+                                            <button href="#" content="Copy contract address" @click="copyContractAddress" data-address="{{ $collection->address }}" class="w-full my-2 sm:my-0 sm:w-auto text-sm g-mintpad-100 dark:bg-mintpad-700 border border-mintpad-200 dark:border-transparent text-mintpad-700 dark:text-gray-200 rounded-md dark:hover:border hover:border-primary-600 dark:hover:border-primary-600 px-3 py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shorten_address($collection->address) }}</button>
                                         </div>
-                                        <div class="basis-1/2 sm:basis-2/12 text-right">
+                                        <div class="basis-full sm:basis-2/12 text-center sm:text-right">
                                             <x-link-button href="{{ route('collections.edit', $collection->id) }}" class="!py-2">Manage</x-link-button>
                                         </div>
                                     </x-box-row>

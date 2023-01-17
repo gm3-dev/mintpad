@@ -26,7 +26,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <wallet-manager></wallet-manager>
 
-                <dark-mode></dark-mode>
+                <dark-mode class="mr-4"></dark-mode>
 
                 <dropdown v-if="wallet.account" refname="dropdown-1">
                     <template v-slot:button>

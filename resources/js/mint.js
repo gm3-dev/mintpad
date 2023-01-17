@@ -25,7 +25,7 @@ if (document.getElementById('app')) {
 
     new Vue({
         el: '#app',
-        mixins: [modal, wallet, metamask, phantom,helpers,thirdweb, thirdwebWrapper],
+        mixins: [modal, wallet, metamask, phantom, helpers, thirdweb, thirdwebWrapper],
         data: {
             editMode: false,
             style: {},
@@ -41,7 +41,15 @@ if (document.getElementById('app')) {
             claimPhases: [],
             timers: {0: {}, 1: {}, 2: {}},
             mintAmount: 1,
-            loadComplete: false
+            loadComplete: false,
+            page: {
+                name: ''
+            },
+            activeMintPhase: false,
+            settings: {
+                phases: true,
+                darkmode: false
+            }
         },
         async mounted() {
             this.collectionID = false
@@ -78,7 +86,29 @@ if (document.getElementById('app')) {
                 this.hasValidChain = await this.validateMatchingBlockchains(parseInt(this.collection.chain_id))
                 
                 // Set theme
-                this.theme = response.data.theme
+                this.setPage()
+                if (this.page.name == 'mint.embed') {
+                    if (response.data.theme.embed) {
+                        this.theme = response.data.theme.embed
+                    } else {
+                        this.theme = this.theme.embed
+                    }
+                } else if (this.page.name == 'mint.index') {
+                    if (response.data.theme.mint) {
+                        this.theme = response.data.theme.mint
+                    } else {
+                        this.theme = this.theme.mint
+                    }
+                }
+                // Set settings
+                if (response.data.settings.embed) {
+                    this.settings = response.data.settings.embed
+
+                    if (this.page.name == 'mint.embed') {
+                        this.setDarkmode(this.settings.darkmode)
+                    }
+                }
+
                 this.setStyling()
                 this.appReady()
 
@@ -131,6 +161,25 @@ if (document.getElementById('app')) {
                     this.collection.totalRatio = 0
                 }
             },
+            setPage: function() {
+                this.page.name = this.$el.getAttribute('data-page')
+            },
+            previousPhase: function() {
+                const phaseCount = this.claimPhases.length-1
+                if (this.activeMintPhase == 0) {
+                    this.activeMintPhase = phaseCount
+                } else {
+                    this.activeMintPhase--
+                }
+            },
+            nextPhase: function() {
+                const phaseCount = this.claimPhases.length-1
+                if (this.activeMintPhase == phaseCount) {
+                    this.activeMintPhase = 0
+                } else {
+                    this.activeMintPhase++
+                }
+            },
             setActiveClaimPhase: function() {
                 for (var i = 0; i < this.claimPhases.length; i++) {
                     var claimPhase = this.claimPhases[i]
@@ -139,8 +188,10 @@ if (document.getElementById('app')) {
                     var now = new Date().getTime()
                     if (now <= to && now >= from) {
                         this.claimPhases[i].active = true
+                        this.activeMintPhase = i
                     } else if (now >= from && to == 0) {
                         this.claimPhases[i].active = true
+                        this.activeMintPhase = i
                     } else {
                         this.claimPhases[i].active = false
                     }
@@ -237,8 +288,11 @@ if (document.getElementById('app')) {
                 try {
                     await this.contract.claim(this.mintAmount)
 
-                    this.modal.id = 'mint-successful'
-                    this.setMessage('NFT minted!', 'success')
+                    if (this.page.name == 'mint.index') {
+                        this.modal.id = 'mint-successful'
+                    } else {
+                        this.setMessage('NFT minted!', 'success')
+                    }
                     this.setSupplyData()
                 } catch (error) {
                     if (! this.setMetaMaskError(error)) {

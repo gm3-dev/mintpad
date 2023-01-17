@@ -48,7 +48,6 @@
                 @apply inline-block;
             }
         }
-        
         &.dark {
 			@apply text-gray-100;
 
@@ -72,6 +71,32 @@
                 filter: invert(1);
             }
 		}
+
+        #embed-mint-box {
+            .mint-text-dark {
+                @apply text-mintpad-500;
+            }
+            .mint-border-dark {
+                @apply border-mintpad-200;
+            }
+            .mint-active-button {
+                @apply border-green-600 bg-green-100 text-green-600;
+            }
+            &.dark {
+                p {
+                    @apply text-gray-100;
+                }
+                .mint-text-dark {
+                    @apply text-white;
+                }
+                .mint-border-dark {
+                    @apply border-mintpad-900;
+                }
+                .mint-active-button {
+                    @apply text-green-600 border-0 bg-[#0F391D];
+                }
+            }
+        }
 
         /* Global elements */
         h1 {

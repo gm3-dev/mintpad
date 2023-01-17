@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('admin.collections.index')" :active="request()->routeIs('admin.collections.*')">
                         {{ __('Collections') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                        {{ __('Users') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('admin.import.index')" :active="request()->routeIs('admin.import.*')">
                         {{ __('Import') }}
                     </x-nav-link>
@@ -29,7 +32,7 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden sm:flex sm:items-center sm:ml-6 gap-x-4">
                 <dark-mode></dark-mode>
 
                 <dropdown refname="dropdown-2">
@@ -81,6 +84,9 @@
                 </hamburger-menu-link>
                 <hamburger-menu-link href="{{ route('admin.collections.index') }}" active="{{ request()->routeIs('admin.collections.*') }}">
                     {{ __('Collections') }}
+                </hamburger-menu-link>
+                <hamburger-menu-link href="{{ route('admin.users.index') }}" active="{{ request()->routeIs('admin.users.*') }}">
+                    {{ __('Users') }}
                 </hamburger-menu-link>
                 <hamburger-menu-link href="{{ route('admin.import.index') }}" active="{{ request()->routeIs('admin.import.*') }}">
                     {{ __('Import') }}

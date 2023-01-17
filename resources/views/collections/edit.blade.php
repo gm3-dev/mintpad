@@ -48,7 +48,7 @@
                                         </x-slot>
                                     </x-box>
                                     <div class="w-full">
-                                        <span content="This action will trigger a transaction" v-tippy>
+                                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateMetadata" v-bind:disabled="buttons.settings">{{ __('Update settings') }}</x-button>
                                         </span>
                                     </div>
@@ -68,7 +68,7 @@
                                         </x-slot>
                                     </x-box>
                                     <div class="w-full">
-                                        <span content="This action will trigger a transaction" v-tippy>
+                                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateRoyalties" v-bind:disabled="buttons.royalties">{{ __('Update royalties') }}</x-button>
                                         </span>
                                     </div>
@@ -131,8 +131,8 @@
                                                 <x-slot name="close">
                                                     <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="toggleWhitelistModal(index, false)">close</a>
                                                 </x-slot>
-                                                <div class="overflow-y-auto" v-bind:class="{'h-96': phase.snapshot != 0}">
-                                                    <div v-if="phase.snapshot != 0" class="p-4 bg-primary-100 rounded-md border border-primary-200">
+                                                <div class="overflow-y-auto" v-bind:class="{'max-h-80 bg-primary-100 rounded-md border border-primary-200': phase.snapshot != 0}">
+                                                    <div v-if="phase.snapshot != 0" class="p-4">
                                                         <p v-for="wallet in phase.snapshot">@{{ wallet.address }}</p>
                                                     </div>
                                                     <div v-else>
@@ -165,7 +165,7 @@
                                 <x-default-button href="#" @click.prevent="addClaimPhase"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add another mint phase</x-default-button>
                             </div>
                             <div class="w-full">
-                                <span content="This action will trigger a transaction" v-tippy>
+                                <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                     <x-button href="#" @click.prevent="updateClaimPhases" v-bind:disabled="buttons.phases">{{ __('Update mint phases') }}</x-button>
                                 </span>
                             </div>
@@ -211,7 +211,7 @@
                                     </div>
                                     <div class="w-full mt-5">
                                         <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
-                                        <span content="This action will trigger a transaction" v-tippy>
+                                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateCollection">{{ __('Add to collection') }}</x-button>
                                         </span>
                                     </div>
@@ -248,7 +248,8 @@
                             <x-slot name="content">
                                 <x-label for="permalink" :value="__('Permalink')" />
                                 <x-input id="permalink" class="basis-1/3" position="left" :addon="config('app.mint_url').'/'" type="text" v-model="collection.permalink" />
-                                <x-blue-button v-bind:href="collection.fullEditorUrl" target="_blank" class="mr-2">{{ __('Page editor') }}</x-blue-button>
+                                <x-blue-button v-bind:href="collection.fullMintEditorUrl" target="_blank" class="mr-2">{{ __('Page editor') }}</x-blue-button>
+                                <x-blue-button v-bind:href="collection.fullEmbedEditorUrl" target="_blank" class="mr-2">{{ __('Embed editor') }}</x-blue-button>
                                 <x-blue-button v-bind:href="collection.fullMintUrl" target="_blank">{{ __('View collection page') }}</x-blue-button>
                             </x-slot>
                         </x-box>
