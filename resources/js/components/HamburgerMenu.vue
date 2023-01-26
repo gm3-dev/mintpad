@@ -36,7 +36,6 @@
         },
         methods: {
             toggle: function() {
-                console.log('open', this.open)
                 this.open = ! this.open
             }
         }

@@ -6,7 +6,7 @@
                 <p>{{ __('Update your personal information here.') }}</p>
             </div>
 
-            <form method="POST" action="{{ route('users.update') }}">
+            <form method="POST" action="{{ route('user-profile-information.update') }}">
                 @csrf
                 @method('PUT')
 

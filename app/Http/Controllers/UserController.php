@@ -31,49 +31,6 @@ class UserController extends Controller
     }
 
     /**
-     * Update profile information
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-        $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'country' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
-            'state' => ['required', 'string', 'max:255'],
-            'postalcode' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-        ];
-
-        // Validate company info
-        if ($request->has('is_company')) {
-            $rules['company_name'] = ['required', 'string', 'max:255'];
-            $rules['vat_id'] = ['required', 'string', 'max:255'];
-        }
-
-        $request->validate($rules);
-
-        $user = User::find(Auth::user()->id);
-        $user->name = $request->name;
-        $user->is_company = $request->has('is_company');
-        $user->company_name = $request->company_name ?? null;
-        $user->vat_id = $request->vat_id ?? null;
-        $user->birthday = date('Y-m-d', strtotime($request->birth_year.'-'.$request->birth_month.'-'.$request->birth_day));
-        $user->country = $request->country ?? null;
-        $user->city = $request->city ?? null;
-        $user->state = $request->state ?? null;
-        $user->postalcode = $request->postalcode ?? null;
-        $user->address = $request->address ?? null;
-        $user->save();
-
-        Moneybird::updateContact($user);
-
-        return redirect()->back()->with('success', 'Profile saved');
-    }
-
-    /**
      * List all user sales invoices
      *
      * @return Response
