@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
-use App\Http\Controllers\Admin\UserController as UserCollectionController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\UpcomingController;
@@ -29,8 +29,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::domain(config('app.url'))->group(function () {
-    Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest');
+    /**
+     * Fortify routes
+     */
+    // require __DIR__.'/fortify.php';
 
+    Route::get('/', fn () => redirect('/login'));
+    
     Route::group(['middleware' => ['auth']], function () {
         /**
          * Admin routes
@@ -43,7 +48,7 @@ Route::domain(config('app.url'))->group(function () {
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
                 // Users
-                Route::resource('users', UserCollectionController::class);
+                Route::resource('users', AdminUserController::class);
                 // Import
                 Route::resource('import', ImportController::class);
                 // Invoices
@@ -101,11 +106,6 @@ Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('min
  * Global routes
  */
 Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
-
-/**
- * Auth routes
- */
-require __DIR__.'/auth.php';
 
 /**
  * Fallback routes

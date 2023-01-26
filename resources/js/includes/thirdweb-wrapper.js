@@ -51,7 +51,6 @@ export default {
                 }
 
             } catch (error) {
-                console.log(error)
                 resportError(error)
             }
 
@@ -71,7 +70,6 @@ export default {
                 }
 
             } catch (error) {
-                console.log(error)
                 resportError(error)
             }
 
@@ -94,7 +92,6 @@ export default {
                 }
 
             } catch (error) {
-                console.log(error)
                 resportError(error)
             }
 
