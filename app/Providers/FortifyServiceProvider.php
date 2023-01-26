@@ -38,8 +38,8 @@ class FortifyServiceProvider extends ServiceProvider
             });
             return view('auth.register', compact('countries'));
         });
-        // Fortify::twoFactorChallengeView(fn () => view(''));
-        // Fortify::verifyEmailView(fn () => view(''));
+        Fortify::twoFactorChallengeView(fn () => view('auth.two-factor-challenge'));
+        // Fortify::verifyEmailView(fn () => view('auth.verify-email'));
         
         // Set actions
         Fortify::createUsersUsing(CreateNewUser::class);

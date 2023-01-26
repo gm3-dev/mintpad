@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,9 @@
     </head>
     <body>
         <div class="font-sans antialiased">
+            <div class="flex items-center justify-center mt-12"> 
+                {{ $logo }}
+            </div>
             {{ $slot }}
         </div>
     </body>

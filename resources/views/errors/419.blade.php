@@ -1,9 +1,8 @@
 <x-minimal-layout>
     <div class="bg-white overflow-hidden text-center">
-        <a href="/" class="relative text-4xl font-jpegdev inline-block mt-12">
-            mintpad
-            @include('partials.beta')
-        </a>
+        <x-slot name="logo">
+            @include('partials.logo')
+        </x-slot>
         <div class="bg-white">
             <span class="inline-block w-full text-primary-300 mt-12 mb-6 text-9xl text-center">419</span>
             <div class="text-center">

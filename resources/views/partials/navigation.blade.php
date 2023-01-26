@@ -64,6 +64,9 @@
                         <dropdown-link href="{{ route('users.profile') }}">
                             {{ __('My profile') }}
                         </dropdown-link>
+                        <dropdown-link href="{{ route('users.2fa') }}">
+                            {{ __('2fa settings') }}
+                        </dropdown-link>
                         <dropdown-link href="{{ route('users.invoices') }}">
                             {{ __('Invoices') }}
                         </dropdown-link>

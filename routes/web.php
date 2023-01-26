@@ -71,6 +71,7 @@ Route::domain(config('app.url'))->group(function () {
         Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
 
         // User
+        Route::get('two-factor-authentication', [UserController::class, 'twoFactorAuthSettings'])->name('users.2fa');
         Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
         Route::put('profile', [UserController::class, 'update'])->name('users.update');
         Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');

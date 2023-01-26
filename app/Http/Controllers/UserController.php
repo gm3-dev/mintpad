@@ -31,6 +31,17 @@ class UserController extends Controller
     }
 
     /**
+     * Manage 2FA settings
+     *
+     * @return Response
+     */
+    public function twoFactorAuthSettings()
+    {
+        $user = Auth::user();
+        return view('users.two-factor-auth')->with(compact('user'));
+    }
+
+    /**
      * List all user sales invoices
      *
      * @return Response
