@@ -109,6 +109,9 @@
                     <hamburger-menu-link href="{{ route('users.profile') }}">
                         {{ __('My profile') }}
                     </hamburger-menu-link>
+                    <hamburger-menu-link href="{{ route('users.2fa') }}">
+                        {{ __('2fa settings') }}
+                    </hamburger-menu-link>
                     <hamburger-menu-link href="{{ route('users.invoices') }}">
                         {{ __('Invoices') }}
                     </hamburger-menu-link>

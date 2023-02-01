@@ -60,6 +60,9 @@
                         <dropdown-link href="{{ route('users.profile') }}">
                             {{ __('My profile') }}
                         </dropdown-link>
+                        <dropdown-link href="{{ route('users.2fa') }}">
+                            {{ __('2fa settings') }}
+                        </dropdown-link>
                         <dropdown-link href="{{ route('users.invoices') }}">
                             {{ __('Invoices') }}
                         </dropdown-link>
@@ -111,6 +114,9 @@
                     </hamburger-menu-link>
                     <hamburger-menu-link href="{{ route('users.profile') }}">
                         {{ __('My profile') }}
+                    </hamburger-menu-link>
+                    <hamburger-menu-link href="{{ route('users.2fa') }}">
+                        {{ __('2fa settings') }}
                     </hamburger-menu-link>
                     <hamburger-menu-link href="{{ route('users.invoices') }}">
                         {{ __('Invoices') }}
