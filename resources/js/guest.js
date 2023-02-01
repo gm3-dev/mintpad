@@ -74,7 +74,7 @@ if (document.getElementById('guest-container')) {
             },
             postForm() {
                 axios.post('/register', this.form).then((response) => {
-                    window.location.href = response.data.redirect
+                    window.location.href = '/collections'
                 }).catch(error => {
                     this.setValidationData()
 

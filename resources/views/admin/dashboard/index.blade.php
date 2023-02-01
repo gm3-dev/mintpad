@@ -43,8 +43,8 @@
                 <x-slot name="title">Users</x-slot>
                 <div>
                     <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
-                        <div class="basis-1/2">Total</div>
-                        <div class="basis-1/2">{{ $users }}</div>
+                        <div class="basis-2/3">Total</div>
+                        <div class="basis-1/3">{{ $users }}</div>
                     </x-box-row>
                 </div>
             </x-box>

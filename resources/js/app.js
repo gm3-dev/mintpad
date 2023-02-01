@@ -19,7 +19,6 @@ import modal from './includes/modal.js'
 import resources from './includes/resources'
 import thirdweb from './includes/thirdweb.js'
 import thirdwebWrapper from './includes/thirdweb-wrapper.js'
-import nftgenerator from './includes/nft-generator.js'
 import validation from './includes/validation.js'
 
 // Config
@@ -78,7 +77,7 @@ if (document.getElementById('app')) {
 
     new Vue({
         el: '#app',
-        mixins: [computed, watch, resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper, nftgenerator],
+        mixins: [computed, watch, resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper],
         data: {
             forms: {},
             collectionID: false,

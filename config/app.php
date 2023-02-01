@@ -178,6 +178,7 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
         Plank\Metable\MetableServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
 
         /*
          * Application Service Providers...
