@@ -3,7 +3,6 @@
         <x-slot name="logo">
             <a href="/" class="relative text-4xl font-jpegdev">
                 mintpad
-                @include('partials.beta')
             </a>
         </x-slot>
 
