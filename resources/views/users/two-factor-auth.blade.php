@@ -7,8 +7,11 @@
             </div>
 
             <x-box class="w-full">
-                <x-slot name="title">Settings</x-slot>
+                <x-slot name="title">Two-factor authentication</x-slot>
                 <x-slot name="content">
+                    <p class="mb-4">Two-factor authentication is an extra layer of security for your Mintpad account in addition to the password. This extra layer prevents unwanted people from gaining access to your account when they have retrieved the password.</p>
+                    <h3>This is how it works</h3>
+                    <p class="mb-4">Every time you log in, you will be asked for an extra verification code in addition to your password. Before you activate two-step verification, you will receive 8 codes from us as a backup. Keep it in a safe place that only you can access. You can use these codes when you do not have access to the control code.</p>
                     @if (session('status') == 'two-factor-authentication-confirmed')
                         <p class="mb-4">Two factor authentication confirmed and enabled successfully.</p>
                     @endif
