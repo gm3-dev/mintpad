@@ -38,7 +38,8 @@
             <x-slot name="action"><span v-if="phase.active" class="inline-block absolute top-3.5 right-4 sm:w-auto mx-0 sm:mx-3 px-4 py-1 text-xs border border-green-600 bg-green-100 text-green-600 dark:text-green-600 dark:border-0 dark:bg-[#0F391D] rounded-full">Active</span></x-slot>
             <x-slot name="content">
                 <div class="grid grid-cols-1 sm:grid-cols-2">
-                    <p>NFTs: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimableSupply"></span></p>
+                    <p v-if="phase.maxClaimableSupply !== 0">NFTs: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimableSupply"></span></p>
+                    <p v-if="phase.maxClaimablePerWallet === 0">NFTs: <span class="text-primary-600 mint-text-primary font-medium">unlimited</span></p>
                     <p>Price: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.price"></span> <span class="text-primary-600 mint-text-primary font-medium" v-html="collection.token"></span></p>
                     <p v-if="phase.maxClaimablePerWallet !== 0">Max claims: <span class="text-primary-600 mint-text-primary font-medium">1</span></p>
                     <p v-if="phase.maxClaimablePerWallet == 0">Max claims: <span class="text-primary-600 mint-text-primary font-medium">unlimited</span></p>
