@@ -39,7 +39,7 @@ if (document.getElementById('app')) {
                 buttons: []
             },
             claimPhases: [],
-            timers: {0: {}, 1: {}, 2: {}},
+            timers: {},
             mintAmount: 1,
             loadComplete: false,
             page: {
@@ -137,7 +137,7 @@ if (document.getElementById('app')) {
                     }, 10000)
                     
                     // Claim phases
-                    var claimConditions = await this.getClaimPhases({withAllowList: false})
+                    var claimConditions = await this.getClaimPhases({withAllowList: true})
                     this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
@@ -218,14 +218,9 @@ if (document.getElementById('app')) {
                 return false
             },
             setClaimPhaseCounters: function() {
-                if (this.claimPhases[0]) {
-                    this.setCountDown(0)
-                }
-                if (this.claimPhases[1]) {
-                    this.setCountDown(1)
-                }
-                if (this.claimPhases[2]) {
-                    this.setCountDown(2)
+                for (var i = 0; i < this.claimPhases.length; i++) {
+                    this.$set(this.timers, i, {})
+                    this.setCountDown(i)
                 }
             },
             setCountDown: function(i) {
