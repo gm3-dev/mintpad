@@ -21,13 +21,16 @@ class PolygonScanApi
             'address' => $address
         ];
         $response = Http::get($this->url.'&'.http_build_query($params));
-        dump($response['result']);
-        dump($this->wei2eth($response['result']));
+
+        if ($response['status'] == 0) {
+            return false;
+        }
+
+        return $this->wei2eth($response['result']);
     }
 
     public function getNormalTransactions($address)
     {
-        dump('Normal');
         $params = [
             'module' => 'account',
             'action' => 'txlist',
@@ -76,6 +79,6 @@ class PolygonScanApi
 
     public function getUrl()
     {
-        return config('polygon.url').'/api?apikey='.config('polygon.key');
+        return config('polygonscan.url').'/api?apikey='.config('polygonscan.key');
     }
 }

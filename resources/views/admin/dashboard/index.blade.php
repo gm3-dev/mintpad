@@ -8,6 +8,10 @@
             <x-box>
                 <x-slot name="title">Collections</x-slot>
                 <div>
+                    <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
+                        <div class="basis-2/3">Blockchain</div>
+                        <div class="basis-1/3">Collections</div>
+                    </x-box-row>
                     @foreach ($collection_list as $chain_id => $count)
                         <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                             <div class="basis-2/3">{{ config('blockchains.'.$chain_id.'.full') }}</div>
@@ -18,6 +22,22 @@
                         <div class="basis-2/3 pr-4 text-right">Total</div>
                         <div class="basis-1/3">{{ $collections }}</div>
                     </x-box-row>
+                </div>
+            </x-box>
+
+            <x-box>
+                <x-slot name="title">Wallet balances</x-slot>
+                <div>
+                    <x-box-row class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
+                        <div class="basis-1/2">Blockchain</div>
+                        <div class="basis-1/2">Balance</div>
+                    </x-box-row>
+                    @foreach ($wallets as $chain_id => $wallet)
+                        <x-box-row class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
+                            <div class="basis-1/2">{{ config('blockchains.'.$chain_id.'.full') }}</div>
+                            <div class="basis-1/2">{{ $wallet }} {{ config('blockchains.'.$chain_id.'.token') }}</div>
+                        </x-box-row>
+                    @endforeach
                 </div>
             </x-box>
 
