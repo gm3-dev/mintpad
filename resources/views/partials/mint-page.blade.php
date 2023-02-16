@@ -31,7 +31,6 @@
     </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 mt-12">
-
     <div v-if="claimPhases.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
         <x-box v-for="(phase, index) in claimPhases" class="min-h-[12rem]">
             <x-slot name="title">@{{ phase.name }}</x-slot>
@@ -42,8 +41,9 @@
                     <p v-else>NFTs: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimableSupply"></span></p>
                     <p>Price: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.price"></span> <span class="text-primary-600 mint-text-primary font-medium" v-html="collection.token"></span></p>
                     <p v-if="phase.maxClaimablePerWallet === 0">Max claims: <span class="text-primary-600 mint-text-primary font-medium">unlimited</span></p>
-                    <p v-else>Max claims: <span class="text-primary-600 mint-text-primary font-medium">1</span></p>
+                    <p v-else>Max claims: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.maxClaimablePerWallet"></span></p>
                     <p v-if="phase.whitelist">Whitelist: <span class="text-primary-600 mint-text-primary font-medium" v-html="phase.snapshot.length"></span></p>
+                    <p v-else>Whitelist: <span class="text-primary-600 mint-text-primary font-medium">No</span></p>
                 </div>
                 <div v-if="typeof timers[index] === 'object' && timers[index].state != undefined" class="mt-3 text-sm text-mintpad-700">
                     <div class="relative w-full text-right sm:text-center font-regular">
