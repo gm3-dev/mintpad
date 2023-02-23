@@ -38,10 +38,8 @@
         "@tinymce/tinymce-vue": "^4.0.7",
         "ethers": "^5.7.0",
         "jquery": "^3.6.0",
-        "lightvue": "^1.5.1",
         "mitt": "^3.0.0",
         "node-polyfill-webpack-plugin": "^2.0.1",
-        "one-colorpicker": "^1.0.12",
         "vue": "^3.2.47",
         "vue-tippy": "^6.0.0"
     }
