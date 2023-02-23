@@ -107,8 +107,8 @@
                                             <x-input id="price" addon="{{ $collection->token }}" step="0.001" type="number" v-model="phase.price" />
                                         </div>
                                         <div>
-                                            <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="Here you can choose whether people can only mint one NFT per wallet or unlimited." />
-                                            <x-select class="!w-full" v-model="phase.maxClaimablePerWallet" :options="['Unlimited claims', '1 claim']"></x-select>
+                                            <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
+                                            <x-input id="max-quantity-wallet" type="number" v-model="phase.maxClaimablePerWallet" />
                                         </div>
                                         <div>
                                             <x-label for="phase-name" :value="__('Phase name')" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
@@ -271,14 +271,15 @@
                                     </div>
                                     <div>
                                         <x-label for="seo-image" :value="__('Social share image')" info="This is the thumbnail people see when you share your mintpage link. Thumbnail image size is 1280x720px." />
-
                                         <div v-if="collection.seo.image" class="relative">
                                             <x-gray-button href="#" class="absolute top-0 right-0 m-2 !px-3 !py-2 text-lg" @click.prevent="deleteSocialImage"><i class="fas fa-trash-alt"></i></x-gray-button>
                                             <img v-bind:src="collection.seo.image" class="rounded-md" />
                                         </div>
                                         <div v-else class="mb-4">
                                             <p v-if="loadingResource('social-sharing')" class="mt-1"><i class="fa-solid fa-cloud-arrow-up animate-bounce mr-2 text-lg"></i> uploading...</p>
-                                            <x-input-file v-else id="upload-logo" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
+                                            <div v-else>
+                                                <x-input-file id="upload-logo" @dragenter="dragEnterUploadResource('social-sharing')" @dragleave="dragLeaveUploadResource('social-sharing')" @change="addSocialImage" v-bind:class="resources['social-sharing'] ? resources['social-sharing'].classes : []" accept="image/jpeg, image/png, image/jpg" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

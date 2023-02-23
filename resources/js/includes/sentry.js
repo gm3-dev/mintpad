@@ -1,10 +1,10 @@
 import * as Sentry from "@sentry/vue";
 import { BrowserTracing } from "@sentry/tracing";
 
-export function initSentry(Vue) {
+export function initSentry(app) {
     if (process.env.MIX_SENTRY_LARAVEL_DSN) {
         Sentry.init({
-            Vue,
+            app,
             dsn: process.env.MIX_SENTRY_LARAVEL_DSN,
             integrations: [
                 new BrowserTracing({

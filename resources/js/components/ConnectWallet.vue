@@ -34,7 +34,7 @@
                 this.open = false
             },
             connectMetaMask: function() {
-                eventBus.$emit('connect-wallet', 'metamask')
+                this.emitter.emit('connect-wallet', 'metamask')
             },
             connectPhantom: function() {
                 // eventBus.$emit('connect-wallet', 'phantom')

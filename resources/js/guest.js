@@ -1,5 +1,5 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
+import { createApp } from 'vue'
 const axios = require('axios')
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -8,36 +8,37 @@ axios.defaults.headers.common = {
 
 // User address in navigation
 if (document.getElementById('guest-container')) {  
-    new Vue({
-        el: '#guest-container',
-        data: {
-            showPassword: false,
-            showConfirmPassword: false,
-            signUpStep: 1,
-            form: {
-                name: '',
-                birth_day: false,
-                birth_month: false,
-                birth_year: false,
-                reference: '',
-                is_company: '0',
-                company_name: '',
-                vat_id: '',
-                country: 'US',
-                address: '',
-                city: '',
-                postalcode: '',
-                state: '',
-                email: '',
-                password: '',
-                password_confirmation: '',
-                accept_tos: false,
-                affiliate: ''
-            },
-            validForm: true,
-            validation: {},
-            validationMessages: {
-                required: 'Field is required'
+    const app = createApp({
+        data() {
+            return {
+                showPassword: false,
+                showConfirmPassword: false,
+                signUpStep: 1,
+                form: {
+                    name: '',
+                    birth_day: false,
+                    birth_month: false,
+                    birth_year: false,
+                    reference: '',
+                    is_company: '0',
+                    company_name: '',
+                    vat_id: '',
+                    country: 'US',
+                    address: '',
+                    city: '',
+                    postalcode: '',
+                    state: '',
+                    email: '',
+                    password: '',
+                    password_confirmation: '',
+                    accept_tos: false,
+                    affiliate: ''
+                },
+                validForm: true,
+                validation: {},
+                validationMessages: {
+                    required: 'Field is required'
+                }
             }
         },
         mounted() {
@@ -132,4 +133,6 @@ if (document.getElementById('guest-container')) {
             }
         }
     })
+
+    app.mount('#guest-container')
 }

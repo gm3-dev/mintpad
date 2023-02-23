@@ -1,16 +1,18 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
+import { createApp } from 'vue'
 
 // Includes
+import mitt from 'mitt';
 import { initSentry, resportError } from './includes/sentry'
 import wallet from './includes/wallet.js'
 import metamask from './wallets/metamask.js'
 import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
-import thirdwebWrapper from './includes/thirdweb-wrapper.js'
+// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import thirdweb from './includes/thirdweb.js'
-import { eventBus } from './includes/event-bus'
+// import { eventBus } from './includes/event-bus'
+import VueTippy from "vue-tippy"
 
 // Config
 const axios = require('axios')
@@ -18,37 +20,37 @@ axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
-initSentry(Vue)
+const emitter = mitt();
 
 if (document.getElementById('app')) {
-    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
-
-    new Vue({
-        el: '#app',
-        mixins: [modal, wallet, metamask, phantom, helpers, thirdweb, thirdwebWrapper],
-        data: {
-            editMode: false,
-            style: {},
-            collection: {
-                totalSupply: 0,
-                totalClaimedSupply: 0,
-                totalRatio: 0,
-                image: false,
-                logo: false,
-                thumbs: false,
-                buttons: []
-            },
-            claimPhases: [],
-            timers: {},
-            mintAmount: 1,
-            loadComplete: false,
-            page: {
-                name: ''
-            },
-            activeMintPhase: false,
-            settings: {
-                phases: true,
-                darkmode: false
+    const app = createApp({
+        mixins: [modal, wallet, metamask, phantom, helpers, thirdweb],
+        data() {
+            return {
+                editMode: false,
+                style: {},
+                collection: {
+                    totalSupply: 0,
+                    totalClaimedSupply: 0,
+                    totalRatio: 0,
+                    image: false,
+                    logo: false,
+                    thumbs: false,
+                    buttons: []
+                },
+                claimPhases: [],
+                timers: {},
+                mintAmount: 1,
+                maxMintAmount: 1,
+                loadComplete: false,
+                page: {
+                    name: ''
+                },
+                activeMintPhase: false,
+                settings: {
+                    phases: true,
+                    darkmode: false
+                }
             }
         },
         async mounted() {
@@ -64,7 +66,7 @@ if (document.getElementById('app')) {
             await this.setBlockchains()
 
             // Listen to connect button
-            eventBus.$on('connect-wallet', async (wallet) =>{
+            this.emitter.on('connect-wallet', async (wallet) =>{
                 await this.connectWallet(wallet)
             });
 
@@ -112,37 +114,37 @@ if (document.getElementById('app')) {
                 this.setStyling()
                 this.appReady()
 
-                // Set SDK
-                if (this.wallet.account && this.hasValidChain === true) {
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
-                } else {
-                    this.setSDK(this.collection.chain_id)
-                }
-
-                await this.setSmartContract(this.contractAddress)
-
                 try {
+                    // Set SDK
+                    let contract
+                    if (this.wallet.account && this.hasValidChain === true) {
+                        contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+                    } else {
+                        contract = await this.getSmartContract(this.collection.chain_id, this.contractAddress)
+                    }
+
                     // Global settings
-                    const metadata = await this.getMetadata()
+                    const metadata = await contract.metadata.get()
                     this.collection.name = metadata.name
                     this.collection.description = metadata.description
-                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage()
-                    const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                    this.collection.image = this.collection.thumb ? this.collection.thumb : await this.setCollectionImage(contract)
+                    const royalties = await contract.royalties.getDefaultRoyaltyInfo()
                     this.collection.royalties = Math.round((royalties.seller_fee_basis_points / 100) * 10) / 10 + '%'
 
                     // Collection supply
-                    this.setSupplyData()
+                    this.setSupplyData(contract)
                     setInterval(() => {
-                        this.setSupplyData()
+                        this.setSupplyData(contract)
                     }, 10000)
                     
                     // Claim phases
-                    var claimConditions = await this.getClaimPhases({withAllowList: true})
+                    var claimConditions = await contract.claimConditions.getAll({withAllowList: true})
                     this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
                     this.setClaimPhaseCounters()
                     this.setActiveClaimPhase()
                     
                 } catch (error) {
+                    console.log('error', error)
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error', true)
                 }
@@ -153,16 +155,16 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
-            setSupplyData: async function() {
-                this.collection.totalSupply = await this.contract.totalSupply()
-                this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+            setSupplyData: async function(contract) {
+                this.collection.totalSupply = await contract.totalSupply()
+                this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
                 this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
                 if (isNaN(this.collection.totalRatio)) {
                     this.collection.totalRatio = 0
                 }
             },
             setPage: function() {
-                this.page.name = this.$el.getAttribute('data-page')
+                this.page.name = $('#app').attr('data-page')
             },
             previousPhase: function() {
                 const phaseCount = this.claimPhases.length-1
@@ -188,9 +190,11 @@ if (document.getElementById('app')) {
                     var now = new Date().getTime()
                     if (now <= to && now >= from) {
                         this.claimPhases[i].active = true
+                        this.maxMintAmount = claimPhase.maxClaimablePerWallet
                         this.activeMintPhase = i
                     } else if (now >= from && to == 0) {
                         this.claimPhases[i].active = true
+                        this.maxMintAmount = claimPhase.maxClaimablePerWallet
                         this.activeMintPhase = i
                     } else {
                         this.claimPhases[i].active = false
@@ -210,8 +214,8 @@ if (document.getElementById('app')) {
                 }
                 return output
             },
-            setCollectionImage: async function() {
-                var images = await this.contract.getAll({count: 1})
+            setCollectionImage: async function(contract) {
+                var images = await contract.getAll({count: 1})
                 if (images.length) {
                     return images[0].metadata.image
                 }
@@ -219,7 +223,7 @@ if (document.getElementById('app')) {
             },
             setClaimPhaseCounters: function() {
                 for (var i = 0; i < this.claimPhases.length; i++) {
-                    this.$set(this.timers, i, {})
+                    this.timers[i] = {}
                     this.setCountDown(i)
                 }
             },
@@ -281,7 +285,15 @@ if (document.getElementById('app')) {
                 this.setButtonLoader(e)
 
                 try {
-                    await this.contract.claim(this.mintAmount)
+                    // Set SDK
+                    let contract
+                    if (this.wallet.account && this.hasValidChain === true) {
+                        contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+                    } else {
+                        contract = await this.getSmartContract(this.collection.chain_id, this.contractAddress)
+                    }
+
+                    await contract.claim(this.mintAmount)
 
                     if (this.page.name == 'mint.index') {
                         this.modal.id = 'mint-successful'
@@ -299,5 +311,17 @@ if (document.getElementById('app')) {
                 this.resetButtonLoader()
             }
         }
-    });
+    })
+
+    initSentry(app)
+    app.config.globalProperties.emitter = emitter;
+    app.use(
+        VueTippy,
+        {
+            directive: 'tippy', // => v-tippy
+            component: 'tippy', // => <tippy/>
+        }
+    )
+    app.component('dark-mode', require('./components/DarkMode.vue').default)
+    app.mount('#app')
 }

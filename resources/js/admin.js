@@ -1,7 +1,7 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
+import { createApp } from 'vue'
 import Alpine from 'alpinejs'
-import VueTippy, { TippyComponent } from "vue-tippy"
+import VueTippy from "vue-tippy"
 
 // Includes
 import { initSentry, resportError } from './includes/sentry'
@@ -9,7 +9,7 @@ import metamask from './wallets/metamask.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
 import thirdweb from './includes/thirdweb.js'
-import thirdwebWrapper from './includes/thirdweb-wrapper.js'
+// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 
 // Config
 const axios = require('axios')
@@ -19,27 +19,20 @@ axios.defaults.headers.common = {
 }
 window.Alpine = Alpine
 Alpine.start()
-Vue.use(VueTippy)
-Vue.component("tippy", TippyComponent)
-initSentry(Vue)
 
 if (document.getElementById('app')) {
-    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
-    Vue.component('dropdown', require('./components/Dropdown.vue').default);
-    Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
-    Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
-    Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
     
-    new Vue({
-        el: '#app',
-        mixins: [metamask,helpers,modal,thirdweb, thirdwebWrapper],
-        data: {
-            collectionID: false,
-            sdk: false,
-            contract: false,
-            contractAddress: false,
-            chainData: false,
-            collection: { nfts: [] }
+    const app = createApp({
+        mixins: [metamask,helpers,modal,thirdweb],
+        data() {
+            return {
+                collectionID: false,
+                sdk: false,
+                contract: false,
+                contractAddress: false,
+                chainData: false,
+                collection: { nfts: [] }
+            }
         },
         async mounted() {    
             await this.setBlockchains()
@@ -73,31 +66,29 @@ if (document.getElementById('app')) {
                     // Mint settings
                     this.collection.permalink = response.data.permalink
 
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
-                    await this.setSmartContract(this.contractAddress)
-
+                    const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
                     try {
                         // Global settings
-                        const metadata = await this.getMetadata()
-                        const platformFees = await this.contract.platformFees.get()
-                        this.collection.primary_sales_recipient = await this.contract.sales.getRecipient()
+                        const metadata = await contract.metadata.get()
+                        const platformFees = await contract.platformFees.get()
+                        this.collection.primary_sales_recipient = await contract.sales.getRecipient()
                         this.collection.platform_fee = platformFees.platform_fee_basis_points / 100
                         this.collection.platform_fee_recipient = platformFees.platform_fee_recipient
                         this.collection.name = metadata.name
                         this.collection.description = metadata.description
-                        const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                        const royalties = await contract.royalties.getDefaultRoyaltyInfo()
                         this.collection.fee_recipient = royalties.fee_recipient
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                         // Claim phases
-                        var claimConditions = await this.getClaimPhases({withAllowList: false})
+                        var claimConditions = await contract.claimConditions.getAll({withAllowList: false})
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
                         // Collection
-                        this.collection.totalSupply = await this.contract.totalSupply()
-                        this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                        this.collection.totalSupply = await contract.totalSupply()
+                        this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
                         this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                        this.collection.nfts = await this.contract.getAll({count: 8})
+                        this.collection.nfts = await contract.getAll({count: 8})
                     } catch (error) {
                         resportError(error)
                         this.setMessage('Contract could not be loaded, please try again.', 'error', true)
@@ -116,4 +107,19 @@ if (document.getElementById('app')) {
             }
         }
     })
+
+    initSentry(app)
+    app.component('dark-mode', require('./components/DarkMode.vue').default)
+        .component('dropdown', require('./components/Dropdown.vue').default)
+        .component('dropdown-link', require('./components/DropdownLink.vue').default)
+        .component('hamburger-menu', require('./components/HamburgerMenu.vue').default)
+        .component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default)
+    app.use(
+        VueTippy,
+        {
+            directive: 'tippy', // => v-tippy
+            component: 'tippy', // => <tippy/>
+        }
+    )
+    app.mount('#app')
 }

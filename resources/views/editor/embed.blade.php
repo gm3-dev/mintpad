@@ -3,10 +3,25 @@
 
     <div v-if="editMode" class="relative sm:fixed z-40 h-auto sm:h-14 left-0 top-0 p-2 w-full bg-white dark:bg-mintpad-500 border-b border-mintpad-200 dark:border-mintpad-900">
         <div class="max-w-7xl mx-auto px-6 flex flex-wrap gap-4 items-center">
-            <div class="grow w-full sm:w-auto text-mintpad-700">
-                <color-picker v-model="theme.primary" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Primary color</span>
-                <color-picker v-model="theme.background" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Background</span>
-                <color-picker v-model="theme.phases" :position="{left: 0, top: '40px'}" :mode="'rgb'"></color-picker><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Mint phase background</span>
+            <div id="color-picker-container" class="grow w-full sm:w-auto text-mintpad-700 relative">
+                <div class="inline-block relative">
+                    <a href="#" @click.prevent="toggleColorpicker('primary')" class="vc-open-color-picker inline-block align-middle rounded-md w-7 h-7 border border-gray-200" :style="{backgroundColor: objectToRgba(colorpicker.primary.color, 1)}"></a><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Primary color</span>
+                    <div v-if="colorpicker.primary.show" class="absolute top-11 left-0">
+                        <Chrome v-model="colorpicker.primary.color" :disable-alpha="true"></Chrome>
+                    </div>
+                </div>
+                <div class="inline-block relative">
+                    <a href="#" @click.prevent="toggleColorpicker('background')" class="vc-open-color-picker inline-block align-middle rounded-md w-7 h-7 border border-gray-200" :style="{backgroundColor: objectToRgba(colorpicker.background.color, 1)}"></a><span class="text-sm mx-4 align-middle dark:text-mintpad-200">Background</span>
+                    <div v-if="colorpicker.background.show" class="absolute top-11 left-0">
+                        <Chrome v-model="colorpicker.background.color" :disable-alpha="true"></Chrome>
+                    </div>
+                </div>
+                <div class="inline-block relative">
+                    <a href="#" @click.prevent="toggleColorpicker('phases')" class="vc-open-color-picker inline-block align-middle rounded-md w-7 h-7 border border-gray-200" :style="{backgroundColor: objectToRgba(colorpicker.phases.color, 1)}"></a><span class="text-sm ml-4 align-middle dark:text-mintpad-200">Mint phase background</span>
+                    <div v-if="colorpicker.phases.show" class="absolute top-11 left-0">
+                        <Chrome v-model="colorpicker.phases.color" :disable-alpha="true"></Chrome>
+                    </div>
+                </div>
             </div>
 
             <dark-mode></dark-mode>

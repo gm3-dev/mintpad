@@ -1,3 +1,3 @@
-import Vue from 'vue/dist/vue.min.js'
+import { createApp } from 'vue'
 
-export const eventBus = new Vue();
+export const eventBus = createApp({});

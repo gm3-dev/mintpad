@@ -4,7 +4,7 @@ import { initSentry, resportError } from './sentry'
 export default {
     methods: {
         deployNFTDrop: async function() {
-            this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
+            const sdk = this.getSDKFromSigner(signer, chainID)
 
             var parameters = {
                 name: this.collection.name,
@@ -22,13 +22,13 @@ export default {
             try {
                 // Deploy on EVM chain
                 if (this.collection.chain == 'evm') {
-                    contractAddress = await this.sdk.deployer.deployNFTDrop(parameters)
+                    contractAddress = await sdk.deployer.deployNFTDrop(parameters)
                 }
 
                 // Deploy on Solana chain
-                if (this.collection.chain == 'solana') {
-                    contractAddress = await this.sdk.deployer.createNftDrop(parameters)
-                }
+                // if (this.collection.chain == 'solana') {
+                //     contractAddress = await sdk.deployer.createNftDrop(parameters)
+                // }
 
             } catch (error) {
                 resportError(error)
@@ -46,9 +46,9 @@ export default {
                 }
 
                 // Set from Solana chain
-                if (this.collection.chain == 'solana') { 
-                    contract = await this.sdk.getProgram(address, "nft-drop")
-                }
+                // if (this.collection.chain == 'solana') { 
+                //     contract = await this.sdk.getProgram(address, "nft-drop")
+                // }
 
             } catch (error) {
                 resportError(error)
@@ -65,9 +65,9 @@ export default {
                 }
 
                 // Get from Solana chain
-                if (this.collection.chain == 'solana') { 
-                    metadata = await this.contract.getMetadata()
-                }
+                // if (this.collection.chain == 'solana') { 
+                //     metadata = await this.contract.getMetadata()
+                // }
 
             } catch (error) {
                 resportError(error)
@@ -84,12 +84,12 @@ export default {
                 }
 
                 // Get from Solana chain
-                if (this.collection.chain == 'solana') { 
-                    const claimCondition = await this.contract.claimConditions.get()
-                    if (claimCondition.price != undefined) {
-                        claimConditions = [claimCondition]
-                    }
-                }
+                // if (this.collection.chain == 'solana') { 
+                //     const claimCondition = await this.contract.claimConditions.get()
+                //     if (claimCondition.price != undefined) {
+                //         claimConditions = [claimCondition]
+                //     }
+                // }
 
             } catch (error) {
                 resportError(error)
