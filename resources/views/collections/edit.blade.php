@@ -117,8 +117,8 @@
                                         <div>
                                             <x-label for="whitelist" :value="__('Enable whitelist')" info="Here you can choose whether to enable a whitelist or not." />
                                             <x-radio-group>
-                                                <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mr-2" :value="__('No')" />
-                                                <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block" :value="__('Yes')" />
+                                                <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mx-2" :value="__('No')" />
+                                                <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block mx-2" :value="__('Yes')" />
                                             </x-radio-group>
                                         </div>
                                         <div v-if="phase.whitelist == 1" class="col-span-2">
