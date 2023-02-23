@@ -70,7 +70,7 @@
             <x-slot name="content">
                 <p class="font-regular text-center mb-4">{{ __('Start minting by clicking the button below') }}</p>
                 <div v-if="!editMode" class="flex gap-2">
-                    <x-input type="number" v-model="mintAmount" min="1" v-bind:max="maxMintAmount == 0 ? 1 : maxMintAmount" width="w-28" class="!mb-0" />                 
+                    <x-input type="number" v-model="mintAmount" min="1" v-bind:max="maxMintAmount == 0 ? 99999 : maxMintAmount" width="w-28" class="!mb-0" />                 
                     <x-button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</x-button>
                     <x-button v-else-if="hasValidChain !== true" @click.prevent="switchBlockchainTo(false)" class="w-full mint-bg-primary">Switch blockchain</x-button>
                     <x-button v-else="" @click.prevent="mintNFT" v-bind:disabled="claimPhases.length == 0" class="w-full mint-bg-primary">Start minting</x-button>
