@@ -1,5 +1,6 @@
 window.$ = require('jquery')
 import { ethers } from 'ethers'
+import { toRaw } from 'vue'
 
 // Includes
 import { initSentry, resportError } from './sentry'
@@ -26,12 +27,12 @@ export default {
             hasValidChain: true,
             theme: {
                 mint: {
-                    primary: 'rgba(0, 119, 255, 1)'
+                    primary: {r: 0, g: 119, b: 255, a: 1}
                 },
                 embed: {
-                    primary: 'rgba(0, 119, 255, 1)',
-                    background: 'rgba(255, 255, 255, 1)',
-                    phases: 'rgba(241, 243, 244, 1)'
+                    primary: {r: 0, g: 119, b: 255, a: 1},
+                    background: {r: 255, g: 255, b: 255, a: 1},
+                    phases: {r: 241, g: 243, b: 244, a: 1}
                 }
             }
         }
@@ -46,28 +47,39 @@ export default {
             
             // Set primary colors
             const primary = this.theme.primary
-            css += '.mint-text-primary { color: '+primary+' !important; } '
-            css += '.mint-bg-primary { background-color: '+primary+' !important; } '
-            css += '.mint-bg-primary:hover { background-color: '+this.replaceOpacityValue(primary, '0.9')+' !important; } '
-            css += '.mint-bg-primary-sm { background-color: '+this.replaceOpacityValue(primary, '0.25')+' !important; } '
-            css += '.mint-bg-primary-md { background-color: '+this.replaceOpacityValue(primary, '0.5')+' !important; } '
-            css += '.mint-bg-primary-lg { background-color: '+this.replaceOpacityValue(primary, '0.75')+' !important; } '
+            css += '.mint-text-primary { color: '+this.objectToRgba(primary, '1')+' !important; } '
+            css += '.mint-bg-primary { background-color: '+this.objectToRgba(primary, '1')+' !important; } '
+            css += '.mint-bg-primary:hover { background-color: '+this.objectToRgba(primary, '0.9')+' !important; } '
+            css += '.mint-bg-primary-sm { background-color: '+this.objectToRgba(primary, '0.25')+' !important; } '
+            css += '.mint-bg-primary-md { background-color: '+this.objectToRgba(primary, '0.5')+' !important; } '
+            css += '.mint-bg-primary-lg { background-color: '+this.objectToRgba(primary, '0.75')+' !important; } '
 
             // Set background colors
             if (this.theme.background) {
                 const background = this.theme.background
-                css += '.mint-bg-box { background-color: '+background+' !important; } '
+                css += '.mint-bg-box { background-color: '+this.objectToRgba(background, '1')+' !important; } '
             }
 
             // Set phase background colors
             if (this.theme.phases) {
                 const phases = this.theme.phases
-                css += '.mint-bg-phase { background-color: '+phases+' !important; } '
+                css += '.mint-bg-phase { background-color: '+this.objectToRgba(phases, '1')+' !important; } '
             }
 
             this.styleTag = document.createElement('style')
             this.styleTag.appendChild(document.createTextNode(css))
             document.head.appendChild(this.styleTag)
+        },
+        objectToRgba: function(object, opacity) {
+            object = toRaw(object)
+            if (object.rgba) {
+                object = object.rgba
+            }
+            return 'rgba('+parseInt(object['r'])+', '+parseInt(object['g'])+', '+parseInt(object['b'])+', '+opacity+')';
+        },
+        rgbaToObject: function(string) {
+            const data = string.replace('rgba(', '').replace(')', '').replaceAll(' ', '').split(',')
+            return {'r': parseInt(data[0]), 'g': parseInt(data[1]), 'b': parseInt(data[2]), 'a': parseInt(data[3])}
         },
         setDarkmode: function(darkmode) {
             if (darkmode == true) {
@@ -82,7 +94,6 @@ export default {
         getURLparams: function() {
             const queryString = window.location.search
             const urlParams = new URLSearchParams(queryString)
-            console.log('urlParams', urlParams)
         },
         getDummyCollection: function() {
 
@@ -110,7 +121,7 @@ export default {
                     name: 'Whitelist',
                     price: 0.2,
                     maxClaimableSupply: 300,
-                    maxClaimablePerWallet: 1,
+                    maxClaimablePerWallet: 3,
                     whitelist: 1,
                     snapshot: Array.from(Array(300).keys()),
                     countdown: '',

@@ -19,7 +19,7 @@ export default {
     methods: {
         setResource: function(name) {
             if (!this.resources[name]) {
-                this.$set(this.resources, name, {classes: [], loading: false})
+                this.resources[name] = {classes: [], loading: false}
             }
         },
         loadingResource: function(name) {

@@ -87,6 +87,9 @@ Route::domain(config('app.url'))->group(function () {
 
         // Validation
         Route::post('validate', [ValidationController::class, 'index'])->name('validate.index');
+
+        // Messenger
+        Route::post('messenger', [MessengerController::class, 'index'])->name('messenger.index');
     });
 });
 

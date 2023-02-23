@@ -1,25 +1,25 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
-import { ethers } from 'ethers'
+import { createApp } from 'vue'
+import { BigNumber } from 'ethers'
 import Alpine from 'alpinejs'
-import VueTippy, { TippyComponent } from "vue-tippy"
+import VueTippy from "vue-tippy"
 
 // Mixins
 import computed from './mixins/computed.js'
 import watch from './mixins/watch.js'
 
 // Includes
-import { eventBus } from './includes/event-bus'
+import mitt from 'mitt';
 import { initSentry, resportError } from './includes/sentry'
 import wallet from './includes/wallet.js'
 import metamask from './wallets/metamask.js'
-import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
 import resources from './includes/resources'
 import thirdweb from './includes/thirdweb.js'
-import thirdwebWrapper from './includes/thirdweb-wrapper.js'
+// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import validation from './includes/validation.js'
+// import { ThirdwebSDK } from "@thirdweb-dev/sdk"
 
 // Config
 const axios = require('axios')
@@ -29,89 +29,47 @@ axios.defaults.headers.common = {
 }
 window.Alpine = Alpine
 Alpine.start()
-Vue.use(VueTippy)
-Vue.component("tippy", TippyComponent)
-initSentry(Vue)
-
-Vue.directive('closable', {
-    bind (el, binding, vnode) {
-        // Here's the click/touchstart handler
-        // (it is registered below)
-        el.clickOutsideEvent = (e) => {
-            e.stopPropagation()
-            
-            const { handler, exclude } = binding.value
-            let clickedOnExcludedEl = false
-            exclude.forEach(refName => {
-                if (!clickedOnExcludedEl) {
-                    const excludedEl = vnode.context.$refs[refName]
-                    clickedOnExcludedEl = excludedEl.contains(e.target)
-                }
-            })
-            if (!el.contains(e.target) && !clickedOnExcludedEl) {
-                vnode.context[handler]()
-            }
-        }
-        // Register click/touchstart event listeners on the whole page
-        document.addEventListener('click', el.clickOutsideEvent)
-        document.addEventListener('touchstart', el.clickOutsideEvent)
-    },
-    unbind (el) {
-        // If the element that has v-closable is removed, then
-        // unbind click/touchstart listeners from the whole page
-        document.removeEventListener('click', el.clickOutsideEvent)
-        document.removeEventListener('touchstart', el.clickOutsideEvent)
-    }
-})
+const emitter = mitt();
 
 if (document.getElementById('app')) {
-    Vue.component('tinymce', require('./components/TinyMCE.vue').default);
-    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
-    Vue.component('connect-wallet', require('./components/ConnectWallet.vue').default);
-    Vue.component('wallet-manager', require('./components/WalletManager.vue').default);
-    Vue.component('dropdown', require('./components/Dropdown.vue').default);
-    Vue.component('dropdown-link', require('./components/DropdownLink.vue').default);
-    Vue.component('hamburger-menu', require('./components/HamburgerMenu.vue').default);
-    Vue.component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default);
-    Vue.component('status-button', require('./components/StatusButton.vue').default);
-
-    new Vue({
-        el: '#app',
-        mixins: [computed, watch, resources, validation, wallet, metamask, phantom, helpers, modal, thirdweb, thirdwebWrapper],
-        data: {
-            forms: {},
-            collectionID: false,
-            sdk: false,
-            contract: false,
-            contractAddress: false,
-            upload: false,
-            collection: {
-                name: '',
-                chain_id: 1,
-                chain: 'evm',
-                token: 'ETH',
-                symbol: '',
-                fee_recipient: '',
-                royalties: 0,
-                description: '',
-                metadata: [],
-                nfts: [],
-                previews: [],
-                totalSupply: 0,
-                totalClaimedSupply: 0,
-                permalink: '',
-                mintUrl: '',
-                editorUrl: '',
-                fullPermalink: '',
-                seo: {},
-            },
-            claimPhases: [],
-            claimPhaseInfo: [],
-            page: {
-                name: '',
-                tab: 0,
-            },
-            validation: {}
+    const app = createApp({
+        mixins: [computed, watch, resources, validation, wallet, metamask, helpers, modal, thirdweb],
+        data() {
+            return {
+                forms: {},
+                collectionID: false,
+                sdk: false,
+                contract: false,
+                contractAddress: false,
+                upload: false,
+                collection: {
+                    name: '',
+                    chain_id: 1,
+                    chain: 'evm',
+                    token: 'ETH',
+                    symbol: '',
+                    fee_recipient: '',
+                    royalties: 0,
+                    description: '',
+                    metadata: [],
+                    nfts: [],
+                    previews: [],
+                    totalSupply: 0,
+                    totalClaimedSupply: 0,
+                    permalink: '',
+                    mintUrl: '',
+                    editorUrl: '',
+                    fullPermalink: '',
+                    seo: {},
+                },
+                claimPhases: [],
+                claimPhaseInfo: [],
+                page: {
+                    name: '',
+                    tab: 0,
+                },
+                validation: {}
+            }
         },
         async mounted() {
             if ($('#collectionID').length) {
@@ -121,7 +79,7 @@ if (document.getElementById('app')) {
             await this.setBlockchains()
 
             // Listen to connect button
-            eventBus.$on('connect-wallet', async (wallet) =>{
+            this.emitter.on('connect-wallet', async (wallet) =>{
                 await this.connectWallet(wallet)
             });
 
@@ -155,7 +113,7 @@ if (document.getElementById('app')) {
                 }
             },
             setPage: function() {
-                this.page.name = this.$el.getAttribute('data-page')
+                this.page.name = $('#app').attr('data-page')
             },
             setPageData: async function() {
 
@@ -199,27 +157,25 @@ if (document.getElementById('app')) {
                         this.page.tab = 1
                     }
 
-                    this.setSDKFromSigner(this.wallet.signer, this.collection.chain_id)
-                    await this.setSmartContract(this.contractAddress)
-
-                    try {
+                    const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+                    try {                        
                         // Global settings
-                        const metadata = await this.getMetadata()
+                        const metadata = await contract.metadata.get()
                         this.collection.name = metadata.name
                         this.collection.description = metadata.description
-                        const royalties = await this.contract.royalties.getDefaultRoyaltyInfo()
+                        const royalties = await contract.royalties.getDefaultRoyaltyInfo()
                         this.collection.fee_recipient = royalties.fee_recipient
                         this.collection.royalties = royalties.seller_fee_basis_points / 100
 
                         // Claim phases
-                        var claimConditions = await this.getClaimPhases({withAllowList: true})
+                        var claimConditions = await contract.claimConditions.getAll({withAllowList: true})
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
-                        // Collection
-                        this.collection.totalSupply = await this.contract.totalSupply()
-                        this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                        // // Collection
+                        this.collection.totalSupply = await contract.totalSupply()
+                        this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
                         this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                        this.collection.nfts = await this.contract.getAll({count: 8})
+                        this.collection.nfts = await contract.getAll({count: 8})
                     } catch (error) {
                         resportError(error)
                         this.setMessage('Contract could not be loaded, please try again.', 'error', true)
@@ -263,8 +219,10 @@ if (document.getElementById('app')) {
                     claimPhases.push(newClaimPhase)
                 }
 
+                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+
                 try {
-                    await this.contract.claimConditions.set(claimPhases)
+                    await contract.claimConditions.set(claimPhases)
                     this.validateTabClaimPhases()
                     // await axios.put('/collections/'+this.collectionID+'/claim-phases', formData).then((response) => {
                     //     this.validateTabClaimPhases()
@@ -326,8 +284,9 @@ if (document.getElementById('app')) {
 
                 this.setButtonLoader(e)
 
+                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
                 try {
-                    await this.contract.metadata.set({
+                    await contract.metadata.set({
                         name: this.collection.name,
                         description: this.collection.description
                     })
@@ -355,8 +314,9 @@ if (document.getElementById('app')) {
 
                 this.setButtonLoader(e)
 
+                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
                 try {
-                    await this.contract.royalties.setDefaultRoyaltyInfo({
+                    await contract.royalties.setDefaultRoyaltyInfo({
                         seller_fee_basis_points: this.collection.royalties * 100, // 1% royalty fee
                         fee_recipient: this.collection.fee_recipient, // the fee recipient
                     })
@@ -427,7 +387,27 @@ if (document.getElementById('app')) {
 
                 try {
                     // Deploy contract
-                    const contractAddress = await this.deployNFTDrop()
+                    const sdk = this.getSDKFromSigner(this.wallet.signer, this.collection.chain_id)
+
+                    var parameters = {
+                        name: this.collection.name,
+                        symbol: this.collection.symbol,
+                        description: this.collection.description,
+                        primary_sale_recipient: this.wallet.account, // primary sales
+                        fee_recipient: this.wallet.account, // royalties address
+                        seller_fee_basis_points: this.collection.royalties * 100, // royalties address
+                        platform_fee_recipient: process.env.MIX_WALLET, // platform fee address
+                        platform_fee_basis_points: 500, // platform fee (5%)
+                        totalSupply: this.collection.totalSupply // Solana only
+                    }
+                    
+                    var contractAddress = false
+                    try {
+                        contractAddress = await sdk.deployer.deployNFTDrop(parameters)
+                    } catch (error) {
+                        console.log('error 1', error)
+                        resportError(error)
+                    }
 
                     if (contractAddress) {
                         // Update DB
@@ -440,6 +420,7 @@ if (document.getElementById('app')) {
                     }
 
                 } catch(error) {
+                    console.log('error 2', error)
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error')
                 }
@@ -464,12 +445,13 @@ if (document.getElementById('app')) {
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
 
+                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
                 try {
-                    await this.contract.createBatch(this.collection.metadata)
-                    this.collection.totalSupply = await this.contract.totalSupply()
-                    this.collection.totalClaimedSupply = await this.contract.totalClaimedSupply()
+                    await contract.createBatch(this.collection.metadata)
+                    this.collection.totalSupply = await contract.totalSupply()
+                    this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
                     this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.nfts = await this.contract.getAll({count: 8})
+                    this.collection.nfts = await contract.getAll({count: 8})
                     this.collection.previews = []
                     
                     if (this.collection.nfts.length > 0) {
@@ -609,4 +591,57 @@ if (document.getElementById('app')) {
             }
         }
     })
+
+    app.config.globalProperties.emitter = emitter;  
+    app.component('tinymce', require('./components/TinyMCE.vue').default)
+        .component('dark-mode', require('./components/DarkMode.vue').default)
+        .component('connect-wallet', require('./components/ConnectWallet.vue').default)
+        .component('wallet-manager', require('./components/WalletManager.vue').default)
+        .component('dropdown', require('./components/Dropdown.vue').default)
+        .component('dropdown-link', require('./components/DropdownLink.vue').default)
+        .component('hamburger-menu', require('./components/HamburgerMenu.vue').default)
+        .component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default)
+        .component('status-button', require('./components/StatusButton.vue').default)
+        .component('messenger', require('./components/Messenger.vue').default)
+    app.use(
+        VueTippy,
+        {
+            directive: 'tippy', // => v-tippy
+            component: 'tippy', // => <tippy/>
+        }
+    )
+
+    app.directive('closable', {
+        bind (el, binding, vnode) {
+            // Here's the click/touchstart handler
+            // (it is registered below)
+            el.clickOutsideEvent = (e) => {
+                e.stopPropagation()
+                
+                const { handler, exclude } = binding.value
+                let clickedOnExcludedEl = false
+                exclude.forEach(refName => {
+                    if (!clickedOnExcludedEl) {
+                        const excludedEl = vnode.context.$refs[refName]
+                        clickedOnExcludedEl = excludedEl.contains(e.target)
+                    }
+                })
+                if (!el.contains(e.target) && !clickedOnExcludedEl) {
+                    vnode.context[handler]()
+                }
+            }
+            // Register click/touchstart event listeners on the whole page
+            document.addEventListener('click', el.clickOutsideEvent)
+            document.addEventListener('touchstart', el.clickOutsideEvent)
+        },
+        unbind (el) {
+            // If the element that has v-closable is removed, then
+            // unbind click/touchstart listeners from the whole page
+            document.removeEventListener('click', el.clickOutsideEvent)
+            document.removeEventListener('touchstart', el.clickOutsideEvent)
+        }
+    })
+
+    initSentry(app)
+    app.mount('#app')
 }

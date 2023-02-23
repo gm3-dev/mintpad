@@ -33,7 +33,7 @@
 
             <!-- Page Content -->
             <div id="app-loader" class="w-10 mx-auto pt-4 text-lg dark:text-white"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
-            <main id="app-content" class="hidden" data-page="{{ Route::currentRouteName() }}">
+            <main id="app-content" class="hidden">
                 @include('partials.messages')
                 <div class="py-12">
                     <div class="max-w-7xl mx-auto px-6">

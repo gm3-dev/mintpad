@@ -1,10 +1,10 @@
 window.$ = require('jquery')
-import Vue from 'vue/dist/vue.min.js'
+import { createApp, toRaw } from 'vue'
 import VueTippy from "vue-tippy"
-import {ColorPicker, ColorPanel} from 'one-colorpicker'
+import { Chrome, create } from '@ckpack/vue-color';
 
 // Includes
-import { initSentry, resportError } from './includes/sentry'
+import { initSentry } from './includes/sentry'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
 import resources from './includes/resources'
@@ -15,46 +15,47 @@ axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
 }
-Vue.use(VueTippy)
-initSentry(Vue)
 
 if (document.getElementById('app')) {  
-    Vue.component('dark-mode', require('./components/DarkMode.vue').default);
-
-    Vue.use(ColorPanel)
-    Vue.use(ColorPicker)
-
-    new Vue({
-        el: '#app',
+    const app = createApp({
         mixins: [helpers,resources,modal],
-        components: {},
-        data: {
-            editMode: true,
-            style: {},
-            collectionID: false,
-            collection: {
-                permalink: '',
-                buttons: [],
-                logo: false,
-                background: false
-            },
-            claimPhases: [],
-            timers: {0: {}, 1: {}, 2: {}},
-            loadComplete: false,
-            edit: {
-                logo: {classes: []},
-                background: {classes: []},
-                button: false,
-                loading: false
+        data() {
+            return {
+                editMode: true,
+                testje: '#194D33',
+                colorpicker: {
+                    primary: {
+                        show: false,
+                        color: {r: 0, g: 0, b: 0, a: 1},
+                        
+                    }
+                },
+                collectionID: false,
+                collection: {
+                    permalink: '',
+                    buttons: [],
+                    logo: false,
+                    background: false
+                },
+                claimPhases: [],
+                timers: {0: {}, 1: {}, 2: {}},
+                loadComplete: false,
+                edit: {
+                    logo: {classes: []},
+                    background: {classes: []},
+                    button: false,
+                    loading: false
+                }
             }
         },
         computed: {
             primaryColor() {
-                return this.theme.primary;
+                return this.colorpicker.primary.color;
             }
         },
         watch: {
-            primaryColor() {
+            primaryColor(color) {
+                this.theme.primary = color.rgba ? color.rgba : color
                 this.setStyling()
             }
         },
@@ -62,6 +63,14 @@ if (document.getElementById('app')) {
             if ($('#collectionID').length) {
                 this.collectionID = $('#collectionID').val()
             }
+
+            document.addEventListener("mouseup", e => {
+                let target = $(e.target)[0].className
+                let closeColorPicker = !target.startsWith('vc-')
+                if (closeColorPicker) {
+                    this.colorpicker.primary.show = false
+                }
+            })
             
             axios.get('/'+this.collectionID+'/fetch').then(async (response) => {
                 this.collection.buttons = response.data.buttons
@@ -78,6 +87,8 @@ if (document.getElementById('app')) {
                 } else {
                     this.theme = this.theme.mint
                 }
+
+                this.colorpicker.primary.color = toRaw(this.theme.primary)
                 this.setStyling()
                 this.appReady()
                 this.loadComplete = true
@@ -87,6 +98,9 @@ if (document.getElementById('app')) {
             });
         },
         methods: {
+            toggleColorpicker: function(target) {
+                this.colorpicker[target].show = !this.colorpicker[target].show
+            },
             setDummyData: function() {
                 const dummyData = this.getDummyCollection()
                 this.collection = {...this.collection, ...dummyData.collection}
@@ -224,5 +238,20 @@ if (document.getElementById('app')) {
                 this.modalContent('<div class="w-full text-center"><iframe class="inline-block" width="650" height="366" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>')
             }
         }
-    });
+    })
+
+    initSentry(app)
+    app.use(
+        VueTippy,
+        {
+            directive: 'tippy', // => v-tippy
+            component: 'tippy', // => <tippy/>
+        }
+    )
+    app.use(create({
+        components: [Chrome],
+    }));
+    app.component('dark-mode', require('./components/DarkMode.vue').default)
+
+    app.mount('#app')
 }

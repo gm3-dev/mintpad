@@ -8,7 +8,8 @@ return [
         'token' => 'ETH',
         'full' => 'Ethereum',
         'testnet' => false,
-        'rpc' => 'https://eth-mainnet.g.alchemy.com/v2/ZVtoxx-JliMx1W7Ui1NoDn2Fmjs59DCa',
+        'rpc' => false,
+        // 'rpc' => 'https://eth-mainnet.g.alchemy.com/v2/ZVtoxx-JliMx1W7Ui1NoDn2Fmjs59DCa',
         'wallet' => ['metamask'],
         'chain' => 'evm',
         'explorer' => 'https://etherscan.io/address/'
@@ -28,7 +29,8 @@ return [
         'token' => 'ETH',
         'full' => 'Ethereum Goerli',
         'testnet' => true,
-        'rpc' => 'https://eth-goerli.g.alchemy.com/v2/yx3q1Jhb-P5seWxrD0tzcuIFZg01A3_F',
+        'rpc' => false,
+        // 'rpc' => 'https://eth-goerli.g.alchemy.com/v2/yx3q1Jhb-P5seWxrD0tzcuIFZg01A3_F',
         'wallet' => ['metamask'],
         'chain' => 'evm',
         'explorer' => 'https://goerli.etherscan.io/address/'
@@ -61,7 +63,8 @@ return [
         'token' => 'MATIC',
         'full' => 'Polygon',
         'testnet' => false,
-        'rpc' => 'https://polygon-mainnet.g.alchemy.com/v2/8r-nRwRsVh-xJuiaT3U179oIHbIKm0mW',
+        'rpc' => false,
+        // 'rpc' => 'https://polygon-mainnet.g.alchemy.com/v2/8r-nRwRsVh-xJuiaT3U179oIHbIKm0mW',
         'wallet' => ['metamask'],
         'chain' => 'evm',
         'explorer' => 'https://polygonscan.com/address/'
@@ -72,7 +75,8 @@ return [
         'token' => 'MATIC',
         'full' => 'Polygon Mumbai',
         'testnet' => true,
-        'rpc' => 'https://polygon-mumbai.g.alchemy.com/v2/4-no0a1q4yrq3-vtoByaqB2qbKdpGrZf',
+        'rpc' => false,
+        // 'rpc' => 'https://polygon-mumbai.g.alchemy.com/v2/4-no0a1q4yrq3-vtoByaqB2qbKdpGrZf',
         'wallet' => ['metamask'],
         'chain' => 'evm',
         'explorer' => 'https://mumbai.polygonscan.com/address/'

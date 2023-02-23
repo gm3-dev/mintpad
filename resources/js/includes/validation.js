@@ -57,6 +57,10 @@ export default {
                     return this.setValidationResponse(false, claimPhase.name +': Mint price must be a number')
                 } else if (claimPhase.price < 0) {
                     return this.setValidationResponse(false, claimPhase.name +': Mint price is not valid')
+                } else if (claimPhase.maxClaimablePerWallet.length < 1) {
+                    return this.setValidationResponse(false, claimPhase.name +': Mints per wallet must be a number')
+                } else if (claimPhase.maxClaimablePerWallet < 0) {
+                    return this.setValidationResponse(false, claimPhase.name +': Mints per wallet is not valid')
                 }
             }
 
