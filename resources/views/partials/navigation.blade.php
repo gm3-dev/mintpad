@@ -30,7 +30,7 @@
 
                 <dropdown v-if="wallet.account" refname="dropdown-1">
                     <template v-slot:button>
-                        <div><img :src="'/images/'+wallet.name+'.png'" width="30px" class="inline-block mr-4" /></div>
+                        <div><img :src="'/images/'+wallet.name+'.png'" width="26px" class="inline-block mr-4 w-6" /></div>
                     </template>
                     <template v-slot:links>
                         <dropdown-link href="#" @click.prevent.native="disconnectWallet">Disconnect</dropdown-link>
