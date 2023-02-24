@@ -95,6 +95,12 @@ export default {
             }
 
             switch(error.reason) {
+                case '!Qty': 
+                    this.setMessage('You reached the maximum number of claimable NFTs per wallet.', 'error')
+                    return true
+                case '!MaxSupply': 
+                    this.setMessage('There are no more NFTs left to claim in this mint phase.', 'error')
+                    return true
                 case 'user rejected transaction': 
                     this.setMessage('Request canceled: you rejected the request.', 'error')
                     return true
