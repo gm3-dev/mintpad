@@ -1,6 +1,5 @@
 window.$ = require('jquery')
 import { createApp } from 'vue'
-import { BigNumber } from 'ethers'
 import Alpine from 'alpinejs'
 import VueTippy from "vue-tippy"
 

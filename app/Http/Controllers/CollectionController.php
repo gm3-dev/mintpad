@@ -30,15 +30,7 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        $blockchains = [];
-        foreach (config('blockchains') as $blockchain) {
-            $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';
-            if (config('app.env') != 'production') {
-                $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
-            } elseif ($blockchain['testnet'] == false) {
-                $blockchains[$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
-            }
-        }
+        $blockchains = get_blockchains();
         return view('collections.create')->with(compact('blockchains'));
     }
 
