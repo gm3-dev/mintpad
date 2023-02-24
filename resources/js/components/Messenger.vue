@@ -1,3 +1,15 @@
+<script setup>
+import { ref } from 'vue'
+
+let show = ref(true)
+
+function closeMessage() {
+    show.value = false
+}
+function showMessage() {
+    show.value = true
+}
+</script>
 <template>
     <div class="fixed left-6 bottom-6" v-bind:class="[!show ? 'w-72' : 'w-1/3']">
         <div class="w-full relative transition-all mb-4 p-4 border border-mintpad-200 dark:border-mintpad-900 bg-white dark:bg-mintpad-800 rounded-md">
@@ -20,22 +32,3 @@
         </a>
     </div>
 </template>
-
-<script>
-    export default {
-        props: {},
-        data() {
-            return {
-                show: true
-            }
-        },
-        methods: {
-            closeMessage() {
-                this.show = false
-            },
-            showMessage() {
-                this.show = true
-            }
-        }
-    }
-</script>

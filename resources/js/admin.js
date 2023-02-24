@@ -9,7 +9,6 @@ import metamask from './wallets/metamask.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
 import thirdweb from './includes/thirdweb.js'
-// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 
 // Config
 const axios = require('axios')

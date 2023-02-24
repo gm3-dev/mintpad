@@ -9,9 +9,7 @@ import metamask from './wallets/metamask.js'
 import phantom from './wallets/phantom.js'
 import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
-// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import thirdweb from './includes/thirdweb.js'
-// import { eventBus } from './includes/event-bus'
 import VueTippy from "vue-tippy"
 
 // Config

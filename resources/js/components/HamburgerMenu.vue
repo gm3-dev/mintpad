@@ -1,3 +1,12 @@
+<script setup>
+import { ref } from 'vue';
+
+let open = ref(false)
+
+function toggle() {
+    open.value = !open.value
+}
+</script>
 <template>
     <div>
         <!-- Hamburger -->
@@ -23,21 +32,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    export default {
-        data () {
-            return {
-                open: false
-            }
-        },
-        mounted() {
-            //
-        },
-        methods: {
-            toggle: function() {
-                this.open = ! this.open
-            }
-        }
-    }
-</script>

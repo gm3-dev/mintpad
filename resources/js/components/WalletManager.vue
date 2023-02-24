@@ -1,3 +1,15 @@
+<script setup>
+function copyAddress(e) {
+    var button = $(e.target)
+    var buttonWidth = button.outerWidth()
+    var shortAddress = button.text()
+    button.css('width', buttonWidth+'px').text('Copied')
+    setTimeout(function() {
+        button.text(shortAddress)
+    }, 1000)
+    navigator.clipboard.writeText(button.data('address'))
+}
+</script>
 <template>
     <div>
         <div id="user-address" class="hidden lg:inline-block">
@@ -5,29 +17,3 @@
         </div>      
     </div>
 </template>
-
-<script>
-    import { eventBus } from '../includes/event-bus'
-
-    export default {
-        props: {},
-        data() {
-            return {}
-        },
-        mounted() {
-            //
-        },
-        methods: {
-            copyAddress: function(e) {
-                var button = $(e.target)
-                var buttonWidth = button.outerWidth()
-                var shortAddress = button.text()
-                button.css('width', buttonWidth+'px').text('Copied')
-                setTimeout(function() {
-                    button.text(shortAddress)
-                }, 1000)
-                navigator.clipboard.writeText(button.data('address'))
-            }
-        }
-    }
-</script>

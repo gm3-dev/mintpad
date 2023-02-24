@@ -1,11 +1,11 @@
+<script setup>
+defineProps({
+    href: String,
+    target: String
+})
+</script>
 <template>
     <a :href="href" :target="target" class="block px-4 py-2 font-regular text-sm leading-5 text-mintpad-400 dark:text-white hover:text-mintpad-300 dark:hover:text-primary-600 transition duration-150 ease-in-out">
         <slot></slot>
     </a>
 </template>
-
-<script>
-    export default {
-        props: ['href','target']
-    }
-</script>

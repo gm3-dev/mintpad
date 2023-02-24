@@ -17,9 +17,7 @@ import helpers from './includes/helpers.js'
 import modal from './includes/modal.js'
 import resources from './includes/resources'
 import thirdweb from './includes/thirdweb.js'
-// import thirdwebWrapper from './includes/thirdweb-wrapper.js'
 import validation from './includes/validation.js'
-// import { ThirdwebSDK } from "@thirdweb-dev/sdk"
 
 // Config
 const axios = require('axios')
@@ -169,6 +167,7 @@ if (document.getElementById('app')) {
 
                         // Claim phases
                         var claimConditions = await contract.claimConditions.getAll({withAllowList: true})
+                        // var activeClaimCondition = await contract.claimConditions.getActive()
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
                         // // Collection

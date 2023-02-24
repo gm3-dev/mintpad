@@ -1,3 +1,19 @@
+<script setup>
+import { ref } from 'vue';
+
+defineProps({
+    refname: String
+})
+
+let open = ref(false)
+
+function toggle() {
+    open.value = !open.value
+}
+function hide() {
+    open.value = false
+}
+</script>
 <template>
     <div class="relative">
         <button :ref="refname" @click="toggle()" class="hover:cursor-pointer h-8">
@@ -11,25 +27,3 @@
         </div>
     </div>
 </template>
-
-<script>
-    export default {
-        props: ['refname'],
-        data () {
-            return {
-                open: false
-            }
-        },
-        mounted() {
-            //
-        },
-        methods: {
-            toggle: function() {
-                this.open = ! this.open
-            },
-            hide: function() {
-                this.open = false
-            }
-        }
-    }
-</script>
