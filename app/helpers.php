@@ -20,14 +20,27 @@ if (!function_exists('shorten_address')) {
     }
 }
 
-if (!function_exists('get_blockchains')) {
-    function get_blockchains()
+if (!function_exists('get_blockchain_list')) {
+    function get_blockchain_list()
     {
         $blockchains = [];
 
         foreach (config('blockchains') as $blockchain) {
             $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';
             $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['token'].')';
+        }
+
+        return $blockchains;
+    }
+}
+
+if (!function_exists('get_blockchains')) {
+    function get_blockchains()
+    {
+        $blockchains = [];
+
+        foreach (config('blockchains') as $blockchain) {
+            $blockchains[$blockchain['id']] = $blockchain;
         }
 
         return $blockchains;

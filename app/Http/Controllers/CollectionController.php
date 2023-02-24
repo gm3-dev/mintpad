@@ -30,7 +30,7 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        $blockchains = get_blockchains();
+        $blockchains = get_blockchain_list();
         return view('collections.create')->with(compact('blockchains'));
     }
 
