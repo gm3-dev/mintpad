@@ -589,12 +589,11 @@ if (document.getElementById('app')) {
     })
 
     app.config.globalProperties.emitter = emitter;  
-    app.component('tinymce', require('./components/TinyMCE.vue').default)
-        .component('dark-mode', require('./components/DarkMode.vue').default)
-        .component('connect-wallet', require('./components/ConnectWallet.vue').default)
+    app.component('dark-mode', require('./components/DarkMode.vue').default)
         .component('wallet-manager', require('./components/WalletManager.vue').default)
         .component('dropdown', require('./components/Dropdown.vue').default)
         .component('dropdown-link', require('./components/DropdownLink.vue').default)
+        .component('dropdown-row', require('./components/DropdownRow.vue').default)
         .component('hamburger-menu', require('./components/HamburgerMenu.vue').default)
         .component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default)
         .component('status-button', require('./components/StatusButton.vue').default)
@@ -608,31 +607,22 @@ if (document.getElementById('app')) {
     )
 
     app.directive('closable', {
-        bind (el, binding, vnode) {
-            // Here's the click/touchstart handler
-            // (it is registered below)
+        mounted (el, binding, vnode) {
             el.clickOutsideEvent = (e) => {
                 e.stopPropagation()
                 
                 const { handler, exclude } = binding.value
-                let clickedOnExcludedEl = false
-                exclude.forEach(refName => {
-                    if (!clickedOnExcludedEl) {
-                        const excludedEl = vnode.context.$refs[refName]
-                        clickedOnExcludedEl = excludedEl.contains(e.target)
-                    }
-                })
+                const element = document.getElementById(exclude)
+                let clickedOnExcludedEl = element.contains(e.target)
                 if (!el.contains(e.target) && !clickedOnExcludedEl) {
-                    vnode.context[handler]()
+                    handler()
                 }
             }
-            // Register click/touchstart event listeners on the whole page
+
             document.addEventListener('click', el.clickOutsideEvent)
             document.addEventListener('touchstart', el.clickOutsideEvent)
         },
-        unbind (el) {
-            // If the element that has v-closable is removed, then
-            // unbind click/touchstart listeners from the whole page
+        unmounted (el) {
             document.removeEventListener('click', el.clickOutsideEvent)
             document.removeEventListener('touchstart', el.clickOutsideEvent)
         }

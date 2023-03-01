@@ -35,7 +35,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6 gap-x-4">
                 <dark-mode></dark-mode>
 
-                <dropdown refname="dropdown-2">
+                <dropdown id="dropdown-2">
                     <template v-slot:button>
                         <button class="flex items-center text-mintpad-700 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
                             <div><i class="fas fa-user-circle text-3xl"></i></div>

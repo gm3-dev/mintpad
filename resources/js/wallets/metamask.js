@@ -14,6 +14,7 @@ export default {
                 network: false,
                 provider: false,
                 signer: false,
+                balance: false,
             }
         }
     },
@@ -122,6 +123,7 @@ export default {
             var chainID = false
             var accounts = []
             var network = false
+            var balance = false
     
             try {
                 signer = this.wallet.provider.getSigner()
@@ -132,6 +134,7 @@ export default {
                     throw Error('Not connected')
                 }
                 network = await this.wallet.provider.getNetwork()
+                balance = await this.wallet.provider.getBalance(account)
             } catch (error) {
                 if (error.message != 'Not connected') {
                     this.setMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', 'error', true)
@@ -158,12 +161,13 @@ export default {
                 //     chainID = parseInt(network.chainId)
                 // }
             }
-    
+
             this.wallet.name = 'metamask'
             this.wallet.signer = signer
             this.wallet.account = account
             if (chainID && this.blockchains[chainID]) {
                 this.wallet.network = this.blockchains[chainID]
+                this.wallet.balance = (balance / 1000000000000000000).toFixed(3) + ' ' + this.wallet.network.token
             } else {
                 this.wallet.network = {id: chainID}
             }

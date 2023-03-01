@@ -28,16 +28,24 @@
 
                 <dark-mode class="mr-4"></dark-mode>
 
-                <dropdown v-if="wallet.account" refname="dropdown-1">
+                <dropdown v-if="wallet.account" id="dropdown-1" width="w-72">
                     <template v-slot:button>
                         <div><img :src="'/images/'+wallet.name+'.png'" width="26px" class="inline-block mr-4 w-6" /></div>
                     </template>
                     <template v-slot:links>
-                        <dropdown-link href="#" @click.prevent.native="disconnectWallet">Disconnect</dropdown-link>
+                        <dropdown-row v-if="wallet.network" class="flex flex-row">
+                            <div class="w-1/3">Blockchain</div>
+                            <div class="w-2/3 text-primary-600">@{{ wallet.network.full }}</div>
+                        </dropdown-row>
+                        <dropdown-row v-if="wallet.balance" class="flex flex-row">
+                            <div class="w-1/3">Balance</div>
+                            <div class="w-2/3 text-primary-600">@{{ wallet.balance }}</div>
+                        </dropdown-row>
+                        <dropdown-link href="#" @click.prevent.native="disconnectWallet" class="border-t border-gray-200 dark:border-mintpad-900">Disconnect</dropdown-link>
                     </template>
                 </dropdown>
 
-                <dropdown refname="dropdown-2">
+                <dropdown id="dropdown-2">
                     <template v-slot:button>
                         <button class="flex items-center text-mintpad-700 dark:text-gray-200 text-sm font-medium hover:border-gray-300 hover:text-mintpad-300 focus:outline-none transition duration-150 ease-in-out">
                             <div><i class="fas fa-user-circle text-3xl"></i></div>
