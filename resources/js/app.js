@@ -403,7 +403,6 @@ if (document.getElementById('app')) {
                     try {
                         contractAddress = await sdk.deployer.deployNFTDrop(parameters)
                     } catch (error) {
-                        console.log('error 1', error)
                         resportError(error)
                     }
 
@@ -418,7 +417,6 @@ if (document.getElementById('app')) {
                     }
 
                 } catch(error) {
-                    console.log('error 2', error)
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error')
                 }

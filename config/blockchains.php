@@ -196,4 +196,26 @@ return [
         'chain' => 'evm',
         'explorer' => 'https://testnet.bscscan.com/address/'
     ],
+    256256 => [
+        'name' => 'CMP-Mainnet',
+        'id' => 256256,
+        'token' => 'CMP',
+        'full' => 'CMP-Mainnet',
+        'testnet' => false,
+        'rpc' => false,
+        'wallet' => ['metamask'],
+        'chain' => 'evm',
+        'explorer' => 'https://mainnet.scan.caduceus.foundation'
+    ],
+    512512 => [
+        'name' => 'CMP-Testnet',
+        'id' => 512512,
+        'token' => 'CMP',
+        'full' => 'CMP-Testnet',
+        'testnet' => true,
+        'rpc' => false,
+        'wallet' => ['metamask'],
+        'chain' => 'evm',
+        'explorer' => 'https://galaxy.scan.caduceus.foundation'
+    ],
 ];

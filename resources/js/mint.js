@@ -142,7 +142,6 @@ if (document.getElementById('app')) {
                     this.setActiveClaimPhase()
                     
                 } catch (error) {
-                    console.log('error', error)
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error', true)
                 }

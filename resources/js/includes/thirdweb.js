@@ -1,4 +1,5 @@
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
+import { Cmp, CmpTestnet } from '@thirdweb-dev/chains'
 // import { ThirdwebSDK as ThirdwebSolanaSDK } from "@thirdweb-dev/sdk/solana"
 
 export default {
@@ -35,7 +36,13 @@ export default {
             return await sdk.getContract(address, 'nft-drop')
         },
         getSDKBlockchain: function(chain) {
-            return chain.rpc !== false ? chain.rpc : chain.name
+            if (chain.name == 'CMP-Mainnet') {
+                return Cmp
+            } else if (chain.name == 'CMP-Testnet') {
+                return CmpTestnet
+            } else {
+                return chain.rpc !== false ? chain.rpc : chain.id
+            }
         }
     }
 }

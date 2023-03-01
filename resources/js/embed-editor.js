@@ -117,7 +117,6 @@ if (document.getElementById('app')) {
                 } else {
                     this.theme = this.theme.embed
                 }
-                console.log(this.theme)
                 this.colorpicker.primary.color = toRaw(this.theme.primary)
                 this.colorpicker.background.color = toRaw(this.theme.background)
                 this.colorpicker.phases.color = toRaw(this.theme.phases)

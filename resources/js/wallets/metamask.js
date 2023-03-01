@@ -79,9 +79,9 @@ export default {
             }
         },
         setMetaMaskError: function(error) {
-            console.log('error', error)
-            console.log('error.code', error.code)
-            console.log('error.reason', error.reason)
+            // console.log('error', error)
+            // console.log('error.code', error.code)
+            // console.log('error.reason', error.reason)
             switch (error.code) {
                 case -32002: 
                     this.setMessage('Request already pending: open MetaMask to see the request.', 'error')
