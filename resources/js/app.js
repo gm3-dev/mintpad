@@ -58,6 +58,19 @@ if (document.getElementById('app')) {
                     editorUrl: '',
                     fullPermalink: '',
                     seo: {},
+                    delayedReveal: false
+                },
+                manageReveal: {
+                    batchId: 0,
+                    batches: {},
+                    password: ''
+                },
+                addReveal: {
+                    password: '',
+                    passwordConfirm: '',
+                    name: '',
+                    description: '',
+                    image: ''
                 },
                 claimPhases: [],
                 claimPhaseInfo: [],
@@ -169,6 +182,9 @@ if (document.getElementById('app')) {
                         // var activeClaimCondition = await contract.claimConditions.getActive()
                         this.claimPhases = this.parseClaimConditions(claimConditions, response.data)
 
+                        // Delayed reveal
+                        this.setRevealBatches(contract)
+
                         // // Collection
                         this.collection.totalSupply = await contract.totalSupply()
                         this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
@@ -181,6 +197,18 @@ if (document.getElementById('app')) {
 
                     this.validateTabStatus()
                 })
+            },
+            setRevealBatches: async function(contract) {
+                this.manageReveal.batches = {}
+
+                const revealBatches = await contract.revealer.getBatchesToReveal()
+                if (revealBatches.length) {
+                    for (let i = 0; i < revealBatches.length; i++) {
+                        let batch = revealBatches[i]
+                        this.manageReveal.batches[batch.batchId] = batch.placeholderMetadata.name
+                    }
+                    this.manageReveal.batchId = revealBatches[0].batchId
+                }
             },
             setClaimPhasesInfo: function() {
                 this.claimPhaseInfo = [
@@ -298,6 +326,22 @@ if (document.getElementById('app')) {
                 } catch(error) {
                     resportError(error)
                     this.setMessage('Something went wrong, please try again.', 'error')
+                }
+
+                this.resetButtonLoader()
+            },
+            updateRevealBatch: async function(e) {
+                this.setButtonLoader(e)
+
+                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+
+                try {
+                    await contract.revealer.reveal(this.manageReveal.batchId, this.manageReveal.password);
+
+                    this.setRevealBatches(contract)
+                    this.setMessage('NFTs revealed', 'success')
+                } catch(error) {
+                    this.setMessage(error.message, 'error')
                 }
 
                 this.resetButtonLoader()
@@ -423,6 +467,14 @@ if (document.getElementById('app')) {
 
                 this.resetButtonLoader()
             },
+            setPlaceholderImage: async function(event) {
+                let files = event.target.files
+                let file = files[0]
+
+                if(this.validFileType(file)) {
+                    this.addReveal.image = file
+                }
+            },
             uploadCollection: async function(event) {
                 var files = event.target.files
                 var metadata = await this.prepareFiles(files)
@@ -441,26 +493,53 @@ if (document.getElementById('app')) {
             updateCollection: async function(e) {
                 this.setButtonLoader(e)
 
-                const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
-                try {
-                    await contract.createBatch(this.collection.metadata)
-                    this.collection.totalSupply = await contract.totalSupply()
-                    this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
-                    this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
-                    this.collection.nfts = await contract.getAll({count: 8})
-                    this.collection.previews = []
-                    
-                    if (this.collection.nfts.length > 0) {
-                        var data = {url: this.collection.nfts[0].metadata.image}
-                        await axios.post('/collections/'+this.collectionID+'/thumb', data).then((response) => {
-                            this.validateTabCollection()
-                        })
+                let validCollection = true
+                if (this.collection.delayedReveal) {
+                    // Validate form
+                    var validation = this.validateDelayedReveal()
+                    if (!validation.valid) {
+                        this.setMessage(validation.message, 'error')
+                        this.resetButtonLoader()
+                        return
                     }
+                }
 
-                    this.setMessage('NFTs added to the collection!', 'success')
-                } catch(error) {
-                    resportError(error)
-                    this.setMessage('Something went wrong, please try again.', 'error')
+                if (validCollection) {
+                    const contract = await this.getSmartContractFromSigner(this.wallet.signer, this.collection.chain_id, this.contractAddress)
+                    try {
+                        if (this.collection.delayedReveal) {
+                            await contract.revealer.createDelayedRevealBatch(
+                                {
+                                    name: this.addReveal.name,
+                                    description: this.addReveal.description,
+                                    image: this.addReveal.image
+                                },
+                                this.collection.metadata,
+                                this.addReveal.password,
+                            )
+                            this.setRevealBatches(contract)
+                        } else {
+                            await contract.createBatch(this.collection.metadata)
+                        }
+                        this.collection.totalSupply = await contract.totalSupply()
+                        this.collection.totalClaimedSupply = await contract.totalClaimedSupply()
+                        this.collection.totalRatio = Math.round((this.collection.totalClaimedSupply/this.collection.totalSupply)*100)
+                        this.collection.nfts = await contract.getAll({count: 8})
+                        this.collection.previews = []
+                        document.getElementById('image_collection').value= null
+                        
+                        if (this.collection.nfts.length > 0) {
+                            var data = {url: this.collection.nfts[0].metadata.image}
+                            await axios.post('/collections/'+this.collectionID+'/thumb', data).then((response) => {
+                                this.validateTabCollection()
+                            })
+                        }
+    
+                        this.setMessage('NFTs added to the collection!', 'success')
+                    } catch(error) {
+                        resportError(error)
+                        this.setMessage('Something went wrong, please try again.', 'error')
+                    }
                 }
 
                 this.resetButtonLoader()
@@ -598,6 +677,7 @@ if (document.getElementById('app')) {
         .component('hamburger-menu-link', require('./components/HamburgerMenuLink.vue').default)
         .component('status-button', require('./components/StatusButton.vue').default)
         .component('messenger', require('./components/Messenger.vue').default)
+        .component('form-select', require('./components/Form/Select.vue').default)
     app.use(
         VueTippy,
         {

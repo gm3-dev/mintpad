@@ -18,15 +18,15 @@
                         <x-slot name="tutorial">https://www.youtube.com/embed/ZH9IAYzwIZ0</x-slot>
                         <x-slot name="content">
                             <div class="w-full flex flex-wrap">
-                                <div class="w-full sm:basis-1/3">
+                                <div class="basis-full sm:basis-1/3">
                                     <x-label for="symbol" :value="__('Blockchain')" class="relative" info="Choose which blockchain you want to launch your NFT collection on." />
                                     <x-select class="!w-full mb-4" v-model="collection.chain_id" :options="$blockchains"></x-select>
                                 </div>
-                                <div class="w-full sm:basis-1/3 px-0 sm:px-4">
+                                <div class="basis-full sm:basis-1/3 px-0 sm:px-4">
                                     <x-label for="symbol" :value="__('Symbol / Ticker')" class="relative" info="You can compare the symbol with a stock ticker. We recommend making this a shortened version of your collection's name. For example, for the collection name 'Mintpad NFT', the Symbol/Ticker could be 'MPNFT'. Keep it under 5 characters." />
                                     <x-input id="symbol" class="mb-4" type="text" name="symbol" v-model="collection.symbol" />
                                 </div>
-                                <div class="w-full sm:basis-1/3">
+                                <div class="basis-full sm:basis-1/3">
                                     <x-label for="royalties" :value="__('Creator royalties (%)')" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
                                     <x-input id="royalties" addon="%" class="mb-4" step=".01" min="0" max="100" type="number" name="royalties" v-model="collection.royalties" />
                                 </div>

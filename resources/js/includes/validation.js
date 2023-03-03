@@ -66,6 +66,21 @@ export default {
 
             return this.setValidationResponse(true, 'Valid collection data')
         },
+        validateDelayedReveal: function() {
+            if (this.addReveal.password == '') {
+                return this.setValidationResponse(false, 'Placeholder password is not valid')
+            } else if (this.addReveal.password != this.addReveal.passwordConfirm) {
+                return this.setValidationResponse(false, 'Reveal password does not match')
+            } else if (this.addReveal.name == '') {
+                return this.setValidationResponse(false, 'Placeholder name is not valid')
+            } else if (this.addReveal.description == '') {
+                return this.setValidationResponse(false, 'Placeholder description is not valid')
+            } else if (this.addReveal.image == '') {
+                return this.setValidationResponse(false, 'Placeholder image is not valid')
+            }
+
+            return this.setValidationResponse(true, 'Valid delayed reveal data')
+        },
         setValidationResponse: function(valid, message) {
             return {valid: valid, message: message}
         },

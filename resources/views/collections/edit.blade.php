@@ -42,17 +42,18 @@
                                                 </div>
                                                 <div class="basis-full">
                                                     <x-label for="description" :value="__('Collection description')" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
-                                                    <x-textarea id="description" class="w-full" name="description" v-model="collection.description"></x-textarea>
+                                                    <x-textarea id="description" class="w-full mb-4" name="description" v-model="collection.description"></x-textarea>
                                                 </div>
                                             </div>
                                         </x-slot>
                                     </x-box>
-                                    <div class="w-full">
+                                    <div class="w-full mb-8">
                                         <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateMetadata" v-bind:disabled="buttons.settings">{{ __('Update settings') }}</x-button>
                                         </span>
                                     </div>
                                 </div>
+
                                 <div class="flex flex-col">
                                     <x-box class="flex-1 mb-4">
                                         <x-slot name="title">Royalties</x-slot>
@@ -67,7 +68,7 @@
                                             </div>
                                         </x-slot>
                                     </x-box>
-                                    <div class="w-full">
+                                    <div class="w-full mb-8">
                                         <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateRoyalties" v-bind:disabled="buttons.royalties">{{ __('Update royalties') }}</x-button>
                                         </span>
@@ -95,27 +96,27 @@
                                 <x-slot name="content">
                                     <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
                                         <div>
-                                            <x-label for="start" :value="__('Phase start time')" info="This is the time and date when people can mint your NFT collection. Note: This time is shown in your local time." />
-                                            <x-input id="start" type="datetime-local" v-model="phase.startTime" />
+                                            <x-label :value="__('Phase start time')" info="This is the time and date when people can mint your NFT collection. Note: This time is shown in your local time." />
+                                            <x-input type="datetime-local" v-model="phase.startTime" />
                                         </div>
                                         <div>
-                                            <x-label for="max-quantity" :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
-                                            <x-input id="max-quantity" type="number" v-model="phase.maxClaimableSupply" />
+                                            <x-label :value="__('Number of NFTs')" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
+                                            <x-input type="number" v-model="phase.maxClaimableSupply" />
                                         </div>
                                         <div class="relative">
-                                            <x-label for="price" :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
-                                            <x-input id="price" addon="{{ $collection->token }}" step="0.001" type="number" v-model="phase.price" />
+                                            <x-label :value="__('Mint price')" info="The mint price people pay for one NFT from your collection." />
+                                            <x-input addon="{{ $collection->token }}" step="0.001" type="number" v-model="phase.price" />
                                         </div>
                                         <div>
-                                            <x-label for="max-quantity-wallet" :value="__('Claims per wallet')" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
-                                            <x-input id="max-quantity-wallet" type="number" v-model="phase.maxClaimablePerWallet" />
+                                            <x-label :value="__('Claims per wallet')" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
+                                            <x-input type="number" v-model="phase.maxClaimablePerWallet" />
                                         </div>
                                         <div>
-                                            <x-label for="phase-name" :value="__('Phase name')" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
-                                            <x-input id="phase-name" type="text" v-model="phase.name" />
+                                            <x-label :value="__('Phase name')" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
+                                            <x-input type="text" v-model="phase.name" />
                                         </div>
                                         <div>
-                                            <x-label for="whitelist" :value="__('Enable whitelist')" info="Here you can choose whether to enable a whitelist or not." />
+                                            <x-label :value="__('Enable whitelist')" info="Here you can choose whether to enable a whitelist or not." />
                                             <x-radio-group>
                                                 <x-radio v-bind:id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><x-label v-bind:for="'whitelist-0-'+index" class="inline-block mx-2" :value="__('No')" />
                                                 <x-radio v-bind:id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><x-label v-bind:for="'whitelist-1-'+index" class="inline-block mx-2" :value="__('Yes')" />
@@ -175,29 +176,27 @@
                         <form method="POST" action="/" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="w-full">
-                                <x-box class="mb-4">
-                                    <x-slot name="title">Add your collection files</x-slot>
-                                    <x-slot name="tutorial">https://www.youtube.com/embed/fgzBxLpVY4E</x-slot>
-                                    <x-slot name="content">
-                                        <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
-                                        <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
-    
-                                        <label class="block text-mintpad-300 mb-4">
-                                            <span class="sr-only">Choose Files</span>
-                                            <x-input-file @change="uploadCollection" id="image_collection" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
-                                        </label>
-                                        <p>{{ __('Your upload must contain images and JSON files.') }}</p>
+                            <x-box class="mb-4">
+                                <x-slot name="title">Add your collection files</x-slot>
+                                <x-slot name="tutorial">https://www.youtube.com/embed/fgzBxLpVY4E</x-slot>
+                                <x-slot name="content">
+                                    <p>{{ __('Upload your NFT collection. If you have not yet generated your NFT collection, use our free') }} <x-link class="text-sm" href="{{ config('app.generator_url') }}" target="_blank">NFT generator</x-link> {{ __('to generate your collection.') }}</p>
+                                    <p class="mb-4"><x-link href="/examples/demo-collection.zip">{{ __('Download a demo collection.') }}</x-link></p>
 
-                                        <div v-if="upload">
-                                            <p class="text-sm mb-2">We are uploading your collection, please don't close this page or the upload will fail!</p>
-                                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
-                                                <div class="bg-primary-600 h-2.5 rounded-full transition-all duration-1000" v-bind:style="{width: upload.width+'%'}"></div>
-                                            </div>
+                                    <label class="block text-mintpad-300 mb-4">
+                                        <span class="sr-only">Choose Files</span>
+                                        <x-input-file @change="uploadCollection" id="image_collection" name="image_collection[]" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
+                                    </label>
+                                    <p>{{ __('Your upload must contain images and JSON files.') }}</p>
+
+                                    <div v-if="upload">
+                                        <p class="text-sm mb-2">We are uploading your collection, please don't close this page or the upload will fail!</p>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-300">
+                                            <div class="bg-primary-600 h-2.5 rounded-full transition-all duration-1000" v-bind:style="{width: upload.width+'%'}"></div>
                                         </div>
-                                    </x-slot>
-                                </x-box>
-                            </div>
+                                    </div>
+                                </x-slot>
+                            </x-box>
 
                             <x-box v-if="collection.previews.length > 0" class="mb-4">
                                 <x-slot name="title">Preview of your collection</x-slot>
@@ -211,6 +210,43 @@
                                     </div>
                                     <div class="w-full mt-5">
                                         <p class="font-regular text-sm mb-4">{{ __('Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.') }}</p>
+                                        <p class="mb-4">
+                                            <x-checkbox id="settings-phases" class="align-middle" type="checkbox" value="1" v-model="collection.delayedReveal" />
+                                            <x-label for="settings-phases" class="ml-2 mt-1" info="Whether the collectors will immediately see the final NFT when they complete the minting or at a later time">Delayed reveal</x-label>
+                                        </p>
+                                        <div v-if="collection.delayedReveal">
+                                            <p class="mb-4">Collectors will mint your placeholder image so you can reveal it at a later time.</p>
+                                            <div class="flex px-6 py-2 mb-4 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
+                                                <i class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
+                                                <div class="ml-3 text-sm text-mintpad-700 dark:text-white">You will need this password to reveal your NFTs. Please store it somewhere safe.</div>
+                                            </div>
+
+                                            <div class="w-full flex flex-wrap">
+                                                <div class="basis-full sm:basis-1/2 sm:pr-2">
+                                                    <x-label for="reveal-password" :value="__('Password')" class="relative" />
+                                                    <x-input id="reveal-password" class="mb-4" type="password" v-model="addReveal.password" />
+                                                </div>
+                                                <div class="basis-full sm:basis-1/2 sm:pl-2">
+                                                    <x-label for="reveal-confirm-password" :value="__('Confirm password')" />
+                                                    <x-input id="reveal-confirm-password" class="mb-4" type="password" v-model="addReveal.passwordConfirm" />
+                                                </div>
+                                                <div class="basis-full">
+                                                    <x-label for="reveal-name" :value="__('Placeholder collection name')" class="relative" info="This is the placeholder name of your NFT collection." />
+                                                    <x-input id="reveal-name" class="mb-4" type="text" v-model="addReveal.name" />
+                                                </div>
+                                                <div class="basis-full">
+                                                    <x-label for="reveal-description" :value="__('Placeholder collection description')" info="This should be a short placeholder description of your collection. This is displayed in the collectors wallet until it will be revealed." />
+                                                    <x-textarea id="reveal-description" class="w-full mb-2" v-model="addReveal.description"></x-textarea>
+                                                </div>
+                                                <div class="basis-full mb-4">
+                                                    <x-label for="description" :value="__('Placeholder image')" />
+                                                    <label class="block text-mintpad-300">
+                                                        <span class="sr-only">Choose Files</span>
+                                                        <x-input-file @change="setPlaceholderImage" accept="image/jpeg, image/png, image/jpg, image/gif" />
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                             <x-button href="#" @click.prevent="updateCollection">{{ __('Add to collection') }}</x-button>
                                         </span>
@@ -230,6 +266,27 @@
                                             </div>
                                         </div> 
                                     </div> 
+                                </x-slot>
+                            </x-box>
+
+                            <x-box>
+                                <x-slot name="title">Reveal your NFTs</x-slot>
+                                <x-slot name="content">
+                                    <div v-if="Object.keys(manageReveal.batches).length" class="mb-4">
+                                        <div class="basis-full">
+                                            <x-label :value="__('Batch name')" class="relative" info="Which batch of NFTs you want to reveal." />
+                                            <form-select class="!w-full mb-4" v-model="manageReveal.batchId" :options="manageReveal.batches"></-select>
+                                        </div>
+                                        <div>
+                                            <x-label :value="__('Password')" class="relative" info="Password that was entered while creating this batch." />
+                                            <x-input class="w-full" type="password" v-model="manageReveal.password" />
+                                        </div>
+                                    </div>
+                                    <p v-else class="mb-4">You don't have any NFTs to reveal</p>
+
+                                    <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                                        <x-button href="#" @click.prevent="updateRevealBatch" v-bind:disabled="!Object.keys(manageReveal.batches).length">{{ __('Reveal NFTs') }}</x-button>
+                                    </span>
                                 </x-slot>
                             </x-box>
                         </form>
@@ -266,7 +323,7 @@
 
                                         <div>
                                             <x-label for="seo-description" :value="__('Description')" info="This is the description that is displayed on search engine result pages, browser tabs, and social media. You can use up to 155 characters." />
-                                            <x-textarea id="seo-description" class="w-full" v-model="collection.seo.description"></x-textarea>
+                                            <x-textarea id="seo-description" class="w-full mb-4" v-model="collection.seo.description"></x-textarea>
                                         </div>
                                     </div>
                                     <div>
