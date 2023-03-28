@@ -9,7 +9,7 @@ export default ({ mode }) => {
 
     let server = null;
     if (process.env.APP_ENV == 'local') {
-        let server = {
+        server = {
             host,
             hmr: { host },
             https: {
