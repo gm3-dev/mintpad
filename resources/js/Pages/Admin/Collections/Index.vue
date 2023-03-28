@@ -8,13 +8,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { shortenWalletAddress, copyToClipboard, parseClaimConditions } from '@/Helpers/Helpers'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
-import ButtonBlue from '@/Components/Form/ButtonBlue.vue'
 import axios from 'axios'
 import { connectWallet } from '@/Wallets/Wallet'
 import { switchBlockchainTo } from '@/Wallets/MetaMask'
 import Button from '@/Components/Form/Button.vue'
 import Modal from '@/Components/Modal.vue'
 import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
+import LinkBlue from '@/Components/LinkBlue.vue'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -120,7 +120,7 @@ const switchBlockchain = async () => {
                     <div class="basis-full sm:basis-3/12 font-semibold">{{ blockchains[collection.chain_id].name }} ({{ blockchains[collection.chain_id].nativeCurrency.symbol }})</div>
                     <div class="basis-full sm:basis-5/12 text-center sm:text-right">
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
-                        <ButtonBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</ButtonBlue>
+                        <LinkBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</LinkBlue>
                         <span v-if="wallet.chainId != collection.chain_id" :content="'You need to switch to '+blockchains[collection.chain_id].nativeCurrency.symbol" v-tippy>
                             <ButtonGray href="#" @click.prevent="switchBlockchain" class="ml-2 !px-2 w-24">Switch</ButtonGray>
                         </span>

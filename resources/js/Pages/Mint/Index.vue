@@ -76,7 +76,8 @@ onMounted(async () => {
         collectionData.value.thumb = response.data.thumb
         
         // Set theme for mint
-        if (response.data.theme) {
+        if (response.data.theme.mint) {
+            console.log('i', response.data.theme)
             collectionData.value.theme = response.data.theme.mint
         }
 
@@ -132,8 +133,8 @@ onMounted(async () => {
 
         }
     }).catch((error) => {
-        //
-    });
+        console.log('error', error)
+    })
 })
 
 const switchBlockchain = async () => {

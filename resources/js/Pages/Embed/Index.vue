@@ -52,7 +52,7 @@ let embedUrl = ref('')
 onMounted(() => {
     axios.get('/'+props.collection.id+'/fetch').then((response) => {
         // Set theme for mint
-        if (response.data.theme) {
+        if (response.data.theme.embed) {
             collectionData.value.theme = response.data.theme.embed
         }
 

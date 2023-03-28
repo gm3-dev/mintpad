@@ -73,7 +73,6 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
             totalRatioSupply: totalRatio
         }
     } catch(error) {
-        console.log(error)
         return false
     }
 }

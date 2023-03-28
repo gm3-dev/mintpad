@@ -49,7 +49,7 @@ onMounted(async() => {
     
     axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
         // Set theme for mint
-        if (response.data.theme) {
+        if (response.data.theme.embed) {
             collectionData.value.theme = response.data.theme.embed
         }
 

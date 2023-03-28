@@ -599,7 +599,6 @@ const toggleWhitelistModal = (index, state) => {
     claimPhases.value[index].modal = state
 }
 const addSocialImage = (e) => {
-    console.log('add')
     socialImageLoading.value = true
     var files = e.target.files
     var formData = new FormData()
@@ -608,11 +607,9 @@ const addSocialImage = (e) => {
 
     axios.post(route('resources.upload', props.collection.id), formData)
     .then((response) => {
-        console.log(response)
         form.mint.image = response.data.url
         socialImageLoading.value = false
     }).catch((error) => {
-        console.log(error);
         messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
     });
 }
