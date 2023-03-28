@@ -38,8 +38,7 @@ export default ({ mode }) => {
             }),
         ],
         define: {
-            'process.env': process.env,
-            global: {}
+            'process.env': process.env
         },
         resolve: {
             alias: {

@@ -1,5 +1,5 @@
-import "../sass/app.scss";
-
+import "../sass/app.scss"
+window.global ||= window
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { directive as Tippy } from 'vue-tippy'
