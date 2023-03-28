@@ -13,8 +13,8 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: {
-                'waves': "url('/images/background.jpg')",
-                'waves-dark': "url('/images/background-dark.jpg')",
+                'waves': "url('../images/background.jpg')",
+                'waves-dark': "url('../images/background-dark.jpg')",
             },
             padding: {
                 'full': '100%',

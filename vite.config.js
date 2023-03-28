@@ -7,16 +7,19 @@ const host = 'app.mintpad.test';
 export default ({ mode }) => {
     process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
 
-    const server = {
-        host,
-        hmr: { host },
-        https: {
-            key: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.key`),
-            cert: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.crt`),
-        },
-    };
+    let server = null;
+    if (process.env.APP_ENV == 'local') {
+        let server = {
+            host,
+            hmr: { host },
+            https: {
+                key: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.key`),
+                cert: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.crt`),
+            },
+        };
+    }
     return defineConfig({
-        server: process.env.APP_ENV == 'local' ? server : null,
+        server: server,
         plugins: [
             vue({
                 template: {
