@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 class MintController extends Controller
 {
@@ -26,9 +28,9 @@ class MintController extends Controller
             'description' => $collection->getMeta('seo.description', $collection->description),
             'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? url($image) : false
         ];
-        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
+        $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
 
-        return view('mint.index')->with(compact('collection', 'seo', 'contract_url'));
+        return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode'));
     }
 
     public function embed(Request $request, $address)
@@ -37,9 +39,8 @@ class MintController extends Controller
         if (!$collection) {
             abort(404);
         }
-        $contract_url = config('blockchains.'.$collection->chain_id.'.explorer').$collection->address;
 
-        return view('mint.embed')->with(compact('collection', 'contract_url'));
+        return Inertia::render('Mint/Embed', compact('collection'));
     }
 
     /**

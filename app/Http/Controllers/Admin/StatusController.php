@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class StatusController extends Controller
 {
@@ -14,7 +15,7 @@ class StatusController extends Controller
      */
     public function index()
     {
-        return view('admin.status.index');
+        return Inertia::render('Admin/Status/Index', []);
     }
 
     /**

@@ -11,10 +11,10 @@ const props = defineProps({
 
 let open = ref(false)
 
-function toggle() {
+const toggle = () => {
     open.value = !open.value
 }
-function hide() {
+const hide = () => {
     open.value = false
 }
 </script>

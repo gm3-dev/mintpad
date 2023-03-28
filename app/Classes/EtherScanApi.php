@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use Illuminate\Support\Facades\Http;
 
-class EtherScanApi
+class EtherScanAPI
 {
     public $url;
 

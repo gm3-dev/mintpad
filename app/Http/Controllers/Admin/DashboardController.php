@@ -10,6 +10,7 @@ use App\Models\Import;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -23,10 +24,10 @@ class DashboardController extends Controller
         $users = User::all()->count();
         $imports = Import::all();
         $collections = Collection::count();
-        $collection_list = Collection::select('chain_id', DB::raw('COUNT(*) as count'))->groupBy('chain_id')->pluck('count', 'chain_id');
+        $chains = Collection::select('chain_id', DB::raw('COUNT(*) as count'))->groupBy('chain_id')->pluck('count', 'chain_id');
         $wallets = $this->getWalletBalances();
 
-        return view('admin.dashboard.index')->with(compact('collections', 'collection_list', 'imports', 'users', 'wallets'));
+        return Inertia::render('Admin/Dashboard/Index', compact('collections', 'chains', 'imports', 'users', 'wallets'));
     }
 
     public function getWalletBalances()

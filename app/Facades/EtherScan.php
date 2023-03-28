@@ -2,7 +2,7 @@
 
 namespace App\Facades;
 
-use App\Classes\EtherScanApi;
+use App\Classes\EtherScanAPI;
 use Illuminate\Support\Facades\Facade;
 
 class EtherScan extends Facade
@@ -14,6 +14,6 @@ class EtherScan extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return EtherScanApi::class;
+        return EtherScanAPI::class;
     }
 }

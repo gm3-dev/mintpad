@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Classes\PolygonScanApi;
+use App\Classes\PolygonScanAPI;
 use Illuminate\Support\ServiceProvider;
 
 class PolygonScanServiceProvider extends ServiceProvider
@@ -14,8 +14,8 @@ class PolygonScanServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(PolygonScanApi::class, function ($app) {
-            return new PolygonScanApi(config('polygonscan'));
+        $this->app->singleton(PolygonScanAPI::class, function ($app) {
+            return new PolygonScanAPI(config('polygonscan'));
         });
     }
 

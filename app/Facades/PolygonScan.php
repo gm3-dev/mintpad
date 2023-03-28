@@ -2,7 +2,7 @@
 
 namespace App\Facades;
 
-use App\Classes\PolygonScanApi;
+use App\Classes\PolygonScanAPI;
 use Illuminate\Support\Facades\Facade;
 
 class PolygonScan extends Facade
@@ -14,6 +14,6 @@ class PolygonScan extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return PolygonScanApi::class;
+        return PolygonScanAPI::class;
     }
 }

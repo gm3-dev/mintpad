@@ -23,10 +23,8 @@ class DeployNotification extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): Int
     {
         if (app()->isProduction()) {
             $status = $this->argument('status');

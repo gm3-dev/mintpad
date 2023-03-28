@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Facades\Moneybird;
 use App\Models\Collection;
 use App\Models\Import;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,8 +21,6 @@ class GenerateInvoices implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
     public function __construct($month, $year)
     {
@@ -33,10 +30,8 @@ class GenerateInvoices implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $import_at = date('Y-m-d', strtotime('01-'.$this->month.'-'.$this->year));
         $imports = Import::where('import_at', $import_at)->get();

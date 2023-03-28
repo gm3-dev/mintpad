@@ -1,3 +1,6 @@
+
+$fa-font-path: "@fortawesome/fontawesome-pro/webfonts";
+
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -190,20 +193,4 @@
 .tippy-box .tippy-content {
     text-align: left;
     font-size: 13px;
-}
-
-/* Show password button */
-.show-password-container {
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    padding: 2px 5px;
-    width: 30px;
-}
-
-/* Is loading */
-button.is-loading {
-    i {
-        display: inline-block !important;
-    }
 }

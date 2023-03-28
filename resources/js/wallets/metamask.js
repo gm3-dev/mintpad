@@ -1,176 +1,169 @@
-window.$ = require('jquery')
-import { ethers } from 'ethers'
-import helpers from '../includes/helpers.js'
-import { initSentry, resportError } from '../includes/sentry'
-initSentry(undefined)
+import { resportError } from "@/Helpers/Sentry"
+import { ethers } from "ethers";
 
-export default {
-    mixins: [helpers],
-    data() {
-        return {
-            wallet: {
-                name: false,
-                account: false,
-                network: false,
-                provider: false,
-                signer: false,
-                balance: false,
-            }
+export async function connectMetaMask(forceRequest) {
+    localStorage.setItem('walletName', 'metamask');
+
+    const provider = getMetaMaskProvider()
+    if (provider) {
+        setMetaMaskEvents()
+        return await loadMetaMaskAccount()
+    } else {
+        return false
+    }
+
+    function getMetaMaskProvider() {
+        var provider = false
+        try {
+            provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+            // this.provider = await detectEthereumProvider() // not used
+    
+        } catch(error) {
+            //
         }
-    },
-    methods: {
-        connectMetaMask: async function() {
-            if (this.wallet.account === false) {
-                await this.initMetaMask(true)
-            }
-        },
-        initMetaMask: async function(triggerRequest) {
-            localStorage.setItem('walletName', 'metamask');
-            await this.getMetaMaskProvider()
-            if (this.wallet.provider) {
-                this.setMetaMaskEvents()
-                await this.loadMetaMaskAccount(triggerRequest)
-            }
-        },
-        getMetaMaskProvider: async function () {
-            try {
-                var provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-                // this.provider = await detectEthereumProvider() // not used
     
-            } catch(error) {
-                this.setMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', 'error', false)
-            }
+        if (provider) {
+            provider.on("pending", function(e) {
+                //
+            })
+        } else {
+            // this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
+        }
     
-            if (provider) {
-                // From now on, this should always be true:
-                // provider === window.ethereum
-                this.wallet.provider = provider
+        return provider
+    }
     
-                provider.on("pending", function(e) {
-                    console.log(e)
-                })
-            }
-        },
-        setMetaMaskEvents: function () {
-            if (window.ethereum) {
-                ethereum.on('accountsChanged', (accounts) => {
-                    // Time to reload your interface with accounts[0]!
-                    console.log('accountsChanged', accounts)
-                    window.location.reload()
-                })
+    function setMetaMaskEvents() {
+        if (window.ethereum) {
+            ethereum.on('accountsChanged', (accounts) => {
+                // Time to reload your interface with accounts[0]!
+                console.log('accountsChanged', accounts)
+                window.location.reload()
+            })
     
-                ethereum.on('chainChanged', () => {
-                    // Time to reload your interface with accounts[0]!
-                    console.log('chainChanged')
-                    window.location.reload()
-                })
+            ethereum.on('chainChanged', () => {
+                // Time to reload your interface with accounts[0]!
+                console.log('chainChanged')
+                window.location.reload()
+            })
     
-                ethereum.on('message', function (message) {
-                    console.log('message', message)
-                })
+            ethereum.on('message', function (message) {
+                console.log('message', message)
+            })
     
-                ethereum.on('connect', function (info) {
-                    console.log('Connected to network', info)
-                })
+            ethereum.on('connect', function (info) {
+                console.log('Connected to network', info)
+            })
     
-                ethereum.on('disconnect', function (error) {
-                    console.log('Disconnected from network', error)
-                    window.location.reload()
-                })
-            }
-        },
-        setMetaMaskError: function(error) {
-            // console.log('error', error)
-            // console.log('error.code', error.code)
-            // console.log('error.reason', error.reason)
-            switch (error.code) {
-                case -32002: 
-                    this.setMessage('Request already pending: open MetaMask to see the request.', 'error')
-                    return true
-                case 4001:
-                    this.setMessage('Request canceled: you rejected the request.', 'error')
-                    return true
-                case 4902:
-                    this.setMessage('Unrecognized chain ID: try adding the chain to MetaMask.', 'error')
-                    return true
-            }
-
-            switch(error.reason) {
-                case '!Qty': 
-                    this.setMessage('You reached the maximum number of claimable NFTs per wallet.', 'error')
-                    return true
-                case '!MaxSupply': 
-                    this.setMessage('There are no more NFTs left to claim in this mint phase.', 'error')
-                    return true
-                case 'user rejected transaction': 
-                    this.setMessage('Request canceled: you rejected the request.', 'error')
-                    return true
-                case 'Internal JSON-RPC error.':
-                    if (error.message.search('execution reverted: !MaxSupply') !== -1) {
-                        this.setMessage('There are no more NFTs left to claim in this mint phase.', 'error')
-                        return true
-                    } else if (error.message.search('execution reverted: !Qty') !== -1) {
-                        this.setMessage('You reached the maximum number of claimable NFTs per wallet.', 'error')
-                        return true
-                    }
-            }
-            return false
-        },
-        loadMetaMaskAccount: async function (triggerRequest) {
-            var requestAccount = false
-            var signer = false
-            var account = false
-            var chainID = false
-            var accounts = []
-            var network = false
-            var balance = false
-    
-            try {
-                signer = this.wallet.provider.getSigner()
-                accounts = await ethereum.request({method: 'eth_accounts'})
-                if (accounts.length > 0) {
-                    account = accounts[0]
-                } else {
-                    throw Error('Not connected')
-                }
-                network = await this.wallet.provider.getNetwork()
-                balance = await this.wallet.provider.getBalance(account)
-            } catch (error) {
-                if (error.message != 'Not connected') {
-                    this.setMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', 'error', true)
-                    resportError(error) 
-                }
-                requestAccount = true
-            }
-    
-            if (window.ethereum) {
-                if (requestAccount && triggerRequest) {
-                    try {
-                        accounts = await ethereum.request({method: 'eth_requestAccounts'})
-                    } catch(error) {
-                        this.setMessage('Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', 'error', true)
-                        resportError(error) 
-                    }
-                    if (accounts.length > 0) {
-                        account = accounts[0]
-                    }
-                }
-                
-                chainID = parseInt(window.ethereum.networkVersion)
-                // if (chainID == undefined) {
-                //     chainID = parseInt(network.chainId)
-                // }
-            }
-
-            this.wallet.name = 'metamask'
-            this.wallet.signer = signer
-            this.wallet.account = account
-            if (chainID && this.blockchains[chainID]) {
-                this.wallet.network = this.blockchains[chainID]
-                this.wallet.balance = (balance / 1000000000000000000).toFixed(3) + ' ' + this.wallet.network.token
-            } else {
-                this.wallet.network = {id: chainID}
-            }
+            ethereum.on('disconnect', function (error) {
+                console.log('Disconnected from network', error)
+                window.location.reload()
+            })
         }
     }
+    
+    async function loadMetaMaskAccount() {
+        var requestAccount = false
+        var signer = false
+        var account = false
+        var chainId = false
+        var accounts = []
+        var network = false
+        var balance = false
+    
+        try {
+            signer = provider.getSigner()
+            accounts = await ethereum.request({method: 'eth_accounts'})
+            if (accounts.length > 0) {
+                account = accounts[0]
+            } else {
+                throw Error('Not connected')
+            }
+            network = await provider.getNetwork()
+            balance = await provider.getBalance(account)
+        } catch (error) {
+            if (error.message != 'Not connected') {
+                // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                resportError(error) 
+            }
+            requestAccount = true
+        }
+    
+        if (window.ethereum) {
+            if (requestAccount && forceRequest) {
+                try {
+                    accounts = await ethereum.request({method: 'eth_requestAccounts'})
+                } catch(error) {
+                    // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                    resportError(error) 
+                }
+                if (accounts.length > 0) {
+                    account = accounts[0]
+                }
+            }
+            
+            chainId = parseInt(window.ethereum.networkVersion)
+        }
+
+        if (forceRequest == true) {
+            window.location.reload()
+        }
+
+        return {
+            name: 'metamask',
+            signer: signer,
+            account: account,
+            chainId: chainId,
+            balance: balance
+        }
+    }
+}
+
+export async function switchBlockchainTo(chainId) {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: ethers.utils.hexValue(parseInt(chainId)) }],
+        })
+    } catch(error) {
+        let metamaskError = getMetaMaskError(error)
+        if (metamaskError) {
+            return metamaskError
+        } else {
+            resportError(error)
+            return 'Failed to switch to the correct blockchain, try to do it manually.'
+        }
+    }
+
+    return true
+}
+
+export function getMetaMaskError(error) {
+    // console.log('error', error)
+    // console.log('error.code', error.code)
+    // console.log('error.reason', error.reason)
+    switch (error.code) {
+        case -32002: 
+            return 'Request already pending: open MetaMask to see the request.'
+        case 4001:
+            return 'Request canceled: you rejected the request.'
+        case 4902:
+            return 'Unrecognized chain ID: try adding the chain to MetaMask.'
+    }
+
+    switch(error.reason) {
+        case '!Qty': 
+            return 'You reached the maximum number of claimable NFTs per wallet.'
+        case '!MaxSupply': 
+            return 'There are no more NFTs left to claim in this mint phase.'
+        case 'user rejected transaction': 
+            return 'Request canceled: you rejected the request.'
+        case 'Internal JSON-RPC error.':
+            if (error.message.search('execution reverted: !MaxSupply') !== -1) {
+                return 'There are no more NFTs left to claim in this mint phase.'
+            } else if (error.message.search('execution reverted: !Qty') !== -1) {
+                return 'You reached the maximum number of claimable NFTs per wallet.'
+            }
+    }
+    return false
 }

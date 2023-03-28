@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Import;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ImportController extends Controller
 {
@@ -17,15 +18,8 @@ class ImportController extends Controller
      */
     public function index()
     {
-        $blockchains = [];
-        foreach (config('blockchains') as $blockchain) {
-            if ($blockchain['chain'] == 'evm') {
-                $array_key = $blockchain['testnet'] == true ? 'Testnets' : 'Mainnets';
-                $blockchains[$array_key][$blockchain['id']] = $blockchain['full'].' ('.$blockchain['id'].')';
-            }
-        }
         $imports = Import::orderBy('created_at', 'DESC')->get();
-        return view('admin.import.index')->with(compact('imports', 'blockchains'));
+        return Inertia::render('Admin/Import/Index', compact('imports'));
     }
 
     /**
@@ -47,7 +41,7 @@ class ImportController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $file = $request->file('file');
+        $file = $request->file;
         if ($file) {
             // $filename = $file->getClientOriginalName();
             // $extension = $file->getClientOriginalExtension();
@@ -84,15 +78,14 @@ class ImportController extends Controller
                     Transaction::create([
                         'block' => $row[1],
                         'import_id' => $import->id,
-                        'from' => $row[4],
-                        'to' => $row[5],
-                        'amount' => $row[7],
-                        'fee' => $row[10],
-                        'price' => $row[12],
-                        'method' => $row[15],
+                        'from' => $row[7],
+                        'to' => $row[8],
+                        'amount' => $row[10],
+                        'price' => $row[13],
+                        'method' => $row[16],
                         'transaction_at' => $row[3],
                     ]);
-                    $total_usd += $row[12] * $row[7];
+                    $total_usd += $row[13] * $row[10];
                 }
             }
             $import->total = $total_usd;

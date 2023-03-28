@@ -1,13 +1,9 @@
+
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 
 let dark = ref(false)
-
-onMounted(() => {
-    dark.value = useDarkmode
-})
-
-function toggleDarkmode(e) {
+const toggleDarkmode = (e) => {
     var mode = document.documentElement.classList.contains('dark')
     if (mode) {
         document.documentElement.classList.remove('dark')
@@ -19,6 +15,9 @@ function toggleDarkmode(e) {
         dark.value = true
     }
 }
+onMounted(() => {
+    dark.value = useDarkmode
+})
 </script>
 <template>
     <div>
