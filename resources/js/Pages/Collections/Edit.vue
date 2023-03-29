@@ -70,12 +70,12 @@ const form = {
         royalties: ''
     }),
     mint: useForm({
-        permalink: '',
+        permalink: props.collection.permalink,
         seo: {
-            title: '',
-            description: ''
+            title: props.collection.seo.title,
+            description: props.collection.seo.description
         },
-        image: ''
+        image: props.collection.seo.image
     }),
     reveal: useForm({
         delay: false,
@@ -118,12 +118,6 @@ onMounted(async () => {
         messages.value.push({type: 'error', message: 'There is a problem with your wallet'})
     } else {
         currentTab.value = 1
-
-        // Mint settings
-        form.mint.permalink = props.collection.permalink
-        form.mint.seo.title = props.collection.seo.title
-        form.mint.seo.description = props.collection.seo.description
-        form.mint.defaults()
 
         const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
         try {
