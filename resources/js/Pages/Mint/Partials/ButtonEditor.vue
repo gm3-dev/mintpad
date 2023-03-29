@@ -32,7 +32,7 @@ const editButton = (index) => {
 }
 
 const newButton = () => {
-    buttonEditor.value = {label: '', href: '', index: -1}
+    editor.value = {label: '', href: '', index: -1}
     showModal.value = true
 }
 
