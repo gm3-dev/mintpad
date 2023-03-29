@@ -267,8 +267,7 @@ const mintNFT = async (e) => {
             }
         }
 
-        buttonLoading.value = true
-
+        buttonLoading.value = false
     }
 }
 </script>
@@ -361,7 +360,7 @@ const mintNFT = async (e) => {
                                 <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />                 
                                 <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</Button>
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary">Switch blockchain</Button>
-                                <Button v-else="" @click.prevent="mintNFT" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary">Start minting</Button>
+                                <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary">Start minting</Button>
                             </div>
                             <div class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
                                 <div>
