@@ -144,7 +144,7 @@ const updateMintSettings = async () => {
                     <ButtonGray href="#" class="!px-4" @click.prevent="deleteBackground"><i class="fas fa-trash-alt"></i></ButtonGray>
                 </span>
                 <span class="float-right inline-block" content="Save" v-tippy>
-                    <Button href="#" class="!px-4" @click.prevent="closeModal">Save</Button>
+                    <Button href="#" class="!px-4" @click.prevent="showModal = false">Save</Button>
                 </span>
             </div>
         </form>
