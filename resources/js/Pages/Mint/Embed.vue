@@ -1,12 +1,11 @@
 <script setup>
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted } from 'vue'
 import EmbedContent from '../Embed/Partials/EmbedContent.vue'
 import axios from 'axios'
-import { getDoubleDigitNumber, getDummyCollection, parseClaimConditions, setDarkmode, setStyling } from '@/Helpers/Helpers'
+import { getDoubleDigitNumber, parseClaimConditions, setStyling } from '@/Helpers/Helpers'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { connectWallet } from '@/Wallets/Wallet'
-import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -56,7 +55,6 @@ onMounted(async() => {
         // Set settings
         if (response.data.settings.embed) {
             collectionData.value.settings = response.data.settings.embed
-            setDarkmode(collectionData.value.settings.darkmode)
         }
 
         setStyling(collectionData.value)

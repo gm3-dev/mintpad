@@ -91,7 +91,7 @@ const mintNFT = async () => {
 
 </script>
 <template>
-    <div id="embed-mint-box" class="sm:col-span-2">
+    <div id="embed-mint-box" class="sm:col-span-2" :class="{dark: collectionData.settings.darkmode}">
         <form>
             <Box class="mint-bg-box mb-0 mint-border-dark" title="Mint an NFT">
                 <template v-slot:action>

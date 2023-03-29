@@ -3,7 +3,7 @@ import $ from 'jquery'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { ref, onMounted, watch, computed } from 'vue'
 import axios from 'axios'
-import { getDummyCollection, setDarkmode, setStyling } from '@/Helpers/Helpers'
+import { getDummyCollection, setStyling } from '@/Helpers/Helpers'
 import EditorBar from '@/Pages/Embed/Partials/EditorBar.vue'
 import EmbedContent from '@/Pages/Embed/Partials/EmbedContent.vue'
 import Box from '@/Components/Box.vue'
@@ -59,7 +59,6 @@ onMounted(() => {
         // Set settings
         if (response.data.settings.embed) {
             collectionData.value.settings = response.data.settings.embed
-            setDarkmode(collectionData.value.settings.darkmode)
         }
 
         setStyling(collectionData.value)
@@ -71,14 +70,8 @@ onMounted(() => {
     })
 })
 
-const darkmodeSetting = computed(() => {
-    return collectionData.value.settings.darkmode
-})
 const phasesSetting = computed(() => {
     return collectionData.value.settings.phases
-})
-watch(darkmodeSetting, (newValue) => {
-    setDarkmode(newValue)
 })
 watch(phasesSetting, (newValue, oldValue) => {
     if (oldValue != null) {

@@ -170,11 +170,3 @@ export function getDummyCollection() {
     }
     return {collection, claimPhases, timers}
 }
-
-export function setDarkmode (darkmode) {
-    if (darkmode == true) {
-        $('#embed-mint-box').addClass('dark')
-    } else {
-        $('#embed-mint-box').removeClass('dark')
-    }
-}

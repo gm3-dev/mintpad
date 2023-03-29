@@ -50,10 +50,10 @@ const primaryColor = computed(() => {
     return colorpicker.value.primary.color;
 })
 const backgroundColor = computed(() => {
-    return colorpicker.value.primary.background;
+    return colorpicker.value.background.color;
 })
 const phasesColor = computed(() => {
-    return colorpicker.value.primary.phases;
+    return colorpicker.value.phases.color;
 })
 
 watch(primaryColor, (color) => {
