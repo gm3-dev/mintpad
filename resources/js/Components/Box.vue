@@ -15,7 +15,7 @@ const toggleModal = (state) => {
 </script>
 <template>
     <div class="mb-4 border border-mintpad-200 dark:border-mintpad-900 bg-white dark:bg-mintpad-800 rounded-md">
-        <div v-if="title" class="relative border-b border-mintpad-200 dark:border-mintpad-900 font-jpegdev px-8 py-3">
+        <div v-if="title" class="relative border-b border-mintpad-200 dark:border-mintpad-900 font-jpegdev px-8 py-3 mint-border-dark">
             <h2 class="!mb-0">{{ title }}
                 <ButtonBlue v-if="tutorial" class="align-middle ml-4 !rounded-full !px-5 !py-1 !text-xs" @click.prevent="toggleModal(true)"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">Watch tutorial</span></ButtonBlue>
             </h2>
