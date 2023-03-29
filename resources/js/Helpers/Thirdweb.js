@@ -61,7 +61,7 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
             },
             platformFees: {
                 platformFee: platformFees.platform_fee_basis_points / 100,
-                platformFeeRecipient: platformFees.platformee_recipient
+                platformFeeRecipient: platformFees.platform_fee_recipient
             },
             sales: {
                 primarySalesRecipient: primarySalesRecipient
