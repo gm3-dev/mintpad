@@ -183,6 +183,7 @@ const updateMetadata = async () => {
                 validateSettingsTab()
             }
         })
+        form.metadata.defaults()
 
         messages.value.push({type: 'success', message: 'General settings updated'})
     } catch(error) {
@@ -216,6 +217,7 @@ const updateRoyalties = async () => {
         })
 
         validateSettingsTab()
+        form.royalties.defaults()
 
         messages.value.push({type: 'success', message: 'Royalties updated'})
     } catch(error) {
@@ -243,6 +245,7 @@ const updateMintSettings = () => {
     form.mint.put(route('collections.update-mint', props.collection.id), {
         onFinish: (response) => {
             validateMintPageTab()
+            form.mint.defaults()
 
             messages.value.push({type: 'success', message: 'Mint settings updated'})
         },
@@ -309,6 +312,7 @@ const updateClaimPhases = async () => {
     try {
         await contract.claimConditions.set(claimPhaseList)
         validateClaimPhasesTab()
+        disablePhases.value = 1
         
         messages.value.push({type: 'success', message: 'Claim phases updated'})
     } catch(error) {
