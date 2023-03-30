@@ -79,7 +79,9 @@ const submit = () => {
                         <!-- Email Address -->
                         <div>
                             <Label for="email" value="Email" />
-                            <Input id="email" type="email" v-model="form.email" disabled />
+                            <span class="inline-block w-full" content="You can't change your email address" v-tippy>
+                                <Input id="email" type="email" v-model="form.email" disabled />
+                            </span>
                         </div>
                         <!-- Country -->
                         <div>
