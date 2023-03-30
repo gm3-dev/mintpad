@@ -113,7 +113,7 @@ const submit = () => {
                     <!-- Is company -->
                     <div class="mb-4">
                         <label for="is-company" class="w-1/2">
-                            <Label for="is-company" value="I\'m a company" />
+                            <Label for="is-company" value="I'm a company" />
                             <p>{{ user.is_company ? 'Yes' : 'No' }}</p>
                         </label>
                     </div>
