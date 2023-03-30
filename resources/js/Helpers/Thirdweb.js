@@ -52,7 +52,7 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
         let claimConditions = []
         if (contract.constructor.name == 'NFTDrop') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
-        } else {
+        } else if (contract.constructor.name == 'EditionDrop') {
             claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
         }
         // const activeClaimCondition = await contract.claimConditions.getActive()
