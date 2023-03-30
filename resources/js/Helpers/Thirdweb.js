@@ -50,11 +50,14 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
     
         // Claim phases
         let claimConditions = []
+        console.log('contract.constructor.name', contract.constructor.name)
         if (contract.constructor.name == 'NFTDrop') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
         } else if (contract.constructor.name == 'EditionDrop') {
+            console.log('get mp')
             claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
         }
+        console.log('claimConditions', claimConditions)
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
         // Collection
@@ -92,6 +95,7 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
             totalRatioSupply: totalRatio
         }
     } catch(error) {
+        console.log(error)
         return false
     }
 }
