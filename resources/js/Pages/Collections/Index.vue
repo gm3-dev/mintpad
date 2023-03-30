@@ -68,7 +68,7 @@ const openYouTubeModal = (link) => {
             <div v-if="collections">
                 <BoxRow class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
                     <div class="basis-full sm:basis-3/12">Collection name</div>
-                    <div class="hidden sm:block basis-2/12">Symbol</div>
+                    <div class="hidden sm:block basis-2/12">Type</div>
                     <div class="hidden sm:block basis-3/12">Blockchain</div>
                     <div class="hidden sm:block basis-4/12 lg:basis-2/12">Contract address</div>
                     <div class="hidden sm:block basis-2/12"></div>
@@ -76,7 +76,7 @@ const openYouTubeModal = (link) => {
 
                 <BoxRow v-for="collection in collections" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                     <div class="basis-full sm:basis-3/12">{{ collection.name }}</div>
-                    <div class="hidden sm:block basis-2/12">{{ collection.symbol }}</div>
+                    <div class="hidden sm:block basis-2/12">{{ collection.type }}</div>
                     <div class="basis-full sm:basis-3/12">{{ blockchains[collection.chain_id].name }}</div>
                     <div class="basis-full sm:basis-4/12 lg:basis-2/12">
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!w-full !text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>

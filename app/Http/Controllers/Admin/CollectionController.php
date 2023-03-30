@@ -38,7 +38,7 @@ class CollectionController extends Controller
         // PolygonScan::getInternalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
         // PolygonScan::getNormalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
 
-        $collections = Collection::select(['id', 'name', 'chain_id', 'address', 'permalink'])->orderBy('id', 'DESC')->get();
+        $collections = Collection::select(['id', 'name', 'chain_id', 'address', 'permalink', 'type'])->orderBy('id', 'DESC')->get();
         return Inertia::render('Admin/Collections/Index', compact('collections'));
     }
 

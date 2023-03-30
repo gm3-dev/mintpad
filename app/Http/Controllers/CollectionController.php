@@ -21,7 +21,7 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        $collections = Collection::select(['id', 'name', 'chain_id', 'symbol', 'address'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $collections = Collection::select(['id', 'name', 'chain_id', 'type', 'address'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         return Inertia::render('Collections/Index', [
             'collections' => $collections
         ]);
@@ -50,6 +50,7 @@ class CollectionController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'type' => 'required',
             'royalties' => 'required|numeric|between:0,100',
             'description' => 'required',
             'symbol' => 'required',
@@ -64,6 +65,7 @@ class CollectionController extends Controller
         } while ($permalink_check);
 
         $collection->name  = $request->get('name');
+        $collection->type  = $request->get('type');
         $collection->permalink  = $permalink;
         $collection->description  = $request->get('description');
         $collection->symbol  = $request->get('symbol');

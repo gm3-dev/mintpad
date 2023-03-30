@@ -77,7 +77,6 @@ onMounted(async () => {
         
         // Set theme for mint
         if (response.data.theme.mint) {
-            console.log('i', response.data.theme)
             collectionData.value.theme = response.data.theme.mint
         }
 
@@ -97,9 +96,9 @@ onMounted(async () => {
             // Set contract
             let contract
             if (wallet.account && validBlockchain === true) {
-                contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+                contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
             } else {
-                contract = await getSmartContract(props.collection.chain_id, props.collection.address)
+                contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
             try {
                 const data = await getCollectionData(contract, true, false)
@@ -133,7 +132,7 @@ onMounted(async () => {
 
         }
     }).catch((error) => {
-        console.log('error', error)
+        //
     })
 })
 
@@ -144,8 +143,13 @@ const switchBlockchain = async () => {
     }
 }
 const setSupplyData = async (contract) => {
-    collectionData.value.totalSupply = await contract.totalSupply()
-    collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
+    if (props.collection.type == 'ERC721') {
+        collectionData.value.totalSupply = await contract.totalSupply()
+        collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
+    } else if (props.collection.type == 'ERC1155') {
+        collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
+        collectionData.value.totalClaimedSupply = await contract.totalSupply(0)
+    }
     collectionData.value.totalRatioSupply = Math.round((collectionData.value.totalClaimedSupply/collectionData.value.totalSupply)*100)
     if (isNaN(collectionData.value.totalRatioSupply)) {
         collectionData.value.totalRatioSupply = 0
@@ -251,8 +255,13 @@ const mintNFT = async (e) => {
         buttonLoading.value = true
         try {
             // Set contract
-            const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
-            await contract.claim(mintAmount.value)
+            const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
+
+            if (props.collection.type == 'ERC721') {
+                await contract.claim(mintAmount.value)
+            } else if (props.collection.type == 'ERC1155') {
+                await contract.claim(0, mintAmount.value)
+            }
 
             showModal.value = true
 
@@ -380,9 +389,9 @@ const mintNFT = async (e) => {
                     <BoxContent>
                         <div class="grid grid-cols-2 gap-1">
                             <p>Contract address</p><p class="font-medium !text-primary-600 mint-text-primary"><a :href="blockchains[collection.chain_id].explorers[0].url+'/address/'+collection.address" target="_blank" class="underline">{{ shortenWalletAddress(collection.address) }}</a></p>
-                            <p>Collection Size</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.totalSupply"></p>
+                            <p>Collection Size</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.totalSupply == 0 ? 'Unlimited' : collectionData.totalSupply"></p>
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
-                            <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">ERC-721</p>
+                            <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
                         </div>
                     </BoxContent>

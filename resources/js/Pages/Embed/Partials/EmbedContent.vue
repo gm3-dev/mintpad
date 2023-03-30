@@ -71,7 +71,7 @@ const mintNFT = async () => {
         buttonLoading.value = true
         try {
             // Set contract
-            const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+            const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
             await contract.claim(mintAmount.value)
 
             messages.value.push({type: 'success', message: 'NFT minted!'})

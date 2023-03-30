@@ -65,9 +65,9 @@ onMounted(async() => {
         // Set contract
         let contract
         if (wallet.account && validBlockchain === true) {
-            contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+            contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
         } else {
-            contract = await getSmartContract(props.collection.chain_id, props.collection.address)
+            contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
         }
         try {
             const data = await getCollectionData(contract, true, false)

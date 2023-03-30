@@ -24,7 +24,9 @@ const switchBlockchain = async () => {
     <div class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">
         <Navigation />
 
-        <div v-if="overlay" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity"></div>
+        <div v-if="overlay" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity">
+            <i class="absolute top-1/2 left-1/2 -ml-[12px] -mt-[12px] text-3xl fa-solid fa-spinner animate-spin"></i>
+        </div>
         <div v-if="loading" class="w-10 mx-auto pt-4 text-lg dark:text-white z-50"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
         <div v-else>
             <div class="col-span-1 lg:col-span-2">

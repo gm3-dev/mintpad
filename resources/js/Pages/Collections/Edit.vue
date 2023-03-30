@@ -42,7 +42,11 @@ let collectionData = ref({
     metadata: [],
     batches: {},
     batchId: 0,
-    password: ''
+    password: '',
+    maxTotalSupply: 0,
+    totalSupply: 0,
+    totalClaimedSupply: 0,
+    totalRatioSupply: 0,
 })
 let wallet = ref(false)
 let loading = ref(true)
@@ -119,7 +123,7 @@ onMounted(async () => {
     } else {
         currentTab.value = 1
 
-        const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+        const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
         try {
 
             const data = await getCollectionData(contract, true, true)
@@ -142,15 +146,17 @@ onMounted(async () => {
 
             // Collection
             collectionData.value.totalSupply = data.totalSupply
+            collectionData.value.maxTotalSupply = data.totalSupply
             collectionData.value.totalClaimedSupply = data.totalClaimedSupply
             collectionData.value.totalRatioSupply = data.totalRatioSupply
             collectionData.value.nfts = data.nfts
 
             // Delayed reveal
-            setRevealBatches(contract)
-
+            if (props.collection.type == 'ERC721') {
+                setRevealBatches(contract)
+            }
         } catch(error) {
-            console.log(error)
+            //
         }
 
         // Set tab status
@@ -171,7 +177,7 @@ const updateMetadata = async () => {
     }
 
     buttonLoading.value = true
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.metadata.set({
             name: form.metadata.name,
@@ -209,7 +215,7 @@ const updateRoyalties = async () => {
     }
 
     buttonLoading.value = true
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.royalties.setDefaultRoyaltyInfo({
             seller_fee_basis_points: form.royalties.royalties * 100,
@@ -308,9 +314,13 @@ const updateClaimPhases = async () => {
         claimPhaseList.push(newClaimPhase)
     }
 
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
-        await contract.claimConditions.set(claimPhaseList)
+        if (props.collection.type == 'ERC721') {
+            await contract.claimConditions.set(claimPhaseList)
+        } else if (props.collection.type == 'ERC1155') {
+            await contract.claimConditions.set(0, claimPhaseList)
+        }
         validateClaimPhasesTab()
         disablePhases.value = 1
         
@@ -345,7 +355,7 @@ const updateCollection = async (e) => {
 
     buttonLoading.value = true
 
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         if (form.reveal.delay) {
             await contract.revealer.createDelayedRevealBatch({
@@ -357,19 +367,24 @@ const updateCollection = async (e) => {
                 form.reveal.password,
             )
             setRevealBatches(contract)
-        } else {
+        } else if (props.collection.type == 'ERC721') {
             await contract.createBatch(collectionData.value.metadata)
+
+            collectionData.value.totalSupply = await contract.totalSupply()
+            collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
+        } else if (props.collection.type == 'ERC1155') {
+            await contract.createBatch(collectionData.value.metadata)
+
+            collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
+            collectionData.value.totalClaimedSupply = await contract.totalSupply(0)
         }
-        collectionData.value.totalSupply = await contract.totalSupply()
-        collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
         collectionData.value.totalRatioSupply = Math.round((collectionData.value.totalClaimedSupply/collectionData.value.totalSupply)*100)
         collectionData.value.nfts = await contract.getAll({count: 8})
         collectionData.value.previews = []
         document.getElementById('image_collection').value= null
         
         if (collectionData.value.nfts.length > 0) {
-            var data = {url: collectionData.value.nfts[0].metadata.image}
-            await axios.post('/collections/'+props.collection.id+'/thumb', data).then((response) => {
+            await axios.post('/collections/'+props.collection.id+'/thumb', {url: collectionData.value.nfts[0].metadata.image}).then((response) => {
                 validateCollectionTab()
             })
         }
@@ -381,15 +396,31 @@ const updateCollection = async (e) => {
 
     buttonLoading.value = false    
 }
-const updateRevealBatch = async (e) => {
+const updateRevealBatch = async () => {
     buttonLoading.value = true
 
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address)
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.revealer.reveal(collectionData.value.batchId, collectionData.value.password);
 
         messages.value.push({type: 'success', message: 'NFTs revealed'})
         setRevealBatches(contract)
+    } catch(error) {
+        resportError(error)
+        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+    }
+
+    buttonLoading.value = false
+}
+const updateMaxTotalSupply = async() => {
+    buttonLoading.value = true
+
+    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
+    try {
+        await contract.call('setMaxTotalSupply', 0, collectionData.value.maxTotalSupply)
+        collectionData.value.totalSupply = collectionData.value.maxTotalSupply
+
+        messages.value.push({type: 'success', message: 'Maximum total supply updated'})
     } catch(error) {
         resportError(error)
         messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
@@ -778,7 +809,7 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 3">
-                    <Box class="mb-4" title="Add your collection files" tutorial="https://www.youtube.com/embed/fgzBxLpVY4E">
+                    <Box v-if="collection.type == 'ERC721' || (collection.type == 'ERC1155' && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files" tutorial="https://www.youtube.com/embed/fgzBxLpVY4E">
                         <BoxContent>
                             <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate your collection</p>
                             <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
@@ -802,7 +833,7 @@ const deleteSocialImage = () => {
                             </div>
                             <div class="w-full mt-5">
                                 <p class="font-regular text-sm mb-4">Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.</p>
-                                <p class="mb-4">
+                                <p v-if="collection.type == 'ERC721'" class="mb-4">
                                     <Checkbox id="settings-phases" class="align-middle" type="checkbox" value="1" v-model="form.reveal.delay" />
                                     <Label for="settings-phases" class="ml-2 mt-1" info="Whether the collectors will immediately see the final NFT when they complete the minting or at a later time">Delayed reveal</Label>
                                 </p>
@@ -846,10 +877,24 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
+                    <Box v-if="collection.type == 'ERC1155'" title="Set maximum total supply">
+                        <BoxContent>
+                            <div>
+                                <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
+                                <Input class="w-full" type="text" v-model="collectionData.maxTotalSupply" />
+                            </div>
+
+                            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                                <Button href="#" @click.prevent="updateMaxTotalSupply" :loading="buttonLoading">Update</Button>
+                            </span>
+                        </BoxContent>
+                    </Box>
+
                     <Box class="mb-4" title="Your collection">
                         <BoxContent>
                             <div class="text-sm">
                                 <p v-if="collectionData.nfts.length == 0">Your collection is still empty.</p>
+                                <p v-else-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }} minted out of an unlimited supply.</p>
                                 <p v-else>Total minted {{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                                 <div class="grid grid-cols-4 mt-2">
                                     <div class="p-1 text-center text-sm" v-for="nft in collectionData.nfts">
@@ -860,7 +905,7 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <Box title="Reveal your NFTs">
+                    <Box v-if="collection.type == 'ERC721'" title="Reveal your NFTs">
                         <BoxContent>
                             <div v-if="Object.keys(collectionData.batches).length" class="mb-4">
                                 <div class="basis-full">
@@ -890,7 +935,7 @@ const deleteSocialImage = () => {
                     <Box class="mb-4" title="Permalink">
                         <BoxContent>
                             <Label for="permalink" value="Permalink" />
-                            <Addon position="left" :content="props.collection.mint_url+'/'">
+                            <Addon position="left" :content="collection.mint_url+'/'">
                                 <Input id="permalink" class="basis-1/3 addon-left" position="left" type="text" v-model="form.mint.permalink" />
                             </Addon>
                             <LinkDarkBlue element="a" :href="mintEditorUrl" target="_blank" class="mr-2">Page editor</LinkDarkBlue>

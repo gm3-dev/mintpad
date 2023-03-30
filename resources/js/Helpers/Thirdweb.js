@@ -16,14 +16,22 @@ export function getSDKFromSigner(signer, chainId) {
     return ThirdwebSDK.fromSigner(toRaw(signer), blockchain, {})
 }
 
-export async function getSmartContract(chainId, address) {
+export async function getSmartContract(chainId, address, contractType) {
     const sdk = setSDK(chainId)
-    return await sdk.getContract(address, 'nft-drop')
+    return await sdk.getContract(address, getContractTypeName(contractType))
 }
 
-export async function getSmartContractFromSigner(signer, chainId, address) {
+export async function getSmartContractFromSigner(signer, chainId, address, contractType) {
     const sdk = getSDKFromSigner(toRaw(signer), chainId)
-    return await sdk.getContract(address, 'nft-drop')
+    return await sdk.getContract(address, getContractTypeName(contractType))
+}
+
+function getContractTypeName(contractType) {
+    switch (contractType) {
+        case 'ERC721': return 'nft-drop'
+        case 'ERC1155': return 'edition-drop'
+        default: return 'nft-drop'
+    }
 }
 
 export async function getCollectionData(contract, withAllowList, withNfts) {
@@ -41,13 +49,24 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
         const primarySalesRecipient = await contract.sales.getRecipient()
     
         // Claim phases
-        const claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
+        let claimConditions = []
+        if (contract.constructor.name == 'NFTDrop') {
+            claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
+        } else {
+            claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
+        }
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
         // Collection
-        const totalSupply = await contract.totalSupply()
-        const totalClaimedSupply = await contract.totalClaimedSupply()
-        const totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
+        if (contract.constructor.name == 'NFTDrop') {
+            var totalSupply = await contract.totalSupply()
+            var totalClaimedSupply = await contract.totalClaimedSupply()
+            var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
+        } else if (contract.constructor.name == 'EditionDrop') {
+            var totalSupply = await contract.call('maxTotalSupply', 0)
+            var totalClaimedSupply = await contract.totalSupply(0)
+            var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
+        }
         const nfts = withNfts ? await contract.getAll({count: 8}) : []
     
         return {

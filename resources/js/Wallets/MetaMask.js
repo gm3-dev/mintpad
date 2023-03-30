@@ -77,7 +77,7 @@ export async function connectMetaMask(forceRequest) {
             if (accounts.length > 0) {
                 account = accounts[0]
             } else {
-                throw Error('Not connected')
+                throw new Error('Not connected')
             }
             network = await provider.getNetwork()
             balance = await provider.getBalance(account)

@@ -28,6 +28,7 @@ let messages = ref([])
 
 const form = useForm({
     chain_id: 1,
+    type: '',
     symbol: '',
     royalties: 0,
     name: '',
@@ -99,7 +100,13 @@ const deployContract = async () => {
         
         let contractAddress = false
         try {
-            contractAddress = await sdk.deployer.deployNFTDrop(parameters)
+            if (form.type == 'ERC721') {
+                contractAddress = await sdk.deployer.deployNFTDrop(parameters)
+            } else if (form.type == 'ERC1155') {
+                contractAddress = await sdk.deployer.deployEditionDrop(parameters)
+            } else {
+                throw new Error('Invalid contract type: ' + form.type)
+            }
         } catch (error) {
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
@@ -135,7 +142,20 @@ const deployContract = async () => {
                     <p>This is the start of your NFT collection.</p>
                 </div>
 
-                <Box class="w-full mb-4" title="Smart contract settings" tutorial="https://www.youtube.com/embed/ZH9IAYzwIZ0">
+                <Box v-if="form.type == ''" class="w-full mb-4" title="Choose your smart contract type">
+                    <BoxContent class="text-center py-14">
+                        <button @click.prevent="form.type = 'ERC721'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                            <h2>NFT Drop</h2>
+                            <p>Release collection of unique NFTs for a set price</p>
+                        </button>
+                        <button @click.prevent="form.type = 'ERC1155'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                            <h2>Open Edition Drop</h2>
+                            <p>Release ERC1155 tokens for a set price.</p>
+                        </button>
+                    </BoxContent>
+                </Box>
+
+                <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'" tutorial="https://www.youtube.com/embed/ZH9IAYzwIZ0">
                     <BoxContent>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full sm:basis-1/3">
@@ -164,7 +184,7 @@ const deployContract = async () => {
                     </BoxContent>
                 </Box>
 
-                <div class="w-full">
+                <div v-if="form.type" class="w-full">
                     <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                         <Button href="#" @click.prevent="deployContract" :disabled="validBlockchain !== true" :loading="buttonLoading">Deploy smart contract</Button>
                     </span>
