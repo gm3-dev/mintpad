@@ -126,7 +126,7 @@ onMounted(async () => {
         const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
         try {
 
-            const data = await getCollectionData(contract, true, true)
+            const data = await getCollectionData(contract, props.collection.type, true, true)
 
             // Settings
             form.metadata.name = data.metadata.name

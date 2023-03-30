@@ -101,7 +101,7 @@ onMounted(async () => {
                 contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
             try {
-                const data = await getCollectionData(contract, true, false)
+                const data = await getCollectionData(contract, props.collection.type, true, false)
 
                 // Settings
                 collectionData.value.name = data.metadata.name

@@ -34,7 +34,7 @@ function getContractTypeName(contractType) {
     }
 }
 
-export async function getCollectionData(contract, withAllowList, withNfts) {
+export async function getCollectionData(contract, contractType, withAllowList, withNfts) {
     try {
         // metadata
         const metadata = await contract.metadata.get()
@@ -50,22 +50,19 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
     
         // Claim phases
         let claimConditions = []
-        console.log('contract.constructor.name', contract.constructor.name)
-        if (contract.constructor.name == 'NFTDrop') {
+        if (contractType == 'ERC721') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
-        } else if (contract.constructor.name == 'EditionDrop') {
-            console.log('get mp')
+        } else if (contractType == 'ERC1155') {
             claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
         }
-        console.log('claimConditions', claimConditions)
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
         // Collection
-        if (contract.constructor.name == 'NFTDrop') {
+        if (contractType == 'ERC721') {
             var totalSupply = await contract.totalSupply()
             var totalClaimedSupply = await contract.totalClaimedSupply()
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
-        } else if (contract.constructor.name == 'EditionDrop') {
+        } else if (contractType == 'ERC1155') {
             var totalSupply = await contract.call('maxTotalSupply', 0)
             var totalClaimedSupply = await contract.totalSupply(0)
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
@@ -95,7 +92,6 @@ export async function getCollectionData(contract, withAllowList, withNfts) {
             totalRatioSupply: totalRatio
         }
     } catch(error) {
-        console.log(error)
         return false
     }
 }
