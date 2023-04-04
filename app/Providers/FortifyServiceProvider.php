@@ -46,7 +46,7 @@ class FortifyServiceProvider extends ServiceProvider
                 'affiliate' => request()->get('affiliate') ?? ''
             ]);
         });
-        Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChalange'));
+        Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChallenge'));
         // Fortify::verifyEmailView(fn () => view('auth.verify-email'));
 
         Fortify::createUsersUsing(CreateNewUser::class);
