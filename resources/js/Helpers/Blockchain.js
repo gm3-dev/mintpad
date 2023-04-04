@@ -1,5 +1,5 @@
 import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, 
-    Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon } from '@thirdweb-dev/chains'
+    Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet } from '@thirdweb-dev/chains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
@@ -14,11 +14,15 @@ export function checkCurrentBlockchain(blockchains, chainId, wallet) {
 }
 
 export function getBlockchains() {
+    Cmp.name = 'Caduceus'
+    CmpTestnet.name = 'Caduceus Testnet'
+
     const mainnets = {
         42161: Arbitrum,
         43114: Avalanche,
         56: Binance,
         256256: Cmp,
+        2000: Dogechain,
         1: Ethereum,
         250: Fantom,
         10: Optimism,
@@ -29,6 +33,7 @@ export function getBlockchains() {
         43113: AvalancheFuji,
         97: BinanceTestnet,
         512512: CmpTestnet,
+        568: DogechainTestnet,
         4002: FantomTestnet,
         5: Goerli,
         80001: Mumbai,
