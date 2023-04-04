@@ -41,7 +41,7 @@ onMounted(async () => {
             <p>Download your invoices here.</p>
         </div>
 
-        <Box title="Your invoices" tutorial="https://www.youtube.com/embed/vXF1pNhEJCg">
+        <Box title="Your invoices">
             <BoxContent>
                 <p>Are you a company? Add your details to your account <Hyperlink :href="route('users.profile')">here</Hyperlink>.</p>
             </BoxContent>

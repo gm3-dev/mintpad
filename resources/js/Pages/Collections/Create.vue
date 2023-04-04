@@ -155,7 +155,7 @@ const deployContract = async () => {
                     </BoxContent>
                 </Box>
 
-                <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'" tutorial="https://www.youtube.com/embed/ZH9IAYzwIZ0">
+                <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'">
                     <BoxContent>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full sm:basis-1/3">

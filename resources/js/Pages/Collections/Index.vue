@@ -12,6 +12,7 @@ import { connectWallet } from '@/Wallets/Wallet'
 import { shortenWalletAddress, copyToClipboard } from '@/Helpers/Helpers'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import Modal from '@/Components/Modal.vue'
+import Hyperlink from '@/Components/Hyperlink.vue'
 
 const props = defineProps({
     collections: Object
@@ -36,10 +37,6 @@ onMounted(async () => {
     // Done loading
     loading.value = false
 })
-
-const openYouTubeModal = (link) => {
-    showModal.value = true
-}
 </script>
 <template>
     <AuthenticatedLayout :loading="loading" :valid-blockchain="validBlockchain">
@@ -48,8 +45,8 @@ const openYouTubeModal = (link) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
             <Box class="bg-waves dark:bg-waves-dark bg-cover p-12">
                 <h1>Welcome</h1>
-                <p class="mb-4">Launching a collection can seem complicated. That is why we have made a video where we explain the entire process step by step.</p>
-                <Button @click.prevent="openYouTubeModal('https://www.youtube.com/embed/OqqzjLOw2QE')">Watch video</Button>
+                <p class="mb-4">Launching a collection can seem complicated. That is why we have made tutorials which explain the entire process step by step. 
+                    You can find them in our detailed <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">documentation</Hyperlink>.</p>
             </Box>
             <Box class="text-left md:text-center p-12">
                 <h1>Let’s get started</h1>
@@ -94,9 +91,5 @@ const openYouTubeModal = (link) => {
         <div class="text-center mt-10">
             <LinkBlue :href="route('collections.create')">Create collection</LinkBlue>
         </div>
-
-        <Modal :show="showModal" :title="'Tutorial video'" @close="showModal = false">
-            <div class="w-full text-center"><iframe class="inline-block" width="560" height="315" src="https://www.youtube.com/embed/OqqzjLOw2QE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-        </Modal>
     </AuthenticatedLayout>
 </template>

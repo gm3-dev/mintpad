@@ -25,7 +25,6 @@ let colorpicker = ref({
     }
 })
 let showModal = ref(false)
-let showTutorialModal = ref(false)
 let backgroundLoading = ref(false)
 const emitter = inject('emitter')
 
@@ -119,12 +118,8 @@ const updateMintSettings = async () => {
 
             <ButtonGray class="px-2 sm:!px-4 text-center" @click.prevent="addBackground">Change background</ButtonGray>
             <Button class="px-2 sm:!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</Button>
-            <ButtonBlue class="align-middle !rounded-full px-2 sm:!px-5 !py-1 !text-xs !leading-6" @click.prevent="showTutorialModal = true"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">Watch tutorial</span></ButtonBlue>
         </div>
     </div>
-    <Modal :show="showTutorialModal" :title="'Tutorial video'" @close="showTutorialModal = false">
-        <div class="w-full text-center"><iframe class="inline-block" width="560" height="315" src="https://www.youtube.com/embed/Qn2-nY0vZfQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-    </Modal>
     <Modal :show="showModal" title="Change background" @close="showModal = false">
         <form>
             <div v-if="backgroundLoading" class="w-full text-center mb-4">

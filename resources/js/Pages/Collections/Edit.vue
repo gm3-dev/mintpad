@@ -684,7 +684,7 @@ const deleteSocialImage = () => {
                 <div v-show="currentTab == 1">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="flex flex-col">
-                            <Box class="flex-1 mb-4" title="General Settings" tutorial="https://www.youtube.com/embed/uSVmOgaCOlQ">
+                            <Box class="flex-1 mb-4" title="General Settings">
                                 <BoxContent>
                                     <div class="w-full flex flex-wrap">
                                         <div class="basis-full">
@@ -729,9 +729,10 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <Box v-if="collection.type == 'ERC721' || (collection.type == 'ERC1155' && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files" tutorial="https://www.youtube.com/embed/fgzBxLpVY4E">
+                    <Box v-if="collection.type == 'ERC721' || (collection.type == 'ERC1155' && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files">
                         <BoxContent>
-                            <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate your collection</p>
+                            <p v-if="collection.type == 'ERC721'">Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate your collection.</p>
+                            <p v-if="collection.type == 'ERC1155'">Upload your artwork. If you have not yet generated your metadata, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate the metadata for your NFT. Visit our <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">documentation</Hyperlink> to learn how.</p>
                             <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
 
                             <label class="block text-mintpad-300 mb-4">
@@ -834,7 +835,7 @@ const deleteSocialImage = () => {
                 </div>
 
                 <div v-show="currentTab == 3">
-                    <Box class="mb-4" title="Mint phases" tutorial="https://www.youtube.com/embed/syNDd3Iepy4">
+                    <Box class="mb-4" title="Mint phases">
                         <BoxContent>
                             <p>On this page you can set mint phases. You can set whitelist phases and the public mint. <b>You must have set at least one mint phase with a maximum of 3.</b></p>
                             <p>When you only set one mint phase, this will be the date and time that people can mint your collection.</p>
@@ -943,7 +944,7 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 4">
-                    <Box class="mb-4" title="Mint settings" tutorial="https://www.youtube.com/embed/MqVxSbt33xQ">
+                    <Box class="mb-4" title="Mint settings">
                         <BoxContent>
                             <p>Here you can customize your mint page. Add SEO to your page and customize the design.</p>
                         </BoxContent>

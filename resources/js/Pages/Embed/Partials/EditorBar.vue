@@ -31,7 +31,6 @@ let colorpicker = ref({
         color: toRaw(props.collectionData.theme.phases),
     }
 })
-let showModal = ref(false)
 const emitter = inject('emitter')
 
 onMounted(() => {
@@ -118,10 +117,6 @@ const updateMintSettings = async () => {
 
             <DarkMode></DarkMode>
             <Button href="#" class="px-2 sm:!px-4 text-center" @click.prevent="updateMintSettings">Publish changes</Button>
-            <ButtonBlue href="#" class="align-middle !rounded-full px-2 sm:!px-5 !py-1 !text-xs !leading-6" @click.prevent="showModal = true"><i class="fas fa-play mr-1 text-md align-middle"></i> <span class="align-middle text-xs">Watch tutorial</span></ButtonBlue>
         </div>
     </div>
-    <Modal :show="showModal" :title="'Tutorial video'" @close="showModal = false">
-        <div class="w-full text-center"><iframe class="inline-block" width="560" height="315" src="https://www.youtube.com/embed/Qn2-nY0vZfQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-    </Modal>
 </template>
