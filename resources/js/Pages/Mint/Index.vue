@@ -124,6 +124,8 @@ onMounted(async () => {
                 collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
                 setClaimPhaseCounters()
                 setActiveClaimPhase()
+
+                loadComplete.value = true
                 
             } catch (error) {
                 resportError(error)
@@ -307,8 +309,8 @@ const mintNFT = async (e) => {
                 <LogoEditor :edit-mode="editMode" :collection-data="collectionData" />
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
 
-                <div class="w-24 sm:w-36 md:w-48 h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
-                    <img v-if="collectionData.thumb" :src="collectionData.thumb" class="inline-block rounded-md" />
+                <div v-if="collectionData.thumb" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
+                    <img v-if="collectionData.thumb" :src="collectionData.thumb" class="inline-block rounded-m h-full" />
                 </div>
                 <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
             </div>
@@ -363,23 +365,24 @@ const mintNFT = async (e) => {
                             <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                             <div v-if="editMode" class="flex gap-2">
                                 <Input type="number" value="1" class="!mb-0 !w-28" />   
-                                <Button @click.prevent="mintNFT" class="w-full mint-bg-primary" :loading="buttonLoading">Start minting</Button>
+                                <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                             </div>
                             <div v-else class="flex gap-2">
                                 <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />                 
-                                <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</Button>
-                                <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary">Switch blockchain</Button>
-                                <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary">Start minting</Button>
+                                <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
+                                <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
+                                <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
                             </div>
-                            <div class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
+                            <div v-if="collectionData.claimPhases.length > 0" class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
                                 <div>
                                     <p>Total minted</p>
                                 </div>
                                 <div class="text-right">
-                                    <p>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
+                                    <p v-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
+                                    <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                                 </div>
                             </div>
-                            <div class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
+                            <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
                                 <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
                             </div>
                         </form>

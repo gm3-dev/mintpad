@@ -484,7 +484,7 @@ const uploadCollection = async (event) => {
     var metadata = await prepareFiles(files)
 
     if (metadata.status == 'error') {
-        messages.value.push({type: 'error', message: 'Invalid collection data'})
+        messages.value.push({type: 'error', message: metadata.message})
         return;
     }
 
@@ -519,13 +519,20 @@ const prepareFiles = async (files) => {
             data: []
         }
     }
+    if (props.collection.type == 'ERC1155' && (imagesLength > 1 || jsonLength > 1)) {
+        return {
+            status: 'error',
+            message: 'Upload 1 image and 1 JSON file',
+            data: []
+        }
+    }
 
     const metadata = await createMetadata(images, json)
     metadata.sort((a,b) => a.name - b.name);
 
     return {
         status: 'success',
-        message: 'Images and JSON data combination',
+        message: '',
         data: metadata
     }
 }
@@ -661,16 +668,16 @@ const deleteSocialImage = () => {
                 <div v-if="validBlockchain === true">
                     <div class="w-full grid grid-cols-2 gap-4 sm:block mb-8 text-left sm:text-center">
                         <StatusTab @click.prevent.native="changeStatusTab(1)" :label="'Settings'" :complete="tabStatus.settings"></StatusTab>
-                        <StatusTab @click.prevent.native="changeStatusTab(2)" :label="'Mint phases'" :complete="tabStatus.phases"></StatusTab>
-                        <StatusTab @click.prevent.native="changeStatusTab(3)" :label="'Upload collection'" :complete="tabStatus.collection"></StatusTab>
+                        <StatusTab @click.prevent.native="changeStatusTab(2)" :label="'Upload collection'" :complete="tabStatus.collection"></StatusTab>
+                        <StatusTab @click.prevent.native="changeStatusTab(3)" :label="'Mint phases'" :complete="tabStatus.phases"></StatusTab>
                         <StatusTab @click.prevent.native="changeStatusTab(4)" :label="'Mint settings'" :complete="tabStatus.mint"></StatusTab>
                     </div>
                 </div>
                 <div v-if="currentTab > 0" class="w-full mb-6 text-center">
                     <ButtonGray href="#" @click.prevent="previousStatusTab" :class="{'!text-mintpad-400': currentTab == 1}">Previous step</ButtonGray>
                     <h2 v-if="currentTab == 1" class="hidden sm:inline-block text-2xl w-1/4">Settings</h2>
-                    <h2 v-if="currentTab == 2" class="hidden sm:inline-block text-2xl w-1/4">Mint phases</h2>
-                    <h2 v-if="currentTab == 3" class="hidden sm:inline-block text-2xl w-1/4">Upload collection</h2>
+                    <h2 v-if="currentTab == 2" class="hidden sm:inline-block text-2xl w-1/4">Upload collection</h2>
+                    <h2 v-if="currentTab == 3" class="hidden sm:inline-block text-2xl w-1/4">Mint phases</h2>
                     <h2 v-if="currentTab == 4" class="hidden sm:inline-block text-2xl w-1/4">Mint settings</h2>
                     <ButtonGray href="#" @click.prevent="nextStatusTab" :class="{'!text-mintpad-400': currentTab == 4}">Next step</ButtonGray>
                 </div>
@@ -722,93 +729,6 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <Box class="mb-4" title="Mint phases" tutorial="https://www.youtube.com/embed/syNDd3Iepy4">
-                        <BoxContent>
-                            <p>On this page you can set mint phases. You can set whitelist phases and the public mint. <b>You must have set at least one mint phase with a maximum of 3.</b></p>
-                            <p>When you only set one mint phase, this will be the date and time that people can mint your collection.</p>
-                        </BoxContent>
-                    </Box>
-
-                    <Box v-for="(phase, index) in claimPhases" class="mb-4" :title="'Phase '+(index+1)">
-                        <template v-slot:action>
-                            <a href="#" class="absolute right-8 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="deleteClaimPhase(index)">Delete phase</a>
-                        </template>
-                        <BoxContent>
-                            <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
-                                <div>
-                                    <Label value="Phase start time" info="This is the time and date when people can mint your NFT collection. Note: This time is shown in your local time." />
-                                    <Input type="datetime-local" v-model="phase.startTime" />
-                                </div>
-                                <div>
-                                    <Label value="Number of NFTs" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
-                                    <Input type="number" v-model="phase.maxClaimableSupply" />
-                                </div>
-                                <div class="relative">
-                                    <Label value="Mint price" info="The mint price people pay for one NFT from your collection." />
-                                    <Addon position="right" :content="currentBlockchain.nativeCurrency.symbol">
-                                        <Input class="addon-right" step="0.001" type="number" v-model="phase.price" />
-                                    </Addon>
-                                </div>
-                                <div>
-                                    <Label value="Claims per wallet" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
-                                    <Input type="number" v-model="phase.maxClaimablePerWallet" />
-                                </div>
-                                <div>
-                                    <Label value="Phase name" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
-                                    <Input type="text" v-model="phase.name" />
-                                </div>
-                                <div>
-                                    <Label value="Enable whitelist" info="Here you can choose whether to enable a whitelist or not." />
-                                    <RadioGroup>
-                                        <Radio :id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><Label :for="'whitelist-0-'+index" class="inline-block mx-2" value="No" />
-                                        <Radio :id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><Label :for="'whitelist-1-'+index" class="inline-block mx-2" value="Yes" />
-                                    </RadioGroup>
-                                </div>
-                                <div v-if="phase.whitelist == 1" class="col-span-2">
-                                    <Label value="Whitelist CSV file" info="Here you can upload a .CSV file with all whitelisted wallets." />
-                                    <p class="text-sm"><ButtonGray href="#" @click.prevent="toggleWhitelistModal(index, true)">Upload CSV</ButtonGray><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
-                                </div>
-
-                                <Modal title="Whitelist addresses" :show="phase.modal" @close.prevent="toggleWhitelistModal(index, false)">
-                                    <div class="overflow-y-auto" :class="{'max-h-80 bg-primary-100 dark:bg-mintpad-800 rounded-md border border-primary-200 dark:border-mintpad-900': phase.snapshot != 0}">
-                                        <div v-if="phase.snapshot != 0" class="p-4">
-                                            <p v-for="walletAddress in phase.snapshot">{{ walletAddress.address }}</p>
-                                        </div>
-                                        <div v-else>
-                                            <p>Here you can upload a .CSV file with all whitelisted wallets. Not sure what your .CSV should contain?</p>
-                                            <p class="mb-4"><Hyperlink href="/examples/snapshot.csv">Download a demo whitelist.</Hyperlink></p>
-                                            <label class="block mb-4 text-mintpad-300">
-                                                <span class="sr-only">Choose File</span>
-                                                <InputFile @change="uploadWhitelist($event, index)" />
-                                            </label>
-                                            <p>Upload a .CSV file. One wallet address per row.</p>
-                                        </div>
-                                    </div>
-                                    <div v-if="phase.snapshot != 0" class="w-full mt-4">
-                                        <ButtonGray href="#" @click.prevent="resetWhitelist(index)">Delete</ButtonGray>
-                                        <Button href="#" @click.prevent="toggleWhitelistModal(index, false)" class="ml-2">Save</Button>
-                                    </div>
-                                </Modal>
-                            </div>
-                        </BoxContent>
-                    </Box>
-
-                    <Box v-if="claimPhases.length == 0" class="mb-4">
-                        <BoxContent>
-                            <p class="">You have no mint phases set yet.</p>
-                        </BoxContent>
-                    </Box>
-
-                    <div class="w-full text-center mb-4">
-                        <ButtonDefault href="#" @click.prevent="addClaimPhase"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add another mint phase</ButtonDefault>
-                    </div>
-                    <div class="w-full">
-                        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                            <Button href="#" @click.prevent="updateClaimPhases" :disabled="disablePhases" :loading="buttonLoading">Update mint phases</Button>
-                        </span>
-                    </div>
-                </div>
-                <div v-show="currentTab == 3">
                     <Box v-if="collection.type == 'ERC721' || (collection.type == 'ERC1155' && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files" tutorial="https://www.youtube.com/embed/fgzBxLpVY4E">
                         <BoxContent>
                             <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate your collection</p>
@@ -877,19 +797,6 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <Box v-if="collection.type == 'ERC1155'" title="Set maximum total supply">
-                        <BoxContent>
-                            <div>
-                                <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
-                                <Input class="w-full" type="text" v-model="collectionData.maxTotalSupply" />
-                            </div>
-
-                            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                                <Button href="#" @click.prevent="updateMaxTotalSupply" :loading="buttonLoading">Update</Button>
-                            </span>
-                        </BoxContent>
-                    </Box>
-
                     <Box class="mb-4" title="Your collection">
                         <BoxContent>
                             <div class="text-sm">
@@ -924,6 +831,116 @@ const deleteSocialImage = () => {
                             </span>
                         </BoxContent>
                     </Box>
+                </div>
+
+                <div v-show="currentTab == 3">
+                    <Box class="mb-4" title="Mint phases" tutorial="https://www.youtube.com/embed/syNDd3Iepy4">
+                        <BoxContent>
+                            <p>On this page you can set mint phases. You can set whitelist phases and the public mint. <b>You must have set at least one mint phase with a maximum of 3.</b></p>
+                            <p>When you only set one mint phase, this will be the date and time that people can mint your collection.</p>
+                        </BoxContent>
+                    </Box>
+
+                    <Box v-if="collection.type == 'ERC1155' && collectionData.nfts.length == 0" class="mb-4">
+                        <BoxContent>
+                            <p class="">You need to upload an NFT first. You can do this in the <Hyperlink href="#" element="a" @click.prevent.native="changeStatusTab(2)">upload collection</Hyperlink> section.</p>
+                        </BoxContent>
+                    </Box>
+
+                    <Box v-if="collection.type == 'ERC1155' && collectionData.nfts.length > 0" title="Set maximum total supply">
+                        <BoxContent>
+                            <div>
+                                <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
+                                <Input class="w-full" type="text" v-model="collectionData.maxTotalSupply" />
+                            </div>
+
+                            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                                <Button href="#" @click.prevent="updateMaxTotalSupply" :loading="buttonLoading">Update</Button>
+                            </span>
+                        </BoxContent>
+                    </Box>
+
+                    <div v-if="(collection.type == 'ERC1155' && collectionData.nfts.length > 0) || collection.type == 'ERC721'">
+                        <Box v-for="(phase, index) in claimPhases" class="mb-4" :title="'Phase '+(index+1)">
+                            <template v-slot:action>
+                                <a href="#" class="absolute right-8 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="deleteClaimPhase(index)">Delete phase</a>
+                            </template>
+                            <BoxContent>
+                                <div class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4">
+                                    <div>
+                                        <Label value="Phase start time" info="This is the time and date when people can mint your NFT collection. Note: This time is shown in your local time." />
+                                        <Input type="datetime-local" v-model="phase.startTime" />
+                                    </div>
+                                    <div>
+                                        <Label value="Number of NFTs" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
+                                        <Input type="number" v-model="phase.maxClaimableSupply" />
+                                    </div>
+                                    <div class="relative">
+                                        <Label value="Mint price" info="The mint price people pay for one NFT from your collection." />
+                                        <Addon position="right" :content="currentBlockchain.nativeCurrency.symbol">
+                                            <Input class="addon-right" step="0.001" type="number" v-model="phase.price" />
+                                        </Addon>
+                                    </div>
+                                    <div>
+                                        <Label value="Claims per wallet" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
+                                        <Input type="number" v-model="phase.maxClaimablePerWallet" />
+                                    </div>
+                                    <div>
+                                        <Label value="Phase name" info="Here you can give this mint phase a name. This is only visible on your own mint page." />
+                                        <Input type="text" v-model="phase.name" />
+                                    </div>
+                                    <div>
+                                        <Label value="Enable whitelist" info="Here you can choose whether to enable a whitelist or not." />
+                                        <RadioGroup>
+                                            <Radio :id="'whitelist-0-'+index" type="radio" v-model="phase.whitelist" value="0" class="inline-block" /><Label :for="'whitelist-0-'+index" class="inline-block mx-2" value="No" />
+                                            <Radio :id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><Label :for="'whitelist-1-'+index" class="inline-block mx-2" value="Yes" />
+                                        </RadioGroup>
+                                    </div>
+                                    <div v-if="phase.whitelist == 1" class="col-span-2">
+                                        <Label value="Whitelist CSV file" info="Here you can upload a .CSV file with all whitelisted wallets." />
+                                        <p class="text-sm"><ButtonGray href="#" @click.prevent="toggleWhitelistModal(index, true)">Upload CSV</ButtonGray><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
+                                    </div>
+
+                                    <Modal title="Whitelist addresses" :show="phase.modal" @close.prevent="toggleWhitelistModal(index, false)">
+                                        <div class="overflow-y-auto" :class="{'max-h-80 bg-primary-100 dark:bg-mintpad-800 rounded-md border border-primary-200 dark:border-mintpad-900': phase.snapshot != 0}">
+                                            <div v-if="phase.snapshot != 0" class="p-4">
+                                                <p v-for="walletAddress in phase.snapshot">{{ walletAddress.address }}</p>
+                                            </div>
+                                            <div v-else>
+                                                <p>Here you can upload a .CSV file with all whitelisted wallets. Not sure what your .CSV should contain?</p>
+                                                <p class="mb-4"><Hyperlink href="/examples/snapshot.csv">Download a demo whitelist.</Hyperlink></p>
+                                                <label class="block mb-4 text-mintpad-300">
+                                                    <span class="sr-only">Choose File</span>
+                                                    <InputFile @change="uploadWhitelist($event, index)" />
+                                                </label>
+                                                <p>Upload a .CSV file. One wallet address per row.</p>
+                                            </div>
+                                        </div>
+                                        <div v-if="phase.snapshot != 0" class="w-full mt-4">
+                                            <ButtonGray href="#" @click.prevent="resetWhitelist(index)">Delete</ButtonGray>
+                                            <Button href="#" @click.prevent="toggleWhitelistModal(index, false)" class="ml-2">Save</Button>
+                                        </div>
+                                    </Modal>
+                                </div>
+                            </BoxContent>
+                        </Box>
+
+                        <Box v-if="claimPhases.length == 0" class="mb-4">
+                            <BoxContent>
+                                <p class="">You have no mint phases set yet.</p>
+                            </BoxContent>
+                        </Box>
+
+                        <div class="w-full text-center mb-4">
+                            <ButtonDefault href="#" @click.prevent="addClaimPhase"><i class="fa-solid fa-plus mr-2 text-lg align-middle"></i> Add another mint phase</ButtonDefault>
+                        </div>
+                        <div class="w-full">
+                            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                                <Button href="#" @click.prevent="updateClaimPhases" :disabled="disablePhases" :loading="buttonLoading">Update mint phases</Button>
+                            </span>
+                        </div>
+                        
+                    </div>
                 </div>
                 <div v-show="currentTab == 4">
                     <Box class="mb-4" title="Mint settings" tutorial="https://www.youtube.com/embed/MqVxSbt33xQ">

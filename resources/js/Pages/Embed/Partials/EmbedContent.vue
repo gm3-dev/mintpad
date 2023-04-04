@@ -164,7 +164,8 @@ const mintNFT = async () => {
                             <p>Total minted</p>
                         </div>
                         <div class="text-right">
-                            <p>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
+                            <p v-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
+                            <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                         </div>
                     </div>
                     <div class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
