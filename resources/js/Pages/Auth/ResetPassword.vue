@@ -3,6 +3,7 @@ import AuthCard from '@/Components/AuthCard.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import Label from '@/Components/Form/Label.vue'
+import ValidationMessage from '@/Components/Form/ValidationMessage.vue'
 import ShowPassword from '@/Components/ShowPassword.vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
@@ -20,8 +21,8 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('password.store'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route('password.update'), {
+        onFinish: () => form.reset('password', 'password_confirmation')
     });
 };
 </script>
@@ -30,14 +31,16 @@ const submit = () => {
         <Head title="Forgot password" />
         <AuthCard>
             <form @submit.prevent="submit">
-                <div>
+                <div class="relative">
                     <Label for="email" value="Email" />
                     <Input id="email" type="email" v-model="form.email" required autofocus autocomplete="username" />
+                    <ValidationMessage :validation="form.errors.email" />
                 </div>
 
                 <div class="relative">
                     <Label for="password" value="Password" />
                     <Input id="password" type="password" v-model="form.password" required autocomplete="new-password" />
+                    <ValidationMessage :validation="form.errors.password" />
                 </div>
 
                 <div class="relative">

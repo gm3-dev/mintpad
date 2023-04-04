@@ -3,6 +3,7 @@ import AuthCard from '@/Components/AuthCard.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import Label from '@/Components/Form/Label.vue'
+import ValidationMessage from '@/Components/Form/ValidationMessage.vue'
 import ShowPassword from '@/Components/ShowPassword.vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
@@ -27,6 +28,7 @@ const submit = () => {
                     <ShowPassword v-slot="slotProps">
                         <Input id="password" :type="slotProps.type" v-model="form.password" required autocomplete="current-password" />
                     </ShowPassword>
+                    <ValidationMessage :validation="form.errors.password" />
                 </div>
 
                 <div class="mt-4">
