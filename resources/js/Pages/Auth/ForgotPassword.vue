@@ -21,6 +21,10 @@ const submit = () => {
         <AuthCard>
             <div class="mb-4 text-sm text-mintpad-300">Enter your email address that you used to register. We'll send you an email with a link to reset your password.</div>
 
+            <div v-if="$page.props.flash.status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+                {{ $page.props.flash.status }}
+            </div>
+
             <form @submit.prevent="submit">
                 <div class="relative">
                     <Label for="email" value="Email" />
