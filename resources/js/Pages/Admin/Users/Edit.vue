@@ -77,7 +77,7 @@ const submit = () => {
                         <!-- Country -->
                         <div>
                             <Label for="country" value="Country" />
-                            <p>{{ user.country_name }}</p>
+                            <p>{{ user.country }}</p>
                         </div>
                         <!-- City -->
                         <div>
