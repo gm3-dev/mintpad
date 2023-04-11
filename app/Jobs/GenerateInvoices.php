@@ -75,8 +75,8 @@ class GenerateInvoices implements ShouldQueue
                 
                     $invoice = Moneybird::createSalesInvoice($user, $details);
                     if ($invoice['id']) {
-                        Moneybird::sendSalesInvoice($invoice['id']);
-                        Moneybird::createSalesInvoicePayment($invoice);
+                        // Moneybird::sendSalesInvoice($invoice['id']);
+                        // Moneybird::createSalesInvoicePayment($invoice);
                     }
                 }
             }
