@@ -1,0 +1,197 @@
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Button from '@/Components/Form/Button.vue'
+import { Head, useForm } from '@inertiajs/vue3'
+import { ref, provide, onMounted, watch, computed } from 'vue'
+import { connectWallet } from '@/Wallets/Wallet'
+import BoxContent from '@/Components/BoxContent.vue'
+import Box from '@/Components/Box.vue'
+import Label from '@/Components/Form/Label.vue'
+import Input from '@/Components/Form/Input.vue'
+import Textarea from '@/Components/Form/Textarea.vue'
+import Select from '@/Components/Form/Select.vue'
+import Addon from '@/Components/Form/Addon.vue'
+import { getBlockchains, checkCurrentBlockchain } from '@/Helpers/Blockchain'
+import { getSelectInputBlockchainObject } from '@/Helpers/Helpers'
+import { getSDKFromSigner } from '@/Helpers/Thirdweb'
+import Messages from '@/Components/Messages.vue'
+import { resportError } from '@/Helpers/Sentry'
+import { getMetaMaskError } from '@/Wallets/MetaMask'
+
+let wallet = ref(false)
+let loading = ref(true)
+let buttonLoading = ref(false)
+let blockchains = ref(getBlockchains())
+let blockchainList = ref({})
+let validBlockchain = ref(false)
+let messages = ref([])
+
+const form = useForm({
+    chain_id: 1,
+    type: '',
+    symbol: '',
+    royalties: 0,
+    name: '',
+    description: '',
+    address: ''
+})
+provide('wallet', wallet)
+
+onMounted(async () => {
+    // Connect wallet if local storage is set
+    const walletName = localStorage.getItem('walletName')
+    if (walletName) {
+        wallet.value = await connectWallet(walletName, false)
+    }
+
+    // Init app
+    form.chain_id = wallet.value.chainId
+    validBlockchain.value = checkCurrentBlockchain(blockchains, form.chain_id, wallet)
+    blockchainList.value = getSelectInputBlockchainObject(blockchains)
+
+    // Done loading
+    loading.value = false
+})
+
+watch(() => form.chain_id, (newChainId) => {
+    validBlockchain.value = checkCurrentBlockchain(blockchains, parseInt(newChainId), wallet)
+})
+
+const deployContract = async () => {
+    if (validBlockchain.value !== true) {
+        messages.value.push({type: 'error', message: 'Please connect to the correct blockchain'})
+        return
+    }
+
+    // Validate form
+    let error = false
+    if (form.royalties.length < 1) {
+        error = 'Creator royalties must be a number'
+    } else if (form.royalties < 0 || form.royalties > 100) {
+        error = 'Creator royalties must be a number between 0 and 100'
+    } else if (form.symbol.length < 2) {
+        error = 'Symbol / ticker must be at least 2 characters long'
+    } else if (form.name.length < 3) {
+        error = 'Collection name must be at least 3 characters long'
+    } else if (form.description.length < 3) {
+        error = 'Collection description must be at least 3 characters long'
+    }
+    if (error) {
+        messages.value.push({type: 'error', message: error})
+        return
+    }
+
+    buttonLoading.value = true
+    try {
+        // Deploy contract
+        const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
+
+        let parameters = {
+            name: form.name,
+            symbol: form.symbol,
+            description: form.description,
+            primary_sale_recipient: wallet.value.account, // primary sales
+            fee_recipient: wallet.value.account, // royalties address
+            seller_fee_basis_points: form.royalties * 100, // royalties address
+            platform_fee_recipient: import.meta.env.VITE_WALLET, // platform fee address
+            platform_fee_basis_points: 500, // platform fee (5%)
+            totalSupply: form.totalSupply // Solana only
+        }
+        
+        let contractAddress = false
+        try {
+            if (form.type == 'ERC721') {
+                contractAddress = await sdk.deployer.deployNFTDrop(parameters)
+            } else if (form.type == 'ERC1155') {
+                contractAddress = await sdk.deployer.deployEditionDrop(parameters)
+            } else {
+                throw new Error('Invalid contract type: ' + form.type)
+            }
+        } catch (error) {
+            let metamaskError = getMetaMaskError(error)
+            if (metamaskError) {
+                messages.value.push({type: 'error', message: metamaskError})
+            } else {
+                resportError(error)
+                messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+            }
+        }
+
+        if (contractAddress) {
+            // Update DB
+            form.address = contractAddress
+            form.post(route('collections.store'), {})
+        }
+    } catch(error) {
+        resportError(error)
+        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+    }
+
+    buttonLoading.value = false
+}
+</script>
+<template>
+    <AuthenticatedLayout :loading="loading" :overlay="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
+        <Head title="Create collection" />
+
+        <div v-if="!wallet.account"></div>
+        <div v-else>
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="text-center mb-10">
+                    <h1>Create NFT collection</h1>
+                    <p>This is the start of your NFT collection.</p>
+                </div>
+
+                <Box v-if="form.type == ''" class="w-full mb-4" title="Choose your smart contract type">
+                    <BoxContent class="text-center py-14">
+                        <button @click.prevent="form.type = 'ERC721'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                            <h2>NFT Drop</h2>
+                            <p>Release collection of unique NFTs for a set price</p>
+                        </button>
+                        <button @click.prevent="form.type = 'ERC1155'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                            <h2>Open Edition Drop</h2>
+                            <p>Release ERC1155 tokens for a set price.</p>
+                        </button>
+                    </BoxContent>
+                </Box>
+
+                <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'">
+                    <BoxContent>
+                        <div class="w-full flex flex-wrap">
+                            <div class="basis-full sm:basis-1/3">
+                                <Label for="symbol" value="Blockchain" class="relative" info="Choose which blockchain you want to launch your NFT collection on." />
+                                <Select class="!w-full mb-4" v-model="form.chain_id" :options="blockchainList"></Select>
+                            </div>
+                            <div class="basis-full sm:basis-1/3 px-0 sm:px-4">
+                                <Label for="symbol" value="Symbol / Ticker" class="relative" info="You can compare the symbol with a stock ticker. We recommend making this a shortened version of your collection's name. For example, for the collection name 'Mintpad NFT', the Symbol/Ticker could be 'MPNFT'. Keep it under 5 characters." />
+                                <Input id="symbol" class="mb-4" type="text" v-model="form.symbol" />
+                            </div>
+                            <div class="basis-full sm:basis-1/3">
+                                <Label for="royalties" value="Creator royalties (%)" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
+                                <Addon position="right" content="%">
+                                    <Input id="royalties" class="mb-4 addon-right" step=".01" min="0" max="100" type="number" v-model="form.royalties" />
+                                </Addon>
+                            </div>
+                            <div class="basis-full">
+                                <Label for="name" value="Collection name" class="relative" info="This is the name of your NFT collection." />
+                                <Input id="name" class="mb-4" type="text" v-model="form.name" />
+                            </div>
+                            <div class="basis-full">
+                                <Label for="description" value="Collection description" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
+                                <Textarea id="description" class="w-full" v-model="form.description"></Textarea>
+                            </div>
+                        </div>
+                    </BoxContent>
+                </Box>
+
+                <div v-if="form.type" class="w-full">
+                    <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                        <Button href="#" @click.prevent="deployContract" :disabled="validBlockchain !== true" :loading="buttonLoading">Deploy smart contract</Button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        
+        <Messages :messages="messages"/>
+    </AuthenticatedLayout>
+</template>

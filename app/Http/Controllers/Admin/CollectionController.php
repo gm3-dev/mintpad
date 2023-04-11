@@ -7,6 +7,8 @@ use App\Facades\Coinbase;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class CollectionController extends Controller
 {
@@ -36,8 +38,8 @@ class CollectionController extends Controller
         // PolygonScan::getInternalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
         // PolygonScan::getNormalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
 
-        $collections = Collection::orderBy('id', 'DESC')->get();
-        return view('admin.collections.index')->with(compact('collections'));
+        $collections = Collection::select(['id', 'name', 'chain_id', 'address', 'permalink', 'type'])->orderBy('id', 'DESC')->get();
+        return Inertia::render('Admin/Collections/Index', compact('collections'));
     }
 
     /**
@@ -106,7 +108,7 @@ class CollectionController extends Controller
         if ($request->ajax()) {
             $collection->delete();
 
-            return response()->json(['succes']);
+            return Redirect()->back();
         }
     }
 }

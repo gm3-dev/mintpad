@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -45,20 +44,21 @@ class User extends Authenticatable
         'birthday' => 'date'
     ];
 
-    /**
-     * Overwrite default ResetPasswordNotification
-     *
-     * @param string $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token));
-    }
+    protected $appends = ['collection_count', 'collection_list'];
 
     public function collections()
     {
         return $this->hasMany(Collection::class);
+    }
+
+    public function getCollectionCountAttribute()
+    {
+        return $this->collections->count();
+    }
+
+    public function getCollectionListAttribute()
+    {
+        return $this->collections->pluck('name')->implode(', ');
     }
 
     public function getCountryNameAttribute()

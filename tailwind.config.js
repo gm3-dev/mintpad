@@ -2,11 +2,9 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
+        './resources/**/*.blade.php',
         "./resources/**/*.vue",
-        "./resources/js/**/*.js"
+        "./resources/**/*.js"
     ],
     safelist: [
         'addon-left', 'addon-right'
@@ -15,8 +13,8 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: {
-                'waves': "url('/images/background.jpg')",
-                'waves-dark': "url('/images/background-dark.jpg')",
+                'waves': "url('../images/background.jpg')",
+                'waves-dark': "url('../images/background-dark.jpg')",
             },
             padding: {
                 'full': '100%',

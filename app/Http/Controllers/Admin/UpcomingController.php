@@ -7,6 +7,7 @@ use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class UpcomingController extends Controller
 {
@@ -25,12 +26,12 @@ class UpcomingController extends Controller
             return $collection;
         });
 
-        $last_phase_update = false;
+        $last_update = false;
         if (Storage::exists('data/mint-phases.json')) {
-            $last_phase_update = Date::createFromTimestampUTC(Storage::lastModified('data/mint-phases.json'))->format('Y-m-d H:i:s');
+            $last_update = Date::createFromTimestampUTC(Storage::lastModified('data/mint-phases.json'))->format('Y-m-d H:i:s');
         }
 
-        return view('admin.upcoming.index')->with(compact('collections', 'last_phase_update'));
+        return Inertia::render('Admin/Upcoming/Index', compact('collections', 'last_update'));
     }
 
     /**

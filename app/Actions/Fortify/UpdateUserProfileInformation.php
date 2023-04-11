@@ -5,7 +5,6 @@ namespace App\Actions\Fortify;
 use App\Facades\Moneybird;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -39,7 +38,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         $user = User::find(Auth::user()->id);
         $user->name = request()->name;
-        $user->is_company = request()->has('is_company');
+        $user->is_company = request()->is_company ?? false;
         $user->company_name = request()->company_name ?? null;
         $user->vat_id = request()->vat_id ?? null;
         $user->birthday = date('Y-m-d', strtotime(request()->birth_year.'-'.request()->birth_month.'-'.request()->birth_day));
@@ -57,28 +56,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         if (isset($input['email']) && $input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         }
-
-        // Validator::make($input, [
-        //     'name' => ['required', 'string', 'max:255'],
-
-        //     'email' => [
-        //         'required',
-        //         'string',
-        //         'email',
-        //         'max:255',
-        //         Rule::unique('users')->ignore($user->id),
-        //     ],
-        // ])->validateWithBag('updateProfileInformation');
-
-        // if ($input['email'] !== $user->email &&
-        //     $user instanceof MustVerifyEmail) {
-        //     $this->updateVerifiedUser($user, $input);
-        // } else {
-        //     $user->forceFill([
-        //         'name' => $input['name'],
-        //         'email' => $input['email'],
-        //     ])->save();
-        // }
     }
 
     /**

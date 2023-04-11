@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -16,8 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id', 'DESC')->get();
-        return view('admin.users.index')->with(compact('users'));
+        $users = User::select(['id', 'name', 'role', 'status'])->orderBy('id', 'DESC')->get();
+        return Inertia::render('Admin/Users/Index', compact('users'));
     }
 
     /**
@@ -67,7 +68,8 @@ class UserController extends Controller
         $user->birth_month = $user->birthday->month ?? date('n');
         $user->birth_year = $user->birthday->year ?? date('Y');
         $roles = config('roles');
-        return view('admin.users.edit')->with(compact('user', 'countries', 'roles'));
+
+        return Inertia::render('Admin/Users/Edit', compact('user', 'countries', 'roles'));
     }
 
     /**

@@ -1,21 +1,19 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\InvoiceController;
-use App\Http\Controllers\Admin\UpcomingController;
 use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\Admin\UpcomingController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\DataController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ValidationController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +21,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
@@ -35,7 +33,7 @@ Route::domain(config('app.url'))->group(function () {
     // require __DIR__.'/fortify.php';
 
     Route::get('/', fn () => redirect('/login'));
-    
+
     Route::group(['middleware' => ['auth']], function () {
         /**
          * Admin routes
@@ -43,8 +41,8 @@ Route::domain(config('app.url'))->group(function () {
         Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'password.confirm']], function () {
             Route::name('admin.')->group(function () {
                 // Dashboard
-                Route::get('/', [AdminDashboardController::class, 'index']);
-                Route::resource('dashboard', AdminDashboardController::class);
+                Route::get('/', [DashboardController::class, 'index']);
+                Route::resource('dashboard', DashboardController::class);
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
                 // Users
@@ -53,21 +51,18 @@ Route::domain(config('app.url'))->group(function () {
                 Route::resource('import', ImportController::class);
                 // Invoices
                 Route::resource('invoices', InvoiceController::class);
-                // Invoices
+                // Upcoming
                 Route::resource('upcoming', UpcomingController::class);
-                // Invoices
+                // Status
                 Route::resource('status', StatusController::class);
             });
         });
-        
-        // Customer
+
+        // Collections
         Route::resource('collections', CollectionController::class);
-        Route::get('collections/{collection}/fetch', [CollectionController::class, 'fetch'])->name('collections.fetch');
-        Route::get('collections/{collection}/collection', [CollectionController::class, 'collection'])->name('collections.collection');
+        Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update-metadata');
+        Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update-mint');
         Route::post('collections/{collection}/whitelist', [CollectionController::class, 'whitelist'])->name('collections.whitelist');
-        Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update_mint');
-        Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update_metadata');
-        Route::put('collections/{collection}/claim-phases', [CollectionController::class, 'updateClaimPhases'])->name('collections.update_claim_phases');
         Route::post('collections/{collection}/thumb', [CollectionController::class, 'downloadThumb'])->name('collections.thumb');
 
         // User
@@ -78,7 +73,7 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
         // Editor layout
-        Route::get('mint-editor/{collection}', [EditorController::class, 'mint'])->name('editor.mint');
+        Route::get('mint-editor/{collection}', [MintController::class, 'mint'])->name('editor.mint');
         Route::get('embed-editor/{collection}', [EditorController::class, 'embed'])->name('editor.embed');
 
         // Resources
@@ -86,7 +81,10 @@ Route::domain(config('app.url'))->group(function () {
         Route::delete('resources/{collection}/delete', [ResourceController::class, 'delete'])->name('resources.delete');
 
         // Validation
-        Route::post('validate', [ValidationController::class, 'index'])->name('validate.index');
+        // Route::post('validate', [ValidationController::class, 'index'])->name('validate.index');
+
+        // Messenger
+        // Route::post('messenger', [MessengerController::class, 'index'])->name('messenger.index');
     });
 });
 
@@ -102,15 +100,9 @@ Route::domain(config('app.embed_url'))->group(function () {
 
 Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
 
-
-/**
- * Global routes
- */
-Route::get('data/blockchains', [DataController::class, 'blockchains'])->name('data.blockchains');
-
 /**
  * Fallback routes
  */
 Route::fallback(function () {
-    return view('errors.404');
+    return Inertia::render('Errors/Index', ['status' => 404]);
 });

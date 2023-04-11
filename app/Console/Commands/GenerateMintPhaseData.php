@@ -37,7 +37,7 @@ class GenerateMintPhaseData extends Command
         $collections = Collection::orderBy('id', 'DESC')->get();
         $output = [];
         foreach ($collections as $collection) {
-            $output[] = ['id' => $collection->id, 'address' => $collection->address, 'chain' => $collection->chain_name];
+            $output[] = ['id' => $collection->id, 'address' => $collection->address, 'chain' => $collection->chain_name, 'type' => $collection->type];
         }
 
         Storage::disk('local')->put('data/collections.json', json_encode($output));

@@ -40,7 +40,8 @@ class CreateNewUser implements CreatesNewUsers
         }
 
         request()->validate($rules, [
-            'accept_tos.required' => 'Accepting the Terms of Service is required'
+            'accept_tos.required' => 'Accepting the Terms of Service is required',
+            'accept_tos.accepted' => 'Accepting the Terms of Service is required'
         ]);
 
         $user = new User();

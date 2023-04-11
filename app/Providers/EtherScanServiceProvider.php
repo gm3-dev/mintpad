@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Classes\EtherScanApi;
+use App\Classes\EtherScanAPI;
 use Illuminate\Support\ServiceProvider;
 
 class EtherScanServiceProvider extends ServiceProvider
@@ -14,8 +14,8 @@ class EtherScanServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(EtherScanApi::class, function ($app) {
-            return new EtherScanApi(config('etherscan'));
+        $this->app->singleton(EtherScanAPI::class, function ($app) {
+            return new EtherScanAPI(config('etherscan'));
         });
     }
 

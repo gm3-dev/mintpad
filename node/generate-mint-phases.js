@@ -1,11 +1,23 @@
 const ThirdwebSDK = require('@thirdweb-dev/sdk')
 const { readFileSync, existsSync, writeFileSync } = require("fs");
 
+const getContractTypeName = (contractType) => {
+    switch (contractType) {
+        case 'ERC721': return 'nft-drop'
+        case 'ERC1155': return 'edition-drop'
+        default: return 'nft-drop'
+    }
+}
+
 const getClaimConditions = async (collection) => {
     const sdk = new ThirdwebSDK.ThirdwebSDK(collection.chain)
-    const contract = await sdk.getContract(collection.address, 'nft-drop')
-    const claimConditions = await contract.claimConditions.getAll({withAllowList: false})
-
+    const contract = await sdk.getContract(collection.address, getContractTypeName(collection.type))
+    var claimConditions = []
+    if (contract.constructor.name == 'NFTDrop') {
+        claimConditions = await contract.claimConditions.getAll({withAllowList: false})
+    } else if (contract.constructor.name == 'EditionDrop') {
+        claimConditions = await contract.claimConditions.getAll(0, {withAllowList: false})
+    }
     output = []
     claimConditions.forEach((claimCondition) => {
         output.push({id: collection.id, address: collection.address, when: claimCondition.startTime, price: claimCondition.currencyMetadata.displayValue})

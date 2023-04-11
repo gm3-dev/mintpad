@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -27,7 +28,7 @@ class UserController extends Controller
         $user->birth_month = $user->birthday->month ?? date('n');
         $user->birth_year = $user->birthday->year ?? date('Y');
 
-        return view('users.profile')->with(compact('user', 'countries'));
+        return Inertia::render('Users/Profile', compact('user', 'countries'));
     }
 
     /**
@@ -38,7 +39,11 @@ class UserController extends Controller
     public function twoFactorAuthSettings()
     {
         $user = Auth::user();
-        return view('users.two-factor-auth')->with(compact('user'));
+        if (session('status') == 'two-factor-authentication-enabled') {
+            $user->twoFactorQrCodeSvg = $user->twoFactorQrCodeSvg();
+            $user->recoveryCodes = $user->recoveryCodes();
+        }
+        return Inertia::render('Users/TwoFactorAuthentication', compact('user'));
     }
 
     /**
@@ -55,7 +60,7 @@ class UserController extends Controller
             $invoices = collect();
         }
 
-        return view('users.invoices')->with(compact('invoices'));
+        return Inertia::render('Users/Invoices', compact('invoices'));
     }
 
     /**

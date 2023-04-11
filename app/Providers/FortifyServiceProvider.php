@@ -10,6 +10,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -19,7 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Fortify::ignoreRoutes();
+        //
     }
 
     /**
@@ -27,21 +28,27 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Set views
-        Fortify::loginView(fn () => view('auth.login'));
-        Fortify::requestPasswordResetLinkView(fn () => view('auth.forgot-password'));
-        Fortify::resetPasswordView(fn () => view('auth.reset-password'));
-        Fortify::confirmPasswordView(fn () => view('auth.confirm-password'));
+        Fortify::loginView(fn () => Inertia::render('Auth/Login'));
+        Fortify::requestPasswordResetLinkView(fn () =>  Inertia::render('Auth/ForgotPassword'));
+        Fortify::resetPasswordView(function ($request) {
+            return Inertia::render('Auth/ResetPassword', [
+                'email' => $request->get('email'),
+                'token' => $request->route('token')
+            ]);
+        });
+        Fortify::confirmPasswordView(fn () =>  Inertia::render('Auth/ConfirmPassword'));
         Fortify::registerView(function () {
             $countries = collect(config('countries'))->map(function ($country) {
                 return $country['full'];
             });
-            return view('auth.register', compact('countries'));
+            return Inertia::render('Auth/Register', [
+                'countries' => $countries,
+                'affiliate' => request()->get('affiliate') ?? ''
+            ]);
         });
-        Fortify::twoFactorChallengeView(fn () => view('auth.two-factor-challenge'));
+        Fortify::twoFactorChallengeView(fn () => Inertia::render('Auth/TwoFactorChallenge'));
         // Fortify::verifyEmailView(fn () => view('auth.verify-email'));
-        
-        // Set actions
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
