@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Facades\EtherScan;
-use App\Facades\PolygonScan;
+use App\Facades\Explorer;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Models\Import;
@@ -25,17 +24,9 @@ class DashboardController extends Controller
         $imports = Import::all();
         $collections = Collection::count();
         $chains = Collection::select('chain_id', DB::raw('COUNT(*) as count'))->groupBy('chain_id')->pluck('count', 'chain_id');
-        $wallets = $this->getWalletBalances();
+        $wallets = Explorer::getWalletBalances(config('wallet.address'));
 
         return Inertia::render('Admin/Dashboard/Index', compact('collections', 'chains', 'imports', 'users', 'wallets'));
-    }
-
-    public function getWalletBalances()
-    {
-        return [
-            1 => EtherScan::getBalance(config('wallet.address')),
-            137 => PolygonScan::getBalance(config('wallet.address'))
-        ];
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace App\Facades;
 
-use App\Classes\PolygonScanAPI;
+use App\Classes\ExplorerAPI;
 use Illuminate\Support\Facades\Facade;
 
-class PolygonScan extends Facade
+class Explorer extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +14,6 @@ class PolygonScan extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return PolygonScanAPI::class;
+        return ExplorerAPI::class;
     }
 }
