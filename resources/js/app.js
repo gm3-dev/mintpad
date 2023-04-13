@@ -6,6 +6,7 @@ import { directive as Tippy } from 'vue-tippy'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import Closable from "./Directives/Closable"
 import mitt from 'mitt'
+import * as Sentry from "@sentry/vue"
 const emitter = mitt()
 
 const app = createInertiaApp({
