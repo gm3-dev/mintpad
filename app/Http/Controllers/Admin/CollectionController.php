@@ -19,25 +19,6 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        // dump(Coinbase::getProfile());
-        // Coinbase::getProducts();
-        // Coinbase::getProductByid('SOL-EUR');
-        // Coinbase::postOrder('SOL-EUR', '0.1');
-        // dump(Coinbase::getAccountById('0937b056-2f39-478e-8c3a-0621c8a24906'));
-        // Coinbase::getCoinbaseAccounts();
-        // dump(Coinbase::getAccountByToken('SOL'));
-        // dump(Coinbase::getAccountByToken('SOL'));
-        // Coinbase::postConversion();
-
-        // $transfers = Coinbase::getTransfers();
-        // $transfer = Coinbase::getTransferById('ad4bed40-45d7-408a-bede-c65d6c8d8ff1');
-        // dump($transfers[0]);
-        // dump($transfer);
-
-        // PolygonScan::getBalance('0x892a99573583c6490526739ba38baefae10a84d4');
-        // PolygonScan::getInternalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
-        // PolygonScan::getNormalTransactions('0x892a99573583c6490526739bA38BaeFae10a84D4');
-
         $collections = Collection::select(['id', 'name', 'chain_id', 'address', 'permalink', 'type'])->orderBy('id', 'DESC')->get();
         return Inertia::render('Admin/Collections/Index', compact('collections'));
     }

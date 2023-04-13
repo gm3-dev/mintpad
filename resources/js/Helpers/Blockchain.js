@@ -1,4 +1,4 @@
-import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, 
+import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet } from '@thirdweb-dev/chains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -26,7 +26,8 @@ export function getBlockchains() {
         1: Ethereum,
         250: Fantom,
         10: Optimism,
-        137: Polygon
+        137: Polygon,
+        324: ZksyncEra
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -37,7 +38,8 @@ export function getBlockchains() {
         4002: FantomTestnet,
         5: Goerli,
         80001: Mumbai,
-        420: OptimismGoerli
+        420: OptimismGoerli,
+        280: ZksyncEraTestnet
     }
     return {...mainnets, ...testnets}
 }
