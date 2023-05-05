@@ -27,7 +27,7 @@ export function getBlockchains() {
         250: Fantom,
         10: Optimism,
         137: Polygon,
-        324: ZksyncEra,
+        // 324: ZksyncEra,
         295: Hedera
     }
     const testnets = {
@@ -40,7 +40,7 @@ export function getBlockchains() {
         5: Goerli,
         80001: Mumbai,
         420: OptimismGoerli,
-        280: ZksyncEraTestnet,
+        // 280: ZksyncEraTestnet,
         296: HederaTestnet
     }
     return {...mainnets, ...testnets}
