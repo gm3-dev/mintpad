@@ -23,6 +23,7 @@ let loading = ref(true)
 let blockchains = ref(getBlockchains())
 let showModal = ref(false)
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     // Connect wallet if local storage is set

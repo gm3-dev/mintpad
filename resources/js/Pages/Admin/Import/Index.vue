@@ -41,6 +41,7 @@ let months = {
 let years = {2022: 2022, 2023: 2023, 2024: 2024, 2025: 2025, 2026: 2026, 2027: 2027, 2028: 2028, 2029: 2029}
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     blockchainList.value = getSelectInputBlockchainObject(blockchains)

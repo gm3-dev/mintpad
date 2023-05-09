@@ -85,7 +85,7 @@ const mintNFT = async () => {
             }
         }
 
-        buttonLoading.value = true
+        buttonLoading.value = false
     }
 }
 

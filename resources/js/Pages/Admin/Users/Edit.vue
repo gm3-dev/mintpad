@@ -25,6 +25,7 @@ let wallet = ref({account: false})
 let validBlockchain = ref(true)
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     // Done loading

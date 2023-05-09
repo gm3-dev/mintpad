@@ -25,6 +25,7 @@ let blockchains = ref(getBlockchains())
 let blockchainList = ref({})
 let validBlockchain = ref(false)
 let messages = ref([])
+let transaction = ref({show: false, message: ''})
 
 const form = useForm({
     chain_id: 1,
@@ -36,6 +37,7 @@ const form = useForm({
     address: ''
 })
 provide('wallet', wallet)
+provide('transaction', transaction)
 
 onMounted(async () => {
     // Connect wallet if local storage is set
@@ -56,6 +58,10 @@ onMounted(async () => {
 watch(() => form.chain_id, (newChainId) => {
     validBlockchain.value = checkCurrentBlockchain(blockchains, parseInt(newChainId), wallet)
 })
+
+const selectContractType = (type) => {
+    form.type = type
+}
 
 const deployContract = async () => {
     if (validBlockchain.value !== true) {
@@ -81,7 +87,7 @@ const deployContract = async () => {
         return
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Deploying contract'
     try {
         // Deploy contract
         const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
@@ -131,7 +137,7 @@ const deployContract = async () => {
 }
 </script>
 <template>
-    <AuthenticatedLayout :loading="loading" :overlay="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
+    <AuthenticatedLayout :loading="loading" :transaction="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
         <Head title="Create collection" />
 
         <div v-if="!wallet.account"></div>
@@ -144,11 +150,11 @@ const deployContract = async () => {
 
                 <Box v-if="form.type == ''" class="w-full mb-4" title="Choose your smart contract type">
                     <BoxContent class="text-center py-14">
-                        <button @click.prevent="form.type = 'ERC721'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <button @click.prevent="selectContractType('ERC721')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                             <h2>NFT Drop</h2>
                             <p>Release collection of unique NFTs for a set price</p>
                         </button>
-                        <button @click.prevent="form.type = 'ERC1155'" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <button @click.prevent="selectContractType('ERC1155')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                             <h2>Open Edition Drop</h2>
                             <p>Release ERC1155 tokens for a set price.</p>
                         </button>

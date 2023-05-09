@@ -4,12 +4,13 @@ import Button from '@/Components/Form/Button.vue'
 import { inject } from 'vue'
 import { switchBlockchainTo } from '@/Wallets/MetaMask'
 import { connectWallet } from '@/Wallets/Wallet'
+import Modal from '@/Components/Modal.vue'
 
 const props = defineProps({
     chainId: Number,
     loading: Boolean,
-    overlay: Boolean,
-    validBlockchain: [Boolean, String]
+    transaction: [Boolean, String],
+    validBlockchain: [Boolean, String],
 })
 const emitter = inject('emitter')
 
@@ -24,8 +25,18 @@ const switchBlockchain = async () => {
     <div class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">
         <Navigation />
 
-        <div v-if="overlay" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity">
-            <i class="absolute top-1/2 left-1/2 -ml-[12px] -mt-[12px] text-3xl fa-solid fa-spinner animate-spin"></i>
+        <div v-if="transaction != false" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity">
+            <Modal :show="true" :show-close="false" title="Transaction status">
+                <div class="flex items-center">
+                    <div class="pr-4">
+                        <i class="text-3xl fa-solid fa-spinner animate-spin"></i>
+                    </div>
+                    <div>
+                        <h4>{{ transaction }}</h4>
+                        <p>Your wallet will prompt you to sign the transaction</p>
+                    </div>
+                </div>
+            </Modal>
         </div>
         <div v-if="loading" class="w-10 mx-auto pt-4 text-lg dark:text-white z-50"><img src="/images/icon.svg" class="h-[35px] animate-bounce" /></div>
         <div v-else>

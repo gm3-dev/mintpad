@@ -37,6 +37,7 @@ let blockchains = ref(getBlockchains())
 const emitter = inject('emitter')
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     // Connect wallet if local storage is set
@@ -72,8 +73,6 @@ const openCollectionModal = async (collectionID) => {
 
         // Fees
         collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
-        collectionData.value.platformFee = data.platformFees.platformFee
-        collectionData.value.platformFeeRecipient = data.platformFees.platformFeeRecipient
 
         // Claim phases
         collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
@@ -140,7 +139,6 @@ const switchBlockchain = async () => {
                 <p>Chain: <span class="text-mintpad-500 dark:text-white">{{ blockchains[collectionData.chainId].name }} ({{ blockchains[collectionData.chainId].nativeCurrency.symbol }}) with ID {{ collectionData.chainId }}</span></p>
                 <p>Primary sales: <span class="text-mintpad-500 dark:text-white">{{ collectionData.primarySalesRecipient }}</span></p>
                 <p>Royalties: <span class="text-mintpad-500 dark:text-white">{{ collectionData.royalties }}% to {{ collectionData.feeRecipient }}</span></p>
-                <p>Platform fees: <span class="text-mintpad-500 dark:text-white">{{ collectionData.platformFee }}% to {{ collectionData.platformFeeRecipient }}</span></p>
                 <p>Claim phases: <span class="text-mintpad-500 dark:text-white">{{ collectionData.claimPhases.length }}</span></p>
                 <p v-if="collectionData.nfts.length == 0">Total minted: <span class="text-mintpad-500 dark:text-white">NFT list empty</span></p>
                 <p v-else>Total minted: <span class="text-mintpad-500 dark:text-white">{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</span></p>

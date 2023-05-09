@@ -93,6 +93,7 @@ const form = {
 let socialImageLoading = ref(false)
 
 provide('wallet', wallet)
+provide('transaction', {show: true, message: ''})
 
 let mintUrl = computed(() => props.collection.mint_url+'/'+form.mint.permalink)
 let mintEditorUrl = computed(() => props.collection.mint_editor_url+'/'+form.mint.permalink)
@@ -125,12 +126,11 @@ onMounted(async () => {
 
         const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
         try {
-
             const data = await getCollectionData(contract, props.collection.type, true, true)
 
             // Settings
             form.metadata.name = data.metadata.name
-            form.metadata.description = data.metadata.description
+            form.metadata.description = data.metadata.description == undefined ? '' : data.metadata.description
             form.metadata.defaults()
             form.royalties.feeRecipient = data.royalties.feeRecipient
             form.royalties.royalties = data.royalties.royalties
@@ -138,8 +138,6 @@ onMounted(async () => {
 
             // Fees
             collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
-            collectionData.value.platformFee = data.platformFees.platformFee
-            collectionData.value.platformFeeRecipient = data.platformFees.platformFeeRecipient
 
             // Claim phases
             claimPhases.value = parseClaimConditions(data.claimConditions)
@@ -176,7 +174,7 @@ const updateMetadata = async () => {
         return
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating settings'
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.metadata.set({
@@ -214,7 +212,7 @@ const updateRoyalties = async () => {
         return
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating royalties'
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.royalties.setDefaultRoyaltyInfo({
@@ -239,7 +237,7 @@ const updateMintSettings = () => {
         return
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating mint settings'
 
     // var data = {
     //     permalink: this.collection.permalink,
@@ -295,7 +293,7 @@ const updateClaimPhases = async () => {
         return
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating mint phases'
 
     let claimPhaseList = []
     for (var i = 0; i < claimPhases.value.length; i++) {
@@ -353,7 +351,7 @@ const updateCollection = async (e) => {
         }
     }
 
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating collection'
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
@@ -397,7 +395,7 @@ const updateCollection = async (e) => {
     buttonLoading.value = false    
 }
 const updateRevealBatch = async () => {
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating reveal settings'
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
@@ -413,7 +411,7 @@ const updateRevealBatch = async () => {
     buttonLoading.value = false
 }
 const updateMaxTotalSupply = async() => {
-    buttonLoading.value = true
+    buttonLoading.value = 'Updating maximum total supply'
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
@@ -654,7 +652,7 @@ const deleteSocialImage = () => {
 }
 </script>
 <template>
-    <AuthenticatedLayout :loading="loading" :overlay="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="collection.chain_id">
+    <AuthenticatedLayout :loading="loading" :transaction="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="collection.chain_id">
         <Head title="Edit collection" />
 
         <div v-if="!wallet.account"></div>

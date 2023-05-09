@@ -1,3 +1,4 @@
+import { getBlockchains } from "@/Helpers/Blockchain"
 import { resportError } from "@/Helpers/Sentry"
 import { ethers } from "ethers";
 
@@ -126,13 +127,37 @@ export async function switchBlockchainTo(chainId) {
             params: [{ chainId: ethers.utils.hexValue(parseInt(chainId)) }],
         })
     } catch(error) {
-        let metamaskError = getMetaMaskError(error)
-        if (metamaskError) {
-            return metamaskError
-        } else {
-            resportError(error)
-            return 'Failed to switch to the correct blockchain, try to do it manually.'
-        }
+        // When missing chainID in your wallet
+        // if (error.code === 4902) {
+        //     let blockchains = getBlockchains()
+        //     const blockchain = blockchains[chainId]
+        //     try {
+        //         await ethereum.request({
+        //             method: 'wallet_addEthereumChain',
+        //             params: [{
+        //                 chainId: ethers.utils.hexValue(chainId),
+        //                 chainName: blockchain.name,
+        //                 nativeCurrency: {
+        //                     name: blockchain.nativeCurrency.name,
+        //                     symbol: blockchain.nativeCurrency.symbol,
+        //                     decimals: blockchain.nativeCurrency.decimals,
+        //                 },
+        //                 rpcUrls: ['https://polygon-rpc.com/'],
+        //                 blockExplorerUrls: ['https://polygonscan.com']
+        //             }],
+        //         });
+        //     } catch (addError) {
+        //       // handle "add" error
+        //     }
+        // } else {
+            let metamaskError = getMetaMaskError(error)
+            if (metamaskError) {
+                return metamaskError
+            } else {
+                resportError(error)
+                return 'Failed to switch to the correct blockchain, try to do it manually.'
+            }
+        // }
     }
 
     return true
