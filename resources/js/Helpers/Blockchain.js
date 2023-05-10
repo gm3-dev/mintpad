@@ -17,6 +17,19 @@ export function getBlockchains() {
     Cmp.name = 'Caduceus'
     CmpTestnet.name = 'Caduceus Testnet'
 
+    // Set CoinGecko Token IDs
+    Arbitrum.coingecko = 'arbitrum';
+    Avalanche.coingecko = 'avalanche-2';
+    Binance.coingecko = 'binancecoin';
+    Cmp.coingecko = 'caduceus';
+    Dogechain.coingecko = 'dogecoin';
+    Ethereum.coingecko = 'ethereum';
+    Fantom.coingecko = 'fantom';
+    Optimism.coingecko = 'optimism';
+    Polygon.coingecko = 'matic-network';
+    // ZksyncEra.coingecko = '';
+    Hedera.coingecko = 'hedera-hashgraph';
+
     const mainnets = {
         42161: Arbitrum,
         43114: Avalanche,

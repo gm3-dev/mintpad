@@ -72,7 +72,21 @@ const mintNFT = async () => {
         try {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-            await contract.claim(mintAmount.value)
+            const transactionFee = await contract.call('getTransactionFee')
+            if (props.collection.type == 'ERC721') {
+                // await contract.claim(mintAmount.value)
+                const preparedClaim = await contract.claim.prepare(mintAmount.value)
+                let valueOverride = ((WeiToValue(transactionFee.toString()) + WeiToValue(preparedClaim.overrides.value.toString())) * 1000000000000000000).toString()
+                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                await preparedClaim.execute()
+
+            } else if (props.collection.type.startsWith('ERC1155')) {
+                // await contract.claim(0, mintAmount.value)
+                const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                let valueOverride = ((WeiToValue(transactionFee.toString()) + WeiToValue(preparedClaim.overrides.value.toString())) * 1000000000000000000).toString()
+                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                await preparedClaim.execute()
+            }
 
             messages.value.push({type: 'success', message: 'NFT minted!'})
         } catch (error) {
@@ -164,7 +178,7 @@ const mintNFT = async () => {
                             <p>Total minted</p>
                         </div>
                         <div class="text-right">
-                            <p v-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
+                            <p v-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
                             <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                         </div>
                     </div>

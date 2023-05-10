@@ -5,13 +5,14 @@ const getContractTypeName = (contractType) => {
     switch (contractType) {
         case 'ERC721': return 'nft-drop'
         case 'ERC1155': return 'edition-drop'
+        case 'ERC1155Evolve': return 'edition-drop'
         default: return 'nft-drop'
     }
 }
 
 const getClaimConditions = async (collection) => {
     const sdk = new ThirdwebSDK.ThirdwebSDK(collection.chain)
-    const contract = await sdk.getContract(collection.address, getContractTypeName(collection.type))
+    const contract = await sdk.getContract(collection.address)
     var claimConditions = []
     if (contract.constructor.name == 'NFTDrop') {
         claimConditions = await contract.claimConditions.getAll({withAllowList: false})

@@ -89,12 +89,12 @@ Route::domain(config('app.url'))->group(function () {
 });
 
 Route::domain(config('app.mint_url'))->group(function () {
-    // Mint layout
+    // Mint
     Route::get('{permalink}', [MintController::class, 'mint'])->name('mint.index');
 });
 
 Route::domain(config('app.embed_url'))->group(function () {
-    // Mint layout
+    // Mint
     Route::get('{address}', [MintController::class, 'embed'])->name('mint.embed');
 });
 

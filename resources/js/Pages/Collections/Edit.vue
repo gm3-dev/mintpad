@@ -316,7 +316,7 @@ const updateClaimPhases = async () => {
     try {
         if (props.collection.type == 'ERC721') {
             await contract.claimConditions.set(claimPhaseList)
-        } else if (props.collection.type == 'ERC1155') {
+        } else if (props.collection.type.startsWith('ERC1155')) {
             await contract.claimConditions.set(0, claimPhaseList)
         }
         validateClaimPhasesTab()
@@ -370,7 +370,7 @@ const updateCollection = async (e) => {
 
             collectionData.value.totalSupply = await contract.totalSupply()
             collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
-        } else if (props.collection.type == 'ERC1155') {
+        } else if (props.collection.type.startsWith('ERC1155')) {
             await contract.createBatch(collectionData.value.metadata)
 
             collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
@@ -517,7 +517,7 @@ const prepareFiles = async (files) => {
             data: []
         }
     }
-    if (props.collection.type == 'ERC1155' && (imagesLength > 1 || jsonLength > 1)) {
+    if (props.collection.type.startsWith('ERC1155') && (imagesLength > 1 || jsonLength > 1)) {
         return {
             status: 'error',
             message: 'Upload 1 image and 1 JSON file',
@@ -727,10 +727,10 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <Box v-if="collection.type == 'ERC721' || (collection.type == 'ERC1155' && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files">
+                    <Box v-if="collection.type == 'ERC721' || (collection.type.startsWith('ERC1155') && collectionData.nfts.length == 0)" class="mb-4" title="Add your collection files">
                         <BoxContent>
                             <p v-if="collection.type == 'ERC721'">Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate your collection.</p>
-                            <p v-if="collection.type == 'ERC1155'">Upload your artwork. If you have not yet generated your metadata, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate the metadata for your NFT. Visit our <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">documentation</Hyperlink> to learn how.</p>
+                            <p v-if="collection.type.startsWith('ERC1155')">Upload your artwork. If you have not yet generated your metadata, use our free <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">NFT generator</Hyperlink> to generate the metadata for your NFT. Visit our <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">documentation</Hyperlink> to learn how.</p>
                             <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
 
                             <label class="block text-mintpad-300 mb-4">
@@ -800,7 +800,7 @@ const deleteSocialImage = () => {
                         <BoxContent>
                             <div class="text-sm">
                                 <p v-if="collectionData.nfts.length == 0">Your collection is still empty.</p>
-                                <p v-else-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }} minted out of an unlimited supply.</p>
+                                <p v-else-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }} minted out of an unlimited supply.</p>
                                 <p v-else>Total minted {{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                                 <div class="grid grid-cols-4 mt-2">
                                     <div class="p-1 text-center text-sm" v-for="nft in collectionData.nfts">
@@ -840,13 +840,13 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <Box v-if="collection.type == 'ERC1155' && collectionData.nfts.length == 0" class="mb-4">
+                    <Box v-if="collection.type.startsWith('ERC1155') && collectionData.nfts.length == 0" class="mb-4">
                         <BoxContent>
                             <p class="">You need to upload an NFT first. You can do this in the <Hyperlink href="#" element="a" @click.prevent.native="changeStatusTab(2)">upload collection</Hyperlink> section.</p>
                         </BoxContent>
                     </Box>
 
-                    <Box v-if="collection.type == 'ERC1155' && collectionData.nfts.length > 0" title="Set maximum total supply">
+                    <Box v-if="collection.type.startsWith('ERC1155') && collectionData.nfts.length > 0" title="Set maximum total supply">
                         <BoxContent>
                             <div>
                                 <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
@@ -859,7 +859,7 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <div v-if="(collection.type == 'ERC1155' && collectionData.nfts.length > 0) || collection.type == 'ERC721'">
+                    <div v-if="(collection.type.startsWith('ERC1155') && collectionData.nfts.length > 0) || collection.type == 'ERC721'">
                         <Box v-for="(phase, index) in claimPhases" class="mb-4" :title="'Phase '+(index+1)">
                             <template v-slot:action>
                                 <a href="#" class="absolute right-8 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="deleteClaimPhase(index)">Delete phase</a>

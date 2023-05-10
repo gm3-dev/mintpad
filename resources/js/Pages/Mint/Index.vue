@@ -4,7 +4,7 @@ import BoxContent from '@/Components/BoxContent.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
-import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber } from '@/Helpers/Helpers'
+import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue } from '@/Helpers/Helpers'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
@@ -20,6 +20,7 @@ import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
 import LogoEditor from '@/Pages/Mint/Partials/LogoEditor.vue'
 import Messages from '@/Components/Messages.vue'
 import { resportError } from '@/Helpers/Sentry'
+import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -45,7 +46,10 @@ let collectionData = ref({
     theme: {
         primary: {r: 0, g: 119, b: 255, a: 1}
     },
-    claimPhases: []
+    claimPhases: [],
+    balance: {tier1: 0, tier2: 0},
+    nftsToBurn: 0,
+    transactionFee: 0
 })
 let editMode = ref(props.mode == 'edit' ? true : false)
 let loadComplete = ref(false)
@@ -92,6 +96,11 @@ onMounted(async () => {
             collectionData.value.totalSupply = dummyData.collection.totalSupply
             collectionData.value.totalClaimedSupply = dummyData.collection.totalClaimedSupply
             collectionData.value.totalRatioSupply = dummyData.collection.totalRatioSupply
+            collectionData.value.nftsToBurn = 2
+            collectionData.value.balance = {
+                tier1: 5,
+                tier2: 1
+            }
         } else {
             // Set contract
             let contract
@@ -108,13 +117,14 @@ onMounted(async () => {
                 collectionData.value.description = data.metadata.description
                 collectionData.value.feeRecipient = data.royalties.feeRecipient
                 collectionData.value.royalties = data.royalties.royalties+'%'
+                const transactionFee = await contract.call('getTransactionFee')
+                collectionData.value.transactionFee = WeiToValue(transactionFee.toString())
 
                 // Fees
                 collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
-                collectionData.value.platformFee = data.platformFees.platformFee
-                collectionData.value.platformFeeRecipient = data.platformFees.platformFeeRecipient
 
                 // Collection supply
+                collectionData.value.nftsToBurn = data.nftsToBurn
                 setSupplyData(contract)
                 setInterval(() => {
                     setSupplyData(contract)
@@ -148,9 +158,17 @@ const setSupplyData = async (contract) => {
     if (props.collection.type == 'ERC721') {
         collectionData.value.totalSupply = await contract.totalSupply()
         collectionData.value.totalClaimedSupply = await contract.totalClaimedSupply()
-    } else if (props.collection.type == 'ERC1155') {
+        collectionData.value.balance = {
+            tier1: await contract.balanceOf(wallet.value.account),
+            tier2: 0
+        }
+    } else if (props.collection.type.startsWith('ERC1155')) {
         collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
         collectionData.value.totalClaimedSupply = await contract.totalSupply(0)
+        collectionData.value.balance = {
+            tier1: await contract.balanceOf(wallet.value.account, 0),
+            tier2: await contract.balanceOf(wallet.value.account, 1)
+        }
     }
     collectionData.value.totalRatioSupply = Math.round((collectionData.value.totalClaimedSupply/collectionData.value.totalSupply)*100)
     if (isNaN(collectionData.value.totalRatioSupply)) {
@@ -258,16 +276,52 @@ const mintNFT = async (e) => {
         try {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-
             if (props.collection.type == 'ERC721') {
-                await contract.claim(mintAmount.value)
-            } else if (props.collection.type == 'ERC1155') {
-                await contract.claim(0, mintAmount.value)
+                // await contract.claim(mintAmount.value)
+                const preparedClaim = await contract.claim.prepare(mintAmount.value)
+                let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                await preparedClaim.execute()
+
+            } else if (props.collection.type.startsWith('ERC1155')) {
+                // await contract.claim(0, mintAmount.value)
+                const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                await preparedClaim.execute()
             }
 
             showModal.value = true
 
-            setSupplyData()
+            setSupplyData(contract)
+        } catch (error) {
+            let metamaskError = getMetaMaskError(error)
+            if (metamaskError) {
+                messages.value.push({type: 'error', message: metamaskError})
+            } else {
+                resportError(error)
+                messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+            }
+        }
+
+        buttonLoading.value = false
+    }
+}
+const evolveNFT = async (e) => {
+    if (editMode.value) {
+        showModal.value = true
+    } else {
+
+        buttonLoading.value = true
+        try {
+            if (props.collection.type == 'ERC1155Evolve') {
+                const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
+                const firstClaimPhase = await contract.call('getClaimConditionById', 0, 0)
+                let valueOverride = (collectionData.value.transactionFee * 1000000000000000000).toString()
+                await contract.call('evolve', wallet.value.account, firstClaimPhase.currency, {
+                    value: valueOverride
+                })
+            }
         } catch (error) {
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
@@ -378,12 +432,16 @@ const mintNFT = async (e) => {
                                     <p>Total minted</p>
                                 </div>
                                 <div class="text-right">
-                                    <p v-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
+                                    <p v-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
                                     <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                                 </div>
                             </div>
                             <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
                                 <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
+                            </div>
+                            <div v-if="collection.type == 'ERC1155Evolve'" class="text-center">
+                                <p class="my-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>
+                                <Button @click.prevent="evolveNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Evolve</Button>
                             </div>
                         </form>
                     </BoxContent>
@@ -396,6 +454,9 @@ const mintNFT = async (e) => {
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
+                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.transactionFee+' '+blockchains[collection.chain_id].nativeCurrency.symbol"></p>
+                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
+                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
                     </BoxContent>
                 </Box>

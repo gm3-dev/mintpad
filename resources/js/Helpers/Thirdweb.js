@@ -30,6 +30,7 @@ function getContractTypeName(contractType) {
     switch (contractType) {
         case 'ERC721': return 'nft-drop'
         case 'ERC1155': return 'edition-drop'
+        case 'ERC1155Evolve': return 'edition-drop'
         default: return 'nft-drop'
     }
 }
@@ -42,8 +43,11 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         // royalties
         const royalties = await contract.royalties.getDefaultRoyaltyInfo()
     
-        // Fees
-        const platformFees = await contract.platformFees.get()
+        // Burn
+        let nftsToBurn = 0;
+        if (contractType.startsWith('ERC1155')) {
+            nftsToBurn = await contract.call('numberToBurn')
+        }
     
         // Sales
         const primarySalesRecipient = await contract.sales.getRecipient()
@@ -52,7 +56,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         let claimConditions = []
         if (contractType == 'ERC721') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
-        } else if (contractType == 'ERC1155') {
+        } else if (contractType.startsWith('ERC1155')) {
             claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
         }
         // const activeClaimCondition = await contract.claimConditions.getActive()
@@ -62,7 +66,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             var totalSupply = await contract.totalSupply()
             var totalClaimedSupply = await contract.totalClaimedSupply()
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
-        } else if (contractType == 'ERC1155') {
+        } else if (contractType.startsWith('ERC1155')) {
             var totalSupply = await contract.call('maxTotalSupply', 0)
             var totalClaimedSupply = await contract.totalSupply(0)
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
@@ -78,13 +82,10 @@ export async function getCollectionData(contract, contractType, withAllowList, w
                 feeRecipient: royalties.fee_recipient,
                 royalties: royalties.seller_fee_basis_points / 100
             },
-            platformFees: {
-                platformFee: platformFees.platform_fee_basis_points / 100,
-                platformFeeRecipient: platformFees.platform_fee_recipient
-            },
             sales: {
                 primarySalesRecipient: primarySalesRecipient
             },
+            nftsToBurn: nftsToBurn,
             claimConditions: claimConditions,
             nfts: nfts,
             totalSupply: totalSupply,

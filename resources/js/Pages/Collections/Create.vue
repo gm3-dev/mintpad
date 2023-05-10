@@ -17,6 +17,11 @@ import { getSDKFromSigner } from '@/Helpers/Thirdweb'
 import Messages from '@/Components/Messages.vue'
 import { resportError } from '@/Helpers/Sentry'
 import { getMetaMaskError } from '@/Wallets/MetaMask'
+import axios from 'axios'
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
+}
 
 let wallet = ref(false)
 let loading = ref(true)
@@ -69,6 +74,21 @@ const deployContract = async () => {
         return
     }
 
+    const currentBlockchain = blockchains.value[form.chain_id]
+    let transactionFee = (0.001 * 1000000000000000000).toString()
+    if (currentBlockchain.testnet == false) {
+        const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
+            return response
+        })
+        if (coingeckoData.data[currentBlockchain.coingecko] !== undefined) {
+            const tokenPrice = coingeckoData.data[currentBlockchain.coingecko].usd
+            transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
+        } else {
+            messages.value.push({type: 'error', message: 'Error while setting contract data'})
+            return
+        }
+    }
+
     // Validate form
     let error = false
     if (form.royalties.length < 1) {
@@ -92,24 +112,24 @@ const deployContract = async () => {
         // Deploy contract
         const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
 
-        let parameters = {
-            name: form.name,
-            symbol: form.symbol,
-            description: form.description,
-            primary_sale_recipient: wallet.value.account, // primary sales
-            fee_recipient: wallet.value.account, // royalties address
-            seller_fee_basis_points: form.royalties * 100, // royalties address
-            platform_fee_recipient: import.meta.env.VITE_WALLET, // platform fee address
-            platform_fee_basis_points: 500, // platform fee (5%)
-            totalSupply: form.totalSupply // Solana only
-        }
+        let parameters = [
+            wallet.value.account, // _defaultAdmin
+            form.name, // _name
+            form.symbol, // _symbol
+            wallet.value.account, // _saleRecipient
+            transactionFee, // _transactionFee
+            wallet.value.account, // _royaltyRecipient
+            form.royalties * 100, // _royaltyBps
+        ]
         
         let contractAddress = false
         try {
             if (form.type == 'ERC721') {
-                contractAddress = await sdk.deployer.deployNFTDrop(parameters)
+                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC721Drop', parameters)
             } else if (form.type == 'ERC1155') {
-                contractAddress = await sdk.deployer.deployEditionDrop(parameters)
+                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Drop', parameters)
+            } else if (form.type == 'ERC1155Evolve') {
+                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Evolve', parameters)
             } else {
                 throw new Error('Invalid contract type: ' + form.type)
             }
@@ -149,7 +169,7 @@ const deployContract = async () => {
                 </div>
 
                 <Box v-if="form.type == ''" class="w-full mb-4" title="Choose your smart contract type">
-                    <BoxContent class="text-center py-14">
+                    <BoxContent class="flex gap-2 py-14">
                         <button @click.prevent="selectContractType('ERC721')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                             <h2>NFT Drop</h2>
                             <p>Release collection of unique NFTs for a set price</p>
@@ -157,6 +177,10 @@ const deployContract = async () => {
                         <button @click.prevent="selectContractType('ERC1155')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                             <h2>Open Edition Drop</h2>
                             <p>Release ERC1155 tokens for a set price.</p>
+                        </button>
+                        <button @click.prevent="selectContractType('ERC1155Evolve')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                            <h2>Open Edition Evolution Drop</h2>
+                            <p>Release ERC1155 tokens for a set price with the possibility to evolve them by burning NFTs.</p>
                         </button>
                     </BoxContent>
                 </Box>
