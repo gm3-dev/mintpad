@@ -114,7 +114,6 @@ onMounted(async () => {
 
                 // Settings
                 collectionData.value.name = data.metadata.name
-                collectionData.value.description = data.metadata.description
                 collectionData.value.feeRecipient = data.royalties.feeRecipient
                 collectionData.value.royalties = data.royalties.royalties+'%'
                 const transactionFee = await contract.call('getTransactionFee')
@@ -455,19 +454,14 @@ const evolveNFT = async (e) => {
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
                             <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.transactionFee+' '+blockchains[collection.chain_id].nativeCurrency.symbol"></p>
-                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
-                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
+                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
+                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
                     </BoxContent>
                 </Box>
                 <Box v-if="editMode || collectionData.buttons.length" class="sm:col-span-3">
                     <BoxContent>
                         <ButtonEditor :edit-mode="editMode" :collection-data="collectionData" />
-                    </BoxContent>
-                </Box>
-                <Box class="sm:col-span-3" title="Description">
-                    <BoxContent>
-                        <p class="font-regular">{{ collection.description }}</p>
                     </BoxContent>
                 </Box>
             </div>

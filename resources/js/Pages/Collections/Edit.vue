@@ -67,7 +67,7 @@ let tabStatus = ref({
 const form = {
     metadata: useForm({
         name: '',
-        description: ''
+        salesRecipient: ''
     }),
     royalties: useForm({
         feeRecipient: '',
@@ -130,7 +130,7 @@ onMounted(async () => {
 
             // Settings
             form.metadata.name = data.metadata.name
-            form.metadata.description = data.metadata.description == undefined ? '' : data.metadata.description
+            form.metadata.salesRecipient = data.sales.primarySalesRecipient
             form.metadata.defaults()
             form.royalties.feeRecipient = data.royalties.feeRecipient
             form.royalties.royalties = data.royalties.royalties
@@ -166,8 +166,9 @@ const updateMetadata = async () => {
     let error = false
     if (form.metadata.name.length < 3) {
         error = 'Collection name must be at least 3 characters long'
-    } else if (form.metadata.description.length < 3) {
-        error = 'Collection description must be at least 3 characters long'
+    }
+    if (form.metadata.salesRecipient.length < 10) {
+        error = 'Recipient address is not valid'
     }
     if (error) {
         messages.value.push({type: 'error', message: error})
@@ -238,13 +239,6 @@ const updateMintSettings = () => {
     }
 
     buttonLoading.value = 'Updating mint settings'
-
-    // var data = {
-    //     permalink: this.collection.permalink,
-    //     title: this.collection.seo.title,
-    //     description: this.collection.seo.description,
-    //     image: this.collection.seo.image
-    // }
 
     form.mint.put(route('collections.update-mint', props.collection.id), {
         onFinish: (response) => {
@@ -517,10 +511,17 @@ const prepareFiles = async (files) => {
             data: []
         }
     }
-    if (props.collection.type.startsWith('ERC1155') && (imagesLength > 1 || jsonLength > 1)) {
+    if (props.collection.type == 'ERC1155' && (imagesLength > 1 || jsonLength > 1)) {
         return {
             status: 'error',
             message: 'Upload 1 image and 1 JSON file',
+            data: []
+        }
+    }
+    if (props.collection.type == 'ERC1155Evolve' && (imagesLength > 2 || imagesLength < 2 || jsonLength > 2 || jsonLength < 2)) {
+        return {
+            status: 'error',
+            message: 'Upload 2 images and 2 JSON files',
             data: []
         }
     }
@@ -604,7 +605,7 @@ const validateTabStatus = () => {
 }
 const validateSettingsTab = () => {
     tabStatus.value.settings = 1
-    if (form.metadata.name.trim() == '' || form.metadata.description.trim() == '' || form.royalties.royalties === '' || form.royalties.feeRecipient.trim() === '') {
+    if (form.metadata.name.trim() == '' || form.metadata.salesRecipient.trim() === '' || form.royalties.royalties === '' || form.royalties.feeRecipient.trim() === '') {
         tabStatus.value.settings = 0
     }
 }
@@ -690,8 +691,8 @@ const deleteSocialImage = () => {
                                             <Input type="text" id="name" class="w-full" v-model="form.metadata.name" autofocus />
                                         </div>
                                         <div class="basis-full">
-                                            <Label for="description" value="Collection description" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
-                                            <Textarea id="description" class="w-full mb-4" v-model="form.metadata.description"></Textarea>
+                                            <Label for="sales_recipient" value="Sales recipient address" class="relative" info="This is the wallet address where the revenue from initial sales of your NFT collection go." />
+                                            <Input id="sales_recipient" class="w-full" v-model="form.metadata.salesRecipient" />
                                         </div>
                                     </div>
                                 </BoxContent>

@@ -35,12 +35,14 @@ let transaction = ref({show: false, message: ''})
 const form = useForm({
     chain_id: 1,
     type: '',
-    symbol: '',
-    royalties: 0,
+    address: '',
     name: '',
-    description: '',
-    address: ''
+    symbol: '',
+    feeRecipient: '',
+    royalties: 0,
+    salesRecipient: ''
 })
+console.log(form)
 provide('wallet', wallet)
 provide('transaction', transaction)
 
@@ -55,6 +57,10 @@ onMounted(async () => {
     form.chain_id = wallet.value.chainId
     validBlockchain.value = checkCurrentBlockchain(blockchains, form.chain_id, wallet)
     blockchainList.value = getSelectInputBlockchainObject(blockchains)
+
+    // Set form data
+    form.salesRecipient = wallet.value.account
+    form.feeRecipient = wallet.value.account
 
     // Done loading
     loading.value = false
@@ -99,8 +105,10 @@ const deployContract = async () => {
         error = 'Symbol / ticker must be at least 2 characters long'
     } else if (form.name.length < 3) {
         error = 'Collection name must be at least 3 characters long'
-    } else if (form.description.length < 3) {
-        error = 'Collection description must be at least 3 characters long'
+    } else if (form.salesRecipient.length < 10) {
+        error = 'Recipient address is not valid'
+    } else if (form.feeRecipient.length < 10) {
+        error = 'Recipient address is not valid'
     }
     if (error) {
         messages.value.push({type: 'error', message: error})
@@ -116,9 +124,9 @@ const deployContract = async () => {
             wallet.value.account, // _defaultAdmin
             form.name, // _name
             form.symbol, // _symbol
-            wallet.value.account, // _saleRecipient
+            form.salesRecipient, // _saleRecipient
             transactionFee, // _transactionFee
-            wallet.value.account, // _royaltyRecipient
+            form.feeRecipient, // _royaltyRecipient
             form.royalties * 100, // _royaltyBps
         ]
         
@@ -188,27 +196,31 @@ const deployContract = async () => {
                 <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'">
                     <BoxContent>
                         <div class="w-full flex flex-wrap">
-                            <div class="basis-full sm:basis-1/3">
+                            <div class="basis-full sm:basis-1/2">
                                 <Label for="symbol" value="Blockchain" class="relative" info="Choose which blockchain you want to launch your NFT collection on." />
                                 <Select class="!w-full mb-4" v-model="form.chain_id" :options="blockchainList"></Select>
                             </div>
-                            <div class="basis-full sm:basis-1/3 px-0 sm:px-4">
+                            <div class="basis-full sm:basis-1/2 px-0 sm:pl-4">
                                 <Label for="symbol" value="Symbol / Ticker" class="relative" info="You can compare the symbol with a stock ticker. We recommend making this a shortened version of your collection's name. For example, for the collection name 'Mintpad NFT', the Symbol/Ticker could be 'MPNFT'. Keep it under 5 characters." />
                                 <Input id="symbol" class="mb-4" type="text" v-model="form.symbol" />
-                            </div>
-                            <div class="basis-full sm:basis-1/3">
-                                <Label for="royalties" value="Creator royalties (%)" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
-                                <Addon position="right" content="%">
-                                    <Input id="royalties" class="mb-4 addon-right" step=".01" min="0" max="100" type="number" v-model="form.royalties" />
-                                </Addon>
                             </div>
                             <div class="basis-full">
                                 <Label for="name" value="Collection name" class="relative" info="This is the name of your NFT collection." />
                                 <Input id="name" class="mb-4" type="text" v-model="form.name" />
                             </div>
                             <div class="basis-full">
-                                <Label for="description" value="Collection description" info="This should be a short description of your collection. This is displayed on marketplaces where people can trade your NFT." />
-                                <Textarea id="description" class="w-full" v-model="form.description"></Textarea>
+                                <Label for="sales_recipient" value="Sales recipient address" class="relative" info="This is the wallet address where the revenue from initial sales of your NFT collection go." />
+                                <Input id="sales_recipient" class="w-full" v-model="form.salesRecipient" />
+                            </div>
+                            <div class="basis-full sm:basis-2/3">
+                                <Label for="fee_recipient" value="Royalty recipient address" class="relative" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
+                                <Input id="fee_recipient" class="w-full" v-model="form.feeRecipient" />
+                            </div>
+                            <div class="basis-full sm:basis-1/3 sm:pl-4">
+                                <Label for="royalties" value="Creator royalties (%)" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
+                                <Addon position="right" content="%">
+                                    <Input id="royalties" class="mb-4 addon-right" step=".01" min="0" max="100" type="number" v-model="form.royalties" />
+                                </Addon>
                             </div>
                         </div>
                     </BoxContent>

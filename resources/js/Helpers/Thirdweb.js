@@ -75,8 +75,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
     
         return {
             metadata: {
-                name: metadata.name,
-                description: metadata.description
+                name: metadata.name
             },
             royalties: {
                 feeRecipient: royalties.fee_recipient,

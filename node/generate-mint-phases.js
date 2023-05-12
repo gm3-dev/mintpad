@@ -12,7 +12,7 @@ const getContractTypeName = (contractType) => {
 
 const getClaimConditions = async (collection) => {
     const sdk = new ThirdwebSDK.ThirdwebSDK(collection.chain)
-    const contract = await sdk.getContract(collection.address)
+    const contract = await sdk.getContract(collection.address, getContractTypeName(collection.type))
     var claimConditions = []
     if (contract.constructor.name == 'NFTDrop') {
         claimConditions = await contract.claimConditions.getAll({withAllowList: false})

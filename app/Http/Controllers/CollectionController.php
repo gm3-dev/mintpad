@@ -52,7 +52,6 @@ class CollectionController extends Controller
             'name' => 'required',
             'type' => 'required',
             'royalties' => 'required|numeric|between:0,100',
-            'description' => 'required',
             'symbol' => 'required',
             'chain_id' => 'required|numeric',
             'address' => 'required'
@@ -67,7 +66,6 @@ class CollectionController extends Controller
         $collection->name  = $request->get('name');
         $collection->type  = $request->get('type');
         $collection->permalink  = $permalink;
-        $collection->description  = $request->get('description');
         $collection->symbol  = $request->get('symbol');
         $collection->royalties  = $request->get('royalties');
         $collection->chain_id  = $request->get('chain_id');
@@ -157,7 +155,6 @@ class CollectionController extends Controller
             $data = $request->all();
 
             $collection->name  = $data['name'] ?? '';
-            $collection->description  = $data['description'] ?? '';
             $collection->save();
 
             return Redirect::back();
