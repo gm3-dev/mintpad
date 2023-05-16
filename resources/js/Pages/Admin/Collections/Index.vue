@@ -67,7 +67,6 @@ const openCollectionModal = async (collectionID) => {
 
         // Settings
         collectionData.value.name = data.metadata.name
-        collectionData.value.description = data.metadata.description
         collectionData.value.feeRecipient = data.royalties.feeRecipient
         collectionData.value.royalties = data.royalties.royalties
 

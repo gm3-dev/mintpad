@@ -154,7 +154,7 @@ onMounted(async () => {
                 setRevealBatches(contract)
             }
         } catch(error) {
-            //
+            console.log('error', error)
         }
 
         // Set tab status

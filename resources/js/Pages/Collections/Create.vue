@@ -42,7 +42,6 @@ const form = useForm({
     royalties: 0,
     salesRecipient: ''
 })
-console.log(form)
 provide('wallet', wallet)
 provide('transaction', transaction)
 
@@ -142,6 +141,7 @@ const deployContract = async () => {
                 throw new Error('Invalid contract type: ' + form.type)
             }
         } catch (error) {
+            console.log('error 1', error)
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
@@ -157,6 +157,8 @@ const deployContract = async () => {
             form.post(route('collections.store'), {})
         }
     } catch(error) {
+        console.log('error 2', error)
+
         resportError(error)
         messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
     }

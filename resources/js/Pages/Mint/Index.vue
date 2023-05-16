@@ -38,6 +38,7 @@ let buttonLoading = ref(false)
 let messages = ref([])
 
 let collectionData = ref({
+    oldContract: props.collection.description !== null,
     id: props.collection.id,
     buttons: {},
     logo: null,
@@ -49,7 +50,7 @@ let collectionData = ref({
     claimPhases: [],
     balance: {tier1: 0, tier2: 0},
     nftsToBurn: 0,
-    transactionFee: 0
+    transactionFee: 0,
 })
 let editMode = ref(props.mode == 'edit' ? true : false)
 let loadComplete = ref(false)
@@ -116,8 +117,12 @@ onMounted(async () => {
                 collectionData.value.name = data.metadata.name
                 collectionData.value.feeRecipient = data.royalties.feeRecipient
                 collectionData.value.royalties = data.royalties.royalties+'%'
-                const transactionFee = await contract.call('getTransactionFee')
-                collectionData.value.transactionFee = WeiToValue(transactionFee.toString())
+                if (collectionData.value.oldContract) {
+                    collectionData.value.transactionFee = 0
+                } else {
+                    let transactionFee = await contract.call('getTransactionFee')
+                    collectionData.value.transactionFee = WeiToValue(transactionFee.toString())
+                }
 
                 // Fees
                 collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
@@ -137,12 +142,14 @@ onMounted(async () => {
                 loadComplete.value = true
                 
             } catch (error) {
+                console.log('mint 1', error)
                 resportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
 
         }
     }).catch((error) => {
+        console.log('mint 2', error)
         //
     })
 })
@@ -276,18 +283,23 @@ const mintNFT = async (e) => {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
             if (props.collection.type == 'ERC721') {
-                // await contract.claim(mintAmount.value)
-                const preparedClaim = await contract.claim.prepare(mintAmount.value)
-                let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
-                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
-                await preparedClaim.execute()
-
+                if (collectionData.value.oldContract) {
+                    await contract.claim(mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(mintAmount.value)
+                    let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                    preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                    await preparedClaim.execute()
+                }
             } else if (props.collection.type.startsWith('ERC1155')) {
-                // await contract.claim(0, mintAmount.value)
-                const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
-                let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
-                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
-                await preparedClaim.execute()
+                if (collectionData.value.oldContract) {
+                    await contract.claim(0, mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                    let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                    preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                    await preparedClaim.execute()
+                }
             }
 
             showModal.value = true
