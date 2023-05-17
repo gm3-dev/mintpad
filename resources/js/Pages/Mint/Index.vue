@@ -306,6 +306,7 @@ const mintNFT = async (e) => {
 
             setSupplyData(contract)
         } catch (error) {
+            console.log('mint error', error)
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
