@@ -76,14 +76,16 @@ const mintNFT = async () => {
             if (props.collection.type == 'ERC721') {
                 // await contract.claim(mintAmount.value)
                 const preparedClaim = await contract.claim.prepare(mintAmount.value)
-                let valueOverride = ((WeiToValue(transactionFee.toString()) + WeiToValue(preparedClaim.overrides.value.toString())) * 1000000000000000000).toString()
+                const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                let valueOverride = ((WeiToValue(transactionFee.toString()) + overrideValue) * 1000000000000000000).toString()
                 preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                 await preparedClaim.execute()
 
             } else if (props.collection.type.startsWith('ERC1155')) {
                 // await contract.claim(0, mintAmount.value)
                 const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
-                let valueOverride = ((WeiToValue(transactionFee.toString()) + WeiToValue(preparedClaim.overrides.value.toString())) * 1000000000000000000).toString()
+                const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                let valueOverride = ((WeiToValue(transactionFee.toString()) + overrideValue) * 1000000000000000000).toString()
                 preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                 await preparedClaim.execute()
             }

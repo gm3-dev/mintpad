@@ -278,6 +278,8 @@ const mintNFT = async (e) => {
             return
         }
 
+        console.log(collectionData.value.oldContract)
+
         buttonLoading.value = true
         try {
             // Set contract
@@ -287,7 +289,8 @@ const mintNFT = async (e) => {
                     await contract.claim(mintAmount.value)
                 } else {
                     const preparedClaim = await contract.claim.prepare(mintAmount.value)
-                    let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                     await preparedClaim.execute()
                 }
@@ -296,7 +299,8 @@ const mintNFT = async (e) => {
                     await contract.claim(0, mintAmount.value)
                 } else {
                     const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
-                    let valueOverride = ((collectionData.value.transactionFee + WeiToValue(preparedClaim.overrides.value)) * 1000000000000000000).toString()
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                     await preparedClaim.execute()
                 }
@@ -466,7 +470,7 @@ const evolveNFT = async (e) => {
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
-                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ oldContract ? '-' : '~1$' }}</p>
+                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.oldContract ? '-' : '~1$' }}</p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
