@@ -465,7 +465,7 @@ const evolveNFT = async (e) => {
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
-                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.transactionFee+' '+blockchains[collection.chain_id].nativeCurrency.symbol"></p>
+                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ oldContract ? '-' : '~1$' }}</p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
