@@ -88,7 +88,6 @@ watch(wallet, () => {
                             <DropdownLink v-if="route().current('admin.*')" :href="route('collections.index')">User panel</DropdownLink>
                             <DropdownLink :href="route('users.profile')">My profile</DropdownLink>
                             <DropdownLink :href="route('users.2fa')">2fa settings</DropdownLink>
-                            <DropdownLink :href="route('users.invoices')">Invoices</DropdownLink>
                             <DropdownLink :href="route('logout')" method="post" as="button">Log Out</DropdownLink>
                         </template>
                     </Dropdown>

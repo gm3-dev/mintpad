@@ -69,8 +69,6 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('two-factor-authentication', [UserController::class, 'twoFactorAuthSettings'])->name('users.2fa');
         Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
         Route::put('profile', [UserController::class, 'update'])->name('users.update');
-        Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
-        Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
         // Editor layout
         Route::get('mint-editor/{collection}', [MintController::class, 'mint'])->name('editor.mint');
