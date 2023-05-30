@@ -901,7 +901,7 @@ const deleteSocialImage = () => {
                                         <p class="text-sm"><ButtonGray href="#" @click.prevent="toggleWhitelistModal(index, true)">Upload CSV</ButtonGray><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                                     </div>
 
-                                    <Modal title="Whitelist addresses" :show="phase.modal" @close.prevent="toggleWhitelistModal(index, false)">
+                                    <Modal title="Whitelist addresses" :show="phase.modal" @close="toggleWhitelistModal(index, false)">
                                         <div class="overflow-y-auto" :class="{'max-h-80 bg-primary-100 dark:bg-mintpad-800 rounded-md border border-primary-200 dark:border-mintpad-900': phase.snapshot != 0}">
                                             <div v-if="phase.snapshot != 0" class="p-4">
                                                 <p v-for="walletAddress in phase.snapshot">{{ walletAddress.address }}</p>
