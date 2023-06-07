@@ -182,6 +182,7 @@ class CollectionController extends Controller
             $data = $request->all();
 
             $collection->permalink = $data['permalink'] ?? '';
+            $collection->description = $data['description'] ?? '';
             $collection->setMeta('seo.title', $data['seo']['title'] ?? '');
             $collection->setMeta('seo.description', $data['seo']['description'] ?? '');
             $collection->setMeta('seo.image', $data['image'] ?? '');

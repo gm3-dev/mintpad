@@ -91,8 +91,8 @@ const closeModal = () => {
     collectionData.value.show = false
     collectionData.value.loading = true
 }
-const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+const switchBlockchain = async (chainId) => {
+    const status = await switchBlockchainTo(chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }
@@ -120,7 +120,7 @@ const switchBlockchain = async () => {
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
                         <LinkBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</LinkBlue>
                         <span v-if="wallet.chainId != collection.chain_id" :content="'You need to switch to '+blockchains[collection.chain_id].nativeCurrency.symbol" v-tippy>
-                            <ButtonGray href="#" @click.prevent="switchBlockchain" class="ml-2 !px-2 w-24">Switch</ButtonGray>
+                            <ButtonGray href="#" @click.prevent="switchBlockchain(collection.chain_id)" class="ml-2 !px-2 w-24">Switch</ButtonGray>
                         </span>
                         <Button v-else href="#" @click.prevent="openCollectionModal(collection.id)" class="ml-2 !px-2 w-24">More info</Button>
                         <a href="#" @click.prevent="deleteCollection(collection.id)" class="ml-2 hover:text-red-700"><i class="fas fa-trash-alt"></i></a>

@@ -1,7 +1,7 @@
 <script setup>
 import Navigation from '@/Components/Navigation.vue'
 import Button from '@/Components/Form/Button.vue'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import { switchBlockchainTo } from '@/Wallets/MetaMask'
 import { connectWallet } from '@/Wallets/Wallet'
 import Modal from '@/Components/Modal.vue'
@@ -12,7 +12,12 @@ const props = defineProps({
     transaction: [Boolean, String],
     validBlockchain: [Boolean, String],
 })
+let transactionMessage = ref(false)
 const emitter = inject('emitter')
+
+emitter.on('set-transaction', (message) => {
+    transactionMessage.value = message
+})
 
 const switchBlockchain = async () => {
     const status = await switchBlockchainTo(props.chainId)
@@ -25,14 +30,14 @@ const switchBlockchain = async () => {
     <div class="main-container min-h-screen bg-primary-100 dark:bg-mintpad-500">
         <Navigation />
 
-        <div v-if="transaction != false" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity">
+        <div v-if="transaction != false || transactionMessage != false" class="fixed z-40 inset-0 bg-gray-200 dark:bg-mintpad-500 bg-opacity-50 dark:bg-opacity-50 transition-opacity">
             <Modal :show="true" :show-close="false" title="Transaction status">
                 <div class="flex items-center">
                     <div class="pr-4">
                         <i class="text-3xl fa-solid fa-spinner animate-spin"></i>
                     </div>
                     <div>
-                        <h4>{{ transaction }}</h4>
+                        <h3 class="mb-0">{{ transaction != false ? transaction : transactionMessage }}</h3>
                         <p>Your wallet will prompt you to sign the transaction</p>
                     </div>
                 </div>

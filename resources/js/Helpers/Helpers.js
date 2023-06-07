@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import $ from 'jquery'
 import { toRaw, unref } from 'vue'
 
@@ -169,4 +170,41 @@ export function getDummyCollection() {
         2: {state: 'Starts', days: '00', hours: '11', minutes: '22', seconds: '33'},
     }
     return {collection, claimPhases, timers}
+}
+
+export function getAllowedNFTTypes() {
+    return [
+        'video/mp4', 
+        'image/jpeg', 
+        'image/png', 
+        'image/jpg', 
+        'image/gif'
+    ]
+}
+
+export function fileIsImage(type) {
+    const allowedTypes = [
+        'image/jpeg', 
+        'image/png', 
+        'image/jpg', 
+        'image/gif'
+    ]
+    return allowedTypes.includes(type)
+}
+
+export function fileIsVideo(type) {
+    const allowedTypes = [
+        'video/mp4'
+    ]
+    return allowedTypes.includes(type)
+}
+
+export function formatTransactionFee(fee) {
+    const feeData = parseFloat(fee).toString().split('.')
+    if (feeData[1].length > 18) {
+        feeData[1] = feeData[1].slice(0, 18)
+        fee = feeData.join('.')
+    }
+    
+    return ethers.utils.parseUnits(fee.toString(), 18).toString()
 }

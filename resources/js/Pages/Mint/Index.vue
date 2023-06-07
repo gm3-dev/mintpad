@@ -38,7 +38,7 @@ let buttonLoading = ref(false)
 let messages = ref([])
 
 let collectionData = ref({
-    oldContract: props.collection.description !== null,
+    contractType: 'ERC721',
     id: props.collection.id,
     buttons: {},
     logo: null,
@@ -48,9 +48,11 @@ let collectionData = ref({
         primary: {r: 0, g: 119, b: 255, a: 1}
     },
     claimPhases: [],
-    balance: {tier1: 0, tier2: 0},
+    balance: {tier1: '...', tier2: '...'},
     nftsToBurn: 0,
     transactionFee: 0,
+    totalSupply: '...',
+    royalties: '...'
 })
 let editMode = ref(props.mode == 'edit' ? true : false)
 let loadComplete = ref(false)
@@ -111,13 +113,15 @@ onMounted(async () => {
                 contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
             try {
-                const data = await getCollectionData(contract, props.collection.type, true, false)
+                const data = await getCollectionData(contract, props.collection.type, true, false)            
+                const contractType = await contract.call('contractType')
 
                 // Settings
+                collectionData.value.contractType = ethers.utils.parseBytes32String(contractType)
                 collectionData.value.name = data.metadata.name
                 collectionData.value.feeRecipient = data.royalties.feeRecipient
                 collectionData.value.royalties = data.royalties.royalties+'%'
-                if (collectionData.value.oldContract) {
+                if (collectionData.value.contractType == 'DropERC721' || collectionData.value.contractType == 'DropERC1155') {
                     collectionData.value.transactionFee = 0
                 } else {
                     let transactionFee = await contract.call('getTransactionFee')
@@ -169,7 +173,7 @@ const setSupplyData = async (contract) => {
             tier2: 0
         }
     } else if (props.collection.type.startsWith('ERC1155')) {
-        collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
+        collectionData.value.totalSupply = await contract.call('maxTotalSupply', [0])
         collectionData.value.totalClaimedSupply = await contract.totalSupply(0)
         collectionData.value.balance = {
             tier1: await contract.balanceOf(wallet.value.account, 0),
@@ -278,29 +282,29 @@ const mintNFT = async (e) => {
             return
         }
 
-        console.log(collectionData.value.oldContract)
-
         buttonLoading.value = true
         try {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
             if (props.collection.type == 'ERC721') {
-                if (collectionData.value.oldContract) {
+                if (collectionData.value.contractType == 'DropERC721') {
                     await contract.claim(mintAmount.value)
                 } else {
                     const preparedClaim = await contract.claim.prepare(mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                    let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
                     preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                     await preparedClaim.execute()
                 }
             } else if (props.collection.type.startsWith('ERC1155')) {
-                if (collectionData.value.oldContract) {
+                if (collectionData.value.contractType == 'DropERC1155') {
                     await contract.claim(0, mintAmount.value)
                 } else {
                     const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                    let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
                     preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
                     await preparedClaim.execute()
                 }
@@ -332,7 +336,7 @@ const evolveNFT = async (e) => {
         try {
             if (props.collection.type == 'ERC1155Evolve') {
                 const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-                const firstClaimPhase = await contract.call('getClaimConditionById', 0, 0)
+                const firstClaimPhase = await contract.call('getClaimConditionById', [0, 0])
                 let valueOverride = (collectionData.value.transactionFee * 1000000000000000000).toString()
                 await contract.call('evolve', wallet.value.account, firstClaimPhase.currency, {
                     value: valueOverride
@@ -470,7 +474,7 @@ const evolveNFT = async (e) => {
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
-                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.oldContract ? '-' : '~1$' }}</p>
+                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                             <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
@@ -479,6 +483,11 @@ const evolveNFT = async (e) => {
                 <Box v-if="editMode || collectionData.buttons.length" class="sm:col-span-3">
                     <BoxContent>
                         <ButtonEditor :edit-mode="editMode" :collection-data="collectionData" />
+                    </BoxContent>
+                </Box>
+                <Box v-if="collection.description != ''" class="sm:col-span-3" title="Description">
+                    <BoxContent>
+                        <p class="font-regular">{{ collection.description }}</p>
                     </BoxContent>
                 </Box>
             </div>

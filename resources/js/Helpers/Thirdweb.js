@@ -61,17 +61,19 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         }
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
+        // NFTs
+        const nfts = withNfts ? await contract.getAll({count: 8}) : []
+
         // Collection
         if (contractType == 'ERC721') {
             var totalSupply = await contract.totalSupply()
             var totalClaimedSupply = await contract.totalClaimedSupply()
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         } else if (contractType.startsWith('ERC1155')) {
-            var totalSupply = await contract.call('maxTotalSupply', 0)
+            var totalSupply = await contract.call('maxTotalSupply', [0])
             var totalClaimedSupply = await contract.totalSupply(0)
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         }
-        const nfts = withNfts ? await contract.getAll({count: 8}) : []
     
         return {
             metadata: {

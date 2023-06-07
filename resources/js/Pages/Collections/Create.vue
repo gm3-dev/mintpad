@@ -8,16 +8,18 @@ import BoxContent from '@/Components/BoxContent.vue'
 import Box from '@/Components/Box.vue'
 import Label from '@/Components/Form/Label.vue'
 import Input from '@/Components/Form/Input.vue'
-import Textarea from '@/Components/Form/Textarea.vue'
 import Select from '@/Components/Form/Select.vue'
 import Addon from '@/Components/Form/Addon.vue'
 import { getBlockchains, checkCurrentBlockchain } from '@/Helpers/Blockchain'
-import { getSelectInputBlockchainObject } from '@/Helpers/Helpers'
+import { formatTransactionFee, getSelectInputBlockchainObject } from '@/Helpers/Helpers'
 import { getSDKFromSigner } from '@/Helpers/Thirdweb'
 import Messages from '@/Components/Messages.vue'
 import { resportError } from '@/Helpers/Sentry'
 import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
+import LinkLightBlue from '@/Components/LinkLightBlue.vue'
+import { ethers } from 'ethers'
+import { MetaMaskWallet } from "@thirdweb-dev/wallets";
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -52,6 +54,17 @@ onMounted(async () => {
         wallet.value = await connectWallet(walletName, false)
     }
 
+    // const walletWithOptions = new MetaMaskWallet({
+    //     dappMetadata: {
+    //         name: "Mintpad",
+    //         url: "https://mintpad.co",
+    //         description: "Mintpad",
+    //         logoUrl: "https://app.mintpad.co/favicon.png"
+    //     }
+    // })
+    // walletWithOptions.connect()
+    // const walletSigner = await walletWithOptions.getSigner()
+
     // Init app
     form.chain_id = wallet.value.chainId
     validBlockchain.value = checkCurrentBlockchain(blockchains, form.chain_id, wallet)
@@ -80,14 +93,16 @@ const deployContract = async () => {
     }
 
     const currentBlockchain = blockchains.value[form.chain_id]
-    let transactionFee = (0.001 * 1000000000000000000).toString()
+    let transactionFee = ethers.utils.parseUnits((0.001).toString(), 18)
     if (currentBlockchain.testnet == false) {
         const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
             return response
         })
         if (coingeckoData.data[currentBlockchain.coingecko] !== undefined) {
             const tokenPrice = coingeckoData.data[currentBlockchain.coingecko].usd
-            transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
+            // transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
+            // transactionFee = ethers.utils.parseUnits((1 / tokenPrice).toFixed(18), 18)
+            transactionFee = ethers.utils.parseUnits(formatTransactionFee(1 / tokenPrice), 18)
         } else {
             messages.value.push({type: 'error', message: 'Error while setting contract data'})
             return
@@ -174,28 +189,47 @@ const deployContract = async () => {
         <div v-else>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="text-center mb-10">
-                    <h1>Create NFT collection</h1>
-                    <p>This is the start of your NFT collection.</p>
+                    <h1>Choose your smart contract type</h1>
+                    <p>This is the start of your NFT collection.    </p>
                 </div>
 
-                <Box v-if="form.type == ''" class="w-full mb-4" title="Choose your smart contract type">
-                    <BoxContent class="flex gap-2 py-14">
-                        <button @click.prevent="selectContractType('ERC721')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                <div v-if="form.type == ''" class="px-24 grid grid-cols-3">
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-1.png" class="rounded-t-md">
+                        </div>
+                        <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-721</div>
                             <h2>NFT Drop</h2>
-                            <p>Release collection of unique NFTs for a set price</p>
-                        </button>
-                        <button @click.prevent="selectContractType('ERC1155')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
-                            <h2>Open Edition Drop</h2>
-                            <p>Release ERC1155 tokens for a set price.</p>
-                        </button>
-                        <button @click.prevent="selectContractType('ERC1155Evolve')" class="inline-block p-4 w-1/3 rounded-md bg-mintpad-200 dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-transparent dark:hover:border-mintpad-400 transition ease-in-out duration-150">
-                            <h2>Open Edition Evolution Drop</h2>
-                            <p>Release ERC1155 tokens for a set price with the possibility to evolve them by burning NFTs.</p>
-                        </button>
-                    </BoxContent>
-                </Box>
+                            <p class="mb-4">Each token/artwork will have a unique owner.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC721')">Create</Button> 
+                        </div>
+                    </div>
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-2.png" class="rounded-t-md">
+                        </div>
+                        <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
+                            <h2>Open Edition</h2>
+                            <p class="mb-4">A single token with multiple owners for each artwork.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155')">Create</Button> 
+                        </div>
+                    </div>
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-3.png" class="rounded-t-md">
+                        </div>
+                        <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
+                            <h2>Open Edition + Burn</h2>
+                            <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Evolve')">Create</Button> 
+                        </div>
+                    </div>
+                </div>
 
-                <Box v-else class="w-full mb-4" :title="form.type+' smart contract settings'">
+                <Box v-else class="w-full mb-4" title="Smart contract settings">
                     <BoxContent>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full sm:basis-1/2">
@@ -232,6 +266,10 @@ const deployContract = async () => {
                     <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                         <Button href="#" @click.prevent="deployContract" :disabled="validBlockchain !== true" :loading="buttonLoading">Deploy smart contract</Button>
                     </span>
+                </div>
+
+                <div v-if="form.type == ''" class="text-center mt-8">
+                    <LinkLightBlue element="a" href="https://docs.mintpad.co/" target="_blank">Visit our documentation</LinkLightBlue>
                 </div>
             </form>
         </div>
