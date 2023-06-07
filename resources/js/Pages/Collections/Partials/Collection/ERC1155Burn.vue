@@ -99,7 +99,7 @@ const updateCollection = async (e) => {
         document.getElementById('image-2').value = null
         await setCollectionImages()
         
-        if (form.base.file && fileIsImage(form.file)) {
+        if (form.base.file && fileIsImage(form.base.file)) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.base.file.src}).then((response) => {
                 //
             })
