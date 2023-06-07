@@ -12,6 +12,7 @@ import { inject, ref, watch } from 'vue'
 import { disconnectWallet } from '@/Wallets/Wallet';
 import { getBlockchain } from '@/Helpers/Blockchain'
 import { WeiToValue } from '@/Helpers/Helpers'
+import Hyperlink from './Hyperlink.vue'
 
 let wallet = inject('wallet')
 let balance = ref(false)
@@ -48,6 +49,7 @@ watch(wallet, () => {
                 </div>
 
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <a href="https://docs.mintpad.co/" target="_blank" class="mr-4 text-sm text-mintpad-700 border border-mintpad-400 hover:border-mintpad-700 dark:text-mintpad-400 py-1 px-3 rounded-md"><i class="fa-regular fa-file"></i> Docs</a>
                     <WalletManager></WalletManager>
                     <DarkMode class="mr-4" />
 

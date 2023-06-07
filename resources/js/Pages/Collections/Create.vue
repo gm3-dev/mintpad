@@ -149,7 +149,7 @@ const deployContract = async () => {
                 contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC721Drop', parameters)
             } else if (form.type == 'ERC1155') {
                 contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Drop', parameters)
-            } else if (form.type == 'ERC1155Evolve') {
+            } else if (form.type == 'ERC1155Burn') {
                 contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Evolve', parameters)
             } else {
                 throw new Error('Invalid contract type: ' + form.type)
@@ -223,7 +223,7 @@ const deployContract = async () => {
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
                             <h2>Open Edition + Burn</h2>
                             <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
-                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Evolve')">Create</Button> 
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')">Create</Button> 
                         </div>
                     </div>
                 </div>

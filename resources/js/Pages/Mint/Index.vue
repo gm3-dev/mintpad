@@ -334,7 +334,7 @@ const evolveNFT = async (e) => {
 
         buttonLoading.value = true
         try {
-            if (props.collection.type == 'ERC1155Evolve') {
+            if (props.collection.type == 'ERC1155Burn') {
                 const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
                 const firstClaimPhase = await contract.call('getClaimConditionById', [0, 0])
                 let valueOverride = (collectionData.value.transactionFee * 1000000000000000000).toString()
@@ -459,7 +459,7 @@ const evolveNFT = async (e) => {
                             <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
                                 <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
                             </div>
-                            <div v-if="collection.type == 'ERC1155Evolve'" class="text-center">
+                            <div v-if="collection.type == 'ERC1155Burn'" class="text-center">
                                 <p class="my-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>
                                 <Button @click.prevent="evolveNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Evolve</Button>
                             </div>
@@ -475,8 +475,8 @@ const evolveNFT = async (e) => {
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
                             <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>
-                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
-                            <p v-if="collection.type == 'ERC1155Evolve'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Evolve'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
+                            <p v-if="collection.type == 'ERC1155Burn'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
+                            <p v-if="collection.type == 'ERC1155Burn'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
                     </BoxContent>
                 </Box>

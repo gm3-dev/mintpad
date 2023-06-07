@@ -95,10 +95,9 @@ const updateCollection = async (e) => {
             image: form.burn.file
         }]
         await contract.createBatch(metadata)
-        await setCollectionImages()
-
         document.getElementById('image-1').value = null
         document.getElementById('image-2').value = null
+        await setCollectionImages()
         
         if (form.base.file && fileIsImage(form.file)) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.base.file.src}).then((response) => {
@@ -106,7 +105,6 @@ const updateCollection = async (e) => {
             })
         }
 
-        validCollection.value = true
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
         console.log('error', error)

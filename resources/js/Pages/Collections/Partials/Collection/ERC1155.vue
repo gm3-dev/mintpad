@@ -80,9 +80,8 @@ const updateCollection = async (e) => {
             image: form.file
         }]
         await contract.createBatch(metadata)
-        await setCollectionImages()
-
         document.getElementById('image-1').value = null
+        await setCollectionImages()
         
         if (form.file && fileIsImage(form.file)) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.file.src}).then((response) => {
@@ -90,7 +89,6 @@ const updateCollection = async (e) => {
             })
         }
 
-        validCollection.value = true
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
         console.log('error', error)
@@ -161,7 +159,7 @@ const validateForm = () => {
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
                     <img v-if="form.file.src && fileIsImage(form.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.file.src" />
-                    <video v-if="form.file.src && fileIsVideo(form.file)" width="512" height="512" autoplay loop>
+                    <video v-if="form.file.src && fileIsVideo(form.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
                         <source :src="form.file.src" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

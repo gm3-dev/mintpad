@@ -25,7 +25,7 @@ import { formateDatetimeLocal, parseClaimConditions } from '@/Helpers/Helpers'
 import InputFile from '@/Components/Form/InputFile.vue'
 import axios from 'axios'
 import { resportError } from '@/Helpers/Sentry'
-import ERC1155Evolve from './Partials/Collection/ERC1155Evolve.vue'
+import ERC1155Burn from './Partials/Collection/ERC1155Burn.vue'
 import ERC721 from './Partials/Collection/ERC721.vue'
 import ERC1155 from './Partials/Collection/ERC1155.vue'
 axios.defaults.headers.common = {
@@ -46,7 +46,6 @@ let collectionData = ref({
     batches: {},
     batchId: 0,
     password: '',
-    maxTotalSupply: 0,
     totalSupply: 0,
     totalClaimedSupply: 0,
     totalRatioSupply: 0,
@@ -84,6 +83,9 @@ const form = {
         },
         image: props.collection.seo.image,
         description: props.collection.description
+    }),
+    totalsupply: useForm({
+        max: 0
     })
 }
 let socialImageLoading = ref(false)
@@ -142,12 +144,9 @@ onMounted(async () => {
             // Claim phases
             claimPhases.value = parseClaimConditions(data.claimConditions)
 
-            // Collection
-            // collectionData.value.totalSupply = data.totalSupply
-            collectionData.value.maxTotalSupply = data.totalSupply
-            // collectionData.value.totalClaimedSupply = data.totalClaimedSupply
-            // collectionData.value.totalRatioSupply = data.totalRatioSupply
-            // collectionData.value.nfts = data.nfts
+            // Total supply
+            form.totalsupply.max = data.totalSupply
+            form.totalsupply.defaults()
         } catch(error) {
             console.log('error', error)
         }
@@ -333,8 +332,8 @@ const updateMaxTotalSupply = async() => {
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
-        await contract.call('setMaxTotalSupply', [0, collectionData.value.maxTotalSupply])
-        // collectionData.value.totalSupply = collectionData.value.maxTotalSupply
+        await contract.call('setMaxTotalSupply', [0, form.totalsupply.max])
+        form.totalsupply.defaults()
 
         messages.value.push({type: 'success', message: 'Maximum total supply updated'})
     } catch(error) {
@@ -511,7 +510,7 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <ERC1155Evolve v-if="collection.type == 'ERC1155Evolve'" :collection="collection" />
+                    <ERC1155Burn v-if="collection.type == 'ERC1155Burn'" :collection="collection" />
                     <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" />
                     <ERC721 v-if="collection.type == 'ERC721'" :collection="collection" />
                 </div>
@@ -534,11 +533,11 @@ const deleteSocialImage = () => {
                         <BoxContent>
                             <div>
                                 <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
-                                <Input class="w-full" type="text" v-model="collectionData.maxTotalSupply" />
+                                <Input class="w-full" type="text" v-model="form.totalsupply.max" />
                             </div>
 
                             <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                                <Button href="#" @click.prevent="updateMaxTotalSupply" :loading="buttonLoading">Update</Button>
+                                <Button href="#" @click.prevent="updateMaxTotalSupply" :disabled="!form.totalsupply.isDirty" :loading="buttonLoading">Update</Button>
                             </span>
                         </BoxContent>
                     </Box>

@@ -130,11 +130,11 @@ const updateCollection = async (e) => {
         } else {
             await contract.createBatch(collectionData.value.metadata)
         }
+
+        document.getElementById('image-collection').value = null
         await setCollectionImages()
 
         collectionData.value.previews = []
-
-        document.getElementById('image-collection').value = null
         
         if (collectionData.value.nfts.length > 0) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: collectionData.value.nfts[0].metadata.image}).then((response) => {

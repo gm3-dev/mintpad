@@ -30,7 +30,7 @@ function getContractTypeName(contractType) {
     switch (contractType) {
         case 'ERC721': return 'nft-drop'
         case 'ERC1155': return 'edition-drop'
-        case 'ERC1155Evolve': return 'edition-drop'
+        case 'ERC1155Burn': return 'edition-drop'
         default: return 'nft-drop'
     }
 }
@@ -45,7 +45,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
     
         // Burn
         let nftsToBurn = 0;
-        if (contractType == 'ERC1155Evolve') {
+        if (contractType == 'ERC1155Burn') {
             nftsToBurn = await contract.call('numberToBurn')
         }
     
