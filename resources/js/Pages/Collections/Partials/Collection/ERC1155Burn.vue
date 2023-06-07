@@ -196,7 +196,6 @@ const validateForm = () => {
         <Box class="mb-4" :title="'Preview: ' + form.base.name">
             <BoxContent>
                 <div class="text-sm">
-                    {{ form.base.file.type }}
                     <p class="mb-4">This image will be the image people mint.</p>
                     <img v-if="form.base.file.src && fileIsImage(form.base.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.base.file.src" />
                     <video v-if="form.base.file.src && fileIsVideo(form.base.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
