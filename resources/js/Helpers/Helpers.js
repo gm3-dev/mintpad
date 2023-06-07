@@ -182,21 +182,40 @@ export function getAllowedNFTTypes() {
     ]
 }
 
-export function fileIsImage(type) {
+export function fileIsImage(file) {
     const allowedTypes = [
         'image/jpeg', 
         'image/png', 
         'image/jpg', 
         'image/gif'
     ]
-    return allowedTypes.includes(type)
+    const allowedExtensions = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif'
+    ]
+    if ('type' in file) {
+        return allowedTypes.includes(file.type)
+    } else {
+        const extension = file.src.toLowerCase().split('.').pop()
+        return allowedExtensions.includes(extension)
+    }
 }
 
-export function fileIsVideo(type) {
+export function fileIsVideo(file) {
     const allowedTypes = [
         'video/mp4'
     ]
-    return allowedTypes.includes(type)
+    const allowedExtensions = [
+        'mp4',
+    ]
+    if ('type' in file) {
+        return allowedTypes.includes(file.type)
+    } else {
+        const extension = file.src.toLowerCase().split('.').pop()
+        return allowedExtensions.includes(extension)
+    }
 }
 
 export function formatTransactionFee(fee) {

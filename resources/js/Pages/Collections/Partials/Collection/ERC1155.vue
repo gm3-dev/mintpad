@@ -84,7 +84,7 @@ const updateCollection = async (e) => {
 
         document.getElementById('image-1').value = null
         
-        if (form.file && fileIsImage(form.file.type)) {
+        if (form.file && fileIsImage(form.file)) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.file.src}).then((response) => {
                 //
             })
@@ -103,7 +103,7 @@ const updateCollection = async (e) => {
 }
 
 const validateForm = () => {
-    const allowedNFTFormats = getAllowedNFTTypes()
+    const allowedNFTTypes = getAllowedNFTTypes()
     let error = false
     if (form.name.trim() == '') {
         error = 'NFT name is not valid'
@@ -111,7 +111,7 @@ const validateForm = () => {
         error = 'NFT description is not valid'
     } else if (form.file == '') {
         error = 'NFT file is not valid'
-    } else if(!allowedNFTFormats.includes(form.file.type)) {
+    } else if(!allowedNFTTypes.includes(form.file.type)) {
         error = 'This NFT file type is not allowed'
     }
 
@@ -160,8 +160,8 @@ const validateForm = () => {
             <BoxContent>
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
-                    <img v-if="form.file.src && fileIsImage(form.file.type)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.file.src" />
-                    <video v-if="form.file.src && fileIsVideo(form.file.type)" width="512" height="512" autoplay loop>
+                    <img v-if="form.file.src && fileIsImage(form.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.file.src" />
+                    <video v-if="form.file.src && fileIsVideo(form.file)" width="512" height="512" autoplay loop>
                         <source :src="form.file.src" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
