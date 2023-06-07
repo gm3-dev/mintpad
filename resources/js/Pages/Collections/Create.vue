@@ -19,7 +19,6 @@ import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
 import LinkLightBlue from '@/Components/LinkLightBlue.vue'
 import { ethers } from 'ethers'
-import { MetaMaskWallet } from "@thirdweb-dev/wallets";
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
