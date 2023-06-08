@@ -82,8 +82,8 @@ const updateCollection = async (e) => {
         await contract.createBatch(metadata)
         document.getElementById('image-1').value = null
         await setCollectionImages()
-        
-        if (form.file && fileIsImage(form.file)) {
+
+        if (form.file.src) {
             await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.file.src}).then((response) => {
                 //
             })

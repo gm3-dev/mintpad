@@ -198,7 +198,8 @@ export function fileIsImage(file) {
     if ('type' in file) {
         return allowedTypes.includes(file.type)
     } else {
-        const extension = file.src.toLowerCase().split('.').pop()
+        const url = file.src.toLowerCase().split('?')[0]
+        const extension = url.toLowerCase().split('.').pop()
         return allowedExtensions.includes(extension)
     }
 }
@@ -213,7 +214,8 @@ export function fileIsVideo(file) {
     if ('type' in file) {
         return allowedTypes.includes(file.type)
     } else {
-        const extension = file.src.toLowerCase().split('.').pop()
+        const url = file.src.toLowerCase().split('?')[0]
+        const extension = url.toLowerCase().split('.').pop()
         return allowedExtensions.includes(extension)
     }
 }

@@ -4,7 +4,7 @@ import BoxContent from '@/Components/BoxContent.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
-import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue } from '@/Helpers/Helpers'
+import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue, fileIsImage, fileIsVideo } from '@/Helpers/Helpers'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
@@ -43,7 +43,7 @@ let collectionData = ref({
     buttons: {},
     logo: null,
     background: null,
-    thumb: null,
+    thumb: { src: null },
     theme: {
         primary: {r: 0, g: 119, b: 255, a: 1}
     },
@@ -80,7 +80,7 @@ onMounted(async () => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
-        collectionData.value.thumb = response.data.thumb
+        collectionData.value.thumb.src = response.data.thumb
         
         // Set theme for mint
         if (response.data.theme.mint) {
@@ -383,8 +383,12 @@ const evolveNFT = async (e) => {
                 <LogoEditor :edit-mode="editMode" :collection-data="collectionData" />
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
 
-                <div v-if="collectionData.thumb" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
-                    <img v-if="collectionData.thumb" :src="collectionData.thumb" class="inline-block rounded-m h-full" />
+                <div v-if="collectionData.thumb.src" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
+                    <img v-if="collectionData.thumb.src && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb.src" />
+                    <video v-if="collectionData.thumb.src && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
+                        <source :src="collectionData.thumb.src" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
                 <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
             </div>
