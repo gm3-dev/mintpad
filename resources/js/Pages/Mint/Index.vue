@@ -4,7 +4,7 @@ import BoxContent from '@/Components/BoxContent.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
-import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue, fileIsImage, fileIsVideo } from '@/Helpers/Helpers'
+import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue, fileIsImage, fileIsVideo, calculateTransactionFee } from '@/Helpers/Helpers'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
@@ -173,7 +173,7 @@ const setSupplyData = async (contract) => {
             tier2: 0
         }
     } else if (props.collection.type.startsWith('ERC1155')) {
-        collectionData.value.totalSupply = await contract.call('maxTotalSupply', [0])
+        collectionData.value.totalSupply = await contract.call('maxTotalSupply', 0)
         collectionData.value.totalClaimedSupply = await contract.totalSupply(0)
         collectionData.value.balance = {
             tier1: await contract.balanceOf(wallet.value.account, 0),
@@ -294,7 +294,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
                     await preparedClaim.execute()
                 }
             } else if (props.collection.type.startsWith('ERC1155')) {
@@ -305,7 +305,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
                     await preparedClaim.execute()
                 }
             }

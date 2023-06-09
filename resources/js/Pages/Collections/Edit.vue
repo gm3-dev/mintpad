@@ -187,6 +187,7 @@ const updateMetadata = async () => {
 
         messages.value.push({type: 'success', message: 'General settings updated'})
     } catch(error) {
+        console.log('error', error)
         resportError(error)
         messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
     }
@@ -333,7 +334,7 @@ const updateMaxTotalSupply = async() => {
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
-        await contract.call('setMaxTotalSupply', [0, form.totalsupply.max])
+        await contract.call('setMaxTotalSupply', 0, form.totalsupply.max)
         form.totalsupply.defaults()
 
         messages.value.push({type: 'success', message: 'Maximum total supply updated'})

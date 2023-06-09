@@ -44,9 +44,9 @@ const burnNFTs = async (e) => {
     buttonLoading.value = true
     try {
         const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-        const firstClaimPhase = await contract.call('getClaimConditionById', [0, 0])
+        const firstClaimPhase = await contract.call('getClaimConditionById', 0, 0)
         // let valueOverride = (props.collectionData.transactionFee * 1000000000000000000).toString()
-        await contract.call('evolve', [wallet.value.account, firstClaimPhase.currency], {
+        await contract.call('evolve', wallet.value.account, firstClaimPhase.currency, {
             value: calculateTransactionFee(props.collectionData.transactionFee, 0.0)
         })
     } catch (error) {
