@@ -334,7 +334,7 @@ const updateMaxTotalSupply = async() => {
 
     const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
-        await contract.call('setMaxTotalSupply', '0', form.totalsupply.max, {})
+        await contract.call('setMaxTotalSupply', [0, form.totalsupply.max], {})
         form.totalsupply.defaults()
 
         messages.value.push({type: 'success', message: 'Maximum total supply updated'})
