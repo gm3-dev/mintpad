@@ -235,7 +235,13 @@ const burnNFTs = async (e) => {
                     <BoxContent>
                         <form>
                             <div class="text-center">
-                                <span v-for="(nft, index) in collectionData.nfts" class="inline-block mb-6 rounded-md">
+                                <p class="my-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>
+                                
+                                <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
+                                <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
+                                <Button v-else @click.prevent="burnNFTs" :loading="buttonLoading" class="w-full mint-bg-primary !py-2">Burn <b>{{ collectionData.nftsToBurn }}</b> NFTs</Button>
+
+                                <span v-for="(nft, index) in collectionData.nfts" class="inline-block mt-6 rounded-md">
                                     <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" :src="nft.metadata.image" />
                                     <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" autoplay loop>
                                         <source :src="nft.metadata.image" type="video/mp4">
@@ -243,13 +249,6 @@ const burnNFTs = async (e) => {
                                     </video>
                                     <span v-if="index == 0" class="inline-block mx-4"><i class="fa-solid fa-arrow-right"></i></span>
                                 </span>
-
-                                <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
-                                <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
-                                <Button v-else @click.prevent="burnNFTs" :loading="buttonLoading" class="w-full mint-bg-primary !py-2">Burn <b>{{ collectionData.nftsToBurn }}</b> NFTs</Button>
-                            </div>
-                            <div class="mt-12 text-center align-bottom">
-                                <p>Need more NFTs to burn? Check out the <Hyperlink :href="route('mint.index', collection.permalink)">mint page</Hyperlink> to find out if you can mint more.</p>
                             </div>
                         </form>
                     </BoxContent>

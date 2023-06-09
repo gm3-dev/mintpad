@@ -435,9 +435,6 @@ const mintNFT = async (e) => {
                             <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
                                 <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
                             </div>
-                            <div v-if="collection.type == 'ERC1155Burn'" class="mt-12 text-center align-bottom">
-                                <p>Do you want to burn your NFTs? Check out the <Hyperlink :href="route('mint.burn', collection.permalink)">burn page</Hyperlink> to find out more.</p>
-                            </div>
                         </form>
                     </BoxContent>
                 </Box>
