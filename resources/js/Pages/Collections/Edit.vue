@@ -21,7 +21,7 @@ import Messages from '@/Components/Messages.vue'
 import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import Modal from '@/Components/Modal.vue'
-import { formateDatetimeLocal, parseClaimConditions } from '@/Helpers/Helpers'
+import { formateDatetimeLocal, parseClaimConditions, handleError } from '@/Helpers/Helpers'
 import InputFile from '@/Components/Form/InputFile.vue'
 import axios from 'axios'
 import { resportError } from '@/Helpers/Sentry'
@@ -149,7 +149,7 @@ onMounted(async () => {
             form.totalsupply.max = data.totalSupply
             form.totalsupply.defaults()
         } catch(error) {
-            console.log('error', error)
+            messages.value.push({type: 'error', message: handleError(error)})
         }
 
         // Set tab status
@@ -187,9 +187,7 @@ const updateMetadata = async () => {
 
         messages.value.push({type: 'success', message: 'General settings updated'})
     } catch(error) {
-        console.log('error', error)
-        resportError(error)
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     }
 
     buttonLoading.value = false
@@ -222,8 +220,7 @@ const updateRoyalties = async () => {
 
         messages.value.push({type: 'success', message: 'Royalties updated'})
     } catch(error) {
-        resportError(error)
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     }
 
     buttonLoading.value = false
@@ -322,9 +319,7 @@ const updateClaimPhases = async () => {
         
         messages.value.push({type: 'success', message: 'Claim phases updated'})
     } catch(error) {
-        console.log('error', error)
-        resportError(error)
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     }
     
     buttonLoading.value = false
@@ -339,9 +334,7 @@ const updateMaxTotalSupply = async() => {
 
         messages.value.push({type: 'success', message: 'Maximum total supply updated'})
     } catch(error) {
-        console.log('error', error)
-        resportError(error)
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     }
 
     buttonLoading.value = false
@@ -429,7 +422,7 @@ const addSocialImage = (e) => {
         form.mint.image = response.data.url
         socialImageLoading.value = false
     }).catch((error) => {
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     });
 }
 const deleteSocialImage = () => {

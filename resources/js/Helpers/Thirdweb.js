@@ -94,7 +94,6 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             totalRatioSupply: totalRatio
         }
     } catch(error) {
-        console.log('error 3', error)
         return false
     }
 }

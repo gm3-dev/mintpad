@@ -8,7 +8,7 @@ import Label from '@/Components/Form/Label.vue'
 import Textarea from '@/Components/Form/Textarea.vue'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { getAllowedNFTTypes, fileIsImage, fileIsVideo } from '@/Helpers/Helpers'
+import { getAllowedNFTTypes, fileIsImage, fileIsVideo, handleError } from '@/Helpers/Helpers'
 import { useForm } from '@inertiajs/vue3'
 import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
@@ -55,7 +55,7 @@ const setCollectionImages = async () => {
             emitter.emit('set-tab-status', {tab: 'collection', status: 0})
         }
     } catch(error) {
-        console.log('error', error)
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 }
 
@@ -91,9 +91,7 @@ const updateCollection = async (e) => {
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
-        console.log('error', error)
-        resportError(error)
-        emitter.emit('new-message', {type: 'error', message: 'Something went wrong, please try again.'})
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
     emitter.emit('set-transaction', false)

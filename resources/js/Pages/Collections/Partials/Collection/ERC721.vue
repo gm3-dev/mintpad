@@ -14,6 +14,7 @@ import { useForm } from '@inertiajs/vue3'
 import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { resportError } from '@/Helpers/Sentry'
+import { handleError } from '@/Helpers/Helpers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -58,7 +59,7 @@ onMounted(async () => {
         await setCollectionImages()
         await setRevealBatches()
     } catch(error) {
-        console.log('error', error)
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 })
 
@@ -76,7 +77,7 @@ const setCollectionImages = async () => {
         validCollection.value = collectionData.value.nfts.length > 0 ? true : false
         emitter.emit('set-tab-status', {tab: 'collection', status: collectionData.value.nfts.length > 0 ? 1 : 0})
     } catch(error) {
-        console.log('error', error)
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 }
 
@@ -143,9 +144,7 @@ const updateCollection = async (e) => {
         }
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
-        console.log('error', error)
-        resportError(error)
-        emitter.emit('new-message', {type: 'error', message: 'Something went wrong, please try again.'})
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
     emitter.emit('set-transaction', false)
@@ -160,8 +159,7 @@ const updateRevealBatch = async () => {
         emitter.emit('new-message', {type: 'success', message: 'NFTs revealed'})
         setRevealBatches(contract)
     } catch(error) {
-        resportError(error)
-        emitter.emit('new-message', {type: 'error', message: 'Something went wrong, please try again.'})
+        emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
     buttonLoading.value = false

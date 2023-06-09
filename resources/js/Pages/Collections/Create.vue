@@ -11,7 +11,7 @@ import Input from '@/Components/Form/Input.vue'
 import Select from '@/Components/Form/Select.vue'
 import Addon from '@/Components/Form/Addon.vue'
 import { getBlockchains, checkCurrentBlockchain } from '@/Helpers/Blockchain'
-import { formatTransactionFee, getSelectInputBlockchainObject } from '@/Helpers/Helpers'
+import { formatTransactionFee, getSelectInputBlockchainObject, handleError } from '@/Helpers/Helpers'
 import { getSDKFromSigner } from '@/Helpers/Thirdweb'
 import Messages from '@/Components/Messages.vue'
 import { resportError } from '@/Helpers/Sentry'
@@ -171,10 +171,7 @@ const deployContract = async () => {
             form.post(route('collections.store'), {})
         }
     } catch(error) {
-        console.log('error 2', error)
-
-        resportError(error)
-        messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+        messages.value.push({type: 'error', message: handleError(error)})
     }
 
     buttonLoading.value = false

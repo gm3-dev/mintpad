@@ -1,6 +1,8 @@
+import { getMetaMaskError } from '@/Wallets/MetaMask'
 import { ethers } from 'ethers'
 import $ from 'jquery'
 import { toRaw, unref } from 'vue'
+import { resportError } from './Sentry'
 
 export function shortenWalletAddress(address) {
     return address ? address.substring(0, 6)+'...'+address.substr(address.length - 4) : ''
@@ -250,4 +252,14 @@ export function calculateTransactionFee(fee, price) {
     
     const parsed = ethers.utils.parseUnits(total).toString()
     return ethers.BigNumber.from(parsed)
+}
+
+export function handleError(error) {
+    let metamaskError = getMetaMaskError(error)
+    if (metamaskError) {
+        return metamaskError
+    } else {
+        resportError(error)
+        return 'Something went wrong, please try again.'
+    }
 }

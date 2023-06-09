@@ -165,8 +165,8 @@ export async function switchBlockchainTo(chainId) {
 
 export function getMetaMaskError(error) {
     // console.log('error', error)
-    // console.log('error.code', error.code)
-    // console.log('error.reason', error.reason)
+    console.log('error.code', error.code)
+    console.log('error.reason', error.reason)
     switch (error.code) {
         case -32002: 
             return 'Request already pending: open MetaMask to see the request.'
