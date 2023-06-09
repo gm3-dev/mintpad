@@ -173,7 +173,7 @@ const setSupplyData = async (contract) => {
             tier2: 0
         }
     } else if (props.collection.type.startsWith('ERC1155')) {
-        collectionData.value.totalSupply = await contract.call('maxTotalSupply', '0', {})
+        collectionData.value.totalSupply = await contract.call('maxTotalSupply', [0], {})
         collectionData.value.totalClaimedSupply = await contract.totalSupply('0')
         collectionData.value.balance = {
             tier1: await contract.balanceOf(wallet.value.account, '0'),

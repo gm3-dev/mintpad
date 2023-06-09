@@ -49,7 +49,6 @@ onMounted(async () => {
 const setCollectionImages = async () => {
     try {
         let NFTData = await contract.getAll({count: 2})
-        console.log('NFTData', NFTData)
         if (NFTData[0] !== undefined && NFTData[1] !== undefined) {
             form.base.name = NFTData[0].metadata.name ?? ''
             form.base.description = NFTData[0].metadata.description ?? ''

@@ -177,6 +177,8 @@ export function getMetaMaskError(error) {
     }
 
     switch(error.reason) {
+        case 'Not enough tokens owned': 
+            return 'You don\'t have enough NFTs to burn.'
         case '!Qty': 
             return 'You reached the maximum number of claimable NFTs per wallet.'
         case '!MaxSupply': 
