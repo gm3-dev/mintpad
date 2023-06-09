@@ -43,7 +43,7 @@ export function getBlockchains() {
         137: Polygon,
         // 324: ZksyncEra,
         295: Hedera,
-        // 1890: LightlinkPhoenix
+        1890: LightlinkPhoenix
     }
     const testnets = {
         421613: ArbitrumGoerli,
