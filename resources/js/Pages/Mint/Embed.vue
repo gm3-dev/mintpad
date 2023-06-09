@@ -3,9 +3,10 @@ import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { ref, onMounted } from 'vue'
 import EmbedContent from '../Embed/Partials/EmbedContent.vue'
 import axios from 'axios'
-import { getDoubleDigitNumber, parseClaimConditions, setStyling } from '@/Helpers/Helpers'
+import { WeiToValue, getDoubleDigitNumber, parseClaimConditions, setStyling } from '@/Helpers/Helpers'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { connectWallet } from '@/Wallets/Wallet'
+import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -20,6 +21,7 @@ let editMode = ref(false)
 let loading = ref(true)
 let validBlockchain = ref(false)
 let collectionData = ref({
+    contractType: 'ERC721',
     loading: true,
     id: props.collection.id,
     theme: {
@@ -37,6 +39,7 @@ let collectionData = ref({
     totalClaimedSupply: 0,
     totalRatioSupply: 0,
     nfts: [],
+    transactionFee: 0,
 })
 
 onMounted(async() => {
@@ -71,6 +74,7 @@ onMounted(async() => {
         }
         try {
             const data = await getCollectionData(contract, props.collection.type, true, false)
+            const contractType = await contract.call('contractType')
             
             collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
             setActiveClaimPhase()
@@ -81,10 +85,20 @@ onMounted(async() => {
             collectionData.value.totalClaimedSupply = data.totalClaimedSupply
             collectionData.value.totalRatioSupply = data.totalRatioSupply
             collectionData.value.nfts = data.nfts
+            if (collectionData.value.contractType == 'DropERC721' || collectionData.value.contractType == 'DropERC1155') {
+                collectionData.value.transactionFee = 0
+            } else {
+                let transactionFee = await contract.call('getTransactionFee')
+                collectionData.value.transactionFee = WeiToValue(transactionFee.toString())
+            }
+
+            // Settings
+            collectionData.value.contractType = ethers.utils.parseBytes32String(contractType)
 
             // Stop loading
             collectionData.loading = false
         } catch(error) {
+            console.log('error', error)
             //
         }
     })

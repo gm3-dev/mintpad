@@ -187,9 +187,13 @@ const deployContract = async () => {
         <div v-if="!wallet.account"></div>
         <div v-else>
             <form @submit.prevent="submit" enctype="multipart/form-data">
-                <div class="text-center mb-10">
+                <div v-if="form.type == ''" class="text-center mb-10">
                     <h1>Choose your smart contract type</h1>
-                    <p>This is the start of your NFT collection.    </p>
+                    <p>This is the start of your NFT collection.</p>
+                </div>
+                <div v-else class="text-center mb-10">
+                    <h1>Deploy your smart contract</h1>
+                    <p>This is the start of your NFT collection.</p>
                 </div>
 
                 <div v-if="form.type == ''" class="px-24 grid grid-cols-3">

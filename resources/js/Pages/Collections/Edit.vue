@@ -97,6 +97,7 @@ emitter.on('set-tab-status', (data) => {
 provide('wallet', wallet)
 provide('transaction', {show: true, message: ''})
 
+let burnUrl = computed(() => props.collection.mint_url+'/'+form.mint.permalink+'/burn')
 let mintUrl = computed(() => props.collection.mint_url+'/'+form.mint.permalink)
 let mintEditorUrl = computed(() => props.collection.mint_editor_url+'/'+form.mint.permalink)
 let embedEditorUrl = computed(() => props.collection.embed_editor_url+'/'+form.mint.permalink)
@@ -638,9 +639,12 @@ const deleteSocialImage = () => {
                                 <Addon position="left" :content="collection.mint_url+'/'">
                                     <Input id="permalink" class="basis-1/3 addon-left" position="left" type="text" v-model="form.mint.permalink" />
                                 </Addon>
-                                <LinkDarkBlue element="a" :href="mintEditorUrl" target="_blank" class="mr-2">Page editor</LinkDarkBlue>
-                                <LinkDarkBlue element="a" :href="embedEditorUrl" target="_blank" class="mr-2">Embed editor</LinkDarkBlue>
-                                <LinkDarkBlue element="a" :href="mintUrl" target="_blank">View collection page</LinkDarkBlue>
+                                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 text-center">
+                                    <LinkDarkBlue element="a" :href="mintEditorUrl" target="_blank" class="!px-0">Page editor</LinkDarkBlue>
+                                    <LinkDarkBlue element="a" :href="embedEditorUrl" target="_blank" class="!px-0">Embed editor</LinkDarkBlue>
+                                    <LinkDarkBlue element="a" :href="mintUrl" target="_blank" class="!px-0">Collection page</LinkDarkBlue>
+                                    <LinkDarkBlue element="a" :href="burnUrl" target="_blank" class="!px-0">Burn page</LinkDarkBlue>
+                                </div>
                             </BoxContent>
                         </Box>
 

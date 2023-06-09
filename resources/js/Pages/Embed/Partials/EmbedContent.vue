@@ -3,6 +3,7 @@ import Box from '@/Components/Box.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
+import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { connectMetaMask, getMetaMaskError, switchBlockchainTo } from '@/Wallets/MetaMask'
@@ -22,6 +23,7 @@ let blockchains = ref(getBlockchains())
 let mintAmount = ref(1)
 let currentMintPhase = ref(0)
 let buttonLoading = ref(false)
+let messages = ref([])
 const emitter = inject('emitter')
 
 onMounted(async () => {
@@ -72,26 +74,34 @@ const mintNFT = async () => {
         try {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-            const transactionFee = await contract.call('getTransactionFee')
             if (props.collection.type == 'ERC721') {
-                // await contract.claim(mintAmount.value)
-                const preparedClaim = await contract.claim.prepare(mintAmount.value)
-                const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                let valueOverride = ((WeiToValue(transactionFee.toString()) + overrideValue) * 1000000000000000000).toString()
-                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
-                await preparedClaim.execute()
-
+                if (props.collectionData.contractType == 'DropERC721') {
+                    await contract.claim(mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(mintAmount.value)
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    // let valueOverride = ((props.collectionData.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ethers.utils.parseUnits((props.collectionData.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    await preparedClaim.execute()
+                }
             } else if (props.collection.type.startsWith('ERC1155')) {
-                // await contract.claim(0, mintAmount.value)
-                const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
-                const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                let valueOverride = ((WeiToValue(transactionFee.toString()) + overrideValue) * 1000000000000000000).toString()
-                preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
-                await preparedClaim.execute()
+                if (props.collectionData.contractType == 'DropERC1155') {
+                    await contract.claim(0, mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    // let valueOverride = ((props.collectionData.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ethers.utils.parseUnits((props.collectionData.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    await preparedClaim.execute()
+                }
             }
 
             messages.value.push({type: 'success', message: 'NFT minted!'})
         } catch (error) {
+            console.log('error', error)
+            
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})

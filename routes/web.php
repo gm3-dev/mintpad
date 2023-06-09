@@ -89,11 +89,13 @@ Route::domain(config('app.url'))->group(function () {
 Route::domain(config('app.mint_url'))->group(function () {
     // Mint
     Route::get('{permalink}', [MintController::class, 'mint'])->name('mint.index');
+    Route::get('{permalink}/burn', [MintController::class, 'burn'])->name('mint.burn');
 });
 
 Route::domain(config('app.embed_url'))->group(function () {
     // Mint
     Route::get('{address}', [MintController::class, 'embed'])->name('mint.embed');
+    Route::get('{address}/burn', [MintController::class, 'embedBurn'])->name('mint.embed-burn');
 });
 
 Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');

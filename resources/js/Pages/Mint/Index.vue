@@ -293,8 +293,8 @@ const mintNFT = async (e) => {
                     const preparedClaim = await contract.claim.prepare(mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
-                    let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                    // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
                     await preparedClaim.execute()
                 }
             } else if (props.collection.type.startsWith('ERC1155')) {
@@ -304,8 +304,8 @@ const mintNFT = async (e) => {
                     const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
-                    let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = ethers.BigNumber.from(valueOverride)
+                    // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
                     await preparedClaim.execute()
                 }
             }
@@ -315,34 +315,6 @@ const mintNFT = async (e) => {
             setSupplyData(contract)
         } catch (error) {
             console.log('mint error', error)
-            let metamaskError = getMetaMaskError(error)
-            if (metamaskError) {
-                messages.value.push({type: 'error', message: metamaskError})
-            } else {
-                resportError(error)
-                messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
-            }
-        }
-
-        buttonLoading.value = false
-    }
-}
-const evolveNFT = async (e) => {
-    if (editMode.value) {
-        showModal.value = true
-    } else {
-
-        buttonLoading.value = true
-        try {
-            if (props.collection.type == 'ERC1155Burn') {
-                const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-                const firstClaimPhase = await contract.call('getClaimConditionById', [0, 0])
-                let valueOverride = (collectionData.value.transactionFee * 1000000000000000000).toString()
-                await contract.call('evolve', wallet.value.account, firstClaimPhase.currency, {
-                    value: valueOverride
-                })
-            }
-        } catch (error) {
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
@@ -446,7 +418,7 @@ const evolveNFT = async (e) => {
                                 <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                             </div>
                             <div v-else class="flex gap-2">
-                                <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />                 
+                                <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />
                                 <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
                                 <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
@@ -463,9 +435,8 @@ const evolveNFT = async (e) => {
                             <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
                                 <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
                             </div>
-                            <div v-if="collection.type == 'ERC1155Burn'" class="text-center">
-                                <p class="my-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>
-                                <Button @click.prevent="evolveNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Evolve</Button>
+                            <div v-if="collection.type == 'ERC1155Burn'" class="mt-12 text-center align-bottom">
+                                <p>Do you want to burn your NFTs? Check out the <Hyperlink :href="route('mint.burn', collection.permalink)">burn page</Hyperlink> to find out more.</p>
                             </div>
                         </form>
                     </BoxContent>
