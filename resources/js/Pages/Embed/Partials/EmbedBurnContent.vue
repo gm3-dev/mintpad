@@ -66,7 +66,7 @@ const burnNFTs = async (e) => {
 <template>
     <div id="embed-mint-box" class="sm:col-span-2" :class="{dark: collectionData.settings.darkmode}">
         <form>
-            <Box class="mint-bg-box mb-0 mint-border-dark" title="Mint an NFT">
+            <Box class="mint-bg-box mb-0 mint-border-dark" title="Burn your NFTs">
                 <template v-slot:action>
                     <span class="inline-block absolute top-3 right-8 mint-text-dark" content="Check contract address" v-tippy><a :href="blockchains[collection.chain_id].explorers[0].url+'/address/'+collection.address" target="_blank" class="text-lg"><i class="fa-regular fa-file-contract"></i></a></span>
                 </template>
