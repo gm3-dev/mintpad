@@ -48,7 +48,8 @@ let collectionData = ref({
     nftsToBurn: 0,
     transactionFee: 0,
     totalSupply: '...',
-    royalties: '...'
+    royalties: '...',
+    nfts: []
 })
 let loadComplete = ref(false)
 let blockchains = ref(getBlockchains())
@@ -93,7 +94,7 @@ onMounted(async () => {
             contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
         }
         try {
-            const data = await getCollectionData(contract, props.collection.type, true, false)            
+            const data = await getCollectionData(contract, props.collection.type, true, true)            
             const contractType = await contract.call('contractType')
 
             // Settings
@@ -117,6 +118,10 @@ onMounted(async () => {
             setInterval(() => {
                 setSupplyData(contract)
             }, 10000)
+
+            // Collection
+            collectionData.value.nfts = data.nfts
+            console.log(collectionData.value.nfts)
 
             loadComplete.value = true
             
@@ -221,24 +226,24 @@ const burnNFTs = async (e) => {
         <div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" :style="[collectionData.background ? {backgroundImage: 'url(' + collectionData.background + ')'} : {}]">
             <div class="relative max-w-7xl mx-auto px-6 pb-4 h-full flex gap-4 items-end">
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
-
-                <div v-if="collectionData.thumb.src" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
-                    <img v-if="collectionData.thumb.src && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb.src" />
-                    <video v-if="collectionData.thumb.src && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
-                        <source :src="collectionData.thumb.src" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
                 <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
             </div>
         </div>
         <div v-if="collection.type == 'ERC1155Burn'" class="max-w-7xl mx-auto px-6 mt-12">                
             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
-                <Box class="sm:col-span-2" title="Burn NFTs">
+                <Box class="sm:col-span-2" title="Burn your NFTs">
                     <BoxContent>
                         <form>
                             <div class="text-center">
-                                <p class="my-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>                 
+                                <span v-for="(nft, index) in collectionData.nfts" class="inline-block mb-6 rounded-md">
+                                    <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" :src="nft.metadata.image" />
+                                    <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" autoplay loop>
+                                        <source :src="nft.metadata.image" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <span v-if="index == 0" class="inline-block mx-4"><i class="fa-solid fa-arrow-right"></i></span>
+                                </span>
+
                                 <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
                                 <Button v-else @click.prevent="burnNFTs" :loading="buttonLoading" class="w-full mint-bg-primary !py-2">Burn <b>{{ collectionData.nftsToBurn }}</b> NFTs</Button>
@@ -260,6 +265,7 @@ const burnNFTs = async (e) => {
                             <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>
                             <p>Your tier 1 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                             <p>Your tier 2 NFTs</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
+                            <p>Burn ratio</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.nftsToBurn+':1'"></p>
                         </div>
                     </BoxContent>
                 </Box>

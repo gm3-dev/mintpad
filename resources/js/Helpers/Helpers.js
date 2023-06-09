@@ -195,10 +195,16 @@ export function fileIsImage(file) {
         'png',
         'gif'
     ]
-    if ('type' in file) {
-        return allowedTypes.includes(file.type)
+    if (typeof file === 'object') {
+        if ('type' in file) {
+            return allowedTypes.includes(file.type)
+        } else if('src' in file) {
+            const url = file.src.toLowerCase().split('?')[0]
+            const extension = url.toLowerCase().split('.').pop()
+            return allowedExtensions.includes(extension)
+        }
     } else {
-        const url = file.src.toLowerCase().split('?')[0]
+        const url = file.toLowerCase().split('?')[0]
         const extension = url.toLowerCase().split('.').pop()
         return allowedExtensions.includes(extension)
     }
@@ -211,10 +217,17 @@ export function fileIsVideo(file) {
     const allowedExtensions = [
         'mp4',
     ]
-    if ('type' in file) {
-        return allowedTypes.includes(file.type)
+
+    if (typeof file === 'object') {
+        if ('type' in file) {
+            return allowedTypes.includes(file.type)
+        } else if('src' in file) {
+            const url = file.src.toLowerCase().split('?')[0]
+            const extension = url.toLowerCase().split('.').pop()
+            return allowedExtensions.includes(extension)
+        }
     } else {
-        const url = file.src.toLowerCase().split('?')[0]
+        const url = file.toLowerCase().split('?')[0]
         const extension = url.toLowerCase().split('.').pop()
         return allowedExtensions.includes(extension)
     }
