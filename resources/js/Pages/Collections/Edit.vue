@@ -505,9 +505,9 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <ERC1155Burn v-if="collection.type == 'ERC1155Burn'" :collection="collection" />
-                    <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" />
                     <ERC721 v-if="collection.type == 'ERC721'" :collection="collection" />
+                    <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" />
+                    <ERC1155Burn v-if="collection.type == 'ERC1155Burn'" :collection="collection" />
                 </div>
 
                 <div v-show="currentTab == 3">
@@ -550,7 +550,7 @@ const deleteSocialImage = () => {
                                     </div>
                                     <div>
                                         <Label value="Number of NFTs" info="The number of NFTs that will be released in this mint phase. (0 = unlimited)." />
-                                        <Input type="number" v-model="phase.maxClaimableSupply" />
+                                        <Input type="number" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" v-model="phase.maxClaimableSupply" />
                                     </div>
                                     <div class="relative">
                                         <Label value="Mint price" info="The mint price people pay for one NFT from your collection." />
@@ -560,7 +560,7 @@ const deleteSocialImage = () => {
                                     </div>
                                     <div>
                                         <Label value="Claims per wallet" info="The number of NFTs that can be minted per wallet in this mint phase. (0 = unlimited)." />
-                                        <Input type="number" v-model="phase.maxClaimablePerWallet" />
+                                        <Input type="number" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" v-model="phase.maxClaimablePerWallet" />
                                     </div>
                                     <div>
                                         <Label value="Phase name" info="Here you can give this mint phase a name. This is only visible on your own mint page." />

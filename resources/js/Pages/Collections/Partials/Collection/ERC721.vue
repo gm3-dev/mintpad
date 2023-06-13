@@ -151,10 +151,12 @@ const updateCollection = async (e) => {
     buttonLoading.value = false    
 }
 const updateRevealBatch = async () => {
-    buttonLoading.value = 'Updating reveal settings'
+    emitter.emit('set-transaction', 'Updating reveal settings')
+    buttonLoading.value = true
 
     try {
         await contract.revealer.reveal(collectionData.value.batchId, collectionData.value.password);
+        await setCollectionImages()
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs revealed'})
         setRevealBatches(contract)
@@ -162,7 +164,8 @@ const updateRevealBatch = async () => {
         emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
-    buttonLoading.value = false
+    emitter.emit('set-transaction', false)
+    buttonLoading.value = false    
 }
 const uploadCollection = async (event) => {
     var files = event.target.files
@@ -321,11 +324,11 @@ const setPlaceholderImage = (e) => {
                     <div class="w-full flex flex-wrap">
                         <div class="basis-full sm:basis-1/2 sm:pr-2">
                             <Label for="reveal-password" value="Password" class="relative" />
-                            <Input id="reveal-password" class="mb-4" type="password" v-model="formReveal.password" />
+                            <Input id="reveal-password" class="mb-4" type="password" v-model="formReveal.password" autocomplete="new-reveal-password"/>
                         </div>
                         <div class="basis-full sm:basis-1/2 sm:pl-2">
                             <Label for="reveal-confirm-password" value="Confirm password" />
-                            <Input id="reveal-confirm-password" class="mb-4" type="password" v-model="formReveal.passwordConfirm" />
+                            <Input id="reveal-confirm-password" class="mb-4" type="password" v-model="formReveal.passwordConfirm" autocomplete="new-reveal-password-confirm"/>
                         </div>
                         <div class="basis-full">
                             <Label for="reveal-name" value="Placeholder collection name" class="relative" info="This is the placeholder name of your NFT collection." />
@@ -374,7 +377,7 @@ const setPlaceholderImage = (e) => {
                 </div>
                 <div>
                     <Label value="Password" class="relative" info="Password that was entered while creating this batch." />
-                    <Input class="w-full" type="password" v-model="collectionData.password" />
+                    <Input class="w-full" type="password" v-model="collectionData.password" autocomplete="reveal-password"/>
                 </div>
             </div>
             <p v-else class="mb-4">You don't have any NFTs to reveal</p>
