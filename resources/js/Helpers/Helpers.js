@@ -255,6 +255,7 @@ export function calculateTransactionFee(fee, price) {
 }
 
 export function handleError(error) {
+    // console.log('error', error)
     let metamaskError = getMetaMaskError(error)
     if (metamaskError) {
         return metamaskError

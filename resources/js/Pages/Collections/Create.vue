@@ -92,7 +92,7 @@ const deployContract = async () => {
     }
 
     const currentBlockchain = blockchains.value[form.chain_id]
-    let transactionFee = ethers.utils.parseUnits((0.001).toString(), 18)
+    let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
     if (currentBlockchain.testnet == false) {
         const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
             return response
@@ -101,7 +101,7 @@ const deployContract = async () => {
             const tokenPrice = coingeckoData.data[currentBlockchain.coingecko].usd
             // transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
             // transactionFee = ethers.utils.parseUnits((1 / tokenPrice).toFixed(18), 18)
-            transactionFee = ethers.utils.parseUnits(formatTransactionFee(1 / tokenPrice), 18)
+            transactionFee = formatTransactionFee(1 / tokenPrice)
         } else {
             messages.value.push({type: 'error', message: 'Error while setting contract data'})
             return
