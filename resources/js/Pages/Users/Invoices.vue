@@ -7,7 +7,7 @@ import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import _ from 'lodash'
 import { format } from 'date-fns'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import BoxRow from '@/Components/BoxRow.vue'
 import LinkDarkBlue from '@/Components/LinkDarkBlue.vue'
 
@@ -22,11 +22,8 @@ let validBlockchain = ref(true)
 provide('wallet', wallet)
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Done loading
     loading.value = false

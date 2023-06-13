@@ -3,7 +3,7 @@ import Box from '@/Components/Box.vue'
 import BoxRow from '@/Components/BoxRow.vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 

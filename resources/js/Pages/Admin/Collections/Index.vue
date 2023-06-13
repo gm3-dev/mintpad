@@ -9,8 +9,8 @@ import { shortenWalletAddress, copyToClipboard, parseClaimConditions } from '@/H
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
 import axios from 'axios'
-import { connectWallet } from '@/Wallets/Wallet'
-import { switchBlockchainTo } from '@/Wallets/MetaMask'
+import { reconnectWallet } from '@/Wallets/Wallet'
+import { switchChainTo } from '@/Wallets/MetaMask'
 import Button from '@/Components/Form/Button.vue'
 import Modal from '@/Components/Modal.vue'
 import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
@@ -40,11 +40,8 @@ provide('wallet', wallet)
 provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
     
     // Done loading
     loading.value = false
@@ -92,7 +89,7 @@ const closeModal = () => {
     collectionData.value.loading = true
 }
 const switchBlockchain = async (chainId) => {
-    const status = await switchBlockchainTo(chainId)
+    const status = await switchChainTo(chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }

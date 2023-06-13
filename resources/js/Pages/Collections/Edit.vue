@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, watch, computed, toRaw, inject } from 'vue'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import StatusTab from '@/Components/StatusTab.vue'
 import Box from '@/Components/Box.vue'
@@ -108,11 +108,8 @@ watch(claimPhases, (newValue) => {
 { deep: true })
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)

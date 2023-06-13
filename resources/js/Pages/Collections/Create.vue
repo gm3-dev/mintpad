@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import Button from '@/Components/Form/Button.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, watch, computed } from 'vue'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import BoxContent from '@/Components/BoxContent.vue'
 import Box from '@/Components/Box.vue'
 import Label from '@/Components/Form/Label.vue'
@@ -19,6 +19,7 @@ import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
 import LinkLightBlue from '@/Components/LinkLightBlue.vue'
 import { ethers } from 'ethers'
+import { MetaMaskWallet } from "@thirdweb-dev/wallets"
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -47,22 +48,8 @@ provide('wallet', wallet)
 provide('transaction', transaction)
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
-
-    // const walletWithOptions = new MetaMaskWallet({
-    //     dappMetadata: {
-    //         name: "Mintpad",
-    //         url: "https://mintpad.co",
-    //         description: "Mintpad",
-    //         logoUrl: "https://app.mintpad.co/favicon.png"
-    //     }
-    // })
-    // walletWithOptions.connect()
-    // const walletSigner = await walletWithOptions.getSigner()
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     form.chain_id = wallet.value.chainId

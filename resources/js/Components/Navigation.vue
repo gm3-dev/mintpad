@@ -11,17 +11,17 @@ import NavLink from '@/Components/NavLink.vue';
 import { inject, ref, watch } from 'vue'
 import { disconnectWallet } from '@/Wallets/Wallet';
 import { getBlockchain } from '@/Helpers/Blockchain'
-import { WeiToValue } from '@/Helpers/Helpers'
-import Hyperlink from './Hyperlink.vue'
 
 let wallet = inject('wallet')
 let balance = ref(false)
 let blockchainName = ref(false)
 
 watch(wallet, () => {
-    const blockchain = getBlockchain(wallet.value.chainId)
-    balance.value = WeiToValue(wallet.value.balance).toFixed(3) + ' ' + blockchain.nativeCurrency.symbol
-    blockchainName.value = blockchain.name
+    if (wallet.value.chainId) {
+        const blockchain = getBlockchain(wallet.value.chainId)
+        balance.value = parseFloat(wallet.value.balance.displayValue).toFixed(3) + ' ' + wallet.value.balance.symbol
+        blockchainName.value = blockchain.name
+    }
 })
 </script>
 <template>

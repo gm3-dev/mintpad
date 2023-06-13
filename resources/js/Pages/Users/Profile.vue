@@ -9,7 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import _ from 'lodash'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import ShowPassword from '@/Components/ShowPassword.vue'
 import ValidationMessage from '@/Components/Form/ValidationMessage.vue'
 
@@ -34,11 +34,8 @@ provide('wallet', wallet)
 provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Done loading
     loading.value = false

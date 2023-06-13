@@ -11,8 +11,8 @@ import axios from 'axios'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import DarkMode from '@/Components/DarkMode.vue'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchBlockchainTo } from '@/Wallets/MetaMask'
-import { connectWallet } from '@/Wallets/Wallet'
+import { connectMetaMask, getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import Modal from '@/Components/Modal.vue'
 import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
 import Messages from '@/Components/Messages.vue'
@@ -59,11 +59,8 @@ const emitter = inject('emitter')
 provide('wallet', wallet)
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     buttonLoading.value = true
 
@@ -139,7 +136,7 @@ onMounted(async () => {
 })
 
 const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+    const status = await switchChainTo(props.chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }

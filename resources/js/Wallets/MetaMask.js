@@ -1,163 +1,102 @@
 import { getBlockchains } from "@/Helpers/Blockchain"
 import { resportError } from "@/Helpers/Sentry"
 import { ethers } from "ethers";
+import { ThirdwebSDK } from '@thirdweb-dev/sdk'
+import { MetaMaskWallet } from "@thirdweb-dev/wallets"
 
-export async function connectMetaMask(forceRequest) {
+export async function disconnectMetaMask() {
+    const wallet = createMetaMaskInstance()
+
+    localStorage.removeItem('walletName')
+    await wallet.disconnect()
+
+    window.location.reload()
+}
+
+export async function connectMetaMask(connect) {
     localStorage.setItem('walletName', 'metamask');
 
-    const provider = getMetaMaskProvider()
-    if (provider) {
-        setMetaMaskEvents()
-        return await loadMetaMaskAccount()
-    } else {
-        return false
-    }
+    const wallet = createMetaMaskInstance()
 
-    function getMetaMaskProvider() {
-        var provider = false
-        try {
-            provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-            // this.provider = await detectEthereumProvider() // not used
-    
+    if (connect == true) {
+        try {  
+            await wallet.connect()
+            window.location.reload()
         } catch(error) {
-            //
+            console.log(error)
         }
-    
-        if (provider) {
-            provider.on("pending", function(e) {
-                //
-            })
-        } else {
-            // this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
-        }
-    
-        return provider
-    }
-    
-    function setMetaMaskEvents() {
-        if (window.ethereum) {
-            ethereum.on('accountsChanged', (accounts) => {
+    } else {
+        try {    
+            wallet.on('accountsChanged', (accounts) => {
                 // Time to reload your interface with accounts[0]!
                 console.log('accountsChanged', accounts)
                 window.location.reload()
             })
     
-            ethereum.on('chainChanged', () => {
+            wallet.on('chainChanged', () => {
                 // Time to reload your interface with accounts[0]!
                 console.log('chainChanged')
                 window.location.reload()
             })
     
-            ethereum.on('message', function (message) {
+            wallet.on('message', function (message) {
                 console.log('message', message)
             })
     
-            ethereum.on('connect', function (info) {
+            wallet.on('connect', function (info) {
                 console.log('Connected to network', info)
             })
     
-            ethereum.on('disconnect', function (error) {
+            wallet.on('disconnect', function (error) {
                 console.log('Disconnected from network', error)
                 window.location.reload()
             })
-        }
-    }
+        
+            const signer = await wallet.getSigner()
+            const address = await wallet.getAddress()
+            const chainId = await wallet.getChainId()
     
-    async function loadMetaMaskAccount() {
-        var requestAccount = false
-        var signer = false
-        var account = false
-        var chainId = false
-        var accounts = []
-        var network = false
-        var balance = false
+            const blockchains = getBlockchains()
+            const blockchain = blockchains[chainId]
     
-        try {
-            signer = provider.getSigner()
-            accounts = await ethereum.request({method: 'eth_accounts'})
-            if (accounts.length > 0) {
-                account = accounts[0]
-            } else {
-                throw new Error('Not connected')
-            }
-            network = await provider.getNetwork()
-            balance = await provider.getBalance(account)
-        } catch (error) {
-            if (error.message != 'Not connected') {
-                // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                resportError(error) 
-            }
-            requestAccount = true
+            const sdk = ThirdwebSDK.fromSigner(signer, blockchain, {})
+            const balance = await sdk.wallet.balance()
+        
+            return {
+                name: 'metamask',
+                signer: signer,
+                account: address,
+                chainId: chainId,
+                balance: balance
+            } 
+    
+        } catch(error) {
+            console.log(error)
         }
     
-        if (window.ethereum) {
-            if (requestAccount && forceRequest) {
-                try {
-                    accounts = await ethereum.request({method: 'eth_requestAccounts'})
-                } catch(error) {
-                    // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                    resportError(error) 
-                }
-                if (accounts.length > 0) {
-                    account = accounts[0]
-                }
-            }
-            
-            chainId = parseInt(window.ethereum.networkVersion)
-        }
-
-        if (forceRequest == true) {
-            window.location.reload()
-        }
-
         return {
             name: 'metamask',
-            signer: signer,
-            account: account,
-            chainId: chainId,
-            balance: balance
-        }
+            signer: false,
+            account: false,
+            chainId: false,
+            balance: false
+        } 
     }
 }
 
-export async function switchBlockchainTo(chainId) {
+export async function switchChainTo(chainId) {
     try {
-        await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: ethers.utils.hexValue(parseInt(chainId)) }],
-        })
+        const wallet = createMetaMaskInstance()
+        await wallet.switchChain(chainId)
+
     } catch(error) {
-        // When missing chainID in your wallet
-        // if (error.code === 4902) {
-        //     let blockchains = getBlockchains()
-        //     const blockchain = blockchains[chainId]
-        //     try {
-        //         await ethereum.request({
-        //             method: 'wallet_addEthereumChain',
-        //             params: [{
-        //                 chainId: ethers.utils.hexValue(chainId),
-        //                 chainName: blockchain.name,
-        //                 nativeCurrency: {
-        //                     name: blockchain.nativeCurrency.name,
-        //                     symbol: blockchain.nativeCurrency.symbol,
-        //                     decimals: blockchain.nativeCurrency.decimals,
-        //                 },
-        //                 rpcUrls: ['https://polygon-rpc.com/'],
-        //                 blockExplorerUrls: ['https://polygonscan.com']
-        //             }],
-        //         });
-        //     } catch (addError) {
-        //       // handle "add" error
-        //     }
-        // } else {
-            let metamaskError = getMetaMaskError(error)
-            if (metamaskError) {
-                return metamaskError
-            } else {
-                resportError(error)
-                return 'Failed to switch to the correct blockchain, try to do it manually.'
-            }
-        // }
+        let metamaskError = getMetaMaskError(error)
+        if (metamaskError) {
+            return metamaskError
+        } else {
+            resportError(error)
+            return 'Failed to switch to the correct blockchain, try to do it manually.'
+        }
     }
 
     return true
@@ -193,4 +132,15 @@ export function getMetaMaskError(error) {
             }
     }
     return false
+}
+
+function createMetaMaskInstance() {
+    return new MetaMaskWallet({
+        dappMetadata: {
+            name: "Mintpad",
+            url: "https://mintpad.co",
+            description: "Mintpad",
+            logoUrl: "https://app.mintpad.co/favicon.png"
+        }
+    })
 }

@@ -6,8 +6,8 @@ import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchBlockchainTo } from '@/Wallets/MetaMask'
-import { connectWallet } from '@/Wallets/Wallet'
+import { connectMetaMask, getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import { ref, inject, onMounted } from 'vue'
 
 const props = defineProps({
@@ -27,11 +27,8 @@ let messages = ref([])
 const emitter = inject('emitter')
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
@@ -40,7 +37,7 @@ onMounted(async () => {
 })
 
 const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+    const status = await switchChainTo(props.chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }

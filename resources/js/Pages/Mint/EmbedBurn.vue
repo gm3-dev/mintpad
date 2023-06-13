@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { WeiToValue, setStyling } from '@/Helpers/Helpers'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectWallet } from '@/Wallets/Wallet'
+import { reconnectWallet } from '@/Wallets/Wallet'
 import EmbedBurnContent from '../Embed/Partials/EmbedBurnContent.vue'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
@@ -38,11 +38,8 @@ let collectionData = ref({
 })
 
 onMounted(async() => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
     
     axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
         // Set theme for mint
