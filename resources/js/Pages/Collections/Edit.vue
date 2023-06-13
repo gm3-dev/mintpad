@@ -637,7 +637,7 @@ const deleteSocialImage = () => {
                                     <LinkDarkBlue element="a" :href="mintEditorUrl" target="_blank" class="!px-0">Page editor</LinkDarkBlue>
                                     <LinkDarkBlue element="a" :href="embedEditorUrl" target="_blank" class="!px-0">Embed editor</LinkDarkBlue>
                                     <LinkDarkBlue element="a" :href="mintUrl" target="_blank" class="!px-0">Collection page</LinkDarkBlue>
-                                    <LinkDarkBlue element="a" :href="burnUrl" target="_blank" class="!px-0">Burn page</LinkDarkBlue>
+                                    <LinkDarkBlue v-if="collection.type == 'ERC721Burn'" element="a" :href="burnUrl" target="_blank" class="!px-0">Burn page</LinkDarkBlue>
                                 </div>
                             </BoxContent>
                         </Box>
