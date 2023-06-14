@@ -5,7 +5,7 @@ Before deployment:
 - 
 
 ToDo:
-- Mails vormgeven
+- generate-mint-phases.js ombouwen zodat hij ERC1155 ondersteund
 
 Methods:
 -

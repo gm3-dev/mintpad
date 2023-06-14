@@ -69,6 +69,8 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('two-factor-authentication', [UserController::class, 'twoFactorAuthSettings'])->name('users.2fa');
         Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
         Route::put('profile', [UserController::class, 'update'])->name('users.update');
+        Route::get('invoices', [UserController::class, 'invoices'])->name('users.invoices');
+        Route::get('invoices/{invoice_id}', [UserController::class, 'download'])->name('users.download');
 
         // Editor layout
         Route::get('mint-editor/{collection}', [MintController::class, 'mint'])->name('editor.mint');
@@ -87,15 +89,13 @@ Route::domain(config('app.url'))->group(function () {
 });
 
 Route::domain(config('app.mint_url'))->group(function () {
-    // Mint
+    // Mint layout
     Route::get('{permalink}', [MintController::class, 'mint'])->name('mint.index');
-    Route::get('{permalink}/burn', [MintController::class, 'burn'])->name('mint.burn');
 });
 
 Route::domain(config('app.embed_url'))->group(function () {
-    // Mint
+    // Mint layout
     Route::get('{address}', [MintController::class, 'embed'])->name('mint.embed');
-    Route::get('{address}/burn', [MintController::class, 'embedBurn'])->name('mint.embed-burn');
 });
 
 Route::get('{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');

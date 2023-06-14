@@ -32,29 +32,6 @@ class MintController extends Controller
 
         return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode'));
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function burn($permalink)
-    {
-        $collection = Collection::where('permalink', $permalink)->first();
-        if (!$collection) {
-            abort(404);
-        }
-
-        $image = $collection->getMeta('seo.image');
-        $image_info = parse_url($image);
-        $seo = [
-            'title' => $collection->getMeta('seo.title', $collection->name),
-            'description' => $collection->getMeta('seo.description', $collection->description),
-            'image' => !empty($image) && file_exists(public_path($image_info['path'])) ? url($image) : false
-        ];
-        $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
-
-        return Inertia::render('Mint/Burn', compact('collection', 'seo', 'mode'));
-    }
 
     public function embed(Request $request, $address)
     {
@@ -64,16 +41,6 @@ class MintController extends Controller
         }
 
         return Inertia::render('Mint/Embed', compact('collection'));
-    }
-
-    public function embedBurn(Request $request, $address)
-    {
-        $collection = Collection::where('address', $address)->first();
-        if (!$collection) {
-            abort(404);
-        }
-
-        return Inertia::render('Mint/EmbedBurn', compact('collection'));
     }
 
     /**

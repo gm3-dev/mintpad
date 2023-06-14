@@ -86,7 +86,6 @@ const updateMintSettings = async () => {
     })
     .then((response) => {
         if (response) {
-            emitter.emit('settings-updated', true)
             emitter.emit('new-message', {type: 'success', message: 'Mint settings updated'})
         }
     })

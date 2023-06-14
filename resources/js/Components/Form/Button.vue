@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-    loading: [Boolean, String]
+    loading: Boolean
 })
 </script>
 <template>

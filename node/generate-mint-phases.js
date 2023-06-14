@@ -5,7 +5,6 @@ const getContractTypeName = (contractType) => {
     switch (contractType) {
         case 'ERC721': return 'nft-drop'
         case 'ERC1155': return 'edition-drop'
-        case 'ERC1155Burn': return 'edition-drop'
         default: return 'nft-drop'
     }
 }

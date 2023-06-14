@@ -38,7 +38,11 @@ class FortifyServiceProvider extends ServiceProvider
         });
         Fortify::confirmPasswordView(fn () =>  Inertia::render('Auth/ConfirmPassword'));
         Fortify::registerView(function () {
+            $countries = collect(config('countries'))->map(function ($country) {
+                return $country['full'];
+            });
             return Inertia::render('Auth/Register', [
+                'countries' => $countries,
                 'affiliate' => request()->get('affiliate') ?? ''
             ]);
         });

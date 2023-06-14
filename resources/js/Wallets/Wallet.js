@@ -1,35 +1,21 @@
-import { connectMetaMask, disconnectMetaMask } from '@/Wallets/MetaMask'
+import { connectMetaMask } from '@/Wallets/MetaMask'
 
-export async function disconnectWallet() {
-    const walletName = localStorage.getItem('walletName')
-    
-    if (walletName == 'metamask') {
-        return await disconnectMetaMask()
-    }
+export function disconnectWallet() {
+    localStorage.removeItem('walletName')
+    window.location.reload()
 }
 
-export async function reconnectWallet() {
-    const walletName = localStorage.getItem('walletName')
-    
-    if (walletName == 'metamask') {
-        return await connectMetaMask(false)
-    }
-
-    return getDefaultWalletData()
-}
-
-export async function connectWallet(wallet) {
+export async function connectWallet(wallet, forceRequest) {
     if (wallet == 'metamask') {
-        return await connectMetaMask(true)
+        return await connectMetaMask(forceRequest)
     }
-}
+    // if (wallet == 'phantom') {
+    //     await this.connectPhantom()
+    // }
 
-export function getDefaultWalletData() {
-    return {
-        name: 'none',
-        signer: false,
-        account: false,
-        chainId: false,
-        balance: false
-    }
+
+
+    // this.setWalletUI()
+    // this.setPage()
+    // this.setPageData()
 }

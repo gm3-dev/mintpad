@@ -210,6 +210,7 @@ return [
         /*
          * Custom Service Providers...
          */
+        App\Providers\MoneybirdServiceProvider::class,
         App\Providers\CoinbaseServiceProvider::class,
         App\Providers\SlackServiceProvider::class,
     ],

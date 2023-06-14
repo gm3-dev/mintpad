@@ -23,7 +23,7 @@ const submit = () => {
 
             <form @submit.prevent="submit">
                 <div class="relative">
-                    <Label for="code" value="Authentication code" />
+                    <Label for="code" value="Password" />
                     <Input id="code" type="text" v-model="form.code" required />
                     <ValidationMessage :validation="form.errors.code" />
                 </div>
