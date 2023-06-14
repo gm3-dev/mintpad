@@ -1,7 +1,7 @@
 <script setup>
 import $ from 'jquery'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed, inject } from 'vue'
 import axios from 'axios'
 import { getDummyCollection, setStyling } from '@/Helpers/Helpers'
 import EditorBar from '@/Pages/Embed/Partials/EditorBar.vue'
@@ -48,6 +48,7 @@ let collectionData = ref({
 let loading = ref(true)
 let validBlockchain = ref(true)
 let embedUrl = ref('')
+const emitter = inject('emitter')
 
 onMounted(() => {
     axios.get('/'+props.collection.id+'/fetch').then((response) => {
@@ -75,8 +76,11 @@ const phasesSetting = computed(() => {
 })
 watch(phasesSetting, (newValue, oldValue) => {
     if (oldValue != null) {
-        settingsChanged = true
+        settingsChanged.value = true
     }
+})
+emitter.on('settings-updated', (data) => {
+    settingsChanged.value = false
 })
 
 const copyEmbedCode = (e) => {

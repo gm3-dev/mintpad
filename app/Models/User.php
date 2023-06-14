@@ -41,7 +41,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'birthday' => 'date'
     ];
 
     protected $appends = ['collection_count', 'collection_list'];
@@ -59,10 +58,5 @@ class User extends Authenticatable
     public function getCollectionListAttribute()
     {
         return $this->collections->pluck('name')->implode(', ');
-    }
-
-    public function getCountryNameAttribute()
-    {
-        return config('countries.'.$this->country.'.full');
     }
 }
