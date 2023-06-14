@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, watch, computed, toRaw, inject } from 'vue'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import StatusTab from '@/Components/StatusTab.vue'
 import Box from '@/Components/Box.vue'
@@ -21,13 +21,14 @@ import Messages from '@/Components/Messages.vue'
 import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import Modal from '@/Components/Modal.vue'
-import { formateDatetimeLocal, parseClaimConditions, handleError } from '@/Helpers/Helpers'
+import { formateDatetimeLocal, parseClaimConditions, handleError, shortenWalletAddress, copyToClipboard, ipfsToUrl } from '@/Helpers/Helpers'
 import InputFile from '@/Components/Form/InputFile.vue'
 import axios from 'axios'
 import { resportError } from '@/Helpers/Sentry'
 import ERC1155Burn from './Partials/Collection/ERC1155Burn.vue'
 import ERC721 from './Partials/Collection/ERC721.vue'
 import ERC1155 from './Partials/Collection/ERC1155.vue'
+import CopyButton from '@/Components/CopyButton.vue'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -50,7 +51,7 @@ let collectionData = ref({
     totalClaimedSupply: 0,
     totalRatioSupply: 0,
 })
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let buttonLoading = ref(false)
 let messages = ref([])
@@ -436,6 +437,10 @@ const deleteSocialImage = () => {
                 <div class="text-center mb-10">
                     <h1>{{ collection.name }}</h1>
                     <p>You can adjust the settings of your collection here.</p>
+                    <p>
+                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
+                        <span class="inline-block font-medium px-3 py-1 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4"><img v-if="currentBlockchain.icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(currentBlockchain.icon.url)" /> {{ currentBlockchain.name }}</span>
+                    </p>
                 </div>
 
                 <div v-if="validBlockchain === true">

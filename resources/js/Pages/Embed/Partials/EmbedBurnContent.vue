@@ -5,8 +5,8 @@ import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { calculateTransactionFee } from '@/Helpers/Helpers'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { ref, inject, onMounted } from 'vue'
 
 const props = defineProps({
@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 let validBlockchain = ref(false)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let blockchains = ref(getBlockchains())
 let buttonLoading = ref(false)
 let messages = ref([])
@@ -71,7 +71,7 @@ const burnNFTs = async (e) => {
                 <div class="p-6">
                     <p class="font-regular text-center mb-4">You can evolve your NFTs by burning <b>{{ collectionData.nftsToBurn }}</b> NFTs.</p>
                     <div class="flex gap-2">
-                        <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</Button>
+                        <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary">Connect MetaMask</Button>
                         <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary">Switch blockchain</Button>
                         <Button v-else @click.prevent="burnNFTs" :loading="collectionData.loading" class="w-full mint-bg-primary">Burn <b>{{ collectionData.nftsToBurn }}</b> NFTs</Button>
                     </div>

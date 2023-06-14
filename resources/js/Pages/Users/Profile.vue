@@ -9,7 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import _ from 'lodash'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import ShowPassword from '@/Components/ShowPassword.vue'
 import ValidationMessage from '@/Components/Form/ValidationMessage.vue'
 
@@ -18,7 +18,7 @@ const props = defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let errorClasses = ref('!border-red-500')
 

@@ -36,6 +36,24 @@ function getContractTypeName(contractType) {
 }
 
 export async function getCollectionData(contract, contractType, withAllowList, withNfts) {
+    let output = {
+        metadata: {
+            name: ''
+        },
+        royalties: {
+            feeRecipient: '',
+            royalties: 0
+        },
+        sales: {
+            primarySalesRecipient: ''
+        },
+        nftsToBurn: false,
+        claimConditions: [],
+        nfts: [],
+        totalSupply: false,
+        totalClaimedSupply: false,
+        totalRatioSupply: false
+    }
     try {
         // metadata
         const metadata = await contract.metadata.get()
@@ -75,7 +93,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         }
     
-        return {
+        output = {
             metadata: {
                 name: metadata.name
             },
@@ -94,6 +112,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             totalRatioSupply: totalRatio
         }
     } catch(error) {
-        return false
+        //
     }
+    return output
 }

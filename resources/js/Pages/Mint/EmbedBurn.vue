@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { WeiToValue, setStyling } from '@/Helpers/Helpers'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import EmbedBurnContent from '../Embed/Partials/EmbedBurnContent.vue'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
@@ -16,7 +16,7 @@ document.documentElement.classList.remove('dark')
 const props = defineProps({
     collection: Object
 })
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let editMode = ref(false)
 let loading = ref(true)
 let validBlockchain = ref(false)

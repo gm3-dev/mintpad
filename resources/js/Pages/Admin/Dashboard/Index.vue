@@ -3,7 +3,7 @@ import Box from '@/Components/Box.vue'
 import BoxRow from '@/Components/BoxRow.vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 
@@ -16,7 +16,7 @@ defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let blockchains = ref(getBlockchains())
 

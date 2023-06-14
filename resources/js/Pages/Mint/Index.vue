@@ -12,8 +12,8 @@ import axios from 'axios'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import DarkMode from '@/Components/DarkMode.vue'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import Modal from '@/Components/Modal.vue'
 import EditorBar from '@/Pages/Mint/Partials/EditorBar.vue'
 import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
@@ -32,7 +32,7 @@ const props = defineProps({
     mode: String
 })
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let buttonLoading = ref(false)
 let messages = ref([])
@@ -416,7 +416,7 @@ const mintNFT = async (e) => {
                             </div>
                             <div v-else class="flex gap-2">
                                 <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />
-                                <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
+                                <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
                                 <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
                             </div>

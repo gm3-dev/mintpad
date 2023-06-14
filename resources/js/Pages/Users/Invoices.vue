@@ -7,7 +7,7 @@ import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import _ from 'lodash'
 import { format } from 'date-fns'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import BoxRow from '@/Components/BoxRow.vue'
 import LinkDarkBlue from '@/Components/LinkDarkBlue.vue'
 
@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 provide('wallet', wallet)

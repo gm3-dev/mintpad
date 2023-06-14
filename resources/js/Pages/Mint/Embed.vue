@@ -5,7 +5,7 @@ import EmbedContent from '../Embed/Partials/EmbedContent.vue'
 import axios from 'axios'
 import { WeiToValue, getDoubleDigitNumber, parseClaimConditions, setStyling } from '@/Helpers/Helpers'
 import { getCollectionData, getSmartContract, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -16,7 +16,7 @@ document.documentElement.classList.remove('dark')
 const props = defineProps({
     collection: Object
 })
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let editMode = ref(false)
 let loading = ref(true)
 let validBlockchain = ref(false)

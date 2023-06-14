@@ -1,8 +1,8 @@
 import { getBlockchains } from "@/Helpers/Blockchain"
 import { resportError } from "@/Helpers/Sentry"
-import { ethers } from "ethers";
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import { MetaMaskWallet } from "@thirdweb-dev/wallets"
+import { getDefaultWalletData } from "./Wallet"
 
 export async function disconnectMetaMask() {
     const wallet = createMetaMaskInstance()
@@ -19,38 +19,40 @@ export async function connectMetaMask(connect) {
     const wallet = createMetaMaskInstance()
 
     if (connect == true) {
-        try {  
+        try {
             await wallet.connect()
+
             window.location.reload()
         } catch(error) {
-            console.log(error)
+            // console.log(error)
         }
     } else {
-        try {    
-            wallet.on('accountsChanged', (accounts) => {
-                // Time to reload your interface with accounts[0]!
-                console.log('accountsChanged', accounts)
+        try {
+            wallet.on('open_wallet', (data) => {
+                console.log('open_wallet', data)
+            })
+            wallet.on('change', (data) => {
+                console.log('change', data)
                 window.location.reload()
             })
-    
-            wallet.on('chainChanged', () => {
-                // Time to reload your interface with accounts[0]!
-                console.log('chainChanged')
+            wallet.on('message', function (data) {
+                console.log('message', data)
+            })
+            wallet.on('connect', function (data) {
+                console.log('connect', data)
+            })
+            wallet.on('disconnect', function (data) {
+                console.log('disconnect', data)
                 window.location.reload()
             })
-    
-            wallet.on('message', function (message) {
-                console.log('message', message)
+            wallet.on('error', function (error) {
+                console.log('Error from network', error)
             })
-    
-            wallet.on('connect', function (info) {
-                console.log('Connected to network', info)
+            wallet.on('request', function () {
+                console.log('request')
             })
-    
-            wallet.on('disconnect', function (error) {
-                console.log('Disconnected from network', error)
-                window.location.reload()
-            })
+
+            await wallet.autoConnect()
         
             const signer = await wallet.getSigner()
             const address = await wallet.getAddress()
@@ -71,22 +73,22 @@ export async function connectMetaMask(connect) {
             } 
     
         } catch(error) {
-            console.log(error)
+            // console.log(error)
         }
     
-        return {
-            name: 'metamask',
-            signer: false,
-            account: false,
-            chainId: false,
-            balance: false
-        } 
+        return getDefaultWalletData()
     }
 }
 
 export async function switchChainTo(chainId) {
     try {
         const wallet = createMetaMaskInstance()
+
+        wallet.on('change', (data) => {
+            console.log('change 3', data)
+            window.location.reload()
+        })
+
         await wallet.switchChain(chainId)
 
     } catch(error) {

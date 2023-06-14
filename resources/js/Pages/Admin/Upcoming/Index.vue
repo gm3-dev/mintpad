@@ -6,6 +6,7 @@ import LinkBlue from '@/Components/LinkBlue.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 defineProps({
     collections: Object,
@@ -13,7 +14,7 @@ defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let blockchains = ref(getBlockchains())
 

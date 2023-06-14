@@ -8,6 +8,7 @@ import Select from '@/Components/Form/Select.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 const props = defineProps({
     'user': Object,
@@ -20,7 +21,7 @@ const form = useForm({
 })
 
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 provide('wallet', wallet)

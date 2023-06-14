@@ -6,8 +6,8 @@ import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { ref, inject, onMounted } from 'vue'
 
 const props = defineProps({
@@ -18,7 +18,7 @@ const props = defineProps({
 })
 
 let validBlockchain = ref(false)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let blockchains = ref(getBlockchains())
 let mintAmount = ref(1)
 let currentMintPhase = ref(0)
@@ -174,7 +174,7 @@ const mintNFT = async () => {
                     <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                     <div v-if="!editMode" class="flex gap-2">
                         <Input type="number" v-model="mintAmount" min="1" :max="collectionData.maxMintAmount == 0 ? 99999 : collectionData.maxMintAmount" class="!mb-0 !w-28 mint-bg-phase" />                 
-                        <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</Button>
+                        <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary">Connect MetaMask</Button>
                         <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary">Switch blockchain</Button>
                         <Button v-else="" @click.prevent="mintNFT" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary" :loading="buttonLoading">Start minting <span v-if="collectionData.activeMintPhase !== false">(<span v-if="collectionData.claimPhases[collectionData.activeMintPhase]" v-html="collectionData.claimPhases[collectionData.activeMintPhase].price"></span> <span v-html="blockchains[collection.chain_id].nativeCurrency.symbol"></span>)</span></Button>
                     </div>

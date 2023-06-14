@@ -2,8 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import Button from '@/Components/Form/Button.vue'
 import { Head, useForm } from '@inertiajs/vue3'
-import { ref, provide, onMounted, watch, computed } from 'vue'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { ref, provide, onMounted, watch } from 'vue'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import BoxContent from '@/Components/BoxContent.vue'
 import Box from '@/Components/Box.vue'
 import Label from '@/Components/Form/Label.vue'
@@ -19,13 +19,12 @@ import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
 import LinkLightBlue from '@/Components/LinkLightBlue.vue'
 import { ethers } from 'ethers'
-import { MetaMaskWallet } from "@thirdweb-dev/wallets"
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
 }
 
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let buttonLoading = ref(false)
 let blockchains = ref(getBlockchains())

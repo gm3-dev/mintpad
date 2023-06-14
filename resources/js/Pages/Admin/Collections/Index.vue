@@ -9,7 +9,7 @@ import { shortenWalletAddress, copyToClipboard, parseClaimConditions } from '@/H
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
 import axios from 'axios'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { switchChainTo } from '@/Wallets/MetaMask'
 import Button from '@/Components/Form/Button.vue'
 import Modal from '@/Components/Modal.vue'
@@ -27,7 +27,7 @@ const props = defineProps({
 const form = useForm({});
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let collectionData = ref({
     show: false,
     loading: true

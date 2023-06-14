@@ -4,6 +4,13 @@ import $ from 'jquery'
 import { toRaw, unref } from 'vue'
 import { resportError } from './Sentry'
 
+export function ipfsToUrl(url) {
+    url = url.replace('ipfs://', '')
+    url = 'https://ipfs-2.thirdwebcdn.com/ipfs/'+url
+
+    return url
+}
+
 export function shortenWalletAddress(address) {
     return address ? address.substring(0, 6)+'...'+address.substr(address.length - 4) : ''
 }

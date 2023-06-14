@@ -8,7 +8,7 @@ import Button from '@/Components/Form/Button.vue'
 import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
-import { connectWallet, reconnectWallet } from '@/Wallets/Wallet'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { shortenWalletAddress, copyToClipboard } from '@/Helpers/Helpers'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import Modal from '@/Components/Modal.vue'
@@ -18,7 +18,7 @@ const props = defineProps({
     collections: Object
 })
 let validBlockchain = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let blockchains = ref(getBlockchains())
 let showModal = ref(false)

@@ -12,6 +12,7 @@ import InputFile from '@/Components/Form/InputFile.vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import { getSelectInputBlockchainObject } from '@/Helpers/Helpers'
 import { format } from 'date-fns'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 const props = defineProps({
     'imports': Object
@@ -20,7 +21,7 @@ const props = defineProps({
 let blockchains = ref(getBlockchains())
 let blockchainList = ref({})
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 // Set months and years

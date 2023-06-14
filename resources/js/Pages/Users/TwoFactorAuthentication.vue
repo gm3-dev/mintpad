@@ -4,7 +4,7 @@ import BoxContent from '@/Components/BoxContent.vue'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
-import { reconnectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import Label from '@/Components/Form/Label.vue'
 import Input from '@/Components/Form/Input.vue'
 import Button from '@/Components/Form/Button.vue'
@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 const formToggle = useForm({})
