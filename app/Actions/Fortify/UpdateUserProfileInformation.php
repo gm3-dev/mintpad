@@ -2,11 +2,12 @@
 
 namespace App\Actions\Fortify;
 
+use App\Facades\Moneybird;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
@@ -20,20 +21,35 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'postalcode' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ];
 
-        if (request()->new_password !== null) {
-            $rules['new_password'] = ['required', 'confirmed', Rules\Password::defaults()];
+        // Validate company info
+        if (request()->has('is_company')) {
+            $rules['company_name'] = ['required', 'string', 'max:255'];
+            $rules['vat_id'] = ['required', 'string', 'max:255'];
         }
 
         request()->validate($rules);
 
         $user = User::find(Auth::user()->id);
         $user->name = request()->name;
-        if (request()->get('new_password') !== null) {
-            $user->password = Hash::make(request()->new_password);
-        }
+        $user->is_company = request()->is_company ?? false;
+        $user->company_name = request()->company_name ?? null;
+        $user->vat_id = request()->vat_id ?? null;
+        $user->birthday = date('Y-m-d', strtotime(request()->birth_year.'-'.request()->birth_month.'-'.request()->birth_day));
+        $user->country = request()->country ?? null;
+        $user->city = request()->city ?? null;
+        $user->state = request()->state ?? null;
+        $user->postalcode = request()->postalcode ?? null;
+        $user->address = request()->address ?? null;
         $user->save();
+
+        Moneybird::updateContact($user);
 
         session()->flash('success', 'Profile saved');
 

@@ -1,96 +1,130 @@
-import { getBlockchains } from "@/Helpers/Blockchain"
 import { resportError } from "@/Helpers/Sentry"
-import { ThirdwebSDK } from '@thirdweb-dev/sdk'
-import { MetaMaskWallet } from "@thirdweb-dev/wallets"
-import { getDefaultWalletData } from "./Wallet"
+import { ethers } from "ethers";
 
-export async function disconnectMetaMask() {
-    const wallet = createMetaMaskInstance()
-
-    localStorage.removeItem('walletName')
-    await wallet.disconnect()
-
-    window.location.reload()
-}
-
-export async function connectMetaMask(connect) {
+export async function connectMetaMask(forceRequest) {
     localStorage.setItem('walletName', 'metamask');
 
-    const wallet = createMetaMaskInstance()
-
-    if (connect == true) {
-        try {
-            await wallet.connect()
-
-            window.location.reload()
-        } catch(error) {
-            // console.log(error)
-        }
+    const provider = getMetaMaskProvider()
+    if (provider) {
+        setMetaMaskEvents()
+        return await loadMetaMaskAccount()
     } else {
-        try {
-            wallet.on('open_wallet', (data) => {
-                console.log('open_wallet', data)
-            })
-            wallet.on('change', (data) => {
-                console.log('change', data)
-                window.location.reload()
-            })
-            wallet.on('message', function (data) {
-                console.log('message', data)
-            })
-            wallet.on('connect', function (data) {
-                console.log('connect', data)
-            })
-            wallet.on('disconnect', function (data) {
-                console.log('disconnect', data)
-                window.location.reload()
-            })
-            wallet.on('error', function (error) {
-                console.log('Error from network', error)
-            })
-            wallet.on('request', function () {
-                console.log('request')
-            })
+        return false
+    }
 
-            await wallet.autoConnect()
-        
-            const signer = await wallet.getSigner()
-            const address = await wallet.getAddress()
-            const chainId = await wallet.getChainId()
-    
-            const blockchains = getBlockchains()
-            const blockchain = blockchains[chainId]
-    
-            const sdk = ThirdwebSDK.fromSigner(signer, blockchain, {})
-            const balance = await sdk.wallet.balance()
-        
-            return {
-                name: 'metamask',
-                signer: signer,
-                account: address,
-                chainId: chainId,
-                balance: balance
-            } 
+    function getMetaMaskProvider() {
+        var provider = false
+        try {
+            provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+            // this.provider = await detectEthereumProvider() // not used
     
         } catch(error) {
-            // console.log(error)
+            //
         }
     
-        return getDefaultWalletData()
+        if (provider) {
+            provider.on("pending", function(e) {
+                //
+            })
+        } else {
+            // this.setErrorMessage('MetaMask is not installed - <a href="https://metamask.io/download/" target="_blank" class="underline">download here</a>', true)
+        }
+    
+        return provider
+    }
+    
+    function setMetaMaskEvents() {
+        if (window.ethereum) {
+            ethereum.on('accountsChanged', (accounts) => {
+                // Time to reload your interface with accounts[0]!
+                console.log('accountsChanged', accounts)
+                window.location.reload()
+            })
+    
+            ethereum.on('chainChanged', () => {
+                // Time to reload your interface with accounts[0]!
+                console.log('chainChanged')
+                window.location.reload()
+            })
+    
+            ethereum.on('message', function (message) {
+                console.log('message', message)
+            })
+    
+            ethereum.on('connect', function (info) {
+                console.log('Connected to network', info)
+            })
+    
+            ethereum.on('disconnect', function (error) {
+                console.log('Disconnected from network', error)
+                window.location.reload()
+            })
+        }
+    }
+    
+    async function loadMetaMaskAccount() {
+        var requestAccount = false
+        var signer = false
+        var account = false
+        var chainId = false
+        var accounts = []
+        var network = false
+        var balance = false
+    
+        try {
+            signer = provider.getSigner()
+            accounts = await ethereum.request({method: 'eth_accounts'})
+            if (accounts.length > 0) {
+                account = accounts[0]
+            } else {
+                throw new Error('Not connected')
+            }
+            network = await provider.getNetwork()
+            balance = await provider.getBalance(account)
+        } catch (error) {
+            if (error.message != 'Not connected') {
+                // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                resportError(error) 
+            }
+            requestAccount = true
+        }
+    
+        if (window.ethereum) {
+            if (requestAccount && forceRequest) {
+                try {
+                    accounts = await ethereum.request({method: 'eth_requestAccounts'})
+                } catch(error) {
+                    // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
+                    resportError(error) 
+                }
+                if (accounts.length > 0) {
+                    account = accounts[0]
+                }
+            }
+            
+            chainId = parseInt(window.ethereum.networkVersion)
+        }
+
+        if (forceRequest == true) {
+            window.location.reload()
+        }
+
+        return {
+            name: 'metamask',
+            signer: signer,
+            account: account,
+            chainId: chainId,
+            balance: balance
+        }
     }
 }
 
-export async function switchChainTo(chainId) {
+export async function switchBlockchainTo(chainId) {
     try {
-        const wallet = createMetaMaskInstance()
-
-        wallet.on('change', (data) => {
-            console.log('change 3', data)
-            window.location.reload()
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: ethers.utils.hexValue(parseInt(chainId)) }],
         })
-
-        await wallet.switchChain(chainId)
-
     } catch(error) {
         let metamaskError = getMetaMaskError(error)
         if (metamaskError) {
@@ -118,8 +152,6 @@ export function getMetaMaskError(error) {
     }
 
     switch(error.reason) {
-        case 'Not enough tokens owned': 
-            return 'You don\'t have enough NFTs to burn.'
         case '!Qty': 
             return 'You reached the maximum number of claimable NFTs per wallet.'
         case '!MaxSupply': 
@@ -134,15 +166,4 @@ export function getMetaMaskError(error) {
             }
     }
     return false
-}
-
-function createMetaMaskInstance() {
-    return new MetaMaskWallet({
-        dappMetadata: {
-            name: "Mintpad",
-            url: "https://mintpad.co",
-            description: "Mintpad",
-            logoUrl: "https://app.mintpad.co/favicon.png"
-        }
-    })
 }

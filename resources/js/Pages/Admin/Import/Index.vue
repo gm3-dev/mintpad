@@ -12,7 +12,6 @@ import InputFile from '@/Components/Form/InputFile.vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import { getSelectInputBlockchainObject } from '@/Helpers/Helpers'
 import { format } from 'date-fns'
-import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 const props = defineProps({
     'imports': Object
@@ -21,7 +20,7 @@ const props = defineProps({
 let blockchains = ref(getBlockchains())
 let blockchainList = ref({})
 let loading = ref(true)
-let wallet = ref(getDefaultWalletData())
+let wallet = ref({account: false})
 let validBlockchain = ref(true)
 
 // Set months and years
@@ -42,7 +41,6 @@ let months = {
 let years = {2022: 2022, 2023: 2023, 2024: 2024, 2025: 2025, 2026: 2026, 2027: 2027, 2028: 2028, 2029: 2029}
 
 provide('wallet', wallet)
-provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     blockchainList.value = getSelectInputBlockchainObject(blockchains)

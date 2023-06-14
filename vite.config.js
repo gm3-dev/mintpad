@@ -44,14 +44,6 @@ export default ({ mode }) => {
             alias: {
                 buffer: 'buffer/',
             }
-        },
-        optimizeDeps: {
-            esbuildOptions: {
-                // Node.js global to browser globalThis
-                define: {
-                    global: 'globalThis',
-                },
-            },
-        },
+        }
     });
 }

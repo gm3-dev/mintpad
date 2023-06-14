@@ -8,10 +8,6 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    showClose: {
-        type: Boolean,
-        default: true
-    },
     title: {
         type: String,
         default: 'Default title'
@@ -35,7 +31,7 @@ onMounted(() => {
                         <h2 v-html="title" class="!mb-0"></h2>
                     </div>
                     <div class="bg-white dark:bg-mintpad-800 px-10 py-6">
-                        <a v-if="showClose" href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="$emit('close')">close</a>
+                        <a href="#" class="absolute right-4 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="$emit('close')">close</a>
                         <div>
                             <slot />
                         </div>

@@ -6,23 +6,21 @@ import DropdownRow from '@/Components/DropdownRow.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import HamburgerMenu from '@/Components/HamburgerMenu.vue';
 import HamburgerMenuLink from '@/Components/HamburgerMenuLink.vue';
+import WalletManager from '@/Components/WalletManager.vue';
 import NavLink from '@/Components/NavLink.vue';
 import { inject, ref, watch } from 'vue'
 import { disconnectWallet } from '@/Wallets/Wallet';
 import { getBlockchain } from '@/Helpers/Blockchain'
-import { shortenWalletAddress } from '@/Helpers/Helpers'
-import CopyButton from './CopyButton.vue'
+import { WeiToValue } from '@/Helpers/Helpers'
 
 let wallet = inject('wallet')
 let balance = ref(false)
 let blockchainName = ref(false)
 
 watch(wallet, () => {
-    if (wallet.value.chainId) {
-        const blockchain = getBlockchain(wallet.value.chainId)
-        balance.value = parseFloat(wallet.value.balance.displayValue).toFixed(3) + ' ' + wallet.value.balance.symbol
-        blockchainName.value = blockchain.name
-    }
+    const blockchain = getBlockchain(wallet.value.chainId)
+    balance.value = WeiToValue(wallet.value.balance).toFixed(3) + ' ' + blockchain.nativeCurrency.symbol
+    blockchainName.value = blockchain.name
 })
 </script>
 <template>
@@ -50,7 +48,7 @@ watch(wallet, () => {
                 </div>
 
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
-                    <a href="https://docs.mintpad.co/" target="_blank" class="mr-4 text-sm text-mintpad-700 border border-mintpad-400 hover:border-mintpad-700 dark:text-mintpad-400 py-1 px-3 rounded-md"><i class="fa-regular fa-file"></i> Docs</a>
+                    <WalletManager></WalletManager>
                     <DarkMode class="mr-4" />
 
                     <Dropdown v-if="wallet.account" id="dropdown-1" width="w-72">
@@ -58,10 +56,6 @@ watch(wallet, () => {
                             <div><img :src="'/images/'+wallet.name+'.png'" width="26px" class="inline-block mr-4 w-6" /></div>
                         </template>
                         <template v-slot:links>
-                            <DropdownRow v-if="wallet.balance" class="flex flex-row">
-                                <div class="w-1/3">Address</div>
-                                <div class="w-2/3 text-primary-600">{{ shortenWalletAddress(wallet.account) }} <CopyButton class="ml-2" :text="wallet.account" /></div>
-                            </DropdownRow>
                             <DropdownRow v-if="wallet.balance" class="flex flex-row">
                                 <div class="w-1/3">Blockchain</div>
                                 <div class="w-2/3 text-primary-600">{{ blockchainName }}</div>
@@ -94,6 +88,7 @@ watch(wallet, () => {
                             <DropdownLink v-if="route().current('admin.*')" :href="route('collections.index')">User panel</DropdownLink>
                             <DropdownLink :href="route('users.profile')">My profile</DropdownLink>
                             <DropdownLink :href="route('users.2fa')">2fa settings</DropdownLink>
+                            <DropdownLink :href="route('users.invoices')">Invoices</DropdownLink>
                             <DropdownLink :href="route('logout')" method="post" as="button">Log Out</DropdownLink>
                         </template>
                     </Dropdown>

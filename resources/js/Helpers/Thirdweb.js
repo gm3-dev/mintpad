@@ -30,30 +30,11 @@ function getContractTypeName(contractType) {
     switch (contractType) {
         case 'ERC721': return 'nft-drop'
         case 'ERC1155': return 'edition-drop'
-        case 'ERC1155Burn': return 'edition-drop'
         default: return 'nft-drop'
     }
 }
 
 export async function getCollectionData(contract, contractType, withAllowList, withNfts) {
-    let output = {
-        metadata: {
-            name: ''
-        },
-        royalties: {
-            feeRecipient: '',
-            royalties: 0
-        },
-        sales: {
-            primarySalesRecipient: ''
-        },
-        nftsToBurn: false,
-        claimConditions: [],
-        nfts: [],
-        totalSupply: false,
-        totalClaimedSupply: false,
-        totalRatioSupply: false
-    }
     try {
         // metadata
         const metadata = await contract.metadata.get()
@@ -61,11 +42,8 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         // royalties
         const royalties = await contract.royalties.getDefaultRoyaltyInfo()
     
-        // Burn
-        let nftsToBurn = 0;
-        if (contractType == 'ERC1155Burn') {
-            nftsToBurn = await contract.call('numberToBurn')
-        }
+        // Fees
+        const platformFees = await contract.platformFees.get()
     
         // Sales
         const primarySalesRecipient = await contract.sales.getRecipient()
@@ -74,37 +52,39 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         let claimConditions = []
         if (contractType == 'ERC721') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
-        } else if (contractType.startsWith('ERC1155')) {
+        } else if (contractType == 'ERC1155') {
             claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
         }
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
-        // NFTs
-        const nfts = withNfts ? await contract.getAll({count: 8}) : []
-
         // Collection
         if (contractType == 'ERC721') {
             var totalSupply = await contract.totalSupply()
             var totalClaimedSupply = await contract.totalClaimedSupply()
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
-        } else if (contractType.startsWith('ERC1155')) {
-            var totalSupply = await contract.call('maxTotalSupply', [0], {})
-            var totalClaimedSupply = await contract.totalSupply('0')
+        } else if (contractType == 'ERC1155') {
+            var totalSupply = await contract.call('maxTotalSupply', 0)
+            var totalClaimedSupply = await contract.totalSupply(0)
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         }
+        const nfts = withNfts ? await contract.getAll({count: 8}) : []
     
-        output = {
+        return {
             metadata: {
-                name: metadata.name
+                name: metadata.name,
+                description: metadata.description
             },
             royalties: {
                 feeRecipient: royalties.fee_recipient,
                 royalties: royalties.seller_fee_basis_points / 100
             },
+            platformFees: {
+                platformFee: platformFees.platform_fee_basis_points / 100,
+                platformFeeRecipient: platformFees.platform_fee_recipient
+            },
             sales: {
                 primarySalesRecipient: primarySalesRecipient
             },
-            nftsToBurn: nftsToBurn,
             claimConditions: claimConditions,
             nfts: nfts,
             totalSupply: totalSupply,
@@ -112,7 +92,6 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             totalRatioSupply: totalRatio
         }
     } catch(error) {
-        //
+        return false
     }
-    return output
 }
