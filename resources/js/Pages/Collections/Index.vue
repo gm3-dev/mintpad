@@ -8,7 +8,7 @@ import Button from '@/Components/Form/Button.vue'
 import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
-import { connectWallet } from '@/Wallets/Wallet'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { shortenWalletAddress, copyToClipboard } from '@/Helpers/Helpers'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import Modal from '@/Components/Modal.vue'
@@ -18,18 +18,16 @@ const props = defineProps({
     collections: Object
 })
 let validBlockchain = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let blockchains = ref(getBlockchains())
 let showModal = ref(false)
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     // validateBlockchain(collection.chain_id)
@@ -52,7 +50,7 @@ onMounted(async () => {
                 <h1>Let’s get started</h1>
                 <div v-if="!wallet.account">
                     <p class="mb-4">You have to connect your wallet to start creating your collection.</p>
-                    <Button href="#" @click.prevent="connectWallet('metamask', true)">Connect MetaMask</Button>
+                    <Button href="#" @click.prevent="connectWallet('metamask')">Connect MetaMask</Button>
                 </div>
                 <div v-else>
                     <p class="mb-4">We are connected to your wallet.</p>

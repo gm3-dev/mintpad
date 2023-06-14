@@ -61,12 +61,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $countries = collect(config('countries'))->map(function ($country) {
-            return $country['full'];
-        });
-        $user->birth_day = $user->birthday->day ?? date('d');
-        $user->birth_month = $user->birthday->month ?? date('n');
-        $user->birth_year = $user->birthday->year ?? date('Y');
         $roles = config('roles');
 
         return Inertia::render('Admin/Users/Edit', compact('user', 'countries', 'roles'));

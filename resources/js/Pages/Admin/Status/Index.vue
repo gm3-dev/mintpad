@@ -5,12 +5,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import LinkBlue from '@/Components/LinkBlue.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 provide('wallet', wallet)
