@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93fecc51f4cc84f8971c3a14d368eff5",
+    "content-hash": "c12b4e74174e0f84c647272419a56d9d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3323,59 +3323,6 @@
                 }
             ],
             "time": "2023-02-25T19:38:58+00:00"
-        },
-        {
-            "name": "picqer/moneybird-php-client",
-            "version": "v0.34.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/picqer/moneybird-php-client.git",
-                "reference": "277cca69816bd66a03433bc4da018183f5ca68e5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/picqer/moneybird-php-client/zipball/277cca69816bd66a03433bc4da018183f5ca68e5",
-                "reference": "277cca69816bd66a03433bc4da018183f5ca68e5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.3.1|^7.0",
-                "php": ">=7.3.0",
-                "psr/http-client": "^1.0"
-            },
-            "require-dev": {
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^8.5|^9.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Picqer\\Financials\\Moneybird\\": "src/Picqer/Financials/Moneybird"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stephan Groen",
-                    "email": "info@picqer.com"
-                }
-            ],
-            "description": "A PHP Client for the Moneybird V2 API",
-            "homepage": "https://github.com/picqer/moneybird-php-client",
-            "keywords": [
-                "api",
-                "moneybird",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/picqer/moneybird-php-client/issues",
-                "source": "https://github.com/picqer/moneybird-php-client/tree/v0.34.1"
-            },
-            "time": "2022-08-30T06:38:46+00:00"
         },
         {
             "name": "plank/laravel-metable",

@@ -4,7 +4,7 @@ import BoxContent from '@/Components/BoxContent.vue'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
-import { connectWallet } from '@/Wallets/Wallet'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import Label from '@/Components/Form/Label.vue'
 import Input from '@/Components/Form/Input.vue'
 import Button from '@/Components/Form/Button.vue'
@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 const formToggle = useForm({})
@@ -23,13 +23,11 @@ const formConfirm = useForm({
 })
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Done loading
     loading.value = false

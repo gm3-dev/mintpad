@@ -9,8 +9,8 @@ import { shortenWalletAddress, copyToClipboard, parseClaimConditions } from '@/H
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
 import axios from 'axios'
-import { connectWallet } from '@/Wallets/Wallet'
-import { switchBlockchainTo } from '@/Wallets/MetaMask'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
+import { switchChainTo } from '@/Wallets/MetaMask'
 import Button from '@/Components/Form/Button.vue'
 import Modal from '@/Components/Modal.vue'
 import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
@@ -27,7 +27,7 @@ const props = defineProps({
 const form = useForm({});
 
 let loading = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let collectionData = ref({
     show: false,
     loading: true
@@ -37,13 +37,11 @@ let blockchains = ref(getBlockchains())
 const emitter = inject('emitter')
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
     
     // Done loading
     loading.value = false
@@ -66,14 +64,11 @@ const openCollectionModal = async (collectionID) => {
 
         // Settings
         collectionData.value.name = data.metadata.name
-        collectionData.value.description = data.metadata.description
         collectionData.value.feeRecipient = data.royalties.feeRecipient
         collectionData.value.royalties = data.royalties.royalties
 
         // Fees
         collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
-        collectionData.value.platformFee = data.platformFees.platformFee
-        collectionData.value.platformFeeRecipient = data.platformFees.platformFeeRecipient
 
         // Claim phases
         collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
@@ -93,8 +88,8 @@ const closeModal = () => {
     collectionData.value.show = false
     collectionData.value.loading = true
 }
-const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+const switchBlockchain = async (chainId) => {
+    const status = await switchChainTo(chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }
@@ -122,7 +117,7 @@ const switchBlockchain = async () => {
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
                         <LinkBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</LinkBlue>
                         <span v-if="wallet.chainId != collection.chain_id" :content="'You need to switch to '+blockchains[collection.chain_id].nativeCurrency.symbol" v-tippy>
-                            <ButtonGray href="#" @click.prevent="switchBlockchain" class="ml-2 !px-2 w-24">Switch</ButtonGray>
+                            <ButtonGray href="#" @click.prevent="switchBlockchain(collection.chain_id)" class="ml-2 !px-2 w-24">Switch</ButtonGray>
                         </span>
                         <Button v-else href="#" @click.prevent="openCollectionModal(collection.id)" class="ml-2 !px-2 w-24">More info</Button>
                         <a href="#" @click.prevent="deleteCollection(collection.id)" class="ml-2 hover:text-red-700"><i class="fas fa-trash-alt"></i></a>
@@ -140,7 +135,6 @@ const switchBlockchain = async () => {
                 <p>Chain: <span class="text-mintpad-500 dark:text-white">{{ blockchains[collectionData.chainId].name }} ({{ blockchains[collectionData.chainId].nativeCurrency.symbol }}) with ID {{ collectionData.chainId }}</span></p>
                 <p>Primary sales: <span class="text-mintpad-500 dark:text-white">{{ collectionData.primarySalesRecipient }}</span></p>
                 <p>Royalties: <span class="text-mintpad-500 dark:text-white">{{ collectionData.royalties }}% to {{ collectionData.feeRecipient }}</span></p>
-                <p>Platform fees: <span class="text-mintpad-500 dark:text-white">{{ collectionData.platformFee }}% to {{ collectionData.platformFeeRecipient }}</span></p>
                 <p>Claim phases: <span class="text-mintpad-500 dark:text-white">{{ collectionData.claimPhases.length }}</span></p>
                 <p v-if="collectionData.nfts.length == 0">Total minted: <span class="text-mintpad-500 dark:text-white">NFT list empty</span></p>
                 <p v-else>Total minted: <span class="text-mintpad-500 dark:text-white">{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</span></p>

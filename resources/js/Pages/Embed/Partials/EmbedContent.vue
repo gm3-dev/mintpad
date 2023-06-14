@@ -3,10 +3,11 @@ import Box from '@/Components/Box.vue'
 import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
+import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
 import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { connectMetaMask, getMetaMaskError, switchBlockchainTo } from '@/Wallets/MetaMask'
-import { connectWallet } from '@/Wallets/Wallet'
+import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { ref, inject, onMounted } from 'vue'
 
 const props = defineProps({
@@ -17,19 +18,17 @@ const props = defineProps({
 })
 
 let validBlockchain = ref(false)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let blockchains = ref(getBlockchains())
 let mintAmount = ref(1)
 let currentMintPhase = ref(0)
 let buttonLoading = ref(false)
+let messages = ref([])
 const emitter = inject('emitter')
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
@@ -38,7 +37,7 @@ onMounted(async () => {
 })
 
 const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+    const status = await switchChainTo(props.chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }
@@ -72,10 +71,34 @@ const mintNFT = async () => {
         try {
             // Set contract
             const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-            await contract.claim(mintAmount.value)
+            if (props.collection.type == 'ERC721') {
+                if (props.collectionData.contractType == 'DropERC721') {
+                    await contract.claim(mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(mintAmount.value)
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    // let valueOverride = ((props.collectionData.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ethers.utils.parseUnits((props.collectionData.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    await preparedClaim.execute()
+                }
+            } else if (props.collection.type.startsWith('ERC1155')) {
+                if (props.collectionData.contractType == 'DropERC1155') {
+                    await contract.claim(0, mintAmount.value)
+                } else {
+                    const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
+                    // let valueOverride = ((props.collectionData.transactionFee + overrideValue) * 1000000000000000000).toString()
+                    // let valueOverride = ethers.utils.parseUnits((props.collectionData.transactionFee + overrideValue).toString(), 18)
+                    preparedClaim.overrides.value = calculateTransactionFee(props.collectionData.transactionFee, overrideValue)
+                    await preparedClaim.execute()
+                }
+            }
 
             messages.value.push({type: 'success', message: 'NFT minted!'})
         } catch (error) {
+            console.log('error', error)
+            
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
@@ -85,7 +108,7 @@ const mintNFT = async () => {
             }
         }
 
-        buttonLoading.value = true
+        buttonLoading.value = false
     }
 }
 
@@ -151,7 +174,7 @@ const mintNFT = async () => {
                     <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                     <div v-if="!editMode" class="flex gap-2">
                         <Input type="number" v-model="mintAmount" min="1" :max="collectionData.maxMintAmount == 0 ? 99999 : collectionData.maxMintAmount" class="!mb-0 !w-28 mint-bg-phase" />                 
-                        <Button v-if="!wallet.account" @click.prevent="connectMetaMask" class="w-full mint-bg-primary">Connect MetaMask</Button>
+                        <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary">Connect MetaMask</Button>
                         <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary">Switch blockchain</Button>
                         <Button v-else="" @click.prevent="mintNFT" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary" :loading="buttonLoading">Start minting <span v-if="collectionData.activeMintPhase !== false">(<span v-if="collectionData.claimPhases[collectionData.activeMintPhase]" v-html="collectionData.claimPhases[collectionData.activeMintPhase].price"></span> <span v-html="blockchains[collection.chain_id].nativeCurrency.symbol"></span>)</span></Button>
                     </div>
@@ -164,7 +187,7 @@ const mintNFT = async () => {
                             <p>Total minted</p>
                         </div>
                         <div class="text-right">
-                            <p v-if="collection.type == 'ERC1155' && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
+                            <p v-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
                             <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
                         </div>
                     </div>

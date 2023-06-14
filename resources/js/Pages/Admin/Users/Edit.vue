@@ -8,10 +8,10 @@ import Select from '@/Components/Form/Select.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
+import { getDefaultWalletData } from '@/Wallets/Wallet'
 
 const props = defineProps({
     'user': Object,
-    'countries': Object,
     'roles': Object,
 })
 
@@ -21,10 +21,11 @@ const form = useForm({
 })
 
 let loading = ref(true)
-let wallet = ref({account: false})
+let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
     // Done loading
@@ -73,61 +74,6 @@ const submit = () => {
                         <div>
                             <Label for="email" value="Email" />
                             <p>{{ user.email }}</p>
-                        </div>
-                        <!-- Country -->
-                        <div>
-                            <Label for="country" value="Country" />
-                            <p>{{ user.country }}</p>
-                        </div>
-                        <!-- City -->
-                        <div>
-                            <Label for="city" value="City" />
-                            <p>{{ user.city }}</p>
-                        </div>
-                        <!-- State/Province -->
-                        <div>
-                            <Label for="state" value="State/Province" />
-                            <p>{{ user.state }}</p>
-                        </div>
-                        <!-- Postal code -->
-                        <div>
-                            <Label for="postalcode" value="Postal code" />
-                            <p>{{ user.postalcode }}</p>
-                        </div>
-                        <!-- Streetaddress -->
-                        <div>
-                            <Label for="address" value="Street address" />
-                            <p>{{ user.address }}</p>
-                        </div>
-                        <!-- Date of birth -->
-                        <div>
-                            <Label for="name" value="Date of birth" />
-                            <p>{{ user.birthday }}</p>
-                        </div>
-                    </div>
-                </BoxContent>
-            </Box>
-
-            <Box title="Company information">
-                <BoxContent>
-                    <!-- Is company -->
-                    <div class="mb-4">
-                        <label for="is-company" class="w-1/2">
-                            <Label for="is-company" value="I'm a company" />
-                            <p>{{ user.is_company ? 'Yes' : 'No' }}</p>
-                        </label>
-                    </div>
-
-                    <div id="company-info" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Company name -->
-                        <div>
-                            <Label for="company_name" value="Company name" />
-                            <p>{{ user.company_name ?? '-' }}</p>
-                        </div>
-                        <!-- VAT ID -->
-                        <div>
-                            <Label for="vat_id" value="VAT ID number" />
-                            <p>{{ user.vat_id ?? '-' }}</p>
                         </div>
                     </div>
                 </BoxContent>
