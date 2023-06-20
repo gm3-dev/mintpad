@@ -129,7 +129,7 @@ const validateForm = () => {
     </Box>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Box class="mb-4" v-if="!validCollection" title="Before burn">
+        <Box class="mb-4" v-if="!validCollection" title="Upload your artwork">
             <BoxContent>
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
