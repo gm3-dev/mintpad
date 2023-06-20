@@ -263,7 +263,7 @@ const updateClaimPhases = async () => {
             error = 'Phase '+ claimPhase.id +': Mint phase name must be at least 1 character long'
         } else if (claimPhase.maxClaimableSupply.length < 1) {
             error = claimPhase.name +': Number of NFTs must be a number'
-        } else if (claimPhase.maxClaimableSupply < 0) {
+        } else if (parseInt(claimPhase.maxClaimableSupply) < 0) {
             error = claimPhase.name +': Number of NFTs is not valid'
         } else if (claimPhase.price.length < 1) {
             error = claimPhase.name +': Mint price must be a number'
@@ -271,12 +271,10 @@ const updateClaimPhases = async () => {
             error = claimPhase.name +': Mint price is not valid'
         } else if (claimPhase.maxClaimablePerWallet.length < 1) {
             error = claimPhase.name +': Mints per wallet must be a number'
-        } else if (claimPhase.maxClaimablePerWallet < 0) {
+        } else if (parseInt(claimPhase.maxClaimablePerWallet) < 0) {
             error = claimPhase.name +': Mints per wallet is not valid'
         } 
-        // else if (claimPhase.whitelist == true && claimPhase.maxClaimablePerWallet == 0) {
-        //     error = claimPhase.name +': Claims per wallet can\'t be unlimited when you enabled a whitelist'
-        // }
+
         if (error) {
             break
         }
@@ -291,16 +289,21 @@ const updateClaimPhases = async () => {
     let claimPhaseList = []
     for (var i = 0; i < claimPhases.value.length; i++) {
         let claimPhase = claimPhases.value[i]
+        // Set maxClaimablePerWallet
+        let maxClaimablePerWallet = claimPhase.maxClaimablePerWallet == '0' && claimPhase.whitelist == '0' ? 'unlimited' : parseInt(claimPhase.maxClaimablePerWallet)
+        if (claimPhase.whitelist == '1') {
+            maxClaimablePerWallet = '0'
+        }
         let newClaimPhase = {
             metadata: {
                 name: claimPhase.name
             },
             startTime: new Date(claimPhase.startTime),
             price: parseFloat(claimPhase.price),
-            maxClaimableSupply: claimPhase.maxClaimableSupply == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimableSupply),
-            maxClaimablePerWallet: claimPhase.maxClaimablePerWallet == 0 && claimPhase.whitelist == 0 ? 'unlimited' : parseInt(claimPhase.maxClaimablePerWallet),
+            maxClaimableSupply: claimPhase.maxClaimableSupply == '0' ? 'unlimited' : parseInt(claimPhase.maxClaimableSupply),
+            maxClaimablePerWallet: maxClaimablePerWallet,
             // waitInSeconds: claimPhase.waitInSeconds == 0 ? ethers.constants.MaxUint256 : 5, // Contract v2, Contract v3
-            snapshot: claimPhase.whitelist == 0 ? [] : toRaw(claimPhase.snapshot),
+            snapshot: claimPhase.whitelist == '0' ? [] : toRaw(claimPhase.snapshot),
         }
         claimPhaseList.push(newClaimPhase)
     }
@@ -345,9 +348,9 @@ const addClaimPhase = () => {
     claimPhases.value.push({
         startTime: formateDatetimeLocal(new Date(Date.now())),
         price: 0,
-        maxClaimableSupply: 0,
-        maxClaimablePerWallet: 0,
-        whitelist: 0,
+        maxClaimableSupply: '0',
+        maxClaimablePerWallet: '0',
+        whitelist: '0',
         // waitInSeconds: 1, Contract v2, Contract v3
         snapshot: [],
         modal: false,
@@ -438,8 +441,8 @@ const deleteSocialImage = () => {
                     <h1>{{ collection.name }}</h1>
                     <p>You can adjust the settings of your collection here.</p>
                     <p>
-                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
-                        <span class="inline-block font-medium px-3 py-1 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4"><img v-if="currentBlockchain.icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(currentBlockchain.icon.url)" /> {{ currentBlockchain.name }}</span>
+                        <ButtonGray content="Copy contract address" @click.prevent="copyToClipboard" :text="collection.address" class="!text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
+                        <span class="inline-block align-middle font-medium px-3 py-1 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4"><img v-if="currentBlockchain.icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(currentBlockchain.icon.url)" /> {{ currentBlockchain.name }}</span>
                     </p>
                 </div>
 
@@ -575,7 +578,7 @@ const deleteSocialImage = () => {
                                             <Radio :id="'whitelist-1-'+index" type="radio" v-model="phase.whitelist" value="1" class="inline-block" /><Label :for="'whitelist-1-'+index" class="inline-block mx-2" value="Yes" />
                                         </RadioGroup>
                                     </div>
-                                    <div v-if="phase.whitelist == 1" class="col-span-2">
+                                    <div v-if="phase.whitelist == '1'" class="col-span-2">
                                         <Label value="Whitelist CSV file" info="Here you can upload a .CSV file with all whitelisted wallets." />
                                         <p class="text-sm"><ButtonGray href="#" @click.prevent="toggleWhitelistModal(index, true)">Upload CSV</ButtonGray><span class="ml-3" v-html="phase.snapshot.length"></span> addresses</p>
                                     </div>
