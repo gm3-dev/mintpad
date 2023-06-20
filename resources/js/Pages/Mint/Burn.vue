@@ -184,6 +184,10 @@ const burnNFTs = async (e) => {
         await contract.call('evolve', [wallet.value.account, firstClaimPhase.currency], {
             value: valueOverride
         })
+
+        showModal.value = true
+
+        setSupplyData(contract)
     } catch (error) {
         console.log('error burn', error)
         let metamaskError = getMetaMaskError(error)

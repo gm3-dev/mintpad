@@ -9,7 +9,7 @@ import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
 import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
-import { shortenWalletAddress, copyToClipboard } from '@/Helpers/Helpers'
+import { shortenWalletAddress, copyToClipboard, ipfsToUrl } from '@/Helpers/Helpers'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import Modal from '@/Components/Modal.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
@@ -72,7 +72,7 @@ onMounted(async () => {
                 <BoxRow v-for="collection in collections" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                     <div class="basis-full sm:basis-3/12">{{ collection.name }}</div>
                     <div class="hidden sm:block basis-2/12">{{ collection.type }}</div>
-                    <div class="basis-full sm:basis-3/12">{{ blockchains[collection.chain_id].name }}</div>
+                    <div class="basis-full sm:basis-3/12"><img v-if="blockchains[collection.chain_id].icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(blockchains[collection.chain_id].icon.url)" /> {{ blockchains[collection.chain_id].name }}</div>
                     <div class="basis-full sm:basis-4/12 lg:basis-2/12">
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!w-full !text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
                     </div>

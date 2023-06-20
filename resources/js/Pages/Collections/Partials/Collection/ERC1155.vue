@@ -135,11 +135,11 @@ const validateForm = () => {
                     <p class="mb-4">This image will be the image people mint.</p>
 
                     <div class="basis-full">
-                        <Label for="name" value="Name of your NFT" class="relative" info="This is the name of your NFT." />
+                        <Label for="name" value="Name of your NFT" class="relative" info="Name of the NFT before burning." />
                         <Input type="text" id="name" class="w-full" v-model="form.name" autofocus />
                     </div>
                     <div class="basis-full">
-                        <Label for="description" value="Description" class="relative" info="You can write a short description about your NFT collection here." />
+                        <Label for="description" value="Description" class="relative" info="Description about the NFT before burning.." />
                         <Textarea id="description" type="text" v-model="form.description" :rows="4" class="w-full"></Textarea>
                     </div>
                     <label class="block text-mintpad-300 mb-4">

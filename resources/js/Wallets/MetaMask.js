@@ -85,7 +85,6 @@ export async function switchChainTo(chainId) {
         const wallet = createMetaMaskInstance()
 
         wallet.on('change', (data) => {
-            console.log('change 3', data)
             window.location.reload()
         })
 
@@ -118,7 +117,7 @@ export function getMetaMaskError(error) {
     }
 
     switch(error.reason) {
-        case 'Not enough tokens owned': 
+        case '!Tokens': 
             return 'You don\'t have enough NFTs to burn.'
         case '!Qty': 
             return 'You reached the maximum number of claimable NFTs per wallet.'
