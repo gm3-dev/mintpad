@@ -85,7 +85,8 @@ export function hexToNumber(hex) {
 }
 
 export function WeiToValue(wei) {
-    return wei / 1000000000000000000
+    return ethers.utils.formatEther(wei.toString())
+    // return wei / 1000000000000000000
 }
 
 export function hexToValue(hex) {
