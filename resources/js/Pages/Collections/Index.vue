@@ -8,8 +8,8 @@ import Button from '@/Components/Form/Button.vue'
 import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
-import { connectWallet } from '@/Wallets/Wallet'
-import { shortenWalletAddress, copyToClipboard } from '@/Helpers/Helpers'
+import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
+import { shortenWalletAddress, copyToClipboard, ipfsToUrl } from '@/Helpers/Helpers'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import Modal from '@/Components/Modal.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
@@ -18,18 +18,16 @@ const props = defineProps({
     collections: Object
 })
 let validBlockchain = ref(true)
-let wallet = ref(false)
+let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let blockchains = ref(getBlockchains())
 let showModal = ref(false)
 provide('wallet', wallet)
+provide('transaction', {show: false, message: ''})
 
 onMounted(async () => {
-    // Connect wallet if local storage is set
-    const walletName = localStorage.getItem('walletName')
-    if (walletName) {
-        wallet.value = await connectWallet(walletName, false)
-    }
+    // Connect wallet
+    wallet.value = await reconnectWallet()
 
     // Init app
     // validateBlockchain(collection.chain_id)
@@ -52,7 +50,7 @@ onMounted(async () => {
                 <h1>Let’s get started</h1>
                 <div v-if="!wallet.account">
                     <p class="mb-4">You have to connect your wallet to start creating your collection.</p>
-                    <Button href="#" @click.prevent="connectWallet('metamask', true)">Connect MetaMask</Button>
+                    <Button href="#" @click.prevent="connectWallet('metamask')">Connect MetaMask</Button>
                 </div>
                 <div v-else>
                     <p class="mb-4">We are connected to your wallet.</p>
@@ -74,7 +72,7 @@ onMounted(async () => {
                 <BoxRow v-for="collection in collections" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                     <div class="basis-full sm:basis-3/12">{{ collection.name }}</div>
                     <div class="hidden sm:block basis-2/12">{{ collection.type }}</div>
-                    <div class="basis-full sm:basis-3/12">{{ blockchains[collection.chain_id].name }}</div>
+                    <div class="basis-full sm:basis-3/12"><img v-if="blockchains[collection.chain_id].icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(blockchains[collection.chain_id].icon.url)" /> {{ blockchains[collection.chain_id].name }}</div>
                     <div class="basis-full sm:basis-4/12 lg:basis-2/12">
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!w-full !text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
                     </div>

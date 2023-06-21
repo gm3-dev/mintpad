@@ -1,6 +1,6 @@
 <script setup>
 import Button from '@/Components/Form/Button.vue'
-import { switchBlockchainTo } from '@/Wallets/MetaMask'
+import { switchChainTo } from '@/Wallets/MetaMask'
 import { connectWallet } from '@/Wallets/Wallet'
 import { inject } from 'vue'
 
@@ -13,7 +13,7 @@ const props = defineProps({
 const emitter = inject('emitter')
 
 const switchBlockchain = async () => {
-    const status = await switchBlockchainTo(props.chainId)
+    const status = await switchChainTo(props.chainId)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }
@@ -26,7 +26,7 @@ const switchBlockchain = async () => {
         <div v-else>
             <div class="col-span-1 lg:col-span-2">
                 <div v-if="validBlockchain == 'wallet'" class="bg-mintpad-200 dark:bg-mintpad-700 p-2 mb-4 text-center">
-                    <p class="text-sm text-mintpad-700 dark:text-white">Your wallet is not connected <Button href="#" class="ml-4" @click.prevent="connectWallet('metamask', true)">Connect MetaMask</Button></p>
+                    <p class="text-sm text-mintpad-700 dark:text-white">Your wallet is not connected <Button href="#" class="ml-4" @click.prevent="connectWallet('metamask')">Connect MetaMask</Button></p>
                 </div>
                 <div v-else-if="validBlockchain == 'chain'" class="bg-mintpad-200 dark:bg-mintpad-700 p-2 mb-4 text-center">
                     <p class="text-sm text-mintpad-700 dark:text-white">Your wallet is not connected to the correct blockchain <Button href="#" class="ml-4" @click.prevent="switchBlockchain">Switch blockchain</Button></p>

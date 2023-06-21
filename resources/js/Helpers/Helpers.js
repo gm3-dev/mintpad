@@ -1,5 +1,15 @@
+import { getMetaMaskError } from '@/Wallets/MetaMask'
+import { ethers } from 'ethers'
 import $ from 'jquery'
 import { toRaw, unref } from 'vue'
+import { resportError } from './Sentry'
+
+export function ipfsToUrl(url) {
+    url = url.replace('ipfs://', '')
+    url = 'https://ipfs-2.thirdwebcdn.com/ipfs/'+url
+
+    return url
+}
 
 export function shortenWalletAddress(address) {
     return address ? address.substring(0, 6)+'...'+address.substr(address.length - 4) : ''
@@ -75,7 +85,8 @@ export function hexToNumber(hex) {
 }
 
 export function WeiToValue(wei) {
-    return wei / 1000000000000000000
+    return ethers.utils.formatEther(wei.toString())
+    // return wei / 1000000000000000000
 }
 
 export function hexToValue(hex) {
@@ -169,4 +180,95 @@ export function getDummyCollection() {
         2: {state: 'Starts', days: '00', hours: '11', minutes: '22', seconds: '33'},
     }
     return {collection, claimPhases, timers}
+}
+
+export function getAllowedNFTTypes() {
+    return [
+        'video/mp4', 
+        'image/jpeg', 
+        'image/png', 
+        'image/jpg', 
+        'image/gif'
+    ]
+}
+
+export function fileIsImage(file) {
+    const allowedTypes = [
+        'image/jpeg', 
+        'image/png', 
+        'image/jpg', 
+        'image/gif'
+    ]
+    const allowedExtensions = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif'
+    ]
+    if (typeof file === 'object') {
+        if ('type' in file) {
+            return allowedTypes.includes(file.type)
+        } else if('src' in file) {
+            const url = file.src.toLowerCase().split('?')[0]
+            const extension = url.toLowerCase().split('.').pop()
+            return allowedExtensions.includes(extension)
+        }
+    } else {
+        const url = file.toLowerCase().split('?')[0]
+        const extension = url.toLowerCase().split('.').pop()
+        return allowedExtensions.includes(extension)
+    }
+}
+
+export function fileIsVideo(file) {
+    const allowedTypes = [
+        'video/mp4'
+    ]
+    const allowedExtensions = [
+        'mp4',
+    ]
+
+    if (typeof file === 'object') {
+        if ('type' in file) {
+            return allowedTypes.includes(file.type)
+        } else if('src' in file) {
+            const url = file.src.toLowerCase().split('?')[0]
+            const extension = url.toLowerCase().split('.').pop()
+            return allowedExtensions.includes(extension)
+        }
+    } else {
+        const url = file.toLowerCase().split('?')[0]
+        const extension = url.toLowerCase().split('.').pop()
+        return allowedExtensions.includes(extension)
+    }
+}
+
+export function formatTransactionFee(fee) {
+    const feeData = parseFloat(fee).toString().split('.')
+    if (feeData[1].length > 18) {
+        feeData[1] = feeData[1].slice(0, 18)
+        fee = feeData.join('.')
+    }
+    
+    return ethers.utils.parseUnits(fee.toString(), 18).toString()
+}
+
+export function calculateTransactionFee(fee, price) {
+    var feeResult = fee * 1000000000000000000
+    var priceResult = price * 1000000000000000000
+    var total = ((feeResult + priceResult) / 1000000000000000000).toString()
+    
+    const parsed = ethers.utils.parseUnits(total).toString()
+    return ethers.BigNumber.from(parsed)
+}
+
+export function handleError(error) {
+    // console.log('error', error)
+    let metamaskError = getMetaMaskError(error)
+    if (metamaskError) {
+        return metamaskError
+    } else {
+        resportError(error)
+        return 'Something went wrong, please try again.'
+    }
 }
