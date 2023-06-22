@@ -179,7 +179,7 @@ const deployContract = async () => {
                     <p>This is the start of your NFT collection.</p>
                 </div>
 
-                <div v-if="form.type == ''" class="px-24 grid grid-cols-3">
+                <div v-if="form.type == ''" class="px-0 lg:px-24 grid grid-cols-3">
                     <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                         <div>
                             <img src="/images/create-1.png" class="rounded-t-md">
