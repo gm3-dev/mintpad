@@ -254,11 +254,11 @@ export function formatTransactionFee(fee) {
 }
 
 export function calculateTransactionFee(fee, price) {
-    var feeResult = fee * 1000000000000000000
-    var priceResult = price * 1000000000000000000
-    var total = ((feeResult + priceResult) / 1000000000000000000).toString()
-    
+    var feeResult = fee * 1000000000
+    var priceResult = price * 1000000000
+    var total = ((feeResult + priceResult) / 1000000000).toString()
     const parsed = ethers.utils.parseUnits(total).toString()
+    
     return ethers.BigNumber.from(parsed)
 }
 
