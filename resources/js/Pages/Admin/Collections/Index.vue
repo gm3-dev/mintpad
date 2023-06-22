@@ -107,13 +107,15 @@ const switchBlockchain = async (chainId) => {
             <div v-if="collections">
                 <BoxRow class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
                     <div class="basis-1/2 sm:basis-4/12">Collection name</div>
-                    <div class="hidden sm:block basis-3/12">Blockchain</div>
-                    <div class="basis-5/12"></div>
+                    <div class="basis-1/2 sm:basis-2/12">Type</div>
+                    <div class="hidden sm:block basis-2/12">Blockchain</div>
+                    <div class="basis-4/12"></div>
                 </BoxRow>
                 <BoxRow v-for="collection in collections" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                     <div class="basis-full sm:basis-4/12 font-semibold">{{ collection.name }}</div>
-                    <div class="basis-full sm:basis-3/12 font-semibold">{{ blockchains[collection.chain_id].name }} ({{ blockchains[collection.chain_id].nativeCurrency.symbol }})</div>
-                    <div class="basis-full sm:basis-5/12 text-center sm:text-right">
+                    <div class="basis-full sm:basis-2/12 font-semibold">{{ collection.type }}</div>
+                    <div class="basis-full sm:basis-2/12 font-semibold">{{ blockchains[collection.chain_id].name }} ({{ blockchains[collection.chain_id].nativeCurrency.symbol }})</div>
+                    <div class="basis-full sm:basis-4/12 text-center sm:text-right">
                         <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
                         <LinkBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</LinkBlue>
                         <span v-if="wallet.chainId != collection.chain_id" :content="'You need to switch to '+blockchains[collection.chain_id].nativeCurrency.symbol" v-tippy>
