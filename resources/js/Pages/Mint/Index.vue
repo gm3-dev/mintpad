@@ -52,7 +52,8 @@ let collectionData = ref({
     nftsToBurn: 0,
     transactionFee: 0,
     totalSupply: '...',
-    royalties: '...'
+    royalties: '...',
+    nfts: []
 })
 let editMode = ref(props.mode == 'edit' ? true : false)
 let loadComplete = ref(false)
@@ -77,7 +78,7 @@ onMounted(async () => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
-        collectionData.value.thumb.src = response.data.thumb
+        // collectionData.value.thumb.src = response.data.thumb
         
         // Set theme for mint
         if (response.data.theme.mint) {
@@ -110,7 +111,7 @@ onMounted(async () => {
                 contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
             try {
-                const data = await getCollectionData(contract, props.collection.type, true, false)            
+                const data = await getCollectionData(contract, props.collection.type, true, 1)            
                 const contractType = await contract.call('contractType')
 
                 // Settings
@@ -139,6 +140,9 @@ onMounted(async () => {
                 collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
                 setClaimPhaseCounters()
                 setActiveClaimPhase()
+
+                // Collection
+                collectionData.value.nfts = data.nfts
 
                 loadComplete.value = true
                 
@@ -352,12 +356,15 @@ const mintNFT = async (e) => {
                 <LogoEditor :edit-mode="editMode" :collection-data="collectionData" />
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
 
-                <div v-if="collectionData.thumb.src" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
-                    <img v-if="collectionData.thumb.src && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb.src" />
-                    <video v-if="collectionData.thumb.src && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
-                        <source :src="collectionData.thumb.src" type="video/mp4">
+                <div v-if="collectionData.nfts.length > 0" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
+                    <img v-if="collectionData.nfts[0].metadata.image && fileIsImage(collectionData.nfts[0].metadata.image)" class="inline-block rounded-m h-full" :src="collectionData.nfts[0].metadata.image" />
+                    <video v-if="collectionData.nfts[0].metadata.image && fileIsVideo(collectionData.nfts[0].metadata.image)" class="inline-block rounded-m h-full" autoplay loop>
+                        <source :src="collectionData.nfts[0].metadata.image" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                </div>
+                <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
+                    <i class="inline-block text-black mt-10 sm:mt-16 md:mt-20 text-lg fa-solid fa-spinner animate-spin"></i>
                 </div>
                 <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
             </div>

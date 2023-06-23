@@ -83,12 +83,6 @@ const updateCollection = async (e) => {
         document.getElementById('image-1').value = null
         await setCollectionImages()
 
-        if (form.file.src) {
-            await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.file.src}).then((response) => {
-                //
-            })
-        }
-
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
         emitter.emit('new-message', {type: 'error', message: handleError(error)})

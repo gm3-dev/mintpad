@@ -80,7 +80,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
         // NFTs
-        const nfts = withNfts ? await contract.getAll({count: 8}) : []
+        const nfts = withNfts !== false ? await contract.getAll({count: withNfts}) : []
 
         // Collection
         if (contractType == 'ERC721') {

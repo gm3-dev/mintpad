@@ -93,8 +93,8 @@ class MintController extends Controller
 
             $logos = glob(public_path('resources/'.$collection->id.'/logo.*'));
             $logo = count($logos) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($logos[0], PATHINFO_BASENAME).'?v='.filemtime($logos[0]) : false;
-            $thumbs = glob(public_path('resources/'.$collection->id.'/thumb.*'));
-            $thumb = count($thumbs) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($thumbs[0], PATHINFO_BASENAME).'?v='.filemtime($thumbs[0]) : false;
+            // $thumbs = glob(public_path('resources/'.$collection->id.'/thumb.*'));
+            // $thumb = count($thumbs) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($thumbs[0], PATHINFO_BASENAME).'?v='.filemtime($thumbs[0]) : false;
             $backgrounds = glob(public_path('resources/'.$collection->id.'/background.*'));
             $background = count($backgrounds) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($backgrounds[0], PATHINFO_BASENAME).'?v='.filemtime($backgrounds[0]) : false;
 
@@ -113,7 +113,7 @@ class MintController extends Controller
             ];
             $collection->logo = $logo;
             $collection->background = $background;
-            $collection->thumb = $thumb;
+            // $collection->thumb = $thumb;
             $collection->embed_url = route('mint.embed', $collection->address);
 
             return response()->json($collection, 200);
