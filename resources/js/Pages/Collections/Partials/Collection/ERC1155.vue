@@ -170,7 +170,7 @@ const validateForm = () => {
         </span>
     </div>
 
-    <div  class="text-center my-4 sm:col-span-3">
+    <div v-if="NFTs.length > 0" class="text-center my-4 sm:col-span-3">
         <h3>NFTs in this collection</h3>
     </div>
 
