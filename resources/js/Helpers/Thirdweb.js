@@ -35,7 +35,9 @@ function getContractTypeName(contractType) {
     }
 }
 
-export async function getCollectionData(contract, contractType, withAllowList, withNfts) {
+export async function getCollectionData(contract, contractType, withAllowList, withNfts, tokenID) {
+    tokenID = tokenID == undefined ? 0 : tokenID
+
     let output = {
         metadata: {
             name: ''
@@ -75,7 +77,7 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         if (contractType == 'ERC721') {
             claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
         } else if (contractType.startsWith('ERC1155')) {
-            claimConditions = await contract.claimConditions.getAll(0, {withAllowList: withAllowList})
+            claimConditions = await contract.claimConditions.getAll(tokenID, {withAllowList: withAllowList})
         }
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
@@ -88,8 +90,8 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             var totalClaimedSupply = await contract.totalClaimedSupply()
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         } else if (contractType.startsWith('ERC1155')) {
-            var totalSupply = await contract.call('maxTotalSupply', [0], {})
-            var totalClaimedSupply = await contract.totalSupply('0')
+            var totalSupply = await contract.call('maxTotalSupply', [tokenID], {})
+            var totalClaimedSupply = await contract.totalSupply(tokenID)
             var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
         }
     

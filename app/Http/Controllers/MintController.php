@@ -14,7 +14,7 @@ class MintController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function mint($permalink)
+    public function mint($permalink, $token = '0')
     {
         $collection = Collection::where('permalink', $permalink)->first();
         if (!$collection) {
@@ -30,14 +30,14 @@ class MintController extends Controller
         ];
         $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
 
-        return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode'));
+        return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode', 'token'));
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function burn($permalink)
+    public function burn($permalink, $token = '0')
     {
         $collection = Collection::where('permalink', $permalink)->first();
         if (!$collection) {
@@ -53,27 +53,27 @@ class MintController extends Controller
         ];
         $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
 
-        return Inertia::render('Mint/Burn', compact('collection', 'seo', 'mode'));
+        return Inertia::render('Mint/Burn', compact('collection', 'seo', 'mode', 'token'));
     }
 
-    public function embed(Request $request, $address)
+    public function embed(Request $request, $address, $token = '0')
     {
         $collection = Collection::where('address', $address)->first();
         if (!$collection) {
             abort(404);
         }
 
-        return Inertia::render('Mint/Embed', compact('collection'));
+        return Inertia::render('Mint/Embed', compact('collection', 'token'));
     }
 
-    public function embedBurn(Request $request, $address)
+    public function embedBurn(Request $request, $address, $token = '0')
     {
         $collection = Collection::where('address', $address)->first();
         if (!$collection) {
             abort(404);
         }
 
-        return Inertia::render('Mint/EmbedBurn', compact('collection'));
+        return Inertia::render('Mint/EmbedBurn', compact('collection', 'token'));
     }
 
     /**

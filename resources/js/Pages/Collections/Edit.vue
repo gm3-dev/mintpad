@@ -29,6 +29,7 @@ import ERC1155Burn from './Partials/Collection/ERC1155Burn.vue'
 import ERC721 from './Partials/Collection/ERC721.vue'
 import ERC1155 from './Partials/Collection/ERC1155.vue'
 import CopyButton from '@/Components/CopyButton.vue'
+import Select from '@/Components/Form/Select.vue'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -67,6 +68,9 @@ let tabStatus = ref({
     collection: 2,
     mint: 2
 })
+let currentNFT = ref(0)
+let NFTList = ref([])
+let contract = false
 const form = {
     metadata: useForm({
         name: '',
@@ -125,35 +129,47 @@ onMounted(async () => {
     } else {
         currentTab.value = 1
 
-        const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-        try {
-            const data = await getCollectionData(contract, props.collection.type, true, 8)
-
-            // Settings
-            form.metadata.name = data.metadata.name
-            form.metadata.salesRecipient = data.sales.primarySalesRecipient
-            form.metadata.defaults()
-            form.royalties.feeRecipient = data.royalties.feeRecipient
-            form.royalties.royalties = data.royalties.royalties
-            form.royalties.defaults()
-
-            // Fees
-            collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
-
-            // Claim phases
-            claimPhases.value = parseClaimConditions(data.claimConditions)
-
-            // Total supply
-            form.totalsupply.max = data.totalSupply
-            form.totalsupply.defaults()
-        } catch(error) {
-            messages.value.push({type: 'error', message: handleError(error)})
-        }
-
+        contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
+        await setClaimPhases()
+        
         // Set tab status
         validateTabStatus()
     }
 })
+const setClaimPhases = async () => {
+    try {
+        const data = await getCollectionData(contract, props.collection.type, true, 1000, currentNFT.value)
+
+        // Settings
+        form.metadata.name = data.metadata.name
+        form.metadata.salesRecipient = data.sales.primarySalesRecipient
+        form.metadata.defaults()
+        form.royalties.feeRecipient = data.royalties.feeRecipient
+        form.royalties.royalties = data.royalties.royalties
+        form.royalties.defaults()
+
+        // Fees
+        collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
+
+        // Claim phases
+        claimPhases.value = parseClaimConditions(data.claimConditions)
+
+        for (var i = 0; i < data.nfts.length; i++) {
+            NFTList.value[i] = data.nfts[i].metadata.name
+        }
+
+        // Total supply
+        form.totalsupply.max = data.totalSupply
+        form.totalsupply.defaults()
+    } catch(error) {
+        messages.value.push({type: 'error', message: handleError(error)})
+    }
+}
+const changeCurrentNFT = async () => {
+    claimPhases.value = []
+    await setClaimPhases()
+    disablePhases.value = 1
+}
 const updateMetadata = async () => {
     // Validate form
     let error = false
@@ -169,7 +185,6 @@ const updateMetadata = async () => {
     }
 
     buttonLoading.value = 'Updating settings'
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.metadata.set({
             name: form.metadata.name,
@@ -206,7 +221,6 @@ const updateRoyalties = async () => {
     }
 
     buttonLoading.value = 'Updating royalties'
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.royalties.setDefaultRoyaltyInfo({
             seller_fee_basis_points: form.royalties.royalties * 100,
@@ -308,12 +322,11 @@ const updateClaimPhases = async () => {
         claimPhaseList.push(newClaimPhase)
     }
 
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         if (props.collection.type == 'ERC721') {
             await contract.claimConditions.set(claimPhaseList)
         } else if (props.collection.type.startsWith('ERC1155')) {
-            await contract.claimConditions.set(0, claimPhaseList)
+            await contract.claimConditions.set(currentNFT.value, claimPhaseList)
         }
         validateClaimPhasesTab()
         disablePhases.value = 1
@@ -328,7 +341,6 @@ const updateClaimPhases = async () => {
 const updateMaxTotalSupply = async() => {
     buttonLoading.value = 'Updating maximum total supply'
 
-    const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
     try {
         await contract.call('setMaxTotalSupply', [0, form.totalsupply.max], {})
         form.totalsupply.defaults()
@@ -390,9 +402,6 @@ const validateSettingsTab = () => {
 const validateClaimPhasesTab = () => {
     tabStatus.value.phases = claimPhases.value.length > 0 ? 1 : 0
 }
-// const validateCollectionTab = () => {
-//     tabStatus.value.collection = collectionData.value.nfts.length > 0 ? 1 : 0
-// }
 const validateMintPageTab = () => {
     tabStatus.value.mint = 1
     if (form.mint.permalink.trim() === '' || form.mint.seo.title.trim() === '' || form.mint.seo.description.trim() === '') {
@@ -441,7 +450,7 @@ const deleteSocialImage = () => {
                     <h1>{{ collection.name }}</h1>
                     <p>You can adjust the settings of your collection here.</p>
                     <p>
-                        <ButtonGray content="Copy contract address" @click.prevent="copyToClipboard" :text="collection.address" class="!text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
+                        <ButtonGray content="Copy contract address" @click.prevent="copyToClipboard" :text="collection.address" class="!w-40 !text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
                         <span class="inline-block align-middle font-medium px-3 py-1 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4"><img v-if="currentBlockchain.icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(currentBlockchain.icon.url)" /> {{ currentBlockchain.name }}</span>
                         <span class="inline-block align-middle font-medium px-3 py-1.5 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4">{{ collection.type }}</span>
                     </p>
@@ -527,6 +536,13 @@ const deleteSocialImage = () => {
                     <Box v-if="collection.type.startsWith('ERC1155') && tabStatus.collection !== 1" class="mb-4">
                         <BoxContent>
                             <p class="">You need to upload an NFT first. You can do this in the <Hyperlink href="#" element="a" @click.prevent.native="changeStatusTab(2)">upload collection</Hyperlink> section.</p>
+                        </BoxContent>
+                    </Box>
+
+                    <Box v-if="collection.type == 'ERC1155'">
+                        <BoxContent>
+                            <Label value="Select a NFT to edit" class="relative" />
+                            <Select class="!w-full mb-4" @change="changeCurrentNFT" v-model="currentNFT" :options="NFTList"></Select>
                         </BoxContent>
                     </Box>
 

@@ -41,7 +41,7 @@ onMounted(async() => {
     // Connect wallet
     wallet.value = await reconnectWallet()
     
-    axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
+    axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         // Set theme for mint
         if (response.data.theme.embed) {
             collectionData.value.theme = response.data.theme.embed
@@ -65,7 +65,7 @@ onMounted(async() => {
             contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
         }
         try {
-            const data = await getCollectionData(contract, props.collection.type, true, false)
+            const data = await getCollectionData(contract, props.collection.type, true, false, 0)
             const contractType = await contract.call('contractType')
             
             // Collection

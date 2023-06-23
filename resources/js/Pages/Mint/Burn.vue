@@ -67,7 +67,7 @@ onMounted(async () => {
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
 
-    axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
+    axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
