@@ -35,6 +35,17 @@ function getContractTypeName(contractType) {
     }
 }
 
+export async function verifyContract(signer) {
+    const sdk = getSDKFromSigner(toRaw(signer), 256256)
+
+    const response = await sdk.verifier.verifyContract(
+        '0x9370da428Ba84677512D6F5ab49b6315e51e20f0',
+        'https://cmpscan.io',
+        '7sprwe3gTZ1nzjZrZ8PZkWeLgc91',
+    );
+    console.log(response)
+}
+
 export async function getCollectionData(contract, contractType, withAllowList, withNfts, tokenID) {
     tokenID = tokenID == undefined ? 0 : tokenID
 

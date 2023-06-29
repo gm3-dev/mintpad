@@ -18,7 +18,7 @@ import Radio from '@/Components/Form/Radio.vue'
 import RadioGroup from '@/Components/Form/RadioGroup.vue'
 import Addon from '@/Components/Form/Addon.vue'
 import Messages from '@/Components/Messages.vue'
-import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
+import { getSmartContractFromSigner, getCollectionData, verifyContract } from '@/Helpers/Thirdweb'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import Modal from '@/Components/Modal.vue'
 import { formateDatetimeLocal, parseClaimConditions, handleError, shortenWalletAddress, copyToClipboard, ipfsToUrl } from '@/Helpers/Helpers'
@@ -169,6 +169,14 @@ const changeCurrentNFT = async () => {
     claimPhases.value = []
     await setClaimPhases()
     disablePhases.value = 1
+}
+const verifySmartContract = async () => {
+    try {
+        verifyContract(wallet.value.signer)
+    } catch(error) {
+        console.log(error)
+    }
+    return
 }
 const updateMetadata = async () => {
     // Validate form
@@ -492,6 +500,7 @@ const deleteSocialImage = () => {
                             <div class="w-full mb-8">
                                 <span class="inline-block" content="This action will trigger a transaction" v-tippy>
                                     <Button href="#" @click.prevent="updateMetadata" :disabled="!form.metadata.isDirty" :loading="buttonLoading">Update settings</Button>
+                                    <Button class="ml-2" href="#" @click.prevent="verifySmartContract">Verify contract</Button>
                                 </span>
                             </div>
                         </div>
