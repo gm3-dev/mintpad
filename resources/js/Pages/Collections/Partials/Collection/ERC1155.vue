@@ -91,6 +91,7 @@ const updateCollection = async (e) => {
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
+        console.log('error collection', error)
         emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
