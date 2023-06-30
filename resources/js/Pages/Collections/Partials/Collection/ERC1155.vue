@@ -21,7 +21,8 @@ const wallet = inject('wallet')
 const emitter = inject('emitter')
 
 const props = defineProps({
-    collection: Object
+    collection: Object,
+    updater: Function
 })
 
 const form = useForm({
@@ -85,6 +86,7 @@ const updateCollection = async (e) => {
         await contract.createBatch(metadata)
         document.getElementById('image-1').value = null
         await setCollectionImages()
+        await props.updater({phases: true})
         form.reset()
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})

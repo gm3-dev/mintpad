@@ -136,6 +136,11 @@ onMounted(async () => {
         validateTabStatus()
     }
 })
+const updateManager = async (data) => {
+    if (data.phases) {
+        await setClaimPhases()
+    }
+}
 const setClaimPhases = async () => {
     try {
         const data = await getCollectionData(contract, props.collection.type, true, 1000, currentNFT.value)
@@ -521,7 +526,7 @@ const deleteSocialImage = () => {
                 </div>
                 <div v-show="currentTab == 2">
                     <ERC721 v-if="collection.type == 'ERC721'" :collection="collection" />
-                    <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" />
+                    <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" :updater="updateManager"/>
                     <ERC1155Burn v-if="collection.type == 'ERC1155Burn'" :collection="collection" />
                 </div>
 
