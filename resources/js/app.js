@@ -20,30 +20,31 @@ const app = createInertiaApp({
         return pages[`./Pages/${name}.vue`]
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
+        const vm = createApp({ render: () => h(App, props) })
         .use(plugin)
         .use(ZiggyVue, Ziggy)
         .directive('tippy', Tippy)
         .directive('closable', Closable)
         .provide('emitter', emitter)
-        .mount(el)
+
+        if (import.meta.env.VITE_SENTRY_LARAVEL_DSN) {
+            Sentry.init({
+                vm,
+                dsn: import.meta.env.VITE_SENTRY_LARAVEL_DSN,
+                integrations: [
+                    new Sentry.BrowserTracing({
+                        // routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+                        // tracingOrigins: ["app.mintpad.co", "on.mintpad.co", "beta.mintpad.co", /^\//],
+                        tracePropagationTargets: ["app.mintpad.co", "on.mintpad.co", "beta.mintpad.co", /^\//],
+                    }),
+                ],
+                // Set tracesSampleRate to 1.0 to capture 100%
+                // of transactions for performance monitoring.
+                // We recommend adjusting this value in production
+                tracesSampleRate: 0,
+            });
+        }
+
+        vm.mount(el)
     },
 })
-
-// if (import.meta.env.VITE_SENTRY_LARAVEL_DSN) {
-//     Sentry.init({
-//         app,
-//         dsn: import.meta.env.VITE_SENTRY_LARAVEL_DSN,
-//         integrations: [
-//             new Sentry.BrowserTracing({
-//                 // routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-//                 // tracingOrigins: ["app.mintpad.co", "on.mintpad.co", "beta.mintpad.co", /^\//],
-//                 tracePropagationTargets: ["app.mintpad.co", "on.mintpad.co", "beta.mintpad.co", /^\//],
-//             }),
-//         ],
-//         // Set tracesSampleRate to 1.0 to capture 100%
-//         // of transactions for performance monitoring.
-//         // We recommend adjusting this value in production
-//         tracesSampleRate: 0,
-//     });
-// }
