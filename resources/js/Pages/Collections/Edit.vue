@@ -5,6 +5,8 @@ import { ref, provide, onMounted, watch, computed, toRaw, inject } from 'vue'
 import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import StatusTab from '@/Components/StatusTab.vue'
+import InfoMessage from '@/Components/Messages/InfoMessage.vue'
+import ErrorMessage from '@/Components/Messages/ErrorMessage.vue'
 import Box from '@/Components/Box.vue'
 import BoxContent from '@/Components/BoxContent.vue'
 import ButtonGray from '@/Components/Form/ButtonGray.vue'
@@ -384,13 +386,16 @@ const uploadWhitelist = async (e, index) => {
     var formData = new FormData()
     formData.append('file', files[0])
     await axios.post('/collections/'+props.collection.id+'/whitelist', formData).then((response) => {
-        var data = response.data
-        claimPhases.value[index].snapshot = data
+        claimPhases.value[index].snapshot = response.data.addresses
+        claimPhases.value[index].snapshotDuplicates = response.data.duplicates
+        claimPhases.value[index].snapshotInvalid = response.data.invalid
     })
 }
 
 const resetWhitelist = (index) => {
     claimPhases.value[index].snapshot = []
+    claimPhases.value[index].snapshotDuplicates = 0
+    claimPhases.value[index].snapshotInvalid = []
 }
 const validateTabStatus = () => {
     validateSettingsTab()
@@ -544,7 +549,7 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <Box v-if="collection.type == 'ERC1155'">
+                    <Box v-if="collection.type == 'ERC1155' && NFTList.length">
                         <BoxContent>
                             <Label value="Select a NFT to edit" class="relative" />
                             <Select class="!w-full mb-4" @change="changeCurrentNFT" v-model="currentNFT" :options="NFTList"></Select>
@@ -606,16 +611,21 @@ const deleteSocialImage = () => {
                                     </div>
 
                                     <Modal title="Whitelist addresses" :show="phase.modal" @close="toggleWhitelistModal(index, false)">
+                                        <InfoMessage v-if="phase.snapshotDuplicates" class="text-mintpad-700 dark:text-white">We removed {{ phase.snapshotDuplicates }} duplicate address(es).</InfoMessage>
+                                        <ErrorMessage v-if="phase.snapshotInvalid && phase.snapshotInvalid.length">
+                                            <p class="text-mintpad-700 dark:text-white">We removed {{ phase.snapshotInvalid.length }} invalid address(es):</p>
+                                            <p v-for="invalidAddress in phase.snapshotInvalid" class="!text-white !mb-0 font-mono">{{ invalidAddress }}</p>
+                                        </ErrorMessage>
                                         <div class="overflow-y-auto" :class="{'max-h-80 bg-primary-100 dark:bg-mintpad-800 rounded-md border border-primary-200 dark:border-mintpad-900': phase.snapshot != 0}">
                                             <div v-if="phase.snapshot != 0" class="p-4">
-                                                <p v-for="walletAddress in phase.snapshot">{{ walletAddress.address }}</p>
+                                                <p v-for="walletAddress in phase.snapshot" class="font-mono">{{ walletAddress.address }}</p>
                                             </div>
                                             <div v-else>
                                                 <p>Here you can upload a .CSV file with all whitelisted wallets. Not sure what your .CSV should contain?</p>
                                                 <p class="mb-4"><Hyperlink href="/examples/snapshot.csv">Download a demo whitelist.</Hyperlink></p>
                                                 <label class="block mb-4 text-mintpad-300">
                                                     <span class="sr-only">Choose File</span>
-                                                    <InputFile @change="uploadWhitelist($event, index)" />
+                                                    <InputFile @change="uploadWhitelist($event, index)" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                                                 </label>
                                                 <p>Upload a .CSV file. One wallet address per row.</p>
                                             </div>
