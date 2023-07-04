@@ -6,8 +6,7 @@ import { resportError } from './Sentry'
 
 export function ipfsToUrl(url) {
     url = url.replace('ipfs://', '')
-    url = 'https://ipfs-2.thirdwebcdn.com/ipfs/'+url
-
+    url = 'https://ipfs-public.thirdwebcdn.com/ipfs/'+url
     return url
 }
 
