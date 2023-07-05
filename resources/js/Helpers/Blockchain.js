@@ -4,8 +4,11 @@ import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTes
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
+    console.log(blockchain)
+    console.log(wallet.value)
+    console.log(wallet.value.account)
 
-    if (!blockchain || wallet.value.account == false || wallet.value == false) {
+    if (!blockchain || wallet.value == false || wallet.value.account == false) {
         return 'wallet'
     } else if (blockchain.networkId != wallet.value.chainId && wallet.value.name == 'metamask') {
         return 'chain'

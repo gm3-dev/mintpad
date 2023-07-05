@@ -6,7 +6,6 @@ import Input from '@/Components/Form/Input.vue'
 import InputFile from '@/Components/Form/InputFile.vue'
 import Label from '@/Components/Form/Label.vue'
 import Textarea from '@/Components/Form/Textarea.vue'
-import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { useForm } from '@inertiajs/vue3'
 import { inject, onMounted, ref } from 'vue'
@@ -97,12 +96,6 @@ const updateCollection = async (e) => {
         document.getElementById('image-1').value = null
         document.getElementById('image-2').value = null
         await setCollectionImages()
-        
-        if (form.base.file.src) {
-            await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.base.file.src}).then((response) => {
-                //
-            })
-        }
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {

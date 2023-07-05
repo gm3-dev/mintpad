@@ -6,7 +6,6 @@ import Input from '@/Components/Form/Input.vue'
 import InputFile from '@/Components/Form/InputFile.vue'
 import Label from '@/Components/Form/Label.vue'
 import Textarea from '@/Components/Form/Textarea.vue'
-import { resportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { getAllowedNFTTypes, fileIsImage, fileIsVideo, handleError } from '@/Helpers/Helpers'
 import { useForm } from '@inertiajs/vue3'
@@ -21,7 +20,8 @@ const wallet = inject('wallet')
 const emitter = inject('emitter')
 
 const props = defineProps({
-    collection: Object
+    collection: Object,
+    updater: Function
 })
 
 const form = useForm({
@@ -32,6 +32,7 @@ const form = useForm({
 
 let buttonLoading = ref(false)
 let validCollection = ref(true)
+let NFTs = ref([])
 let contract = false
 
 onMounted(async () => {
@@ -42,11 +43,11 @@ onMounted(async () => {
 
 const setCollectionImages = async () => {
     try {
-        let NFTData = await contract.getAll({count: 2})
+        let NFTData = await contract.getAll({count: 1000})
         if (NFTData[0] !== undefined) {
-            form.name = NFTData[0].metadata.name ?? ''
-            form.description = NFTData[0].metadata.description ?? ''
-            form.file.src = NFTData[0].metadata.image ?? ''
+            // form.name = NFTData[0].metadata.name ?? ''
+            // form.description = NFTData[0].metadata.description ?? ''
+            // form.file.src = NFTData[0].metadata.image ?? ''
 
             validCollection.value = true
             emitter.emit('set-tab-status', {tab: 'collection', status: 1})
@@ -54,6 +55,8 @@ const setCollectionImages = async () => {
             validCollection.value = false   
             emitter.emit('set-tab-status', {tab: 'collection', status: 0})
         }
+
+        NFTs.value = NFTData
     } catch(error) {
         emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
@@ -82,15 +85,12 @@ const updateCollection = async (e) => {
         await contract.createBatch(metadata)
         document.getElementById('image-1').value = null
         await setCollectionImages()
-
-        if (form.file.src) {
-            await axios.post('/collections/'+props.collection.id+'/thumb', {url: form.file.src}).then((response) => {
-                //
-            })
-        }
+        await props.updater({phases: true})
+        form.reset()
 
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
+        console.log('error collection', error)
         emitter.emit('new-message', {type: 'error', message: handleError(error)})
     }
 
@@ -129,7 +129,7 @@ const validateForm = () => {
     </Box>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Box class="mb-4" v-if="!validCollection" title="Upload your artwork">
+        <Box class="mb-4" title="Upload your artwork">
             <BoxContent>
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
@@ -164,11 +164,30 @@ const validateForm = () => {
                 </div> 
             </BoxContent>
         </Box>
+    </div>
 
-        <div v-if="!validCollection" class="w-full mb-8">
-            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                <Button href="#" @click.prevent="updateCollection" :disabled="buttonLoading" :loading="buttonLoading">Update collection</Button>
-            </span>
-        </div>
+    <div class="w-full mb-8 mt-4">
+        <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+            <Button href="#" @click.prevent="updateCollection" :disabled="buttonLoading" :loading="buttonLoading">Update collection</Button>
+        </span>
+    </div>
+
+    <div v-if="NFTs.length > 0" class="text-center my-4 sm:col-span-3">
+        <h3>NFTs in this collection</h3>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Box v-for="NFT in NFTs" class="mb-4" :title="NFT.metadata.name + ' ('+NFT.supply+')'">
+            <BoxContent>
+                <div class="text-sm">
+                    <p class="mb-4">This image will be the image people mint.</p>
+                    <img v-if="NFT.metadata.image && fileIsImage(NFT.metadata.image)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="NFT.metadata.image" />
+                    <video v-if="NFT.metadata.image && fileIsVideo(NFT.metadata.image)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
+                        <source :src="NFT.metadata.image" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div> 
+            </BoxContent>
+        </Box>
     </div>
 </template>

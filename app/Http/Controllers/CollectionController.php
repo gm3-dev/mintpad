@@ -203,12 +203,14 @@ class CollectionController extends Controller
     {
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-
-            $addresses = [];
             $file_handle = fopen($file, 'r');
+            $addresses = [];
+            $invalid_addresses = [];
             while (!feof($file_handle)) {
                 $row = fgetcsv($file_handle, 0, ',');
-                if (isset($row[0]) && strpos($row[0], '0x') === 0) {
+                if (isset($row[0]) && strpos($row[0], '0x') === 0 && strlen($row[0]) !== 42) {
+                    $invalid_addresses[] = $row[0];
+                } elseif (isset($row[0]) && strpos($row[0], '0x') === 0) {
                     $addresses[] = [
                         'address' => $row[0],
                         'maxClaimable' => 1
@@ -217,7 +219,17 @@ class CollectionController extends Controller
             }
             fclose($file_handle);
 
-            return response()->json($addresses);
+            $full_list_count = count($addresses);
+            $addresses = array_unique($addresses, SORT_REGULAR);
+            $duplicates = $full_list_count - count($addresses);
+
+            $output = [
+                'invalid' => array_values($invalid_addresses),
+                'duplicates' => $duplicates,
+                'addresses' => array_values($addresses)
+            ];
+
+            return response()->json($output);
         }
     }
 

@@ -14,7 +14,7 @@ class MintController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function mint($permalink)
+    public function mint($permalink, $token = '0')
     {
         $collection = Collection::where('permalink', $permalink)->first();
         if (!$collection) {
@@ -30,14 +30,14 @@ class MintController extends Controller
         ];
         $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
 
-        return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode'));
+        return Inertia::render('Mint/Index', compact('collection', 'seo', 'mode', 'token'));
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function burn($permalink)
+    public function burn($permalink, $token = '0')
     {
         $collection = Collection::where('permalink', $permalink)->first();
         if (!$collection) {
@@ -53,27 +53,27 @@ class MintController extends Controller
         ];
         $mode = Route::currentRouteName() == 'editor.mint' ? 'edit' : 'mint';
 
-        return Inertia::render('Mint/Burn', compact('collection', 'seo', 'mode'));
+        return Inertia::render('Mint/Burn', compact('collection', 'seo', 'mode', 'token'));
     }
 
-    public function embed(Request $request, $address)
+    public function embed(Request $request, $address, $token = '0')
     {
         $collection = Collection::where('address', $address)->first();
         if (!$collection) {
             abort(404);
         }
 
-        return Inertia::render('Mint/Embed', compact('collection'));
+        return Inertia::render('Mint/Embed', compact('collection', 'token'));
     }
 
-    public function embedBurn(Request $request, $address)
+    public function embedBurn(Request $request, $address, $token = '0')
     {
         $collection = Collection::where('address', $address)->first();
         if (!$collection) {
             abort(404);
         }
 
-        return Inertia::render('Mint/EmbedBurn', compact('collection'));
+        return Inertia::render('Mint/EmbedBurn', compact('collection', 'token'));
     }
 
     /**
@@ -93,8 +93,8 @@ class MintController extends Controller
 
             $logos = glob(public_path('resources/'.$collection->id.'/logo.*'));
             $logo = count($logos) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($logos[0], PATHINFO_BASENAME).'?v='.filemtime($logos[0]) : false;
-            $thumbs = glob(public_path('resources/'.$collection->id.'/thumb.*'));
-            $thumb = count($thumbs) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($thumbs[0], PATHINFO_BASENAME).'?v='.filemtime($thumbs[0]) : false;
+            // $thumbs = glob(public_path('resources/'.$collection->id.'/thumb.*'));
+            // $thumb = count($thumbs) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($thumbs[0], PATHINFO_BASENAME).'?v='.filemtime($thumbs[0]) : false;
             $backgrounds = glob(public_path('resources/'.$collection->id.'/background.*'));
             $background = count($backgrounds) > 0 ? '/resources/'.$collection->id.'/'.pathinfo($backgrounds[0], PATHINFO_BASENAME).'?v='.filemtime($backgrounds[0]) : false;
 
@@ -113,7 +113,7 @@ class MintController extends Controller
             ];
             $collection->logo = $logo;
             $collection->background = $background;
-            $collection->thumb = $thumb;
+            // $collection->thumb = $thumb;
             $collection->embed_url = route('mint.embed', $collection->address);
 
             return response()->json($collection, 200);

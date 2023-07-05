@@ -1,5 +1,5 @@
 import { getBlockchains } from "@/Helpers/Blockchain"
-import { resportError } from "@/Helpers/Sentry"
+import { reportError } from "@/Helpers/Sentry"
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import { MetaMaskWallet } from "@thirdweb-dev/wallets"
 import { getDefaultWalletData } from "./Wallet"
@@ -95,7 +95,7 @@ export async function switchChainTo(chainId) {
         if (metamaskError) {
             return metamaskError
         } else {
-            resportError(error)
+            reportError(error)
             return 'Failed to switch to the correct blockchain, try to do it manually.'
         }
     }
@@ -104,9 +104,9 @@ export async function switchChainTo(chainId) {
 }
 
 export function getMetaMaskError(error) {
-    // console.log('error', error)
-    // console.log('error.code', error.code)
-    // console.log('error.reason', error.reason)
+    console.log('error', error)
+    console.log('error.code', error.code)
+    console.log('error.reason', error.reason)
     switch (error.code) {
         case -32002: 
             return 'Request already pending: open MetaMask to see the request.'
@@ -120,7 +120,8 @@ export function getMetaMaskError(error) {
         case '!Tokens': 
             return 'You don\'t have enough NFTs to burn.'
         case '!Qty': 
-            return 'You reached the maximum number of claimable NFTs per wallet.'
+            return 'You are not allowed to mint.'
+            // return 'You reached the maximum number of claimable NFTs per wallet.'
         case '!MaxSupply': 
             return 'There are no more NFTs left to claim in this mint phase.'
         case 'user rejected transaction': 

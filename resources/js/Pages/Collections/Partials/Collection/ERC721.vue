@@ -13,7 +13,7 @@ import { getCollectionData, getSmartContractFromSigner } from '@/Helpers/Thirdwe
 import { useForm } from '@inertiajs/vue3'
 import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { handleError } from '@/Helpers/Helpers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -65,7 +65,7 @@ onMounted(async () => {
 
 const setCollectionImages = async () => {
     try {
-        const data = await getCollectionData(contract, props.collection.type, true, true)
+        const data = await getCollectionData(contract, props.collection.type, true, 8)
 
         // Collection
         collectionData.value.totalSupply = data.totalSupply
@@ -134,14 +134,8 @@ const updateCollection = async (e) => {
 
         document.getElementById('image-collection').value = null
         await setCollectionImages()
-
         collectionData.value.previews = []
-        
-        if (collectionData.value.nfts.length > 0) {
-            await axios.post('/collections/'+props.collection.id+'/thumb', {url: collectionData.value.nfts[0].metadata.image}).then((response) => {
-                //
-            })
-        }
+
         emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
     } catch(error) {
         emitter.emit('new-message', {type: 'error', message: handleError(error)})

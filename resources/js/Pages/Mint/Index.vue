@@ -6,7 +6,7 @@ import Input from '@/Components/Form/Input.vue'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import { getDummyCollection, parseClaimConditions, setStyling, shortenWalletAddress, getDoubleDigitNumber, WeiToValue, fileIsImage, fileIsVideo, calculateTransactionFee } from '@/Helpers/Helpers'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
 import axios from 'axios'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
@@ -19,7 +19,7 @@ import EditorBar from '@/Pages/Mint/Partials/EditorBar.vue'
 import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
 import LogoEditor from '@/Pages/Mint/Partials/LogoEditor.vue'
 import Messages from '@/Components/Messages.vue'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -29,7 +29,8 @@ axios.defaults.headers.common = {
 const props = defineProps({
     collection: Object,
     seo: Object,
-    mode: String
+    mode: String,
+    token: String
 })
 let loading = ref(true)
 let wallet = ref(getDefaultWalletData())
@@ -43,7 +44,7 @@ let collectionData = ref({
     buttons: {},
     logo: null,
     background: null,
-    thumb: { src: null },
+    thumb: false,
     theme: {
         primary: {r: 0, g: 119, b: 255, a: 1}
     },
@@ -52,7 +53,9 @@ let collectionData = ref({
     nftsToBurn: 0,
     transactionFee: 0,
     totalSupply: '...',
-    royalties: '...'
+    totalRatioSupply: 100,
+    royalties: '...',
+    nfts: []
 })
 let editMode = ref(props.mode == 'edit' ? true : false)
 let loadComplete = ref(false)
@@ -62,6 +65,7 @@ let maxMintAmount = ref(1)
 let blockchains = ref(getBlockchains())
 let timers = ref({})
 let showModal = ref(false)
+let currentNFT = ref(props.token)
 const emitter = inject('emitter')
 
 provide('wallet', wallet)
@@ -73,11 +77,15 @@ onMounted(async () => {
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
 
-    axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
+    if (props.collection.type == 'ERC1155') {
+        props.collection.name = ''
+    }
+
+    axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
-        collectionData.value.thumb.src = response.data.thumb
+        // collectionData.value.thumb.src = response.data.thumb
         
         // Set theme for mint
         if (response.data.theme.mint) {
@@ -110,7 +118,8 @@ onMounted(async () => {
                 contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
             try {
-                const data = await getCollectionData(contract, props.collection.type, true, false)            
+                let getNFTAmount = props.collection.type == 'ERC1155' ? 1000 : 1
+                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)            
                 const contractType = await contract.call('contractType')
 
                 // Settings
@@ -140,11 +149,18 @@ onMounted(async () => {
                 setClaimPhaseCounters()
                 setActiveClaimPhase()
 
+                // Collection
+                collectionData.value.nfts = data.nfts
+                collectionData.value.thumb = collectionData.value.nfts[currentNFT.value].metadata.image
+                if (props.collection.type == 'ERC1155') {
+                    props.collection.name = collectionData.value.nfts[currentNFT.value].metadata.name
+                }
+
                 loadComplete.value = true
                 
             } catch (error) {
                 console.log('mint 1', error)
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
 
@@ -171,7 +187,7 @@ const setSupplyData = async (contract) => {
         }
     } else if (props.collection.type.startsWith('ERC1155')) {
         collectionData.value.totalSupply = await contract.call('maxTotalSupply', [0], {})
-        collectionData.value.totalClaimedSupply = await contract.totalSupply('0')
+        collectionData.value.totalClaimedSupply = await contract.totalSupply(currentNFT.value)
         collectionData.value.balance = {
             tier1: await contract.balanceOf(wallet.value.account, '0'),
             tier2: await contract.balanceOf(wallet.value.account, '1')
@@ -298,7 +314,7 @@ const mintNFT = async (e) => {
                 if (collectionData.value.contractType == 'DropERC1155') {
                     await contract.claim(0, mintAmount.value)
                 } else {
-                    const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                    const preparedClaim = await contract.claim.prepare(currentNFT.value, mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
@@ -316,7 +332,7 @@ const mintNFT = async (e) => {
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
             } else {
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }
@@ -352,14 +368,20 @@ const mintNFT = async (e) => {
                 <LogoEditor :edit-mode="editMode" :collection-data="collectionData" />
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
 
-                <div v-if="collectionData.thumb.src" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
-                    <img v-if="collectionData.thumb.src && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb.src" />
-                    <video v-if="collectionData.thumb.src && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
-                        <source :src="collectionData.thumb.src" type="video/mp4">
+                <div v-if="collectionData.thumb" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
+                    <img v-if="collectionData.thumb && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb" />
+                    <video v-if="collectionData.thumb && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
+                        <source :src="collectionData.thumb" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
-                <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
+                <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
+                    <div class="bg-white dark:bg-mintpad-500 w-full h-full">
+                        <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-full animate-pulse"></div>
+                    </div>
+                </div>
+                <h2 v-if="collection.name" class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
+                <div v-else class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/3 h-10 mb-4 animate-pulse"></div>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-6 mt-12">
@@ -457,6 +479,25 @@ const mintNFT = async (e) => {
                 <Box v-if="collection.description != ''" class="sm:col-span-3" title="Description">
                     <BoxContent>
                         <p class="font-regular">{{ collection.description }}</p>
+                    </BoxContent>
+                </Box>
+                <div v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" class="text-center my-4 sm:col-span-3">
+                    <h3>All NFTs in this collection</h3>
+                </div>
+                <Box v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" v-for="(nft, index) in collectionData.nfts" :title="nft.metadata.name">
+                    <BoxContent>
+                        <Link :href="route('mint.index', [collection.permalink, index])">
+                            <div v-if="nft.metadata.image" class="w-full rounded-md">
+                                <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" :src="nft.metadata.image" />
+                                <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" autoplay loop>
+                                    <source :src="nft.metadata.image" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                            <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
+                                <i class="inline-block text-black mt-10 sm:mt-16 md:mt-20 text-lg fa-solid fa-spinner animate-spin"></i>
+                            </div>
+                        </Link>
                     </BoxContent>
                 </Box>
             </div>

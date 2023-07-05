@@ -16,7 +16,7 @@ import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/
 import Modal from '@/Components/Modal.vue'
 import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
 import Messages from '@/Components/Messages.vue'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -67,11 +67,11 @@ onMounted(async () => {
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
 
-    axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
+    axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
-        collectionData.value.thumb.src = response.data.thumb
+        // collectionData.value.thumb.src = response.data.thumb
         
         // Set theme for mint
         if (response.data.theme.mint) {
@@ -91,7 +91,7 @@ onMounted(async () => {
             contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
         }
         try {
-            const data = await getCollectionData(contract, props.collection.type, true, true)            
+            const data = await getCollectionData(contract, props.collection.type, true, 2)            
             const contractType = await contract.call('contractType')
 
             // Settings
@@ -123,7 +123,7 @@ onMounted(async () => {
             
         } catch (error) {
             console.log('mint 1', error)
-            resportError(error)
+            reportError(error)
             messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
         } 
         buttonLoading.value = false
@@ -195,7 +195,7 @@ const burnNFTs = async (e) => {
         if (metamaskError) {
             messages.value.push({type: 'error', message: metamaskError})
         } else {
-            resportError(error)
+            reportError(error)
             messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
         }
     }
@@ -227,6 +227,17 @@ const burnNFTs = async (e) => {
         <div class="w-full h-96 bg-black/[.35] dark:bg-mintpad-800/[.35] bg-top bg-cover bg-blend-multiply" :style="[collectionData.background ? {backgroundImage: 'url(' + collectionData.background + ')'} : {}]">
             <div class="relative max-w-7xl mx-auto px-6 pb-4 h-full flex gap-4 items-end">
                 <DarkMode class="absolute top-4 right-6"></DarkMode>
+
+                <div v-if="collectionData.nfts.length > 0" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
+                    <img v-if="collectionData.nfts[1].metadata.image && fileIsImage(collectionData.nfts[1].metadata.image)" class="inline-block rounded-m h-full" :src="collectionData.nfts[1].metadata.image" />
+                    <video v-if="collectionData.nfts[1].metadata.image && fileIsVideo(collectionData.nfts[1].metadata.image)" class="inline-block rounded-m h-full" autoplay loop>
+                        <source :src="collectionData.nfts[1].metadata.image" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
+                    <i class="inline-block text-black mt-10 sm:mt-16 md:mt-20 text-lg fa-solid fa-spinner animate-spin"></i>
+                </div>
                 <h2 class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
             </div>
         </div>

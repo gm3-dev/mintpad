@@ -4,17 +4,18 @@ import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
 import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
-import { ref, inject, onMounted } from 'vue'
+import { ref, inject, onMounted, watch } from 'vue'
 
 const props = defineProps({
     collection: Object,
     collectionData: Object,
     editMode: Boolean,
-    validBlockchain: Boolean
+    validBlockchain: Boolean,
+    currentToken: String
 })
 
 let validBlockchain = ref(false)
@@ -26,14 +27,16 @@ let buttonLoading = ref(false)
 let messages = ref([])
 const emitter = inject('emitter')
 
+watch(() => props.collectionData.activeMintPhase, (newValue, oldValue) => {
+    currentMintPhase.value = props.collectionData.activeMintPhase
+})
+
 onMounted(async () => {
     // Connect wallet
     wallet.value = await reconnectWallet()
 
     // Init app
     validBlockchain.value = checkCurrentBlockchain(blockchains, props.collection.chain_id, wallet)
-
-    currentMintPhase.value = props.collectionData.activeMintPhase
 })
 
 const switchBlockchain = async () => {
@@ -86,7 +89,7 @@ const mintNFT = async () => {
                 if (props.collectionData.contractType == 'DropERC1155') {
                     await contract.claim(0, mintAmount.value)
                 } else {
-                    const preparedClaim = await contract.claim.prepare(0, mintAmount.value)
+                    const preparedClaim = await contract.claim.prepare(props.currentToken, mintAmount.value)
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((props.collectionData.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((props.collectionData.transactionFee + overrideValue).toString(), 18)
@@ -103,7 +106,7 @@ const mintNFT = async () => {
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
             } else {
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }

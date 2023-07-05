@@ -14,7 +14,8 @@ axios.defaults.headers.common = {
 document.documentElement.classList.remove('dark')
 
 const props = defineProps({
-    collection: Object
+    collection: Object,
+    token: String
 })
 let wallet = ref(getDefaultWalletData())
 let editMode = ref(false)
@@ -41,12 +42,13 @@ let collectionData = ref({
     nfts: [],
     transactionFee: 0,
 })
+let currentNFT = ref(props.token)
 
 onMounted(async() => {
     // Connect wallet
     wallet.value = await reconnectWallet()
     
-    axios.get('/'+props.collection.id+'/fetch').then(async (response) => {
+    axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         // Set theme for mint
         if (response.data.theme.embed) {
             collectionData.value.theme = response.data.theme.embed
@@ -70,7 +72,7 @@ onMounted(async() => {
             contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
         }
         try {
-            const data = await getCollectionData(contract, props.collection.type, true, false)
+            const data = await getCollectionData(contract, props.collection.type, true, false, currentNFT.value)
             const contractType = await contract.call('contractType')
             
             collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
@@ -181,6 +183,6 @@ const setCountDown = (i) => {
 </script>
 <template>
     <MinimalLayout :loading="loading" :overlay="loading" :valid-blockchain="validBlockchain" :chain-id="collection.chain_id">
-        <EmbedContent :edit-mode="editMode" :collection="collection" :collection-data="collectionData" />
+        <EmbedContent :edit-mode="editMode" :collection="collection" :collection-data="collectionData" :current-token="currentNFT" />
     </MinimalLayout>
 </template>

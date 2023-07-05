@@ -1,4 +1,4 @@
-import { resportError } from "@/Helpers/Sentry"
+import { reportError } from "@/Helpers/Sentry"
 import { ethers } from "ethers";
 
 export async function connectMetaMask(forceRequest) {
@@ -84,7 +84,7 @@ export async function connectMetaMask(forceRequest) {
         } catch (error) {
             if (error.message != 'Not connected') {
                 // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                resportError(error) 
+                reportError(error) 
             }
             requestAccount = true
         }
@@ -95,7 +95,7 @@ export async function connectMetaMask(forceRequest) {
                     accounts = await ethereum.request({method: 'eth_requestAccounts'})
                 } catch(error) {
                     // return 'Metamask issue. Click <a href="https://mintpad.co/troubleshooting/" target="_blank" class="underline">here</a> to find out more.', true)
-                    resportError(error) 
+                    reportError(error) 
                 }
                 if (accounts.length > 0) {
                     account = accounts[0]
@@ -130,7 +130,7 @@ export async function switchBlockchainTo(chainId) {
         if (metamaskError) {
             return metamaskError
         } else {
-            resportError(error)
+            reportError(error)
             return 'Failed to switch to the correct blockchain, try to do it manually.'
         }
     }

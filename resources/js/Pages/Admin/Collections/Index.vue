@@ -58,7 +58,7 @@ const openCollectionModal = async (collectionID) => {
     const result = props.collections.find(({ id }) => id === collectionID)
     const contract = await getSmartContractFromSigner(wallet.value.signer, result.chain_id, result.address, result.type)
     try {
-        const data = await getCollectionData(contract, result.type, false, true)
+        const data = await getCollectionData(contract, result.type, false, 8)
 
         collectionData.value.chainId = result.chain_id
 
