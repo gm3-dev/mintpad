@@ -4,7 +4,7 @@ import Button from '@/Components/Form/Button.vue'
 import Input from '@/Components/Form/Input.vue'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { WeiToValue, calculateTransactionFee } from '@/Helpers/Helpers'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
 import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
@@ -106,7 +106,7 @@ const mintNFT = async () => {
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
             } else {
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }

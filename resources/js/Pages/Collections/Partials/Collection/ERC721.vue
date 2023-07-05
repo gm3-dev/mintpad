@@ -13,7 +13,7 @@ import { getCollectionData, getSmartContractFromSigner } from '@/Helpers/Thirdwe
 import { useForm } from '@inertiajs/vue3'
 import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { handleError } from '@/Helpers/Helpers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',

@@ -19,7 +19,7 @@ import EditorBar from '@/Pages/Mint/Partials/EditorBar.vue'
 import ButtonEditor from '@/Pages/Mint/Partials/ButtonEditor.vue'
 import LogoEditor from '@/Pages/Mint/Partials/LogoEditor.vue'
 import Messages from '@/Components/Messages.vue'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { ethers } from 'ethers'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -160,7 +160,7 @@ onMounted(async () => {
                 
             } catch (error) {
                 console.log('mint 1', error)
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
 
@@ -332,7 +332,7 @@ const mintNFT = async (e) => {
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
             } else {
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }

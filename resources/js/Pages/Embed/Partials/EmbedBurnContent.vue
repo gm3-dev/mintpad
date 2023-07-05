@@ -3,7 +3,7 @@ import Box from '@/Components/Box.vue'
 import Button from '@/Components/Form/Button.vue'
 import { checkCurrentBlockchain, getBlockchains } from '@/Helpers/Blockchain'
 import { calculateTransactionFee } from '@/Helpers/Helpers'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { getSmartContractFromSigner } from '@/Helpers/Thirdweb'
 import { getMetaMaskError, switchChainTo } from '@/Wallets/MetaMask'
 import { connectWallet, getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
@@ -52,7 +52,7 @@ const burnNFTs = async (e) => {
         if (metamaskError) {
             messages.value.push({type: 'error', message: metamaskError})
         } else {
-            resportError(error)
+            reportError(error)
             messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
         }
     }

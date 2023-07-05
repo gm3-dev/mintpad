@@ -2,7 +2,7 @@ import { getMetaMaskError } from '@/Wallets/MetaMask'
 import { ethers } from 'ethers'
 import $ from 'jquery'
 import { toRaw, unref } from 'vue'
-import { resportError } from './Sentry'
+import { reportError } from './Sentry'
 
 export function ipfsToUrl(url) {
     url = url.replace('ipfs://', '')
@@ -267,7 +267,7 @@ export function handleError(error) {
     if (metamaskError) {
         return metamaskError
     } else {
-        resportError(error)
+        reportError(error)
         return 'Something went wrong, please try again.'
     }
 }

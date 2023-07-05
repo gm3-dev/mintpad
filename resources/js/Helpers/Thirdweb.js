@@ -1,6 +1,7 @@
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import { toRaw } from 'vue'
 import { getBlockchains } from './Blockchain'
+import { reportError } from './Sentry'
 
 export function setSDK(chainId) {
     const blockchains = getBlockchains()
@@ -83,27 +84,14 @@ export async function getCollectionData(contract, contractType, withAllowList, w
         const primarySalesRecipient = await contract.sales.getRecipient()
     
         // Claim phases
-        let claimConditions = []
-        if (contractType == 'ERC721') {
-            claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
-        } else if (contractType.startsWith('ERC1155')) {
-            claimConditions = await contract.claimConditions.getAll(tokenID, {withAllowList: withAllowList})
-        }
+        let claimConditions = await getClaimPhases(contract, contractType, withAllowList, tokenID)
         // const activeClaimCondition = await contract.claimConditions.getActive()
     
         // NFTs
         const nfts = withNfts !== false ? await contract.getAll({count: withNfts}) : []
 
         // Collection
-        if (contractType == 'ERC721') {
-            var totalSupply = await contract.totalSupply()
-            var totalClaimedSupply = await contract.totalClaimedSupply()
-            var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
-        } else if (contractType.startsWith('ERC1155')) {
-            var totalSupply = await contract.call('maxTotalSupply', [tokenID], {})
-            var totalClaimedSupply = await contract.totalSupply(tokenID)
-            var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
-        }
+        const totals = await getTotalsData(contract, contractType, tokenID)
     
         output = {
             metadata: {
@@ -119,12 +107,41 @@ export async function getCollectionData(contract, contractType, withAllowList, w
             nftsToBurn: nftsToBurn,
             claimConditions: claimConditions,
             nfts: nfts,
-            totalSupply: totalSupply,
-            totalClaimedSupply: totalClaimedSupply,
-            totalRatioSupply: totalRatio
+            totalSupply: totals.totalSupply,
+            totalClaimedSupply: totals.totalClaimedSupply,
+            totalRatioSupply: totals.totalRatio
         }
     } catch(error) {
-        //
+        reportError(error)
     }
     return output
+}
+
+export async function getClaimPhases(contract, contractType, withAllowList, tokenID) {
+    let claimConditions = []
+    if (contractType == 'ERC721') {
+        claimConditions = await contract.claimConditions.getAll({withAllowList: withAllowList})
+    } else if (contractType.startsWith('ERC1155')) {
+        claimConditions = await contract.claimConditions.getAll(tokenID, {withAllowList: withAllowList})
+    }
+
+    return claimConditions
+}
+
+export async function getTotalsData(contract, contractType, tokenID) {
+    if (contractType == 'ERC721') {
+        var totalSupply = await contract.totalSupply()
+        var totalClaimedSupply = await contract.totalClaimedSupply()
+        var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
+    } else if (contractType.startsWith('ERC1155')) {
+        var totalSupply = await contract.call('maxTotalSupply', [tokenID], {})
+        var totalClaimedSupply = await contract.totalSupply(tokenID)
+        var totalRatio = Math.round((totalClaimedSupply/totalSupply)*100)
+    }
+
+    return {
+        totalSupply: totalSupply,
+        totalClaimedSupply: totalClaimedSupply,
+        totalRatio: totalRatio
+    }
 }

@@ -14,7 +14,7 @@ import { getBlockchains, checkCurrentBlockchain } from '@/Helpers/Blockchain'
 import { formatTransactionFee, getSelectInputBlockchainObject, handleError } from '@/Helpers/Helpers'
 import { getSDKFromSigner } from '@/Helpers/Thirdweb'
 import Messages from '@/Components/Messages.vue'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
 import LinkLightBlue from '@/Components/LinkLightBlue.vue'
@@ -146,7 +146,7 @@ const deployContract = async () => {
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
             } else {
-                resportError(error)
+                reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }

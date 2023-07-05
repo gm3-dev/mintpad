@@ -20,17 +20,16 @@ import Radio from '@/Components/Form/Radio.vue'
 import RadioGroup from '@/Components/Form/RadioGroup.vue'
 import Addon from '@/Components/Form/Addon.vue'
 import Messages from '@/Components/Messages.vue'
-import { getSmartContractFromSigner, getCollectionData } from '@/Helpers/Thirdweb'
+import { getSmartContractFromSigner, getCollectionData, getClaimPhases, getTotalsData } from '@/Helpers/Thirdweb'
 import Hyperlink from '@/Components/Hyperlink.vue'
 import Modal from '@/Components/Modal.vue'
 import { formateDatetimeLocal, parseClaimConditions, handleError, shortenWalletAddress, copyToClipboard, ipfsToUrl } from '@/Helpers/Helpers'
 import InputFile from '@/Components/Form/InputFile.vue'
 import axios from 'axios'
-import { resportError } from '@/Helpers/Sentry'
+import { reportError } from '@/Helpers/Sentry'
 import ERC1155Burn from './Partials/Collection/ERC1155Burn.vue'
 import ERC721 from './Partials/Collection/ERC721.vue'
 import ERC1155 from './Partials/Collection/ERC1155.vue'
-import CopyButton from '@/Components/CopyButton.vue'
 import Select from '@/Components/Form/Select.vue'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -59,6 +58,7 @@ let loading = ref(true)
 let buttonLoading = ref(false)
 let messages = ref([])
 let claimPhases = ref([])
+let claimPhasesLoading = ref(true)
 let disablePhases = ref(null)
 let blockchains = ref(getBlockchains())
 let currentBlockchain = ref(blockchains.value[props.collection.chain_id])
@@ -132,7 +132,7 @@ onMounted(async () => {
         currentTab.value = 1
 
         contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-        await setClaimPhases()
+        await setContractData()
         
         // Set tab status
         validateTabStatus()
@@ -140,10 +140,10 @@ onMounted(async () => {
 })
 const updateManager = async (data) => {
     if (data.phases) {
-        await setClaimPhases()
+        await setContractData()
     }
 }
-const setClaimPhases = async () => {
+const setContractData = async () => {
     try {
         const data = await getCollectionData(contract, props.collection.type, true, 1000, currentNFT.value)
 
@@ -158,12 +158,14 @@ const setClaimPhases = async () => {
         // Fees
         collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
 
-        // Claim phases
-        claimPhases.value = parseClaimConditions(data.claimConditions)
-
+        // NFT list
         for (var i = 0; i < data.nfts.length; i++) {
             NFTList.value[i] = data.nfts[i].metadata.name
         }
+
+        // Claim phases
+        claimPhases.value = parseClaimConditions(data.claimConditions)
+        claimPhasesLoading.value = false
 
         // Total supply
         form.totalsupply.max = data.totalSupply
@@ -174,7 +176,17 @@ const setClaimPhases = async () => {
 }
 const changeCurrentNFT = async () => {
     claimPhases.value = []
-    await setClaimPhases()
+    claimPhasesLoading.value = true
+
+    // Claim phases
+    claimPhases.value = parseClaimConditions(await getClaimPhases(contract, props.collection.type, false, currentNFT.value))
+    
+    // Total supply
+    const totals = await getTotalsData(contract, props.collection.type, currentNFT.value)
+    form.totalsupply.max = totals.totalSupply
+    form.totalsupply.defaults()
+
+    claimPhasesLoading.value = false
     disablePhases.value = 1
 }
 const updateMetadata = async () => {
@@ -349,7 +361,7 @@ const updateMaxTotalSupply = async() => {
     buttonLoading.value = 'Updating maximum total supply'
 
     try {
-        await contract.call('setMaxTotalSupply', [0, form.totalsupply.max], {})
+        await contract.call('setMaxTotalSupply', [currentNFT.value, form.totalsupply.max], {})
         form.totalsupply.defaults()
 
         messages.value.push({type: 'success', message: 'Maximum total supply updated'})
@@ -556,7 +568,7 @@ const deleteSocialImage = () => {
                         </BoxContent>
                     </Box>
 
-                    <Box v-if="collection.type.startsWith('ERC1155') && tabStatus.collection == 1" title="Set maximum total supply">
+                    <Box v-if="!claimPhasesLoading && collection.type.startsWith('ERC1155') && tabStatus.collection == 1" title="Set maximum total supply">
                         <BoxContent>
                             <div>
                                 <Label value="Maximum total supply" class="relative" info="The max number of NFTs that can be minted. (0 = unlimited)." />
@@ -570,7 +582,7 @@ const deleteSocialImage = () => {
                     </Box>
 
                     <div v-if="(collection.type.startsWith('ERC1155') && tabStatus.collection == 1) || collection.type == 'ERC721'">
-                        <Box v-for="(phase, index) in claimPhases" class="mb-4" :title="'Phase '+(index+1)">
+                        <Box v-if="!claimPhasesLoading" v-for="(phase, index) in claimPhases" class="mb-4" :title="'Phase '+(index+1)">
                             <template v-slot:action>
                                 <a href="#" class="absolute right-8 top-3 text-xs font-medium text-mintpad-300 p-2 hover:text-mintpad-400" @click.prevent="deleteClaimPhase(index)">Delete phase</a>
                             </template>
@@ -639,7 +651,12 @@ const deleteSocialImage = () => {
                             </BoxContent>
                         </Box>
 
-                        <Box v-if="claimPhases.length == 0" class="mb-4">
+                        <Box v-if="claimPhasesLoading" class="mb-4">
+                            <BoxContent>
+                                <p>Loading...</p>
+                            </BoxContent>
+                        </Box>
+                        <Box v-else-if="claimPhases.length == 0" class="mb-4">
                             <BoxContent>
                                 <p class="">You have no mint phases set yet.</p>
                             </BoxContent>
