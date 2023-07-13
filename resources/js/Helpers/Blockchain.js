@@ -47,7 +47,7 @@ export function getBlockchains() {
         // 324: ZksyncEra,
         295: Hedera,
         1890: LightlinkPhoenix,
-        // 5000: Mantle
+        5000: Mantle
     }
     const testnets = {
         421613: ArbitrumGoerli,
