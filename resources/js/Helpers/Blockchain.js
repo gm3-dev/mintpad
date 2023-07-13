@@ -1,6 +1,6 @@
 import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet } from '@thirdweb-dev/chains'
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, LineaTestnet } from '@thirdweb-dev/chains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
@@ -62,7 +62,8 @@ export function getBlockchains() {
         // 280: ZksyncEraTestnet,
         296: HederaTestnet,
         1891: LightlinkPegasusTestnet,
-        5001: MantleTestnet
+        5001: MantleTestnet,
+        59140: LineaTestnet
     }
     return {...mainnets, ...testnets}
 }
