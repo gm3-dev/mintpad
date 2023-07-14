@@ -6,11 +6,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { getDefaultWalletData } from '@/Wallets/Wallet'
 import { Head } from '@inertiajs/vue3'
 import { ref, provide, onMounted } from 'vue'
+import axios from 'axios'
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
+}
 
 defineProps({
     'collections': Number,
     'chains': Object,
-    'imports': Object,
     'users': Number,
     'wallets': Object,
 })
@@ -19,6 +23,7 @@ let loading = ref(true)
 let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let blockchains = ref(getBlockchains())
+let walletBalances = ref([])
 
 provide('wallet', wallet)
 provide('transaction', {show: false, message: ''})
@@ -26,6 +31,14 @@ provide('transaction', {show: false, message: ''})
 onMounted(async () => {
     // Done loading
     loading.value = false
+
+    walletBalances.value = await axios.get('/admin/get-wallet-balances').then((response) => {
+        return response
+    })
+
+    if (walletBalances.value.status !== 200) {
+        walletBalances.value = []
+    }
 })
 </script>
 <template>
@@ -59,20 +72,10 @@ onMounted(async () => {
                 </BoxRow>
                 <BoxRow v-for="(wallet, id) in wallets" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
                     <div class="basis-1/2">{{ blockchains[id].name }}</div>
-                    <div class="basis-1/2">{{ wallet }} {{ blockchains[id].nativeCurrency.symbol }}</div>
-                </BoxRow>
-            </Box>
-
-            <Box title="Recent imports">
-                <BoxRow class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
-                    <div class="basis-2/4">Blockchain</div>
-                    <div class="basis-1/4">Total USD</div>
-                    <div class="basis-1/4 text-right">Period</div>
-                </BoxRow>
-                <BoxRow v-for="importData in imports" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
-                    <div class="basis-2/4">{{ blockchains[importData.chain_id].name }}</div>
-                    <div class="basis-1/4">${{ importData.total }}</div>
-                    <div class="basis-1/4 text-right">{{ importData.period }}</div>
+                    <div class="basis-1/2">
+                        <span v-if="walletBalances.data && walletBalances.data[id]">{{ walletBalances.data[id] }} {{ blockchains[id].nativeCurrency.symbol }}</span>
+                        <i v-else class="inline-block fa-solid fa-spinner animate-spin text-base mr-1 align-middle"></i>
+                    </div>
                 </BoxRow>
             </Box>
 

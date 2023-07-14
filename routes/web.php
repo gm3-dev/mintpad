@@ -42,6 +42,7 @@ Route::domain(config('app.url'))->group(function () {
             Route::name('admin.')->group(function () {
                 // Dashboard
                 Route::get('/', [DashboardController::class, 'index']);
+                Route::get('/get-wallet-balances', [DashboardController::class, 'getWalletBalances']);
                 Route::resource('dashboard', DashboardController::class);
                 // Collections
                 Route::resource('collections', AdminCollectionController::class);
