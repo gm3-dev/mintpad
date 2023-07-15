@@ -88,6 +88,8 @@ const deployContract = async () => {
             // transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
             // transactionFee = ethers.utils.parseUnits((1 / tokenPrice).toFixed(18), 18)
             transactionFee = formatTransactionFee(1 / tokenPrice)
+        } else if (form.chain_id == 1890 || form.chain_id == 5000) { // Mantle and LightLink don't have token prices yet
+            // continue
         } else {
             messages.value.push({type: 'error', message: 'Error while setting contract data'})
             return
