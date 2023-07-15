@@ -21,12 +21,18 @@ class DashboardController extends Controller
     public function index()
     {
         $users = User::all()->count();
-        $imports = Import::all();
         $collections = Collection::count();
         $chains = Collection::select('chain_id', DB::raw('COUNT(*) as count'))->groupBy('chain_id')->pluck('count', 'chain_id');
+        $wallets = config('explorers');
+
+        return Inertia::render('Admin/Dashboard/Index', compact('collections', 'chains', 'users', 'wallets'));
+    }
+
+    public function getWalletBalances()
+    {
         $wallets = Explorer::getWalletBalances(config('wallet.address'));
 
-        return Inertia::render('Admin/Dashboard/Index', compact('collections', 'chains', 'imports', 'users', 'wallets'));
+        return response()->json($wallets);
     }
 
     /**
