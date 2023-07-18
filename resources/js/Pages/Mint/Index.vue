@@ -370,7 +370,7 @@ const mintNFT = async (e) => {
 
                 <div v-if="collectionData.thumb" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
                     <img v-if="collectionData.thumb && fileIsImage(collectionData.thumb)" class="inline-block rounded-m h-full" :src="collectionData.thumb" />
-                    <video v-if="collectionData.thumb && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop>
+                    <video v-if="collectionData.thumb && fileIsVideo(collectionData.thumb)" class="inline-block rounded-m h-full" autoplay loop muted>
                         <source :src="collectionData.thumb" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -489,7 +489,7 @@ const mintNFT = async (e) => {
                         <Link :href="route('mint.index', [collection.permalink, index])">
                             <div v-if="nft.metadata.image" class="w-full rounded-md">
                                 <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" :src="nft.metadata.image" />
-                                <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" autoplay loop>
+                                <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" autoplay loop muted>
                                     <source :src="nft.metadata.image" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
