@@ -157,7 +157,7 @@ const validateForm = () => {
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
                     <img v-if="form.file.src && fileIsImage(form.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.file.src" />
-                    <video v-if="form.file.src && fileIsVideo(form.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
+                    <video v-if="form.file.src && fileIsVideo(form.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop muted>
                         <source :src="form.file.src" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -182,7 +182,7 @@ const validateForm = () => {
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
                     <img v-if="NFT.metadata.image && fileIsImage(NFT.metadata.image)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="NFT.metadata.image" />
-                    <video v-if="NFT.metadata.image && fileIsVideo(NFT.metadata.image)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
+                    <video v-if="NFT.metadata.image && fileIsVideo(NFT.metadata.image)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop muted>
                         <source :src="NFT.metadata.image" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

@@ -230,7 +230,7 @@ const burnNFTs = async (e) => {
 
                 <div v-if="collectionData.nfts.length > 0" class="h-24 sm:h-36 md:h-48 bg-white rounded-md p-1 text-center">
                     <img v-if="collectionData.nfts[1].metadata.image && fileIsImage(collectionData.nfts[1].metadata.image)" class="inline-block rounded-m h-full" :src="collectionData.nfts[1].metadata.image" />
-                    <video v-if="collectionData.nfts[1].metadata.image && fileIsVideo(collectionData.nfts[1].metadata.image)" class="inline-block rounded-m h-full" autoplay loop>
+                    <video v-if="collectionData.nfts[1].metadata.image && fileIsVideo(collectionData.nfts[1].metadata.image)" class="inline-block rounded-m h-full" autoplay loop muted>
                         <source :src="collectionData.nfts[1].metadata.image" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -255,7 +255,7 @@ const burnNFTs = async (e) => {
 
                                 <span v-for="(nft, index) in collectionData.nfts" class="inline-block mt-6 rounded-md">
                                     <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" :src="nft.metadata.image" />
-                                    <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" autoplay loop>
+                                    <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-md w-20 h-full" autoplay loop muted>
                                         <source :src="nft.metadata.image" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>

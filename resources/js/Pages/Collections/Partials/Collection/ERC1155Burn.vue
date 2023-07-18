@@ -188,7 +188,7 @@ const validateForm = () => {
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people mint.</p>
                     <img v-if="form.base.file.src && fileIsImage(form.base.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.base.file.src" />
-                    <video v-if="form.base.file.src && fileIsVideo(form.base.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
+                    <video v-if="form.base.file.src && fileIsVideo(form.base.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop muted>
                         <source :src="form.base.file.src" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -201,7 +201,7 @@ const validateForm = () => {
                 <div class="text-sm">
                     <p class="mb-4">This image will be the image people get after burning their NFT.</p>
                     <img v-if="form.burn.file.src && fileIsImage(form.burn.file)" class="w-full max-w-max transition-all duration-500 rounded-md" :src="form.burn.file.src" />
-                    <video v-if="form.burn.file.src && fileIsVideo(form.burn.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop>
+                    <video v-if="form.burn.file.src && fileIsVideo(form.burn.file)" class="transition-all duration-500 rounded-md" width="512" height="512" autoplay loop muted>
                         <source :src="form.burn.file.src" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
