@@ -34,7 +34,7 @@ export function getBlockchains() {
     // ZksyncEra.coingecko = '';
     Hedera.coingecko = 'hedera-hashgraph';
     // LightlinkPhoenix.coingecko = '';
-    // Mantle.coingecko = '';
+    Mantle.coingecko = 'mantle';
 
     const mainnets = {
         42161: Arbitrum,
