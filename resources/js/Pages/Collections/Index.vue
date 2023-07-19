@@ -74,7 +74,7 @@ onMounted(async () => {
                     <div class="hidden sm:block basis-2/12">{{ collection.type }}</div>
                     <div class="basis-full sm:basis-3/12"><img v-if="blockchains[collection.chain_id].icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(blockchains[collection.chain_id].icon.url)" /> {{ blockchains[collection.chain_id].name }}</div>
                     <div class="basis-full sm:basis-4/12 lg:basis-2/12">
-                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!w-full !text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
+                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!w-full !text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1 !font-mono" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
                     </div>
                     <div class="basis-full sm:basis-2/12 text-center sm:text-right">
                         <LinkBlue :href="route('collections.edit', collection.id)" class="!py-2">Manage</LinkBlue>

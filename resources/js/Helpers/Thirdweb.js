@@ -144,7 +144,7 @@ export async function getTotalsData(contract, contractType, tokenID) {
     }
 
     return {
-        totalSupply: totalSupply,
+        totalSupply: parseInt(totalSupply),
         totalClaimedSupply: totalClaimedSupply,
         totalRatio: totalRatio
     }

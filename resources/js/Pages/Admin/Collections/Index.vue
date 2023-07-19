@@ -6,7 +6,7 @@ import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { getBlockchains } from '@/Helpers/Blockchain'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { shortenWalletAddress, copyToClipboard, parseClaimConditions } from '@/Helpers/Helpers'
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, Link, useForm } from '@inertiajs/vue3'
 import { ref, provide, onMounted, inject } from 'vue'
 import axios from 'axios'
 import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
@@ -112,11 +112,11 @@ const switchBlockchain = async (chainId) => {
                     <div class="basis-4/12"></div>
                 </BoxRow>
                 <BoxRow v-for="collection in collections" class="flex flex-wrap text-sm items-center text-mintpad-700 dark:text-white font-medium">
-                    <div class="basis-full sm:basis-4/12 font-semibold">{{ collection.name }}</div>
+                    <div class="basis-full sm:basis-4/12 font-semibold"><Link class="hover:underline" :href="route('collections.edit', collection.id)">{{ collection.name }}</Link></div>
                     <div class="basis-full sm:basis-2/12 font-semibold">{{ collection.type }}</div>
                     <div class="basis-full sm:basis-2/12 font-semibold">{{ blockchains[collection.chain_id].name }} ({{ blockchains[collection.chain_id].nativeCurrency.symbol }})</div>
                     <div class="basis-full sm:basis-4/12 text-center sm:text-right">
-                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
+                        <ButtonGray content="Copy contract address" @click="copyToClipboard" :text="collection.address" class="!text-sm !bg-mintpad-100 dark:!bg-mintpad-700 !px-3 !py-1 !font-mono" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray> 
                         <LinkBlue element="a" :href="route('mint.index', collection.permalink)" target="_blank" class="ml-2 !px-2">Mint page</LinkBlue>
                         <span v-if="wallet.chainId != collection.chain_id" :content="'You need to switch to '+blockchains[collection.chain_id].nativeCurrency.symbol" v-tippy>
                             <ButtonGray href="#" @click.prevent="switchBlockchain(collection.chain_id)" class="ml-2 !px-2 w-24">Switch</ButtonGray>

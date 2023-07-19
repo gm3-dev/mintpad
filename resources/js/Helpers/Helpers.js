@@ -16,10 +16,11 @@ export function shortenWalletAddress(address) {
 
 export function copyToClipboard(e) {
     var target = $(e.target)
-    var text = target.text()
-    target.text('Copied')
+    var text = target.html()
+    var width = target.css('width')
+    target.css('width', width).text('Copied')
     setTimeout(function() {
-        target.text(text)
+        target.css('width', '').html(text)
     }, 1000)
     navigator.clipboard.writeText(target.attr('text'))
 }

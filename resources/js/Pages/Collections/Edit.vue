@@ -477,7 +477,7 @@ const deleteSocialImage = () => {
                     <h1>{{ collection.name }}</h1>
                     <p>You can adjust the settings of your collection here.</p>
                     <p>
-                        <ButtonGray content="Copy contract address" @click.prevent="copyToClipboard" :text="collection.address" class="!w-40 !text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
+                        <ButtonGray content="Copy contract address" @click.prevent="copyToClipboard" :text="collection.address" class="!text-sm !px-3 !py-1" v-tippy><i class="fas fa-copy mr-2 text-mintpad-700 dark:text-white"></i>{{ shortenWalletAddress(collection.address) }}</ButtonGray>
                         <span class="inline-block align-middle font-medium px-3 py-1 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4"><img v-if="currentBlockchain.icon" class="inline-block mr-2 h-5" :src="ipfsToUrl(currentBlockchain.icon.url)" /> {{ currentBlockchain.name }}</span>
                         <span class="inline-block align-middle font-medium px-3 py-1.5 text-xs bg-mintpad-200 border border-transparent dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 rounded-md text-center ml-4">{{ collection.type }}</span>
                     </p>
