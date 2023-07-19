@@ -61,7 +61,9 @@ export async function connectMetaMask(connect) {
             const blockchains = getBlockchains()
             const blockchain = blockchains[chainId]
     
-            const sdk = ThirdwebSDK.fromSigner(signer, blockchain, {})
+            const sdk = ThirdwebSDK.fromSigner(signer, blockchain, {
+                clientId: import.meta.env.VITE_TW_CLIENT_ID
+            })
             const balance = await sdk.wallet.balance()
         
             return {
