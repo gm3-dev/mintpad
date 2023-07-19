@@ -20,6 +20,9 @@ export default ({ mode }) => {
     }
     return defineConfig({
         server: server,
+        build: {
+            sourcemap: true,
+        },
         plugins: [
             vue({
                 template: {
