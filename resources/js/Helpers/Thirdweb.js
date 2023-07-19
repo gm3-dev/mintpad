@@ -7,14 +7,18 @@ export function setSDK(chainId) {
     const blockchains = getBlockchains()
     const blockchain = blockchains[chainId]
 
-    return new ThirdwebSDK(blockchain)
+    return new ThirdwebSDK(blockchain, {
+        clientId: import.meta.env.VITE_TW_CLIENT_ID,
+    })
 }
 
 export function getSDKFromSigner(signer, chainId) {
     const blockchains = getBlockchains()
     const blockchain = blockchains[chainId]
 
-    return ThirdwebSDK.fromSigner(toRaw(signer), blockchain, {})
+    return ThirdwebSDK.fromSigner(toRaw(signer), blockchain, {
+        clientId: import.meta.env.VITE_TW_CLIENT_ID,
+    })
 }
 
 export async function getSmartContract(chainId, address, contractType) {
