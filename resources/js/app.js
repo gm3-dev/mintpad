@@ -9,7 +9,7 @@ import mitt from 'mitt'
 import * as Sentry from "@sentry/vue"
 const emitter = mitt()
 
-const app = createInertiaApp({
+createInertiaApp({
     id: 'app',
     progress: {
         color: '#0077FF',
@@ -20,7 +20,7 @@ const app = createInertiaApp({
         return pages[`./Pages/${name}.vue`]
     },
     setup({ el, App, props, plugin }) {
-        const vm = createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) })
         .use(plugin)
         .use(ZiggyVue, Ziggy)
         .directive('tippy', Tippy)
@@ -29,7 +29,7 @@ const app = createInertiaApp({
 
         if (import.meta.env.VITE_SENTRY_LARAVEL_DSN) {
             Sentry.init({
-                vm,
+                app,
                 dsn: import.meta.env.VITE_SENTRY_LARAVEL_DSN,
                 integrations: [
                     new Sentry.BrowserTracing({
@@ -45,6 +45,6 @@ const app = createInertiaApp({
             });
         }
 
-        vm.mount(el)
+        app.mount(el)
     },
 })
