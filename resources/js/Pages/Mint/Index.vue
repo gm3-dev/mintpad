@@ -172,7 +172,7 @@ onMounted(async () => {
 })
 
 const switchBlockchain = async () => {
-    const status = await switchChainTo(props.chainId)
+    const status = await switchChainTo(props.collection.chain_id)
     if (status !== true) {
         emitter.emit('new-message', {type: 'error', message: status})
     }

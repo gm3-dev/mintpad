@@ -325,7 +325,12 @@ const updateClaimPhases = async () => {
         // Set maxClaimablePerWallet
         let maxClaimablePerWallet = claimPhase.maxClaimablePerWallet == '0' && claimPhase.whitelist == '0' ? 'unlimited' : parseInt(claimPhase.maxClaimablePerWallet)
         if (claimPhase.whitelist == '1') {
+            for (var s = 0; s < claimPhase.snapshot.length; s++) {
+                claimPhase.snapshot[s].maxClaimable = maxClaimablePerWallet
+            }
             maxClaimablePerWallet = '0'
+        } else {
+            claimPhase.snapshot = []
         }
         let newClaimPhase = {
             metadata: {

@@ -60,6 +60,7 @@ export function parseClaimConditions(claimConditions) {
         var cc = claimConditions[i]
         var nextIndex = i + 1
         var nextCc = nextIndex > claimConditions.length ? false : claimConditions[nextIndex]
+        var hasNoWhitelist = (cc.snapshot == undefined || cc.snapshot.length == 0)
         output.push({
             id: nextIndex,
             name: cc.metadata != undefined && typeof cc.metadata.name !== 'undefined' ? cc.metadata.name : 'Phase '+nextIndex,
@@ -67,9 +68,9 @@ export function parseClaimConditions(claimConditions) {
             endTime: nextCc ? formateDatetimeLocal(nextCc.startTime) : false,
             price: hexToValue(cc.price._hex),
             maxClaimableSupply: cc.maxClaimableSupply == 'unlimited' ? 0 : parseInt(cc.maxClaimableSupply),
-            maxClaimablePerWallet: cc.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(cc.maxClaimablePerWallet),
+            maxClaimablePerWallet: hasNoWhitelist ? (cc.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(cc.maxClaimablePerWallet)) : parseInt(cc.snapshot[0].maxClaimable),
             // waitInSeconds: parseInt(cc.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
-            whitelist: cc.snapshot == undefined || cc.snapshot.length == 0 ? 0 : 1,
+            whitelist: hasNoWhitelist ? 0 : 1,
             snapshot: cc.snapshot ?? [],
             modal: false,
             countdown: ''
