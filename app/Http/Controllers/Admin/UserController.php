@@ -63,7 +63,7 @@ class UserController extends Controller
     {
         $roles = config('roles');
 
-        return Inertia::render('Admin/Users/Edit', compact('user', 'countries', 'roles'));
+        return Inertia::render('Admin/Users/Edit', compact('user', 'roles'));
     }
 
     /**
