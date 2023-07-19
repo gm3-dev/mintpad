@@ -68,7 +68,7 @@ export function parseClaimConditions(claimConditions) {
             endTime: nextCc ? formateDatetimeLocal(nextCc.startTime) : false,
             price: hexToValue(cc.price._hex),
             maxClaimableSupply: cc.maxClaimableSupply == 'unlimited' ? 0 : parseInt(cc.maxClaimableSupply),
-            maxClaimablePerWallet: hasNoWhitelist ? (cc.maxClaimablePerWallet == 'unlimited' ? 0 :  parseInt(cc.maxClaimablePerWallet)) : parseInt(cc.snapshot[0].maxClaimable),
+            maxClaimablePerWallet: hasNoWhitelist ? (cc.maxClaimablePerWallet == 'unlimited' ? 0 : parseInt(cc.maxClaimablePerWallet)) : (cc.snapshot[0].maxClaimable == 'unlimited' ? 0 : parseInt(cc.snapshot[0].maxClaimable)),
             // waitInSeconds: parseInt(cc.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
             whitelist: hasNoWhitelist ? 0 : 1,
             snapshot: cc.snapshot ?? [],
