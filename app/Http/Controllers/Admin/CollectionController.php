@@ -6,6 +6,7 @@ use App\Facades\PolygonScan;
 use App\Facades\Coinbase;
 use App\Http\Controllers\Controller;
 use App\Models\Collection;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -30,7 +31,8 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::select('id', 'name')->orderBy('id')->pluck('name', 'id');
+        return Inertia::render('Admin/Collections/Create', compact('users'));
     }
 
     /**
@@ -41,7 +43,31 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $request->validate([
+                'user_id' => ['required'],
+                'type' => ['required'],
+                'name' => ['required'],
+                'symbol' => ['required'],
+                'chain_id' => ['required'],
+                'address' => ['required', 'max:255', 'unique:collections,permalink'],
+                'permalink' => ['required', 'max:255', 'unique:collections,permalink'],
+            ]);
+
+            $collection = new Collection();
+            $collection->user_id = $request->user_id;
+            $collection->type = $request->type;
+            $collection->name = $request->name;
+            $collection->description = $request->description;
+            $collection->symbol = $request->symbol;
+            $collection->royalties = $request->royalties;
+            $collection->chain_id = $request->chain_id;
+            $collection->address = $request->address;
+            $collection->permalink = $request->permalink;
+            $collection->save();
+    
+            return Redirect::route('admin.collections.index');
+        }
     }
 
     /**
