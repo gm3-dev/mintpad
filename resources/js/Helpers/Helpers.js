@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import $ from 'jquery'
 import { toRaw, unref } from 'vue'
 import { reportError } from './Sentry'
+import BigNumber from "bignumber.js";
 
 export function ipfsToUrl(url) {
     url = url.replace('ipfs://', '')
@@ -255,11 +256,15 @@ export function formatTransactionFee(fee) {
 }
 
 export function calculateTransactionFee(fee, price) {
-    var feeResult = fee * 1000000000
-    var priceResult = price * 1000000000
-    var total = ((feeResult + priceResult) / 1000000000).toString()
-    const parsed = ethers.utils.parseUnits(total).toString()
-    
+    // var feeResult = fee * 1000000000
+    // var priceResult = price * 1000000000
+    // var total = ((feeResult + priceResult) / 1000000000).toString()
+    // const parsed = ethers.utils.parseUnits(total).toString()
+
+    var feeResult = BigNumber(fee)
+    var total = feeResult.plus(price)
+    var parsed = ethers.utils.parseUnits(total.toString()).toString()
+
     return ethers.BigNumber.from(parsed)
 }
 
