@@ -547,9 +547,9 @@ const deleteSocialImage = () => {
                     </div>
                 </div>
                 <div v-show="currentTab == 2">
-                    <ERC721 v-if="collection.type == 'ERC721'" :collection="collection" />
-                    <ERC1155 v-if="collection.type == 'ERC1155'" :collection="collection" :updater="updateManager"/>
-                    <ERC1155Burn v-if="collection.type == 'ERC1155Burn'" :collection="collection" />
+                    <ERC721 v-if="validBlockchain === true && collection.type == 'ERC721'" :collection="collection" />
+                    <ERC1155 v-if="validBlockchain === true && collection.type == 'ERC1155'" :collection="collection" :updater="updateManager"/>
+                    <ERC1155Burn v-if="validBlockchain === true && collection.type == 'ERC1155Burn'" :collection="collection" />
                 </div>
 
                 <div v-show="currentTab == 3">
