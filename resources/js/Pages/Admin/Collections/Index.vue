@@ -103,7 +103,10 @@ const switchBlockchain = async (chainId) => {
             <h1>Collections</h1>
         </div>
         
-        <Box class="w-full mb-12" title="Your collections">
+        <Box class="w-full mb-12" title="Collections">
+            <template v-slot:action>
+                <LinkBlue :href="route('admin.collections.create')" class="!absolute top-2.5 right-8 !py-1.5 !px-6" @click.prevent="">Add collection</LinkBlue>
+            </template>
             <div v-if="collections">
                 <BoxRow class="flex flex-wrap text-sm dark:text-mintpad-300 font-jpegdevmd">
                     <div class="basis-1/2 sm:basis-4/12">Collection name</div>

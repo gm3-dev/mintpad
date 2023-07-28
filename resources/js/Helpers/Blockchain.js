@@ -1,12 +1,10 @@
 import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, LineaTestnet } from '@thirdweb-dev/chains'
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, LineaTestnet, Sepolia } from '@thirdweb-dev/chains'
+import { LineaMainnet } from '@/Helpers/CustomBlockchains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
-    console.log(blockchain)
-    console.log(wallet.value)
-    console.log(wallet.value.account)
 
     if (!blockchain || wallet.value == false || wallet.value.account == false) {
         return 'wallet'
@@ -49,7 +47,8 @@ export function getBlockchains() {
         // 324: ZksyncEra,
         295: Hedera,
         1890: LightlinkPhoenix,
-        5000: Mantle
+        5000: Mantle,
+        59144: LineaMainnet
     }
     const testnets = {
         421613: ArbitrumGoerli,

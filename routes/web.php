@@ -49,9 +49,9 @@ Route::domain(config('app.url'))->group(function () {
                 // Users
                 Route::resource('users', AdminUserController::class);
                 // Import
-                Route::resource('import', ImportController::class);
+                // Route::resource('import', ImportController::class);
                 // Invoices
-                Route::resource('invoices', InvoiceController::class);
+                // Route::resource('invoices', InvoiceController::class);
                 // Upcoming
                 Route::resource('upcoming', UpcomingController::class);
                 // Status

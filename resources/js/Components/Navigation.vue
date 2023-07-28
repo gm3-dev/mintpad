@@ -38,7 +38,6 @@ watch(wallet, () => {
                         <NavLink :href="route('admin.dashboard.index')" :active="route().current('admin.dashboard.*')">Dashboard</NavLink>
                         <NavLink :href="route('admin.collections.index')" :active="route().current('admin.collections.*')">Collections</NavLink>
                         <NavLink :href="route('admin.users.index')" :active="route().current('admin.users.*')">Users</NavLink>
-                        <NavLink :href="route('admin.import.index')" :active="route().current('admin.import.*')">Import</NavLink>
                         <NavLink :href="route('admin.upcoming.index')" :active="route().current('admin.upcoming.*')">Upcoming</NavLink>
                         <NavLink :href="route('admin.status.index')" :active="route().current('admin.status.*')">Status</NavLink>
                     </div>
@@ -114,7 +113,6 @@ watch(wallet, () => {
                         <HamburgerMenuLink v-if="$page.props.auth.user.role == 'admin'" :href="route('collections.index')">Admin panel</HamburgerMenuLink>
                         <HamburgerMenuLink :href="route('collections.index')" :active="route().current('collections.*')">My profile</HamburgerMenuLink>
                         <HamburgerMenuLink :href="route('collections.index')" :active="route().current('collections.*')">2fa settings</HamburgerMenuLink>
-                        <HamburgerMenuLink :href="route('collections.index')" :active="route().current('collections.*')">Invoices</HamburgerMenuLink>
                         <form @submit.prevent="logout">
                             <HamburgerMenuLink :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</HamburgerMenuLink>
                         </form>
