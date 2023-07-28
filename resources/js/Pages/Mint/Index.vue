@@ -151,9 +151,16 @@ onMounted(async () => {
 
                 // Collection
                 collectionData.value.nfts = data.nfts
-                collectionData.value.thumb = collectionData.value.nfts[currentNFT.value].metadata.image
-                if (props.collection.type == 'ERC1155') {
-                    props.collection.name = collectionData.value.nfts[currentNFT.value].metadata.name
+                if (collectionData.value.nfts.length) {
+                    collectionData.value.thumb = collectionData.value.nfts[currentNFT.value].metadata.image
+
+                    if (props.collection.type == 'ERC1155') {
+                        props.collection.name = collectionData.value.nfts[currentNFT.value].metadata.name
+                    }
+                } else {
+                    if (props.collection.type == 'ERC1155') {
+                        props.collection.name = collectionData.value.name
+                    }
                 }
 
                 loadComplete.value = true
@@ -377,11 +384,11 @@ const mintNFT = async (e) => {
                 </div>
                 <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
                     <div class="bg-white dark:bg-mintpad-500 w-full h-full">
-                        <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-full animate-pulse"></div>
+                        <div v-if="!loadComplete" class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-full animate-pulse"></div>
                     </div>
                 </div>
                 <h2 v-if="collection.name" class="grow text-lg sm:text-2xl md:text-5xl text-white">{{ collection.name }}</h2>
-                <div v-else class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/3 h-10 mb-4 animate-pulse"></div>
+                <div v-else-if="!loadComplete" class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/3 h-10 mb-4 animate-pulse"></div>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-6 mt-12">
