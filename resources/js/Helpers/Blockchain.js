@@ -1,6 +1,6 @@
 import { Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, LineaTestnet, Sepolia } from '@thirdweb-dev/chains'
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, LineaTestnet, ShardeumSphinxDapp1X, TaikoAlpha3Testnet } from '@thirdweb-dev/chains'
 import { LineaMainnet } from '@/Helpers/CustomBlockchains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -64,7 +64,9 @@ export function getBlockchains() {
         296: HederaTestnet,
         1891: LightlinkPegasusTestnet,
         5001: MantleTestnet,
-        59140: LineaTestnet
+        59140: LineaTestnet,
+        8081: ShardeumSphinxDapp1X,
+        167005: TaikoAlpha3Testnet
     }
     return {...mainnets, ...testnets}
 }
