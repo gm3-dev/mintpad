@@ -35,5 +35,10 @@ return [
         'url' => env('ME_URL', false),
         'key' => env('ME_KEY', false),
         'coingecko' => 'mantle'
+    ],
+    2000 => [
+        'url' => env('DE_URL', false),
+        'key' => env('DE_KEY', false),
+        'coingecko' => 'dogechain'
     ]
 ];

@@ -145,7 +145,8 @@ const updateManager = async (data) => {
 }
 const setContractData = async () => {
     try {
-        const data = await getCollectionData(contract, props.collection.type, true, 1000, currentNFT.value)
+        let numberOfNFTsToLoad = props.collection.type == 'ERC1155' ? 1000 : 8
+        const data = await getCollectionData(contract, props.collection.type, true, numberOfNFTsToLoad, currentNFT.value)
 
         // Settings
         form.metadata.name = data.metadata.name
@@ -159,8 +160,10 @@ const setContractData = async () => {
         collectionData.value.primarySalesRecipient = data.sales.primarySalesRecipient
 
         // NFT list
-        for (var i = 0; i < data.nfts.length; i++) {
-            NFTList.value[i] = data.nfts[i].metadata.name
+        if (props.collection.type == 'ERC1155') {
+            for (var i = 0; i < data.nfts.length; i++) {
+                NFTList.value[i] = data.nfts[i].metadata.name
+            }
         }
 
         // Claim phases
