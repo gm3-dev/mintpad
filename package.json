@@ -19,7 +19,7 @@
         "@inertiajs/vue3": "^1.0.2",
         "@sentry/tracing": "^7.45.0",
         "@sentry/vue": "^7.57.0",
-        "@thirdweb-dev/sdk": "^3.10.38",
+        "@thirdweb-dev/sdk": "^3.10.47",
         "@thirdweb-dev/wallets": "^1.1.1",
         "@vitejs/plugin-vue": "^4.0.0",
         "bignumber.js": "^9.1.1",

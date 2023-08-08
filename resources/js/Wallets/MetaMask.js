@@ -128,6 +128,8 @@ export function getMetaMaskError(error) {
             return 'There are no more NFTs left to claim in this mint phase.'
         case 'user rejected transaction': 
             return 'Request canceled: you rejected the request.'
+        case 'insufficient funds for intrinsic transaction cost': 
+            return 'Insufficient funds for intrinsic transaction cost'
         case 'Internal JSON-RPC error.':
             if (error.message.search('execution reverted: !MaxSupply') !== -1) {
                 return 'There are no more NFTs left to claim in this mint phase.'
