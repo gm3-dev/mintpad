@@ -68,7 +68,7 @@ export function parseClaimConditions(claimConditions) {
             name: cc.metadata != undefined && typeof cc.metadata.name !== 'undefined' ? cc.metadata.name : 'Phase '+nextIndex,
             startTime: formateDatetimeLocal(cc.startTime),
             endTime: nextCc ? formateDatetimeLocal(nextCc.startTime) : false,
-            price: hexToValue(cc.price._hex),
+            price: hexToValue(cc.price),
             maxClaimableSupply: cc.maxClaimableSupply == 'unlimited' ? 0 : parseInt(cc.maxClaimableSupply),
             maxClaimablePerWallet: hasNoWhitelist ? (cc.maxClaimablePerWallet == 'unlimited' ? 0 : parseInt(cc.maxClaimablePerWallet)) : (cc.snapshot[0].maxClaimable == 'unlimited' ? 0 : parseInt(cc.snapshot[0].maxClaimable)),
             // waitInSeconds: parseInt(cc.waitInSeconds) == 5 ? 1 : 0, // Contract v2, Contract v3
@@ -92,7 +92,8 @@ export function WeiToValue(wei) {
 }
 
 export function hexToValue(hex) {
-    return WeiToValue(parseInt(hex, 16))
+    // return WeiToValue(parseInt(hex, 16))
+    return WeiToValue(hex.toString())
 }
 
 export function objectToRgba(object, opacity) {
