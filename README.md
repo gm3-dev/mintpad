@@ -21,3 +21,7 @@ Nice to have:
 - setWalletData() functie maken om default de wallet ref() mee te vullen?
 - Na form submit kijken of the inertia response goed werkt. HIj lijkt te reloaden nu. Dit kan alleen opgelost worden door Axios te gebruiken. Nodig?
 - Hoeveelheid data nalopen wat in collectionData zit in de mint en embed pages
+
+## Problem solving
+### FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+export NODE_OPTIONS="--max-old-space-size=4096"
