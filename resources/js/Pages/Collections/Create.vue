@@ -88,7 +88,7 @@ const deployContract = async () => {
             // transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
             // transactionFee = ethers.utils.parseUnits((1 / tokenPrice).toFixed(18), 18)
             transactionFee = formatTransactionFee(1 / tokenPrice)
-        } else if (form.chain_id == 1890 || form.chain_id == 59144) { // LightLink doesn't have token prices yet
+        } else if (form.chain_id == 1890 || form.chain_id == 59144 || form.chain_id == 8453 || form.chain_id == 324) { // LightLink, Linea, Zksync and Base don't have token prices yet
             // continue
         } else {
             messages.value.push({type: 'error', message: 'Error while setting contract data'})
@@ -134,11 +134,11 @@ const deployContract = async () => {
         let contractAddress = false
         try {
             if (form.type == 'ERC721') {
-                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC721Drop', parameters)
+                contractAddress = await sdk.deployer.deployPublishedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC721Drop', parameters)
             } else if (form.type == 'ERC1155') {
-                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Drop', parameters)
+                contractAddress = await sdk.deployer.deployPublishedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Drop', parameters)
             } else if (form.type == 'ERC1155Burn') {
-                contractAddress = await sdk.deployer.deployReleasedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Evolve', parameters)
+                contractAddress = await sdk.deployer.deployPublishedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Evolve', parameters)
             } else {
                 throw new Error('Invalid contract type: ' + form.type)
             }
