@@ -7,7 +7,8 @@ import BigNumber from "bignumber.js";
 
 export function ipfsToUrl(url) {
     url = url.replace('ipfs://', '')
-    url = 'https://ipfs-public.thirdwebcdn.com/ipfs/'+url
+    // url = 'https://ipfs-public.thirdwebcdn.com/ipfs/'+url
+    url = 'https://ipfs.io/ipfs/'+url
     return url
 }
 
