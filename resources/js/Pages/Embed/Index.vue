@@ -1,5 +1,4 @@
 <script setup>
-import $ from 'jquery'
 import MinimalLayout from '@/Layouts/MinimalLayout.vue'
 import { ref, onMounted, watch, computed, inject } from 'vue'
 import axios from 'axios'
@@ -87,11 +86,10 @@ const copyEmbedCode = (e) => {
     const height = collectionData.value.settings.phases ? '369px' : '233px'
     const iframe = '<iframe frameborder="0" width="600px" height="'+height+'" src="'+embedUrl.value+'"></iframe>';
 
-    var target = $(e.target)
-    var text = target.text()
-    target.text('Copied')
-    setTimeout(function() {
-        target.text(text)
+    var text = e.target.innerHTML
+    e.target.textContent = 'Copied'
+    setTimeout(() => {
+        e.target.innerHTML = text
     }, 1000)
     navigator.clipboard.writeText(iframe)
 }

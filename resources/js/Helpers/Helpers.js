@@ -1,6 +1,5 @@
 import { getMetaMaskError } from '@/Wallets/MetaMask'
 import { ethers } from 'ethers'
-import $ from 'jquery'
 import { toRaw, unref } from 'vue'
 import { reportError } from './Sentry'
 import BigNumber from "bignumber.js";
@@ -17,14 +16,14 @@ export function shortenWalletAddress(address) {
 }
 
 export function copyToClipboard(e) {
-    var target = $(e.target)
-    var text = target.html()
-    var width = target.css('width')
-    target.css('width', width).text('Copied')
+    var text = e.target.innerHTML
+    e.target.style.width = e.target.offsetWidth
+    e.target.textContent = 'Copied'
     setTimeout(function() {
-        target.css('width', '').html(text)
+        e.target.style.width = ''
+        e.target.innerHTML = text
     }, 1000)
-    navigator.clipboard.writeText(target.attr('text'))
+    navigator.clipboard.writeText(e.target.getAttribute('text'))
 }
 
 export function getSelectInputBlockchainObject(blockchains) {
