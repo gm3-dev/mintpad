@@ -39,6 +39,6 @@ return [
     2000 => [
         'url' => env('DE_URL', false),
         'key' => env('DE_KEY', false),
-        'coingecko' => 'dogechain'
+        'coingecko' => 'dogecoin'
     ]
 ];

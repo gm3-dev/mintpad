@@ -1,49 +1,33 @@
-export let LineaMainnet = {
-  "name": "Linea Mainnet",
-  "title": "Linea Goerli Testnet",
+export let TaikoJolnir = {
+  "name": "Taiko Jolnir L2",
   "chain": "ETH",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmcHdmVr5VRUJq13jnM6tgah5Ge7hn3Dm14eY6vwivJ5ui",
+    "width": 288,
+    "height": 258,
+    "format": "png"
+  },
   "rpc": [
-    "https://rpc.linea.build/"
+    "https://rpc.jolnir.taiko.xyz"
   ],
   "faucets": [],
   "nativeCurrency": {
-    "name": "Linea Ether",
+    "name": "Ether",
     "symbol": "ETH",
     "decimals": 18
   },
-  "infoURL": "https://linea.build",
-  "shortName": "linea-mainnet",
-  "chainId": 59144,
-  "networkId": 59144,
-  "icon": {
-    "url": "ipfs://QmURjritnHL7a8TwZgsFwp3f272DJmG5paaPtWDZ98QZwH",
-    "width": 97,
-    "height": 102,
-    "format": "svg"
-  },
-  "parent": {
-    "type": "L2",
-    "chain": "eip155-5",
-    "bridges": [
-      {
-        "url": "https://goerli.hop.exchange/#/send?token=ETH&sourceNetwork=ethereum&destNetwork=linea"
-      }
-    ]
-  },
+  "infoURL": "https://taiko.xyz",
+  "shortName": "taiko-jolnir-l2",
+  "chainId": 167007,
+  "networkId": 167007,
   "explorers": [
     {
       "name": "blockscout",
-      "url": "https://explorer.goerli.linea.build",
-      "standard": "EIP3091",
-      "icon": {
-        "url": "ipfs://QmURjritnHL7a8TwZgsFwp3f272DJmG5paaPtWDZ98QZwH",
-        "width": 97,
-        "height": 102,
-        "format": "svg"
-      }
+      "url": "https://explorer.jolnir.taiko.xyz",
+      "standard": "EIP3091"
     }
   ],
-  "status": "active",
-  "testnet": false,
-  "slug": "linea-mainnet"
+  "testnet": true,
+  "slug": "taiko-jolnir-l2"
 }
