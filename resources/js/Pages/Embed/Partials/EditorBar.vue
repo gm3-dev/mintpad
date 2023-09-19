@@ -1,9 +1,6 @@
 <script setup>
-import $ from 'jquery'
 import DarkMode from '@/Components/DarkMode.vue'
 import Button from '@/Components/Form/Button.vue'
-import ButtonBlue from '@/Components/Form/ButtonBlue.vue'
-import Modal from '@/Components/Modal.vue'
 import { objectToRgba, setStyling } from '@/Helpers/Helpers'
 import { Chrome } from '@ckpack/vue-color'
 import { ref, toRaw, onMounted, watch, computed, inject } from 'vue'
@@ -35,8 +32,8 @@ const emitter = inject('emitter')
 
 onMounted(() => {
     document.addEventListener("mouseup", e => {
-        let target = $(e.target)[0].className
-        let closeColorPicker = !target.startsWith('vc-')
+        let classList = e.target.classList.value
+        let closeColorPicker = !classList.startsWith('vc-')
         if (closeColorPicker) {
             colorpicker.value.primary.show = false
             colorpicker.value.background.show = false

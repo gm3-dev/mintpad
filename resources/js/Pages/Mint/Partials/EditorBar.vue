@@ -1,5 +1,4 @@
 <script setup>
-import ButtonBlue from '@/Components/Form/ButtonBlue.vue'
 import ButtonGray from '@/Components/Form/ButtonGray.vue'
 import { objectToRgba, setStyling } from '@/Helpers/Helpers'
 import { ref, computed, watch, toRaw, onMounted, inject } from 'vue'
@@ -8,7 +7,6 @@ import Modal from '@/Components/Modal.vue'
 import InputFile from '@/Components/Form/InputFile.vue'
 import Button from '@/Components/Form/Button.vue'
 import axios from 'axios'
-import $ from 'jquery'
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
@@ -30,8 +28,8 @@ const emitter = inject('emitter')
 
 onMounted(() => {
     document.addEventListener("mouseup", e => {
-        let target = $(e.target)[0].className
-        let closeColorPicker = !target.startsWith('vc-')
+        let classList = e.target.classList.value
+        let closeColorPicker = !classList.startsWith('vc-')
         if (closeColorPicker) {
             colorpicker.value.primary.show = false
         }
