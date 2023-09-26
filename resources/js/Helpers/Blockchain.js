@@ -2,7 +2,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumSphinxDapp1X, TaikoGrimsvotnL2, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
-    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet } from '@thirdweb-dev/chains'
+    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace } from '@thirdweb-dev/chains'
 import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -43,6 +43,8 @@ export function getBlockchains() {
     KlaytnCypress.coingecko = 'klay-token';
     TelosEvm.coingecko = 'telos';
     MetalCChain.coingecko = 'metal-blockchain';
+    Astar.coingecko = 'astar';
+    ConfluxEspace.coingecko = 'conflux-token';
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -68,7 +70,9 @@ export function getBlockchains() {
         25: Cronos,
         8217: KlaytnCypress,
         40: TelosEvm,
-        381931: MetalCChain
+        381931: MetalCChain,
+        592: Astar,
+        1030: ConfluxEspace,
     }
     const testnets = {
         421613: ArbitrumGoerli,
