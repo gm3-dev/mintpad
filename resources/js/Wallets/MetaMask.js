@@ -3,6 +3,11 @@ import { reportError } from "@/Helpers/Sentry"
 import { ThirdwebSDK } from '@thirdweb-dev/sdk'
 import { MetaMaskWallet } from "@thirdweb-dev/wallets"
 import { getDefaultWalletData } from "./Wallet"
+import axios from 'axios'
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
+}
 
 export async function disconnectMetaMask() {
     const wallet = createMetaMaskInstance()
@@ -20,7 +25,17 @@ export async function connectMetaMask(connect) {
 
     if (connect == true) {
         try {
-            await wallet.connect()
+            const walletAddress = await wallet.connect()
+
+            // Save wallet address
+            if (walletAddress) {
+                axios.post(route('users.save-wallet'), {address: walletAddress, type: 'MetaMask'})
+                .then((response) => {
+                    // console.log(response)
+                }).catch((error) => {
+                    // console.log(error)
+                });
+            }
 
             window.location.reload()
         } catch(error) {
