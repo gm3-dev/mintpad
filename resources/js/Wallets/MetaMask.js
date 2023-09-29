@@ -39,7 +39,8 @@ export async function connectMetaMask(connect) {
 
             window.location.reload()
         } catch(error) {
-            // console.log(error)
+            console.log('walletAddress', walletAddress)
+            console.log(error)
         }
     } else {
         try {
