@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Collection::class);
     }
 
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class);
+    }
+
     public function getCollectionCountAttribute()
     {
         return $this->collections->count();

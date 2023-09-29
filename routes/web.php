@@ -70,6 +70,7 @@ Route::domain(config('app.url'))->group(function () {
         Route::get('two-factor-authentication', [UserController::class, 'twoFactorAuthSettings'])->name('users.2fa');
         Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
         Route::put('profile', [UserController::class, 'update'])->name('users.update');
+        Route::post('users/save-wallet', [UserController::class, 'saveWallet'])->name('users.save-wallet');
 
         // Editor layout
         Route::get('mint-editor/{collection}/{token?}', [MintController::class, 'mint'])->name('editor.mint');
