@@ -43,7 +43,7 @@ class CollectionController extends Controller
         $output = true;
 
         $limit = config('blockchains.'.$chain_id.'.max', false);
-        if ($limit !== false) {
+        if (!Auth::user()->id == 1 && $limit !== false) {
             $collections = Collection::where('chain_id', $chain_id)->where('created_at', '>=', Carbon::now()->subDay(1))->count();
             if ($collections >= $limit) {
                 $output = false;
