@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\Slack;
 use App\Models\Collection;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -35,6 +36,21 @@ class CollectionController extends Controller
     public function create()
     {
         return Inertia::render('Collections/Create', []);
+    }
+
+    public function canDeploy(string $chain_id)
+    {
+        $output = true;
+
+        $limit = config('blockchains.'.$chain_id.'.max', false);
+        if ($limit !== false) {
+            $collections = Collection::where('chain_id', $chain_id)->where('created_at', '>=', Carbon::now()->subDay(1))->count();
+            if ($collections >= $limit) {
+                $output = false;
+            }
+        }
+
+        return response()->json($output, 200);
     }
 
     /**
