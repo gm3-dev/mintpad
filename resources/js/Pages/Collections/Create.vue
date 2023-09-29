@@ -72,6 +72,15 @@ const selectContractType = (type) => {
 }
 
 const deployContract = async () => {
+    const canDeploy = await axios.get(route('collections.can-deploy', form.chain_id)).then((response) => {
+        return response.data ?? true
+    })
+
+    // Check rate-limits
+    if (canDeploy === false) {
+        messages.value.push({type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.'})
+        return
+    }
     if (validBlockchain.value !== true) {
         messages.value.push({type: 'error', message: 'Please connect to the correct blockchain'})
         return

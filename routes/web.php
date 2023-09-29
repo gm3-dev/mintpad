@@ -60,6 +60,7 @@ Route::domain(config('app.url'))->group(function () {
         });
 
         // Collections
+        Route::get('collections/can-deploy/{chain_id}', [CollectionController::class, 'canDeploy'])->name('collections.can-deploy');
         Route::resource('collections', CollectionController::class);
         Route::put('collections/{collection}/metadata', [CollectionController::class, 'updateMetadata'])->name('collections.update-metadata');
         Route::put('collections/{collection}/mint', [CollectionController::class, 'updateMint'])->name('collections.update-mint');
