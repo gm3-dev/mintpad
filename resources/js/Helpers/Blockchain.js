@@ -1,16 +1,16 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumSphinxDapp1X, TaikoGrimsvotnL2, Base, BaseGoerli,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumSphinxDapp1X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace } from '@thirdweb-dev/chains'
-import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
+// import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
     
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
 
     if (!blockchain || wallet.value == false || wallet.value.account == false) {
         return 'wallet'
-    } else if (blockchain.networkId != wallet.value.chainId && wallet.value.name == 'metamask') {
+    } else if (blockchain.chainId != wallet.value.chainId && wallet.value.name == 'metamask') {
         return 'chain'
     } else {
         return true
@@ -48,6 +48,7 @@ export function getBlockchains() {
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
+    TaikoJolnirL2.testnet = true;
 
     const mainnets = {
         42161: Arbitrum,
@@ -91,7 +92,7 @@ export function getBlockchains() {
         59140: LineaTestnet,
         8081: ShardeumSphinxDapp1X,
         167005: TaikoGrimsvotnL2,
-        167007: TaikoJolnir,
+        167007: TaikoJolnirL2,
         84531: BaseGoerli,
         88880: ChilizScovilleTestnet,
         2888: BobaNetworkGoerliTestnet,
