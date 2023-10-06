@@ -38,7 +38,7 @@ const switchBlockchain = async () => {
                     </div>
                     <div>
                         <h3 class="mb-0">{{ transaction != false ? transaction : transactionMessage }}</h3>
-                        <p>Your wallet will prompt you to sign the transaction</p>
+                        <p>Your wallet will prompt you to sign the transaction. <b class="text-primary-600">Don't close or refresh this window!</b></p>
                     </div>
                 </div>
             </Modal>

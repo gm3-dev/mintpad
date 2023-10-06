@@ -91,14 +91,14 @@ Route::domain(config('app.url'))->group(function () {
 
 Route::domain(config('app.mint_url'))->group(function () {
     // Mint
-    Route::get('{permalink}/{token?}', [MintController::class, 'mint'])->name('mint.index');
     Route::get('{permalink}/burn/{token?}', [MintController::class, 'burn'])->name('mint.burn');
+    Route::get('{permalink}/{token?}', [MintController::class, 'mint'])->name('mint.index');
 });
 
 Route::domain(config('app.embed_url'))->group(function () {
     // Mint
-    Route::get('{address}/{token?}', [MintController::class, 'embed'])->name('mint.embed');
     Route::get('{address}/burn/{token?}', [MintController::class, 'embedBurn'])->name('mint.embed-burn');
+    Route::get('{address}/{token?}', [MintController::class, 'embed'])->name('mint.embed');
 });
 
 Route::get('collection/{collection_id}/fetch', [MintController::class, 'fetch'])->name('mint.fetch');
