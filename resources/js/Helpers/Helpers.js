@@ -248,7 +248,7 @@ export function fileIsVideo(file) {
 
 export function formatTransactionFee(fee) {
     const feeData = parseFloat(fee).toString().split('.')
-    if (feeData[1].length > 18) {
+    if (feeData[1] && feeData[1].length > 18) {
         feeData[1] = feeData[1].slice(0, 18)
         fee = feeData.join('.')
     }

@@ -146,6 +146,8 @@ export function getMetaMaskError(error) {
             return 'Request canceled: you rejected the request.'
         case 'insufficient funds for intrinsic transaction cost': 
             return 'Insufficient funds for intrinsic transaction cost'
+        case 'Insufficient funds for transaction': 
+            return 'Insufficient funds for transaction'
         case 'Internal JSON-RPC error.':
             if (error.message.search('execution reverted: !MaxSupply') !== -1) {
                 return 'There are no more NFTs left to claim in this mint phase.'

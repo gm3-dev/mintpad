@@ -315,6 +315,10 @@ const mintNFT = async (e) => {
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
                     preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+
+                    if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
+                        throw {reason: "Insufficient funds for transaction"}
+                    }
                     await preparedClaim.execute()
                 }
             } else if (props.collection.type.startsWith('ERC1155')) {
@@ -326,6 +330,10 @@ const mintNFT = async (e) => {
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
                     preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+
+                    if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
+                        throw {reason: "Insufficient funds for transaction"}
+                    }
                     await preparedClaim.execute()
                 }
             }
@@ -335,6 +343,7 @@ const mintNFT = async (e) => {
             setSupplyData(contract)
         } catch (error) {
             console.log('mint error', error)
+            
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
