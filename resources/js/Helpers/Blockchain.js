@@ -2,9 +2,9 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumSphinxDapp1X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
-    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace } from '@thirdweb-dev/chains'
+    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, Zetachain, ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
-    
+
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
 
@@ -74,6 +74,8 @@ export function getBlockchains() {
         381931: MetalCChain,
         592: Astar,
         1030: ConfluxEspace,
+        7000: Zetachain,
+        534352: Scroll,
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -99,14 +101,16 @@ export function getBlockchains() {
         338: CronosTestnet,
         1001: KlaytnTestnetBaobab,
         41: TelosEvmTestnet,
-        381932: MetalTahoeCChain
+        381932: MetalTahoeCChain,
+        7001: ZetachainAthens3Testnet,
+        534351: ScrollSepoliaTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
     // testnets[1337].networkId = 1337
     // testnets[1337].rpc = [
     //     'HTTP://127.0.0.1:7545'
-    // ];    
+    // ];
     // testnets[1337].explorers = [{
     //     "name": "ganache",
     //     "url": "https://www.ganache.com",
