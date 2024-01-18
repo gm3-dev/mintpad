@@ -139,7 +139,7 @@ const deployContract = async () => {
             form.feeRecipient, // _royaltyRecipient
             form.royalties * 100, // _royaltyBps
         ]
-        
+
         let contractAddress = false
         try {
             if (form.type == 'ERC721') {
@@ -199,7 +199,7 @@ const deployContract = async () => {
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-721</div>
                             <h2>NFT Drop</h2>
                             <p class="mb-4">Each token/artwork will have a unique owner.</p>
-                            <Button class="!py-2" @click.prevent="selectContractType('ERC721')">Create</Button> 
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC721')">Create</Button>
                         </div>
                     </div>
                     <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
@@ -210,7 +210,7 @@ const deployContract = async () => {
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
                             <h2>Open Edition</h2>
                             <p class="mb-4">A single token with multiple owners for each artwork.</p>
-                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155')">Create</Button> 
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155')">Create</Button>
                         </div>
                     </div>
                     <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
@@ -221,7 +221,7 @@ const deployContract = async () => {
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
                             <h2>Open Edition + Burn</h2>
                             <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
-                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')">Create</Button> 
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')">Create</Button>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@ const deployContract = async () => {
                 </div>
             </form>
         </div>
-        
+
         <Messages :messages="messages"/>
     </AuthenticatedLayout>
 </template>

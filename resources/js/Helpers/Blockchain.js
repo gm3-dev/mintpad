@@ -1,9 +1,9 @@
-import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, ZksyncEra, ZksyncEraTestnet,
+import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Goerli, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumSphinxDapp1X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumLiberty2X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2 } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -61,7 +61,7 @@ export function getBlockchains() {
         250: Fantom,
         10: Optimism,
         137: Polygon,
-        324: ZksyncEra,
+        324: Zksync,
         295: Hedera,
         1890: LightlinkPhoenix,
         5000: Mantle,
@@ -89,12 +89,12 @@ export function getBlockchains() {
         5: Goerli,
         80001: Mumbai,
         420: OptimismGoerli,
-        280: ZksyncEraTestnet,
+        300: ZksyncSepoliaTestnet,
         296: HederaTestnet,
         1891: LightlinkPegasusTestnet,
         5001: MantleTestnet,
         59140: LineaTestnet,
-        8081: ShardeumSphinxDapp1X,
+        8081: ShardeumLiberty2X,
         167005: TaikoGrimsvotnL2,
         167007: TaikoJolnirL2,
         84531: BaseGoerli,
@@ -107,6 +107,8 @@ export function getBlockchains() {
         7001: ZetachainAthens3Testnet,
         534351: ScrollSepoliaTestnet,
         71: ConfluxEspaceTestnet,
+        1261120: Zkatana,
+        167008: TaikoKatlaL2,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
