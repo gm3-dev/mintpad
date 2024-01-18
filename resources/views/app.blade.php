@@ -7,6 +7,8 @@
         <link rel="icon" type="image/png" href="/favicon.png"/>
         @routes
 
+        <!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-8RJEVT0GCD"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-8RJEVT0GCD'); </script>
+
         <script type="text/javascript" src="{{ asset('js/darkmode.js') }}" defer></script>
         @vite('resources/js/app.js')
         @inertiaHead

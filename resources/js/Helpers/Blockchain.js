@@ -3,7 +3,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumLiberty2X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraTestnet } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraTestnet, FormTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -111,6 +111,7 @@ export function getBlockchains() {
         1261120: Zkatana,
         167008: TaikoKatlaL2,
         999: ZoraTestnet,
+        132902: FormTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
