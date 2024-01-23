@@ -50,6 +50,7 @@ export function getBlockchains() {
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
     TaikoJolnirL2.testnet = true;
+    TaikoKatlaL2.testnet = true;
 
     const mainnets = {
         42161: Arbitrum,
