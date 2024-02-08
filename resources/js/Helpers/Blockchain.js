@@ -1,9 +1,9 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumLiberty2X, TaikoGrimsvotnL2, TaikoJolnirL2, Base, BaseGoerli,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumLiberty2X, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraTestnet, FormTestnet } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraTestnet, FormTestnet, BerachainArtio } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
@@ -49,7 +49,7 @@ export function getBlockchains() {
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
-    TaikoJolnirL2.testnet = true;
+    TaikoKatlaL2.testnet = true;
 
     const mainnets = {
         42161: Arbitrum,
@@ -96,8 +96,6 @@ export function getBlockchains() {
         5001: MantleTestnet,
         59140: LineaTestnet,
         8081: ShardeumLiberty2X,
-        167005: TaikoGrimsvotnL2,
-        167007: TaikoJolnirL2,
         84531: BaseGoerli,
         88880: ChilizScovilleTestnet,
         2888: BobaNetworkGoerliTestnet,
@@ -112,6 +110,7 @@ export function getBlockchains() {
         167008: TaikoKatlaL2,
         999: ZoraTestnet,
         132902: FormTestnet,
+        80085: BerachainArtio,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
