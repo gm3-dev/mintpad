@@ -110,6 +110,7 @@ export function getBlockchains() {
         167008: TaikoKatlaL2,
         999: ZoraTestnet,
         132902: FormTestnet,
+        80085: BerachainArtio,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
