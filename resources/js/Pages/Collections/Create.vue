@@ -143,11 +143,11 @@ const deployContract = async () => {
         let contractAddress = false
         try {
             if (form.type == 'ERC721') {
-                contractAddress = await sdk.deployer.deployPublishedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC721Drop', parameters)
+                contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC721Drop', parameters)
             } else if (form.type == 'ERC1155') {
                 contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Drop', parameters)
             } else if (form.type == 'ERC1155Burn') {
-                contractAddress = await sdk.deployer.deployPublishedContract('0x892a99573583c6490526739bA38BaeFae10a84D4', 'MintpadERC1155Evolve', parameters)
+                contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Evolve', parameters)
             } else {
                 throw new Error('Invalid contract type: ' + form.type)
             }
