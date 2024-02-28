@@ -45,7 +45,10 @@ export function getBlockchains() {
     TelosEvm.coingecko = 'telos';
     MetalCChain.coingecko = 'metal-blockchain';
     Astar.coingecko = 'astar';
+    AstarZkevm.coingecko = 'ethereum'
     ConfluxEspace.coingecko = 'conflux-token';
+    Zetachain.coingecko = 'zetachain'
+    Zora.coingecko = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
