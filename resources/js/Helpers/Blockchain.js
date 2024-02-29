@@ -5,6 +5,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
+import {BlastL2} from "@/Helpers/CustomBlockchains";
 
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
@@ -49,6 +50,7 @@ export function getBlockchains() {
     ConfluxEspace.coingecko = 'conflux-token';
     Zetachain.coingecko = 'zetachain'
     Zora.coingecko = 'ethereum'
+    BlastL2 = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -82,6 +84,7 @@ export function getBlockchains() {
         7000: Zetachain,
         534352: Scroll,
         7777777: Zora,
+        81457: BlastL2,
     }
     const testnets = {
         421613: ArbitrumGoerli,

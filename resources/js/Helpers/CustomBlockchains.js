@@ -31,3 +31,37 @@ export let TaikoJolnir = {
   "testnet": true,
   "slug": "taiko-jolnir-l2"
 }
+
+export let BlastL2 = {
+  "name": "Blast L2",
+  "chain": "BLAST",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://bafybeifc2h3x7jgy4x4nmg2m54ghbvmkfu6oweujambwefzqzew5vujhsi",
+    "width": 400,
+    "height": 400,
+    "format": "png"
+  },
+  "rpc": [
+    "https://blast.blockpi.network/v1/rpc/public"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://blast.io",
+  "shortName": "blast-l2",
+  "chainId": 81457,
+  "networkId": 81457,
+  "explorers": [
+    {
+      "name": "blockscout",
+      "url": "https://blastscan.io",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "blast-l2"
+}
