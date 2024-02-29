@@ -43,7 +43,7 @@ export let BlastL2 = {
     "format": "png"
   },
   "rpc": [
-    "https://blast.blockpi.network/v1/rpc/public"
+    "https://blast.din.dev/rpc"
   ],
   "faucets": [],
   "nativeCurrency": {
@@ -57,7 +57,7 @@ export let BlastL2 = {
   "networkId": 81457,
   "explorers": [
     {
-      "name": "blockscout",
+      "name": "Blastscan",
       "url": "https://blastscan.io",
       "standard": "EIP3091"
     }
