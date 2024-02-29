@@ -50,7 +50,7 @@ export function getBlockchains() {
     ConfluxEspace.coingecko = 'conflux-token';
     Zetachain.coingecko = 'zetachain'
     Zora.coingecko = 'ethereum'
-    BlastL2 = 'ethereum'
+    BlastL2.coingecko = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
