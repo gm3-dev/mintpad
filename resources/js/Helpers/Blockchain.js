@@ -1,9 +1,9 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, ShardeumLiberty2X, Base, BaseGoerli,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
 
@@ -52,10 +52,12 @@ export function getBlockchains() {
     Zora.coingecko = 'ethereum'
     // BlastL2.coingecko = 'ethereum'
     BlastBlastmainnet.coingecko = 'ethereum'
+    Rari.coingecko = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
     TaikoKatlaL2.testnet = true;
+    ShardeumSphinx1X.testnet = true
 
     const mainnets = {
         42161: Arbitrum,
@@ -80,12 +82,13 @@ export function getBlockchains() {
         40: TelosEvm,
         381931: MetalCChain,
         592: Astar,
-        12611: AstarZkevm,
+        3776: AstarZkevm,
         1030: ConfluxEspace,
         7000: Zetachain,
         534352: Scroll,
         7777777: Zora,
         81457: BlastBlastmainnet,
+        1380012617: Rari,
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -102,7 +105,7 @@ export function getBlockchains() {
         1891: LightlinkPegasusTestnet,
         5001: MantleTestnet,
         59140: LineaTestnet,
-        8081: ShardeumLiberty2X,
+        8082: ShardeumSphinx1X,
         84531: BaseGoerli,
         88880: ChilizScovilleTestnet,
         2888: BobaNetworkGoerliTestnet,
@@ -118,7 +121,8 @@ export function getBlockchains() {
         999999999: ZoraSepoliaTestnet,
         132902: FormTestnet,
         80085: BerachainArtio,
-        168587773: BlastSepoliaTestnet
+        168587773: BlastSepoliaTestnet,
+        1918988905: RarichainTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
