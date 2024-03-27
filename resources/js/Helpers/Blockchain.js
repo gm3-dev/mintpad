@@ -38,7 +38,7 @@ export function getBlockchains() {
     // LightlinkPhoenix.coingecko = '';
     Mantle.coingecko = 'mantle';
     // Base.coingecko = '';
-    // Linea.coingecko = '';
+    Linea.coingecko = 'ethereum';
     ChilizChain.coingecko = 'chiliz';
     BobaNetwork.coingecko = 'boba-network';
     Cronos.coingecko = 'crypto-com-chain';
