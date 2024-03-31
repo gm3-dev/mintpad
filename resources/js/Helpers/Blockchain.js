@@ -37,7 +37,7 @@ export function getBlockchains() {
     Hedera.coingecko = 'hedera-hashgraph';
     // LightlinkPhoenix.coingecko = '';
     Mantle.coingecko = 'mantle';
-    // Base.coingecko = '';
+    Base.coingecko = 'ethereum'
     Linea.coingecko = 'ethereum';
     ChilizChain.coingecko = 'chiliz';
     BobaNetwork.coingecko = 'boba-network';
