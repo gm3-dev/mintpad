@@ -142,7 +142,7 @@ const updateCollection = async (e) => {
     }
 
     emitter.emit('set-transaction', false)
-    buttonLoading.value = false    
+    buttonLoading.value = false
 }
 const updateRevealBatch = async () => {
     emitter.emit('set-transaction', 'Updating reveal settings')
@@ -159,7 +159,7 @@ const updateRevealBatch = async () => {
     }
 
     emitter.emit('set-transaction', false)
-    buttonLoading.value = false    
+    buttonLoading.value = false
 }
 const uploadCollection = async (event) => {
     var files = event.target.files
@@ -240,12 +240,22 @@ const createMetadata = async (images, json) => {
     for (var i = parseInt(firstImageKey); i < (imagesLength + parseInt(firstImageKey)); i++) {
         var image = images[i]
         var json = jsonList[image.id]
-        metadata.push({
-            name: json.name,
-            description: json.description != null && json.description != false ? json.description : '',
-            image: image,
-            attributes: json.attributes
-        })
+        let data = {
+          name: json.name,
+          description: json.description != null && json.description != false ? json.description : '',
+          image: image,
+          attributes: json.attributes,
+        }
+        // TODO: Check if mintangible is enabled
+        if(1===1) {
+          data.description += '\n\nConfirm token authenticity and any rights and terms - click [here] (https://rightsregistry.xyz/lpid/LPID). By purchasing this token, you are agreeing to these terms.'
+          data.rights_registration = {
+            blockchain_verifiable_ip_management: 'applied',
+            LPID: 'a1',
+            certified_by: 'MINTangible',
+          }
+        }
+        metadata.push(data)
     }
 
     return metadata
@@ -357,8 +367,8 @@ const setPlaceholderImage = (e) => {
                     <div class="p-1 text-center text-sm" v-for="nft in collectionData.nfts">
                         <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="nft.metadata.image" />
                     </div>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </BoxContent>
     </Box>
 

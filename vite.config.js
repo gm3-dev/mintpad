@@ -16,6 +16,9 @@ export default ({ mode }) => {
                 key: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.key`),
                 cert: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.crt`),
             },
+            watch: {
+                usePolling: true,
+            }
         };
     }
     return defineConfig({
@@ -34,7 +37,7 @@ export default ({ mode }) => {
             }),
             laravel({
                 input: [
-                    'resources/sass/app.scss', 
+                    'resources/sass/app.scss',
                     'resources/js/app.js'
                 ],
                 refresh: true,
