@@ -280,7 +280,7 @@ const deployContract = async () => {
                                 </Addon>
                             </div>
                             <div class="basis-full sm:basis-1/2">
-                              <Label for="symbol" value="Choose your License" class="relative" info="Choose which license you want to use in your collection." />
+                              <Label for="symbol" value="Choose your License (Powered by MINTangible)" class="relative" info="Choose which license you want to use in your collection. This will be verified on-chain by our partner MINTangible" />
                               <select v-model="form.mintangible"
                                       class="!w-full mb-4 mb-4 rounded-md p-6 w-32 px-3 py-2 text-sm font-regular text-mintpad-700 dark:text-white bg-primary-100 border-1 border-primary-200 dark:border-mintpad-900 focus:ring-0 focus:border-primary-600 dark:focus:border-gray-600 dark:bg-mintpad-500 disabled:bg-mintpad-200 disabled:text-mintpad-200">
                                 <option v-for="(label, value) in mintangibleList" :value="value.value">{{ label.name }}</option>
