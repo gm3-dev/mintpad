@@ -32,6 +32,25 @@ let blockchainList = ref({})
 let validBlockchain = ref(false)
 let messages = ref([])
 let transaction = ref({show: false, message: ''})
+const mintangibleList = [
+  {
+    name: 'Personal Use',
+    value: 'PERSONAL',
+    id: 'a1'
+  },{
+    name: 'Commercial Use',
+    value: 'COMMERCIAL',
+    id: 'a2'
+  },{
+    name: 'CCO Use',
+    value: 'CCO',
+    id: 'a3'
+  },{
+    name: 'None',
+    value: 'NONE',
+    id: 'a4'
+  },
+]
 
 const form = useForm({
     chain_id: 1,
@@ -41,7 +60,11 @@ const form = useForm({
     symbol: '',
     feeRecipient: '',
     royalties: 0,
-    salesRecipient: ''
+    salesRecipient: '',
+    deployerWallet: '',
+    mintangibleLicense: '',
+    mintangibleLicenseId: '',
+
 })
 provide('wallet', wallet)
 provide('transaction', transaction)
@@ -165,6 +188,7 @@ const deployContract = async () => {
         if (contractAddress) {
             // Update DB
             form.address = contractAddress
+            form.deployerWallet = wallet.value.account
             form.post(route('collections.store'), {})
         }
     } catch(error) {
@@ -254,6 +278,13 @@ const deployContract = async () => {
                                 <Addon position="right" content="%">
                                     <Input id="royalties" class="mb-4 addon-right" step=".01" min="0" max="100" type="number" v-model="form.royalties" />
                                 </Addon>
+                            </div>
+                            <div class="basis-full sm:basis-1/2">
+                              <Label for="symbol" value="Choose your License" class="relative" info="Choose which license you want to use in your collection." />
+                              <select v-model="form.mintangible"
+                                      class="!w-full mb-4 mb-4 rounded-md p-6 w-32 px-3 py-2 text-sm font-regular text-mintpad-700 dark:text-white bg-primary-100 border-1 border-primary-200 dark:border-mintpad-900 focus:ring-0 focus:border-primary-600 dark:focus:border-gray-600 dark:bg-mintpad-500 disabled:bg-mintpad-200 disabled:text-mintpad-200">
+                                <option v-for="(label, value) in mintangibleList" :value="value.value">{{ label.name }}</option>
+                              </select>
                             </div>
                         </div>
                     </BoxContent>
