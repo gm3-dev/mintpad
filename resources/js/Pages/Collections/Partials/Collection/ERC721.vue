@@ -248,10 +248,10 @@ const createMetadata = async (images, json) => {
         }
         // TODO: Check if mintangible is enabled
         if(1===1) {
-          data.description += '\n\nConfirm token authenticity and any rights and terms - click [here] (https://rightsregistry.xyz/lpid/LPID). By purchasing this token, you are agreeing to these terms.'
+          data.description += '\n\nConfirm token authenticity and any rights and terms - click [here](https://rightsregistry.xyz/p/pid). By purchasing this token, you are agreeing to these terms.'
           data.rights_registration = {
             blockchain_verifiable_ip_management: 'applied',
-            LPID: 'a1',
+            pid: 'a1',
             certified_by: 'MINTangible',
           }
         }
