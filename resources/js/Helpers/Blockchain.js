@@ -35,7 +35,7 @@ export function getBlockchains() {
     Polygon.coingecko = 'matic-network';
     // ZksyncEra.coingecko = '';
     Hedera.coingecko = 'hedera-hashgraph';
-    // LightlinkPhoenix.coingecko = '';
+    LightlinkPhoenix.coingecko = 'ethereum'
     Mantle.coingecko = 'mantle';
     Base.coingecko = 'ethereum'
     Linea.coingecko = 'ethereum';
