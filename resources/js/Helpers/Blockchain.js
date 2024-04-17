@@ -2,7 +2,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
-    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaTestnet, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain,
+    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -54,6 +54,8 @@ export function getBlockchains() {
     BlastBlastmainnet.coingecko = 'ethereum'
     Rari.coingecko = 'ethereum'
     DegenChain.coingecko = 'degen-base'
+    Hychain.coingecko = 'hychain'
+    Inevm.coingecko = 'injective'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -92,6 +94,8 @@ export function getBlockchains() {
         1380012617: Rari,
         10242: Arthera, // TODO: add token once it is launched on coingecko
         666666666: DegenChain,
+        2911: Hychain,
+        2525: Inevm,
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -107,7 +111,7 @@ export function getBlockchains() {
         296: HederaTestnet,
         1891: LightlinkPegasusTestnet,
         5001: MantleTestnet,
-        59140: LineaTestnet,
+        59141: LineaSepolia,
         8082: ShardeumSphinx1X,
         84531: BaseGoerli,
         88880: ChilizScovilleTestnet,
