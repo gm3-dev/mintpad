@@ -2,7 +2,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
-    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm,
+    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -56,6 +56,7 @@ export function getBlockchains() {
     DegenChain.coingecko = 'degen-base'
     Hychain.coingecko = 'hychain'
     Inevm.coingecko = 'injective'
+    Shibarium.coingecko = 'bone-shibaswap'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -97,6 +98,7 @@ export function getBlockchains() {
         666666666: DegenChain,
         2911: Hychain,
         2525: Inevm,
+        109: Shibarium,
     }
     const testnets = {
         421613: ArbitrumGoerli,
