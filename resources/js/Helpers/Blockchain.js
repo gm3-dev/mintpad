@@ -61,6 +61,7 @@ export function getBlockchains() {
     MetalTahoeCChain.testnet = true;
     TaikoKatlaL2.testnet = true;
     ShardeumSphinx1X.testnet = true
+    Hychain.testnet = false
 
     const mainnets = {
         42161: Arbitrum,
