@@ -57,6 +57,8 @@ export function getBlockchains() {
     Hychain.coingecko = 'hychain'
     Inevm.coingecko = 'injective'
     Shibarium.coingecko = 'bone-shibaswap'
+    Scroll.coingecko = 'ethereum'
+    Zksync.coingecko = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
