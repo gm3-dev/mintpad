@@ -2,7 +2,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
-    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium,
+    TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -63,6 +63,7 @@ export function getBlockchains() {
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
     TaikoKatlaL2.testnet = true;
+    TaikoHeklaL2.testnet = true;
     ShardeumSphinx1X.testnet = true
 
     const mainnets = {
@@ -129,6 +130,7 @@ export function getBlockchains() {
         71: ConfluxEspaceTestnet,
         1261120: Zkatana,
         167008: TaikoKatlaL2,
+        167009: TaikoHeklaL2,
         999999999: ZoraSepoliaTestnet,
         132902: FormTestnet,
         80085: BerachainArtio,
