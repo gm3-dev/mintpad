@@ -1,6 +1,6 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
@@ -62,6 +62,7 @@ export function getBlockchains() {
     Mint.coingecko = 'ethereum'
     Vanar.coingecko = 'vanar-chain'
     NeonEvm.coingecko = 'neon'
+    Opbnb.coingecko = 'binancecoin'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -107,6 +108,7 @@ export function getBlockchains() {
         185: Mint,
         2040: Vanar,
         245022934: NeonEvm,
+        204: Opbnb,
     }
     const testnets = {
         421613: ArbitrumGoerli,
