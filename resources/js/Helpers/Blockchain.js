@@ -55,7 +55,7 @@ export function getBlockchains() {
     Rari.coingecko = 'ethereum'
     DegenChain.coingecko = 'degen-base'
     Hychain.coingecko = 'hychain'
-    Inevm.coingecko = 'injective'
+    Inevm.coingecko = 'injective-protocol'
     Shibarium.coingecko = 'bone-shibaswap'
     Scroll.coingecko = 'ethereum'
     Zksync.coingecko = 'ethereum'
