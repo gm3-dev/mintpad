@@ -1,7 +1,7 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb,
-    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab,
+    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
@@ -24,6 +24,7 @@ export function getBlockchains() {
     CmpTestnet.name = 'Caduceus Testnet'
 
     // Set CoinGecko Token IDs
+    // See here for list of token id's to use https://docs.coingecko.com/reference/simple-price
     Arbitrum.coingecko = 'arbitrum';
     Avalanche.coingecko = 'avalanche-2';
     Binance.coingecko = 'binancecoin';
@@ -54,7 +55,7 @@ export function getBlockchains() {
     BlastBlastmainnet.coingecko = 'ethereum'
     Rari.coingecko = 'ethereum'
     DegenChain.coingecko = 'degen-base'
-    Hychain.coingecko = 'hychain'
+    Hychain.coingecko = 'hytopia'
     Inevm.coingecko = 'injective-protocol'
     Shibarium.coingecko = 'bone-shibaswap'
     Scroll.coingecko = 'ethereum'
@@ -63,6 +64,7 @@ export function getBlockchains() {
     Vanar.coingecko = 'vanar-chain'
     NeonEvm.coingecko = 'neon'
     Opbnb.coingecko = 'binancecoin'
+    Taiko.coingecko = 'ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -109,6 +111,7 @@ export function getBlockchains() {
         2040: Vanar,
         245022934: NeonEvm,
         204: Opbnb,
+        167000: Taiko,
     }
     const testnets = {
         421613: ArbitrumGoerli,
