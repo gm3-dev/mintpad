@@ -1,6 +1,6 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
-    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb,
+    LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb, Vanguard, NeonEvmDevnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
@@ -62,7 +62,9 @@ export function getBlockchains() {
     Zksync.coingecko = 'ethereum'
     Mint.coingecko = 'ethereum'
     Vanar.coingecko = 'vanar-chain'
+    Vanguard.coingecko = 'vanar-chain'
     NeonEvm.coingecko = 'neon'
+    NeonEvmDevnet.coingecko = 'neon'
     Opbnb.coingecko = 'binancecoin'
     Taiko.coingecko = 'ethereum'
 
@@ -149,6 +151,8 @@ export function getBlockchains() {
         1918988905: RarichainTestnet,
         10243: ArtheraTestnet,
         1686: MintTestnet,
+        78600: Vanguard,
+        245022926: NeonEvmDevnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
