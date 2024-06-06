@@ -74,6 +74,13 @@ export function getBlockchains() {
     TaikoHeklaL2.testnet = true;
     ShardeumSphinx1X.testnet = true
 
+    //block explorer custom overwrite
+    ConfluxEspace.explorers = [{
+        "name": "Conflux Scan",
+        "url": "https://evm.confluxscan.io",
+        "standard": "none"
+    }];
+
     const mainnets = {
         42161: Arbitrum,
         43114: Avalanche,
