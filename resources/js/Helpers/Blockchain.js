@@ -72,7 +72,9 @@ export function getBlockchains() {
     MetalTahoeCChain.testnet = true;
     TaikoKatlaL2.testnet = true;
     TaikoHeklaL2.testnet = true;
-    ShardeumSphinx1X.testnet = true
+    ShardeumSphinx1X.testnet = true;
+
+    Hychain.testnet = false;
 
     //block explorer custom overwrite
     ConfluxEspace.explorers = [{
