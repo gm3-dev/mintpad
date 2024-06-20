@@ -1,7 +1,7 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb, Vanguard, NeonEvmDevnet,
-    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio,
+    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
@@ -163,6 +163,7 @@ export function getBlockchains() {
         1686: MintTestnet,
         78600: Vanguard,
         245022926: NeonEvmDevnet,
+        29112: HychainTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
