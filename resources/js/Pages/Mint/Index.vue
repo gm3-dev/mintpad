@@ -86,7 +86,7 @@ onMounted(async () => {
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
         // collectionData.value.thumb.src = response.data.thumb
-        
+
         // Set theme for mint
         if (response.data.theme.mint) {
             collectionData.value.theme = response.data.theme.mint
@@ -119,7 +119,7 @@ onMounted(async () => {
             }
             try {
                 let getNFTAmount = props.collection.type == 'ERC1155' ? 1000 : 1
-                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)            
+                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)
                 const contractType = await contract.call('contractType')
 
                 // Settings
@@ -143,7 +143,7 @@ onMounted(async () => {
                 setInterval(() => {
                     setSupplyData(contract)
                 }, 10000)
-                
+
                 // // Claim phases
                 collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
                 setClaimPhaseCounters()
@@ -164,7 +164,7 @@ onMounted(async () => {
                 }
 
                 loadComplete.value = true
-                
+
             } catch (error) {
                 console.log('mint 1', error)
                 reportError(error)
@@ -261,7 +261,7 @@ const setCountDown = (i) => {
             } else if (distance < 0) {
                 clearInterval(x)
                 timers.value[i] = false
-            
+
             // Coming or runing phases
             } else {
                 var days = Math.floor(distance / (1000 * 60 * 60 * 24))
@@ -314,7 +314,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue).toString()
 
                     if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
                         throw {reason: "Insufficient funds for transaction"}
@@ -329,7 +329,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue).toString()
 
                     if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
                         throw {reason: "Insufficient funds for transaction"}
@@ -343,7 +343,7 @@ const mintNFT = async (e) => {
             setSupplyData(contract)
         } catch (error) {
             console.log('mint error', error)
-            
+
             let metamaskError = getMetaMaskError(error)
             if (metamaskError) {
                 messages.value.push({type: 'error', message: metamaskError})
@@ -449,7 +449,7 @@ const mintNFT = async (e) => {
                         <form>
                             <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                             <div v-if="editMode" class="flex gap-2">
-                                <Input type="number" value="1" class="!mb-0 !w-28" />   
+                                <Input type="number" value="1" class="!mb-0 !w-28" />
                                 <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                             </div>
                             <div v-else class="flex gap-2">
@@ -535,5 +535,5 @@ const mintNFT = async (e) => {
         </Modal>
 
         <Messages :messages="messages" />
-    </MinimalLayout>  
+    </MinimalLayout>
 </template>
