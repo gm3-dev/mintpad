@@ -106,10 +106,10 @@ export function objectToRgba(object, opacity) {
 
 export function setStyling(collectionData) {
     var css = ''
-    
+
     // Set primary colors
     const primary = collectionData.theme.primary
-    
+
     css += '.mint-text-primary { color: '+objectToRgba(primary, '1')+' !important; } '
     css += '.mint-bg-primary { background-color: '+objectToRgba(primary, '1')+' !important; } '
     css += '.mint-bg-primary:hover { background-color: '+objectToRgba(primary, '0.9')+' !important; } '
@@ -187,19 +187,19 @@ export function getDummyCollection() {
 
 export function getAllowedNFTTypes() {
     return [
-        'video/mp4', 
-        'image/jpeg', 
-        'image/png', 
-        'image/jpg', 
+        'video/mp4',
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
         'image/gif'
     ]
 }
 
 export function fileIsImage(file) {
     const allowedTypes = [
-        'image/jpeg', 
-        'image/png', 
-        'image/jpg', 
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
         'image/gif'
     ]
     const allowedExtensions = [
@@ -252,7 +252,7 @@ export function formatTransactionFee(fee) {
         feeData[1] = feeData[1].slice(0, 18)
         fee = feeData.join('.')
     }
-    
+
     return ethers.utils.parseUnits(fee.toString(), 18).toString()
 }
 
@@ -264,7 +264,7 @@ export function calculateTransactionFee(fee, price) {
 
     var feeResult = BigNumber(fee)
     var total = feeResult.plus(price)
-    var parsed = ethers.utils.parseUnits(total.toString()).toString()
+    var parsed = ethers.utils.parseEther(total.toString()).toString()
 
     return ethers.BigNumber.from(parsed)
 }
