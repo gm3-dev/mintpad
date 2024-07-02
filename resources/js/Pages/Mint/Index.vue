@@ -314,7 +314,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue).toString()
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
 
                     if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
                         throw {reason: "Insufficient funds for transaction"}
@@ -329,7 +329,7 @@ const mintNFT = async (e) => {
                     const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
                     // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
                     // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue).toString()
+                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
 
                     if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
                         throw {reason: "Insufficient funds for transaction"}
