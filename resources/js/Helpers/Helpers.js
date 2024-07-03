@@ -264,7 +264,7 @@ export function calculateTransactionFee(fee, price) {
 
     var feeResult = BigNumber(fee)
     var total = feeResult.plus(price)
-    var parsed = ethers.utils.parseEther(total.toString()).toString()
+    var parsed = ethers.utils.parseUnits(total.toString()).toString()
 
     return ethers.BigNumber.from(parsed)
 }
