@@ -591,6 +591,52 @@ app.get('/fetchminttxn', async (req, res) => {
 });
 
 
+
+// this will just fetch the total count by an address
+
+app.get('/fetchviacontract', async (req, res) => {
+  try {
+    const contracts = await fetchCollectionDetails();
+
+    const holderTransactionMap = new Map();
+
+    for (const contract of contracts.contracts) {
+      const { address: contractAddress, holders } = contract;
+
+      for (const holder of holders) {
+        const details = await fetchTransactions(contractAddress);
+
+        // Filter transactions for the current holder
+        const holderTransactions = details.filter(tx =>
+          tx.to.toLowerCase() === holder.toLowerCase() ||
+          tx.from.toLowerCase() === holder.toLowerCase()
+        );
+
+        if (holderTransactions.length > 0) {
+          if (!holderTransactionMap.has(holder)) {
+            holderTransactionMap.set(holder, { totalCount: 0, transactions: [] });
+          }
+
+          const holderData = holderTransactionMap.get(holder);
+          holderData.totalCount += holderTransactions.length;
+          holderData.transactions.push(...holderTransactions);
+        }
+      }
+    }
+
+    const result = Array.from(holderTransactionMap.entries()).map(([holder, data]) => ({
+      holder,
+      totalCount: data.totalCount,
+
+    }));
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching mint transactions' });
+  }
+});
+
+
 async function fetchTopCollectorList() {
   try {
     const response = await axios.get('http://localhost:6000/fetchminttxn');
