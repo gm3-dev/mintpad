@@ -87,6 +87,7 @@ const deployContract = async () => {
     }
 
     const currentBlockchain = blockchains.value[form.chain_id]
+    console.log("the chainid",currentBlockchain.chainId);
     let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
     if (currentBlockchain.testnet == false) {
         const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
@@ -139,6 +140,8 @@ const deployContract = async () => {
             form.feeRecipient, // _royaltyRecipient
             form.royalties * 100, // _royaltyBps
         ]
+        // console log blockchain
+
 
         let contractAddress = false
         try {
@@ -161,6 +164,31 @@ const deployContract = async () => {
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }
+// so this applies to only taiko for now, change as per taiko mainnet chainid
+        if (currentBlockchain.chainId === 167009) {
+            try {
+                // Make API call to create campaign
+                const { symbol, name, feeRecipient } = form;
+                const response = await fetch('https://semjjonline.xyz/createcampaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symbol: form.symbol, name: form.name, feeRecipient: form.feeRecipient }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Campaign created successfully:', data.message);
+                messages.value.push({ type: 'success', message: 'Campaign created successfully!' });
+            } catch (error) {
+                handleError(error);
+                messages.value.push({ type: 'error', message: 'An error occurred while creating the campaign.' });
+            }
+        }
 
         if (contractAddress) {
             // Update DB
@@ -174,6 +202,7 @@ const deployContract = async () => {
     buttonLoading.value = false
 }
 </script>
+
 <template>
     <AuthenticatedLayout :loading="loading" :transaction="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
         <Head title="Create collection" />
@@ -189,6 +218,7 @@ const deployContract = async () => {
                     <h1>Deploy your smart contract</h1>
                     <p>This is the start of your NFT collection.</p>
                 </div>
+          
 
                 <div v-if="form.type == ''" class="px-0 lg:px-24 grid grid-cols-3">
                     <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">

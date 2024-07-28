@@ -1,27 +1,14 @@
-Check
-- ResetPassword.php
+##
 
-Before deployment:
-- 
+need this two api from app/api folder --> profileupload.js and test.js
 
-ToDo:
-- Mails vormgeven
 
-Methods:
--
+Run profileupload.js
+test.js
 
-Nice to have:
-- connectMetaMask() zonder page reload maken
-- disconnectWallet() zonder page reload maken
-- :collection-data vervangen door inject/provide?
-- Wallet address verplaatsen naar walletmanager?
-- Metamask errors opvangen
-- setSupplyData in embed integreren
-- checkCurrentBlockchain(): blockchain meegeven ipv blockchains en chain_id
-- setWalletData() functie maken om default de wallet ref() mee te vullen?
-- Na form submit kijken of the inertia response goed werkt. HIj lijkt te reloaden nu. Dit kan alleen opgelost worden door Axios te gebruiken. Nodig?
-- Hoeveelheid data nalopen wat in collectionData zit in de mint en embed pages
 
-## Problem solving
-### FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
-export NODE_OPTIONS="--max-old-space-size=4096"
+and then, on the other side-> run this https://github.com/chimmykk/api-server (has cronjob) and showcollection.js
+
+
+
+#here is nginx conf for exposing the endpoints for rendering to campaign site,  https://github.com/gm3-dev/mintpad/blob/taikocampaign/nginx.txt

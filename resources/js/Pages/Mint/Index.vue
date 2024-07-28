@@ -37,6 +37,8 @@ let wallet = ref(getDefaultWalletData())
 let validBlockchain = ref(true)
 let buttonLoading = ref(false)
 let messages = ref([])
+const testlink = ref('');
+
 
 let collectionData = ref({
     contractType: 'ERC721',
@@ -80,13 +82,14 @@ onMounted(async () => {
     if (props.collection.type == 'ERC1155') {
         props.collection.name = ''
     }
+ 
 
     axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
         // collectionData.value.thumb.src = response.data.thumb
-
+        
         // Set theme for mint
         if (response.data.theme.mint) {
             collectionData.value.theme = response.data.theme.mint
@@ -117,9 +120,22 @@ onMounted(async () => {
             } else {
                 contract = await getSmartContract(props.collection.chain_id, props.collection.address, props.collection.type)
             }
+                  //console log wallet adddress
+          const account = wallet.value.account;
+            console.log("player",account);
+            //console log contract address
+            console.log("house",props.collection.address);
+      
+            //console log the collection names and types
+            console.log("housename",props.collection.name);
+            console.log("housetype",props.collection.type);
+     
+            
+// some changes here
+          
             try {
                 let getNFTAmount = props.collection.type == 'ERC1155' ? 1000 : 1
-                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)
+                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)            
                 const contractType = await contract.call('contractType')
 
                 // Settings
@@ -143,7 +159,7 @@ onMounted(async () => {
                 setInterval(() => {
                     setSupplyData(contract)
                 }, 10000)
-
+                
                 // // Claim phases
                 collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
                 setClaimPhaseCounters()
@@ -164,7 +180,7 @@ onMounted(async () => {
                 }
 
                 loadComplete.value = true
-
+                
             } catch (error) {
                 console.log('mint 1', error)
                 reportError(error)
@@ -177,6 +193,10 @@ onMounted(async () => {
         //
     })
 })
+
+//player details
+
+  
 
 const switchBlockchain = async () => {
     const status = await switchChainTo(props.collection.chain_id)
@@ -253,15 +273,13 @@ const setCountDown = (i) => {
                 var distance = countDownDate - now
             }
 
-            // Last phase with no end date
             if (endDate === 0 && distance < 0) {
                 clearInterval(x)
                 timers.value[i] = Infinity
-            // Past phases
             } else if (distance < 0) {
                 clearInterval(x)
                 timers.value[i] = false
-
+            
             // Coming or runing phases
             } else {
                 var days = Math.floor(distance / (1000 * 60 * 60 * 24))
@@ -293,69 +311,110 @@ const setButtons = (buttons) => {
     }
     return output
 }
-const mintNFT = async (e) => {
-    if (editMode.value) {
-        showModal.value = true
-    } else {
-        if (collectionData.value.claimPhases.length == 0) {
-            messages.value.push({type: 'error', message: 'You cannot mint this NFT yet because no mint phases have been set yet'})
-            return
+
+
+const mintNFT = async () => {
+    try {
+        if (editMode.value) {
+            showModal.value = true;
+            return;
         }
 
-        buttonLoading.value = true
-        try {
-            // Set contract
-            const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
-            if (props.collection.type == 'ERC721') {
-                if (collectionData.value.contractType == 'DropERC721') {
-                    await contract.claim(mintAmount.value)
-                } else {
-                    const preparedClaim = await contract.claim.prepare(mintAmount.value)
-                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                    // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
-                    // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+        if (collectionData.value.claimPhases.length === 0) {
+            messages.value.push({ type: 'error', message: 'You cannot mint this NFT yet because no mint phases have been set yet' });
+            return;
+        }
 
-                    if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
-                        throw {reason: "Insufficient funds for transaction"}
-                    }
-                    await preparedClaim.execute()
-                }
-            } else if (props.collection.type.startsWith('ERC1155')) {
-                if (collectionData.value.contractType == 'DropERC1155') {
-                    await contract.claim(0, mintAmount.value)
-                } else {
-                    const preparedClaim = await contract.claim.prepare(currentNFT.value, mintAmount.value)
-                    const overrideValue = preparedClaim.overrides.value == undefined ? 0 : WeiToValue(preparedClaim.overrides.value)
-                    // let valueOverride = ((collectionData.value.transactionFee + overrideValue) * 1000000000000000000).toString()
-                    // let valueOverride = ethers.utils.parseUnits((collectionData.value.transactionFee + overrideValue).toString(), 18)
-                    preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue)
+        buttonLoading.value = true;
 
-                    if (wallet.value.balance.value.gte(preparedClaim.overrides.value) == false) {
-                        throw {reason: "Insufficient funds for transaction"}
-                    }
-                    await preparedClaim.execute()
-                }
-            }
+        // Set contract
+        const contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type);
 
-            showModal.value = true
+        let txHash;
 
-            setSupplyData(contract)
-        } catch (error) {
-            console.log('mint error', error)
-
-            let metamaskError = getMetaMaskError(error)
-            if (metamaskError) {
-                messages.value.push({type: 'error', message: metamaskError})
+        if (props.collection.type === 'ERC721') {
+            if (collectionData.value.contractType === 'DropERC721') {
+                const tx = await contract.claim(mintAmount.value);
+                txHash = tx.hash;
             } else {
-                reportError(error)
-                messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
+                const preparedClaim = await contract.claim.prepare(mintAmount.value);
+                const overrideValue = preparedClaim.overrides.value === undefined ? 0 : WeiToValue(preparedClaim.overrides.value);
+                preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue);
+
+                if (!wallet.value.balance.value.gte(preparedClaim.overrides.value)) {
+                    throw new Error("Insufficient funds for transaction");
+                }
+
+                const sentTx = await preparedClaim.send();
+                txHash = sentTx.hash;
+            }
+        } else if (props.collection.type.startsWith('ERC1155')) {
+            if (collectionData.value.contractType === 'DropERC1155') {
+                const tx = await contract.claim(0, mintAmount.value);
+                txHash = tx.hash;
+            } else {
+                const preparedClaim = await contract.claim.prepare(currentNFT.value, mintAmount.value);
+                const overrideValue = preparedClaim.overrides.value === undefined ? 0 : WeiToValue(preparedClaim.overrides.value);
+                preparedClaim.overrides.value = calculateTransactionFee(collectionData.value.transactionFee, overrideValue);
+
+                if (!wallet.value.balance.value.gte(preparedClaim.overrides.value)) {
+                    throw new Error("Insufficient funds for transaction");
+                }
+
+                const sentTx = await preparedClaim.send();
+                txHash = sentTx.hash;
             }
         }
 
-        buttonLoading.value = false
+        console.log('Transaction hash:', txHash);
+        testlink.value = txHash;
+        console.log('testlink', testlink.value);
+        const serializableWallet = {
+            account: wallet.value.account,
+            balance: wallet.value.balance,
+     
+        };
+
+        // conditional polling trigger based on chainId
+        const chainId = 167009;
+        console.log(props.collection.chain_id);
+        if (chainId === props.collection.chain_id) {
+         // trigger the polling
+         // check for cors origin later
+            const response = await fetch('https://semjjonline.xyz/startPolling', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    txHash,
+                    wallet: serializableWallet,
+                    collection: props.collection,
+           
+                    
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to start polling');
+            }
+
+            console.log('Polling started successfully');
+        } else {
+          // some changes to made here, like show modal ?
+            console.log('Chain ID does not match. No polling triggered.');
+        }
+
+        showModal.value = true;
+
+    } catch (error) {
+        console.error('Error:', error);
+        messages.value.push({ type: 'error', message: 'Something went wrong, please try again.' });
+        buttonLoading.value = false;
     }
 }
+
+
 </script>
 <template>
     <MinimalLayout :loading="loading" :overlay="loading" :valid-blockchain="validBlockchain" :chain-id="collection.chain_id">
@@ -449,7 +508,7 @@ const mintNFT = async (e) => {
                         <form>
                             <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                             <div v-if="editMode" class="flex gap-2">
-                                <Input type="number" value="1" class="!mb-0 !w-28" />
+                                <Input type="number" value="1" class="!mb-0 !w-28" />   
                                 <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                             </div>
                             <div v-else class="flex gap-2">
@@ -458,6 +517,7 @@ const mintNFT = async (e) => {
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
                                 <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
                             </div>
+                            
                             <div v-if="collectionData.claimPhases.length > 0" class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
                                 <div>
                                     <p>Total minted</p>
@@ -481,7 +541,7 @@ const mintNFT = async (e) => {
                             <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
                             <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
                             <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
-<!--                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>-->
+                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>
                             <p v-if="collection.type == 'ERC1155Burn'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                             <p v-if="collection.type == 'ERC1155Burn'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
                         </div>
@@ -529,11 +589,16 @@ const mintNFT = async (e) => {
             </div>
         </div>
 
-        <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
-            <p>You have an NFT in your wallet! You can now trade this NFT on OpenSea and other marketplaces.</p>
+        <Modal :show="showModal" title="Transaction Initiated!" @close="showModal = false">
+            <p>Check your wallet!</p>
+            <p class="text-sm text-gray-500">
+                            <a :href="`https://blockscoutapi.hekla.taiko.xyz/tx/${testlink}`" target="_blank" class="text-blue-500 hover:underline">
+                                Check txn here
+                            </a>
+                            </p>
             <p class="!text-primary-600 mint-text-primary">Good luck with trading!</p>
         </Modal>
 
         <Messages :messages="messages" />
-    </MinimalLayout>
+    </MinimalLayout>  
 </template>
