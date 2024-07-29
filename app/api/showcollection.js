@@ -27,13 +27,15 @@ function ipfsToIpfsIo(ipfsUri) {
 // GET /getcollection endpoint
 app.get('/getcollection', async (req, res) => {
     try {
-        // Get the database connection pool
+
         const pool = await getDbConnection();
 
-        // Execute the query with an additional condition for chain_id
+   // updated to created date so we can fetch recent collections
         const [results] = await pool.query(`
-            SELECT symbol, permalink, address FROM collections
+            SELECT symbol, permalink, address 
+            FROM collections
             WHERE chain_id = 167000
+              AND created_at > '2024-07-28 00:00:00'
         `);
 
         if (results.length === 0) {
@@ -46,6 +48,7 @@ app.get('/getcollection', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 
 
@@ -65,7 +68,7 @@ app.get('/fetchContractData', async (req, res) => {
             'function name() view returns (string)',
             'function tokenURI(uint256 tokenId) view returns (string)'
         ];
-        const provider = new ethers.JsonRpcProvider('https://rpc.hekla.taiko.xyz');
+        const provider = new ethers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz'); //update to mainnet
 
         // Function to fetch and process data from the contract
         const fetchDataForAddress = async (address) => {
