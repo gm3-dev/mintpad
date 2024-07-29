@@ -8,7 +8,7 @@ const port = 6000;
 //test
 app.use(bodyParser.json());
 const API_KEY = 'APUVAUXICC2927IVW8RDN4W6Q6FWTFNHV8'; 
-const BLOCKSCOUT_API_URL = 'https://blockscoutapi.hekla.taiko.xyz/api';
+const BLOCKSCOUT_API_URL = 'https://blockscoutapi.mainnet.taiko.xyz/api';
 app.use(cors({
     origin: 'http://127.0.0.1:8000',
     methods: ['POST','GET'],
@@ -302,7 +302,8 @@ app.get('/getholderaddress', async (req, res) => {
 
   app.get('/checktxnhekla/:txnhash', async (req, res) => {
     const txnHash = req.params.txnhash;
-    const apiUrl = `https://blockscoutapi.hekla.taiko.xyz/api?module=transaction&action=gettxreceiptstatus&txhash=${txnHash}`;
+    const apiUrl = `https://blockscoutapi.mainnet.taiko.xyz/api?module=transaction&action=gettxreceiptstatus&txhash=${txnHash}`;
+      
 
     try {
         const response = await axios.get(apiUrl);
@@ -404,7 +405,7 @@ app.get('/checkmost', async (req, res) => {
       // Iterate over each row in results
       for (let i = 0; i < results.length; i++) {
         const { address, name, type, symbol } = results[i];
-        const apiUrl = `https://blockscoutapi.hekla.taiko.xyz/api?module=token&action=getToken&contractaddress=${address}`;
+        const apiUrl = `https://blockscoutapi.mainnet.taiko.xyz/api?module=token&action=getToken&contractaddress=${address}`;
 
         try {
           const response = await axios.get(apiUrl);
@@ -486,7 +487,7 @@ async function fetchTransactions(contractAddress) {
 }
 
 const collectionDetailsUrl = 'http://127.0.0.1:6000/collectiondetails';
-const tokenHoldersBaseUrl = 'https://blockscoutapi.hekla.taiko.xyz/api';
+const tokenHoldersBaseUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
 
 // Fetch collection details and token holders
 async function fetchCollectionDetails() {
