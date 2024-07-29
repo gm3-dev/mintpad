@@ -169,7 +169,7 @@ const deployContract = async () => {
             try {
                 // Make API call to create campaign
                 const { symbol, name, feeRecipient } = form;
-                const response = await fetch('https://semjjonline.xyz/createcampaign', {
+                const response = await fetch('https://trailblazers.mintpad.co/createcampaign', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ const deployContract = async () => {
                     <h1>Deploy your smart contract</h1>
                     <p>This is the start of your NFT collection.</p>
                 </div>
-          
+
 
                 <div v-if="form.type == ''" class="px-0 lg:px-24 grid grid-cols-3">
                     <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">

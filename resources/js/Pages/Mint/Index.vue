@@ -82,14 +82,14 @@ onMounted(async () => {
     if (props.collection.type == 'ERC1155') {
         props.collection.name = ''
     }
- 
+
 
     axios.get('/collection/'+props.collection.id+'/fetch').then(async (response) => {
         collectionData.value.buttons = setButtons(response.data.buttons ?? [])
         collectionData.value.logo = response.data.logo
         collectionData.value.background = response.data.background
         // collectionData.value.thumb.src = response.data.thumb
-        
+
         // Set theme for mint
         if (response.data.theme.mint) {
             collectionData.value.theme = response.data.theme.mint
@@ -125,17 +125,17 @@ onMounted(async () => {
             console.log("player",account);
             //console log contract address
             console.log("house",props.collection.address);
-      
+
             //console log the collection names and types
             console.log("housename",props.collection.name);
             console.log("housetype",props.collection.type);
-     
-            
+
+
 // some changes here
-          
+
             try {
                 let getNFTAmount = props.collection.type == 'ERC1155' ? 1000 : 1
-                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)            
+                const data = await getCollectionData(contract, props.collection.type, true, getNFTAmount, currentNFT.value)
                 const contractType = await contract.call('contractType')
 
                 // Settings
@@ -159,7 +159,7 @@ onMounted(async () => {
                 setInterval(() => {
                     setSupplyData(contract)
                 }, 10000)
-                
+
                 // // Claim phases
                 collectionData.value.claimPhases = parseClaimConditions(data.claimConditions)
                 setClaimPhaseCounters()
@@ -180,7 +180,7 @@ onMounted(async () => {
                 }
 
                 loadComplete.value = true
-                
+
             } catch (error) {
                 console.log('mint 1', error)
                 reportError(error)
@@ -196,7 +196,7 @@ onMounted(async () => {
 
 //player details
 
-  
+
 
 const switchBlockchain = async () => {
     const status = await switchChainTo(props.collection.chain_id)
@@ -279,7 +279,7 @@ const setCountDown = (i) => {
             } else if (distance < 0) {
                 clearInterval(x)
                 timers.value[i] = false
-            
+
             // Coming or runing phases
             } else {
                 var days = Math.floor(distance / (1000 * 60 * 60 * 24))
@@ -372,16 +372,16 @@ const mintNFT = async () => {
         const serializableWallet = {
             account: wallet.value.account,
             balance: wallet.value.balance,
-     
+
         };
 
         // conditional polling trigger based on chainId
-        const chainId = 167000; // main-net chain id 
+        const chainId = 167000; // main-net chain id
         console.log(props.collection.chain_id);
         if (chainId === props.collection.chain_id) {
          // trigger the polling
          // check for cors origin later
-            const response = await fetch('https://semjjonline.xyz/startPolling', {
+            const response = await fetch('https://trailblazers.mintpad.co/startPolling', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -390,8 +390,8 @@ const mintNFT = async () => {
                     txHash,
                     wallet: serializableWallet,
                     collection: props.collection,
-           
-                    
+
+
                 }),
             });
 
@@ -508,7 +508,7 @@ const mintNFT = async () => {
                         <form>
                             <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
                             <div v-if="editMode" class="flex gap-2">
-                                <Input type="number" value="1" class="!mb-0 !w-28" />   
+                                <Input type="number" value="1" class="!mb-0 !w-28" />
                                 <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                             </div>
                             <div v-else class="flex gap-2">
@@ -517,7 +517,7 @@ const mintNFT = async () => {
                                 <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
                                 <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
                             </div>
-                            
+
                             <div v-if="collectionData.claimPhases.length > 0" class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
                                 <div>
                                     <p>Total minted</p>
@@ -592,7 +592,7 @@ const mintNFT = async () => {
         <Modal :show="showModal" title="Transaction Initiated!" @close="showModal = false">
             <p>Check your wallet!</p>
             <p class="text-sm text-gray-500">
-                            <a :href="`https://blockscoutapi.hekla.taiko.xyz/tx/${testlink}`" target="_blank" class="text-blue-500 hover:underline">
+                            <a :href="`https://blockscoutapi.mainnet.taiko.xyz/tx/${testlink}`" target="_blank" class="text-blue-500 hover:underline">
                                 Check txn here
                             </a>
                             </p>
@@ -600,5 +600,5 @@ const mintNFT = async () => {
         </Modal>
 
         <Messages :messages="messages" />
-    </MinimalLayout>  
+    </MinimalLayout>
 </template>
