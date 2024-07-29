@@ -25,9 +25,12 @@
         "@vitejs/plugin-vue": "^4.0.0",
         "bignumber.js": "^9.1.1",
         "buffer": "^6.0.3",
+        "cors": "^2.8.5",
         "date-fns": "^2.29.3",
         "ethers": "^5.7.*",
+        "express": "^4.19.2",
         "mitt": "^3.0.0",
+        "mysql2": "^3.11.0",
         "sass": "^1.58.3",
         "vue": "^3.2.47",
         "vue-tippy": "^6.0.0"
