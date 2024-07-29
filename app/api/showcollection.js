@@ -5,7 +5,7 @@ const { getDbConnection } = require('./db');
 const { ethers } = require('ethers');
 
 const app = express();
-const port = 5000;
+const port = 6000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -53,7 +53,7 @@ app.get('/getcollection', async (req, res) => {
 app.get('/fetchContractData', async (req, res) => {
     try {
         // Fetch collection data from /getcollection endpoint
-        const collectionResponse = await axios.get('http://localhost:5000/getcollection');
+        const collectionResponse = await axios.get('http://localhost:6000/getcollection');
         const collections = collectionResponse.data;
 
         if (!Array.isArray(collections) || collections.length === 0) {

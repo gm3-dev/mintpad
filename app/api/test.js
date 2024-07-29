@@ -40,7 +40,7 @@ const checkTransactionStatus = async (txHash) => {
 };
 
 
-const pollTransactionStatus = async (txHash, wallet, collection, contractdata, interval = 5000, maxAttempts = 20) => {
+const pollTransactionStatus = async (txHash, wallet, collection, contractdata, interval = 6000, maxAttempts = 20) => {
     const fetch = (await import('node-fetch')).default;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const result = await checkTransactionStatus(txHash);
