@@ -5,7 +5,7 @@ const { getDbConnection } = require('./db');
 const { ethers } = require('ethers');
 
 const app = express();
-const port = 6000;
+const port = 5000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
