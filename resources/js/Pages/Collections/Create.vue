@@ -165,7 +165,7 @@ const deployContract = async () => {
             }
         }
 // so this applies to only taiko for now, change as per taiko mainnet chainid
-        if (currentBlockchain.chainId === 167009) {
+        if (currentBlockchain.chainId === 167000) {
             try {
                 // Make API call to create campaign
                 const { symbol, name, feeRecipient } = form;
