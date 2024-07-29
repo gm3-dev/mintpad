@@ -487,7 +487,7 @@ async function fetchTransactions(contractAddress) {
 }
 
 const collectionDetailsUrl = 'http://127.0.0.1:6000/collectiondetails';
-const tokenHoldersBaseUrl = 'https://blockscoutapi.hekla.taiko.xyz/api';
+const tokenHoldersBaseUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
 
 // Fetch collection details and token holders
 async function fetchCollectionDetails() {
