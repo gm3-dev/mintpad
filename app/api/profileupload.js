@@ -7,7 +7,7 @@ const app = express();
 const port = 6000;
 //test
 app.use(bodyParser.json());
-const API_KEY = 'APUVAUXICC2927IVW8RDN4W6Q6FWTFNHV8'; 
+const API_KEY = 'APUVAUXICC2927IVW8RDN4W6Q6FWTFNHV8';
 const BLOCKSCOUT_API_URL = 'https://blockscoutapi.mainnet.taiko.xyz/api';
 app.use(cors({
     origin: 'http://127.0.0.1:8000',
@@ -17,9 +17,9 @@ app.use(cors({
 
 const connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: 'Koireng@1',
-    database: 'mydatabase'
+    user: 'forge',
+    password: '67yBCxjyCaC3TcOf01JJ',
+    database: 'forge'
 });
 
 connection.connect((err) => {
@@ -55,15 +55,15 @@ app.post('/api/uploadImage', (req, res) => {
 async function getTransactions(contractAddress, walletAddress) {
   try {
     const response = await axios.get(`${BLOCKSCOUT_API_URL}?module=account&action=txlist&address=${contractAddress}`);
-    
+
     if (response.data && response.data.result) {
       const transactions = response.data.result;
-      const filteredTransactions = transactions.filter(tx => 
-        tx.from.toLowerCase() === walletAddress.toLowerCase() || 
+      const filteredTransactions = transactions.filter(tx =>
+        tx.from.toLowerCase() === walletAddress.toLowerCase() ||
         tx.to.toLowerCase() === walletAddress.toLowerCase()
       );
       const transactionCount = filteredTransactions.length;
-      
+
       return transactionCount;
     } else {
       console.error('No transactions found');
@@ -195,7 +195,7 @@ app.get('/getdetailstopone', (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
         return;
       }
-  
+
       // Find the record with the highest totalmint
       let highestMintRecord = null;
       results.forEach((row) => {
@@ -203,7 +203,7 @@ app.get('/getdetailstopone', (req, res) => {
           highestMintRecord = row;
         }
       });
-  
+
       // Prepare response
       let response = {};
       if (highestMintRecord) {
@@ -215,12 +215,12 @@ app.get('/getdetailstopone', (req, res) => {
           message: 'No records found in the taikocampaign table.'
         };
       }
-  
+
       // Send response
       res.json(response);
     });
   });
-  
+
   app.get('/getdetails', async (req, res) => {
     // Default limit if not specified in query params
     const limit = req.query.limit ? parseInt(req.query.limit) : 20;
@@ -303,7 +303,7 @@ app.get('/getholderaddress', async (req, res) => {
   app.get('/checktxnhekla/:txnhash', async (req, res) => {
     const txnHash = req.params.txnhash;
     const apiUrl = `https://blockscoutapi.mainnet.taiko.xyz/api?module=transaction&action=gettxreceiptstatus&txhash=${txnHash}`;
-      
+
 
     try {
         const response = await axios.get(apiUrl);
@@ -442,7 +442,7 @@ app.get('/checkmost', async (req, res) => {
 
 
       tokenInfos.sort((a, b) => {
-    
+
         const totalSupplyA = Number(a.tokenInfo?.totalSupply) || 0;
         const totalSupplyB = Number(b.tokenInfo?.totalSupply) || 0;
         return totalSupplyB - totalSupplyA;
