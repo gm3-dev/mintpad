@@ -47,13 +47,10 @@ app.get('/getcollection', async (req, res) => {
 
 
 
-
-
-
 app.get('/fetchContractData', async (req, res) => {
     try {
-        // Fetch collection data from the external endpoint
-        const collectionResponse = await axios.get('https://app.mintpad.co/api/getcollection');
+        // Fetch collection data from the internal endpoint instead of external
+        const collectionResponse = await axios.get('http://localhost:5000/getcollection');
         const collections = collectionResponse.data;
 
         if (!Array.isArray(collections) || collections.length === 0) {
@@ -65,6 +62,7 @@ app.get('/fetchContractData', async (req, res) => {
             'function tokenURI(uint256 tokenId) view returns (string)'
         ];
         const provider = new ethers.providers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz');
+
         const fetchDataForAddress = async (address) => {
             try {
                 const contract = new ethers.Contract(address, abi, provider);
@@ -92,7 +90,7 @@ app.get('/fetchContractData', async (req, res) => {
             }
         };
 
-        // Function to fetch ERC1155 data for fallback from ERC721 (meaning no data on erc721)
+        // Function to fetch ERC1155 data for fallback from ERC721
         const fetchErc1155DataFallback = async (address) => {
             const erc1155Abi = [
                 'function uri(uint256 id) view returns (string)',
@@ -119,7 +117,7 @@ app.get('/fetchContractData', async (req, res) => {
                     imageUri
                 };
             } catch (error) {
-                console.error(`Error fetching ERC1155 data for address ${address}:`, ); // Remove logs too  much data
+                console.error(`Error fetching ERC1155 data for address ${address}:`, error);
                 return {
                     contractAddress: address,
                     name: 'Unknown',
@@ -142,14 +140,17 @@ app.get('/fetchContractData', async (req, res) => {
                 return data;
             })
         );
-        const successfulResults = results.filter(result => result.name && result.tokenURI);
+
+        // Filter successful results
+        const successfulResults = results.filter(result => result && result.name && result.tokenURI);
 
         res.json(successfulResults);
     } catch (error) {
-        console.error('Error fetching contract data:',); // Remove error else logs too much
+        console.error('Error fetching contract data:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 
 // GET /mostmint endpoint
