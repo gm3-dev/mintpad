@@ -24,15 +24,15 @@ function ipfsToIpfsIo(ipfsUri) {
 
 app.get('/getcollection', async (req, res) => {
     try {
-
         const pool = await getDbConnection();
-
         const [results] = await pool.query(`
             SELECT symbol, permalink, address 
             FROM collections
             WHERE chain_id = 167000
-              AND created_at > '2024-07-28 00:00:00'
+            ORDER BY created_at DESC
+            LIMIT 15
         `);
+        // so this will fetch top 15 collection, will reduce api calls on /fetchContractData
 
         if (results.length === 0) {
             return res.json({ message: 'No records found in the collections table.' });
@@ -49,10 +49,10 @@ app.get('/getcollection', async (req, res) => {
 
 
 
+
 app.get('/fetchContractData', async (req, res) => {
     try {
-        // Fetch collection data from /getcollection endpoint
-        // Update this so it will directly fetch from the expose url instead of localhost:6000/api/getcollection
+        // Fetch collection data from the external endpoint
         const collectionResponse = await axios.get('https://app.mintpad.co/api/getcollection');
         const collections = collectionResponse.data;
 
@@ -60,19 +60,17 @@ app.get('/fetchContractData', async (req, res) => {
             return res.status(404).json({ message: 'No collections found' });
         }
 
-// Get the token URI and name of the contract
         const abi = [
             'function name() view returns (string)',
             'function tokenURI(uint256 tokenId) view returns (string)'
         ];
-        // Updated as issue conflict ether.js 5.x TypeError: ethers.JsonRpcProvider is not a constructor
         const provider = new ethers.providers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz');
         const fetchDataForAddress = async (address) => {
             try {
                 const contract = new ethers.Contract(address, abi, provider);
 
                 const name = await contract.name();
-                const tokenURI = await contract.tokenURI(0); // Default tokenId is 0 as we want that as default image for the collection
+                const tokenURI = await contract.tokenURI(0); 
                 const metadataUrl = ipfsToIpfsIo(tokenURI);
                 const metadataResponse = await axios.get(metadataUrl);
                 const metadata = metadataResponse.data;
@@ -90,28 +88,69 @@ app.get('/fetchContractData', async (req, res) => {
                 };
             } catch (error) {
                 console.error(`Error fetching data for contract address ${address}:`, error);
+                return null; // Return null if there's an error
+            }
+        };
+
+        // Function to fetch ERC1155 data for fallback from ERC721 (meaning no data on erc721)
+        const fetchErc1155DataFallback = async (address) => {
+            const erc1155Abi = [
+                'function uri(uint256 id) view returns (string)',
+                'function name() view returns (string)'
+            ];
+            const erc1155Provider = new ethers.providers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz');
+            try {
+                const contract = new ethers.Contract(address, erc1155Abi, erc1155Provider);
+                const name = await contract.name();
+                const uri = await contract.uri(0); // Default tokenId is 0
+                const metadataUrl = ipfsToIpfsIo(uri);
+                const metadataResponse = await axios.get(metadataUrl);
+                const metadata = metadataResponse.data;
+
+                let imageUri = metadata.image;
+                if (imageUri && imageUri.startsWith('ipfs://')) {
+                    imageUri = ipfsToIpfsIo(imageUri);
+                }
+
                 return {
                     contractAddress: address,
-                    name: null,
+                    name,
+                    tokenURI: uri,
+                    imageUri
+                };
+            } catch (error) {
+                console.error(`Error fetching ERC1155 data for address ${address}:`, ); // Remove logs too  much data
+                return {
+                    contractAddress: address,
+                    name: 'Unknown',
                     tokenURI: null,
                     imageUri: null
                 };
             }
         };
 
+        // Fetch data for all collections
         const results = await Promise.all(
-            collections.map(collection => fetchDataForAddress(collection.address))
-        );
+            collections.map(async (collection) => {
+                const data = await fetchDataForAddress(collection.address);
+                if (!data || !data.name || !data.tokenURI) {
+                    console.warn(`Fallback fetch for address ${collection.address}`);
+                    const fallbackData = await fetchErc1155DataFallback(collection.address);
+                    return fallbackData;
+                }
 
-        // Filter out unsuccessful fetches
+                return data;
+            })
+        );
         const successfulResults = results.filter(result => result.name && result.tokenURI);
 
         res.json(successfulResults);
     } catch (error) {
-        console.error('Error fetching contract data:', error);
+        console.error('Error fetching contract data:',); // Remove error else logs too much
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 // GET /mostmint endpoint
 app.get('/mostmint', async (req, res) => {
@@ -380,3 +419,4 @@ app.get('/gettopcollector', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
