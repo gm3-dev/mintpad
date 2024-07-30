@@ -174,7 +174,7 @@ app.get('/collectiondetails', (req, res) => {
   //update
   // Query to get all collection details
   //more
-  const query = 'SELECT name, symbol, type, address FROM collections';
+  const query = 'SELECT name, symbol, type, address FROM collections WHERE chain_id = 167000 AND created_at > \'2024-07-28 00:00:00\'';
 
   connection.query(query, (err, results) => {
       if (err) {
@@ -272,7 +272,7 @@ async function fetchCollectionDetails() {
       for (const collection of collections) {
           const contractAddress = collection.address;
 
-          const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=100`;
+          const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=10`;
           const tokenHoldersResponse = await axios.get(tokenHoldersUrl);
 
           const tokenHolders = tokenHoldersResponse.data.result;
@@ -356,7 +356,7 @@ app.get('/checktxn/:txnhash', async (req, res) => {
 app.get('/totalTokens/:contractAddress', async (req, res) => {
   const { contractAddress } = req.params;
   try {
-      const response = await axios.get(`${BASE_URL}/?module=token&action=getToken&contractaddress=${contractAddress}&apikey=${API_KEY}`);
+      const response = await axios.get(`${BASE_URL}/?module=token&action=getToken&contractaddress=${contractAddress}`);
       const totalTokens = response.data.result;
       res.json({ totalTokens });
   } catch (error) {
@@ -502,7 +502,7 @@ async function fetchCollectionDetails() {
     for (const collection of collections) {
       const contractAddress = collection.address;
 
-      const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=1000`;
+      const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=10`;
       const tokenHoldersResponse = await axios.get(tokenHoldersUrl);
 
       const tokenHolders = tokenHoldersResponse.data.result;

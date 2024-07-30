@@ -381,7 +381,7 @@ const mintNFT = async () => {
         if (chainId === props.collection.chain_id) {
          // trigger the polling
          // check for cors origin later
-            const response = await fetch('https://app.mintpad.co/startPolling', {
+            const response = await fetch('https://on.mintpad.co/startPolling', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

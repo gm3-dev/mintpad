@@ -4,11 +4,11 @@ const PORT = 3030;
 const cors = require('cors');
 
 // Test CORS setup
-app.use(cors({
-    origin: 'http://127.0.0.1:8000',
-    methods: ['POST', 'GET'],
-    allowedHeaders: ['Content-Type'],
-}));
+// app.use(cors({
+//     origin: 'http://127.0.0.1:8000',
+//     methods: ['POST', 'GET'],
+//     allowedHeaders: ['Content-Type'],
+// }));
 
 app.use(express.json());
 
@@ -32,9 +32,9 @@ const checkTransactionStatus = async (txHash) => {
         },
     });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch transaction status');
-    }
+    // if (!response.ok) {
+    //     throw new Error('Failed to fetch transaction status');
+    // }
 
     return response.json();
 };
