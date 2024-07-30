@@ -7,30 +7,26 @@ const { ethers } = require('ethers');
 const app = express();
 const port = 5000;
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
 const collectionDetailsUrl = 'http://127.0.0.1:6000/collectiondetails';
 const tokenHoldersBaseUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
-// Use CORS middleware
+
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your actual domain
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
 }));
 
-// Helper function to convert IPFS URI
 function ipfsToIpfsIo(ipfsUri) {
     return ipfsUri.replace('ipfs://', 'https://ipfs.io/ipfs/');
 }
 
-// GET /getcollection endpoint
 app.get('/getcollection', async (req, res) => {
     try {
 
         const pool = await getDbConnection();
 
-   // updated to created date so we can fetch recent collections
         const [results] = await pool.query(`
             SELECT symbol, permalink, address 
             FROM collections
@@ -52,35 +48,31 @@ app.get('/getcollection', async (req, res) => {
 
 
 
-// GET /fetchContractData endpoint
+
 app.get('/fetchContractData', async (req, res) => {
     try {
         // Fetch collection data from /getcollection endpoint
-        const collectionResponse = await axios.get('http://localhost:6000/getcollection');
+        // Update this so it will directly fetch from the expose url instead of localhost:6000/api/getcollection
+        const collectionResponse = await axios.get('https://app.mintpad.co/api/getcollection');
         const collections = collectionResponse.data;
 
         if (!Array.isArray(collections) || collections.length === 0) {
             return res.status(404).json({ message: 'No collections found' });
         }
 
-        // Define the ABI for the contract
+// Get the token URI and name of the contract
         const abi = [
             'function name() view returns (string)',
             'function tokenURI(uint256 tokenId) view returns (string)'
         ];
-        const provider = new ethers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz'); //update to mainnet
-
-        // Function to fetch and process data from the contract
+        // Updated as issue conflict ether.js 5.x TypeError: ethers.JsonRpcProvider is not a constructor
+        const provider = new ethers.providers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz');
         const fetchDataForAddress = async (address) => {
             try {
                 const contract = new ethers.Contract(address, abi, provider);
 
                 const name = await contract.name();
-
-                // Fetch tokenURI
-                const tokenURI = await contract.tokenURI(0); // Default tokenId is 0
-
-                // Fetch metadata
+                const tokenURI = await contract.tokenURI(0); // Default tokenId is 0 as we want that as default image for the collection
                 const metadataUrl = ipfsToIpfsIo(tokenURI);
                 const metadataResponse = await axios.get(metadataUrl);
                 const metadata = metadataResponse.data;
@@ -107,7 +99,6 @@ app.get('/fetchContractData', async (req, res) => {
             }
         };
 
-        // Fetch data for all contract addresses
         const results = await Promise.all(
             collections.map(collection => fetchDataForAddress(collection.address))
         );
@@ -167,14 +158,12 @@ app.get('/topcreator', async (req, res) => {
     }
 
     try {
-        // Get the database connection pool
         const pool = await getDbConnection();
 
-        // Query to get contract addresses
         const [rows] = await pool.query('SELECT * FROM top_creattor');
         const contractAddresses = rows.map(row => row.contractaddress);
 
-        // Function to fetch contract deployer details
+// reverse the contract address deployer
         const fetchContractDeployer = async (contractAddress) => {
             const apiUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
 
