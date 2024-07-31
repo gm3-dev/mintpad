@@ -3,6 +3,19 @@ const axios = require('axios');
 const cors = require('cors');
 const { getDbConnection } = require('./db');
 const { ethers } = require('ethers');
+const path = require('path');
+const fs = require('fs');
+const dataDir = path.join(__dirname, 'deployerdata');
+const lastFetchFile = path.join(__dirname, 'lastFetchTime.json'); // this will fetch from lastfetch, for default set to 29th July
+
+// if no deployer folder is created
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+}
+
+if (!fs.existsSync(lastFetchFile)) {
+    fs.writeFileSync(lastFetchFile, JSON.stringify({ lastFetchTime: '2024-07-29T00:00:00Z' }), 'utf8');
+}
 
 const app = express();
 const port = 5000;
@@ -45,7 +58,129 @@ app.get('/getcollection', async (req, res) => {
     }
 });
 
+// Get the details for the contract deployer
+const fetchContractDeployer = async (contractAddress, retryCount = 0) => {
+    const apiUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
+    const maxRetries = 5;
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+    try {
+        const response = await axios.get(apiUrl, {
+            params: {
+                module: 'contract',
+                action: 'getcontractcreation',
+                contractaddresses: contractAddress
+            }
+        });
+
+        const data = response.data.result[0];
+        return {
+            contractAddress: data.contractAddress,
+            contractCreator: data.contractCreator
+        };
+    } catch (error) {
+        if (error.response && error.response.status === 429 && retryCount < maxRetries) {
+            console.warn(`Rate limit exceeded for ${contractAddress}. Retrying... (${retryCount + 1}/${maxRetries})`);
+            await delay((2 ** retryCount) * 1000); // Exponential backoff
+            return fetchContractDeployer(contractAddress, retryCount + 1);
+        } else {
+            console.error(`Error fetching details for contract ${contractAddress}:`, error.message);
+            return {
+                contractAddress,
+                contractCreator: null
+            };
+        }
+    }
+};
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+
+// Function to start logging contract that were deployed
+
+const fetchAndSaveData = async () => {
+    try {
+        const { lastFetchTime } = JSON.parse(fs.readFileSync(lastFetchFile, 'utf8'));
+        const pool = await getDbConnection();
+        const currentTime = new Date().toISOString();
+
+        const query = `
+            SELECT address, type FROM collections
+            WHERE chain_id = 167000
+            AND created_at > '${lastFetchTime}'
+            AND created_at <= '${currentTime}'
+        `;
+
+        const [rows] = await pool.query(query);
+        const contractAddresses = rows.map(row => row.address);
+
+        const processedAddresses = new Set();
+        const updatedData = [];
+
+        for (const address of contractAddresses) {
+            if (processedAddresses.has(address)) {
+                continue;
+            }
+
+            const details = await fetchContractDeployer(address);
+            const entry = {
+                address,
+                type: rows.find(row => row.address === address).type,
+                contractCreator: details.contractCreator
+            };
+
+            updatedData.push(entry);
+            const filePath = path.join(dataDir, `${address}.json`);
+            fs.writeFileSync(filePath, JSON.stringify(entry, null, 2), 'utf8');
+            processedAddresses.add(address);
+            await delay(3); // Delay for 3 milliseconds between requests
+        }
+
+        // Update last fetch time to the current time
+        fs.writeFileSync(lastFetchFile, JSON.stringify({ lastFetchTime: currentTime }), 'utf8');
+        console.log('Data fetched and saved successfully.');
+
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+    }
+};
+
+// Get the details from the deployer folder
+
+
+app.get('/getallcontracts', (req, res) => {
+    fs.readdir(dataDir, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err.message);
+            return res.status(500).json({ message: 'Error reading directory' });
+        }
+
+        const jsonFiles = files.filter(file => file.endsWith('.json'));
+        const allDataPromises = jsonFiles.map(file => {
+            return new Promise((resolve, reject) => {
+                fs.readFile(path.join(dataDir, file), 'utf8', (err, data) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    try {
+                        resolve(JSON.parse(data));
+                    } catch (parseError) {
+                        reject(parseError);
+                    }
+                });
+            });
+        });
+
+        Promise.all(allDataPromises)
+            .then(results => {
+                res.status(200).json(results);
+            })
+            .catch(error => {
+                console.error('Error reading JSON files:', error.message);
+                res.status(500).json({ message: 'Error reading JSON files' });
+            });
+    });
+});
 
 app.get('/fetchContractData', async (req, res) => {
     try {
@@ -93,7 +228,7 @@ app.get('/fetchContractData', async (req, res) => {
         // Function to fetch ERC1155 data for fallback from ERC721
         const fetchErc1155DataFallback = async (address) => {
             const erc1155Abi = [
-                'function uri(uint256 id) view returns (string)',
+               'function uri(uint256 id) view returns (string)',
                 'function name() view returns (string)'
             ];
             const erc1155Provider = new ethers.providers.JsonRpcProvider('https://rpc.mainnet.taiko.xyz');
@@ -417,7 +552,13 @@ app.get('/gettopcollector', async (req, res) => {
   }
 });
 
+
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+      fetchAndSaveData();
+    setInterval(fetchAndSaveData, 15 * 60 * 1000);
 });
+
+
 
