@@ -106,7 +106,7 @@ export let WeaveEVMTestnet = {
   "chain": "WVM",
   "status": "active",
   "icon": {
-    "url": "https://docs.wvm.dev/~gitbook/image?url=https%3A%2F%2F3863681628-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fz2gd4Irh30FSnal6SJnL%252Ficon%252F72zLeEWT82SqUKwiPjwk%252FWVM_logo_lg.png%3Falt%3Dmedia%26token%3D92603341-4ca7-448a-98f2-406043283408&width=32&dpr=2&quality=100&sign=c7e7fb38&sv=1", // Replace with actual IPFS hash if available
+    "url": "ipfs://QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt",
     "width": 100, 
     "height": 100,
     "format": "png"
