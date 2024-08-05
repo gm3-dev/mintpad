@@ -65,3 +65,76 @@ export let BlastL2 = {
   "testnet": false,
   "slug": "blast-l2"
 }
+
+
+// export let AbstractTestnet = {
+//   "name": "Abstract Chain Testnet",
+//   "chain": "ABSTRACT",
+//   "status": "active",
+//   "icon": {
+//     "url": "",
+//     "width": 100, 
+//     "height": 100,
+//     "format": "png"
+//   },
+//   "rpc": [
+//     "https://api.testnet.abs.xyz"
+//   ],
+//   "faucets": [],
+//   "nativeCurrency": {
+//     "name": "Ether",
+//     "symbol": "ETH",
+//     "decimals": 18
+//   },
+//   "infoURL": "https://explorer.testnet.abs.xyz",
+//   "shortName": "abstract-testnet",
+//   "chainId": 11124,
+//   "networkId": 11124,
+//   "explorers": [
+//     {
+//       "name": "Abstract Explorer",
+//       "url": "https://explorer.testnet.abs.xyz",
+//       "standard": ""
+//     }
+//   ],
+//   "testnet": true,
+//   "slug": "abstract-testnet"
+// }
+
+export let WeaveEVMTestnet = {
+  "name": "WeaveEVM Testnet",
+  "chain": "WVM",
+  "status": "active",
+  "icon": {
+    "url": "https://docs.wvm.dev/~gitbook/image?url=https%3A%2F%2F3863681628-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fz2gd4Irh30FSnal6SJnL%252Ficon%252F72zLeEWT82SqUKwiPjwk%252FWVM_logo_lg.png%3Falt%3Dmedia%26token%3D92603341-4ca7-448a-98f2-406043283408&width=32&dpr=2&quality=100&sign=c7e7fb38&sv=1", // Replace with actual IPFS hash if available
+    "width": 100, 
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://testnet-rpc.wvm.dev"
+  ],
+  "rpcProxy": [
+    "https://testnet.wvm.dev"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Test WVM",
+    "symbol": "tWVM",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer.wvm.dev",
+  "shortName": "wvm-testnet",
+  "chainId": 9496,
+  "networkId": 9496,
+  "explorers": [
+    {
+      "name": "WVM Explorer",
+      "url": "https://explorer.wvm.dev",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "wvm-testnet"
+}
+
