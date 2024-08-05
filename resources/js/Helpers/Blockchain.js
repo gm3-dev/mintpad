@@ -4,7 +4,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet, SuperseedSepoliaTestnet,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, } from '@thirdweb-dev/chains'
-import { AbstractTestnet, WeaveEVMTestnet } from './CustomBlockchains'
+import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
 
@@ -167,8 +167,7 @@ export function getBlockchains() {
         245022926: NeonEvmDevnet,
         29112: HychainTestnet,
         53302: SuperseedSepoliaTestnet,
-        // 11124:AbstractTestnet,
-9496: WeaveEVMTestnet,
+        9496: WeaveEVMTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
