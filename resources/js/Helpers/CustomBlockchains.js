@@ -67,46 +67,12 @@ export let BlastL2 = {
 }
 
 
-// export let AbstractTestnet = {
-//   "name": "Abstract Chain Testnet",
-//   "chain": "ABSTRACT",
-//   "status": "active",
-//   "icon": {
-//     "url": "",
-//     "width": 100, 
-//     "height": 100,
-//     "format": "png"
-//   },
-//   "rpc": [
-//     "https://api.testnet.abs.xyz"
-//   ],
-//   "faucets": [],
-//   "nativeCurrency": {
-//     "name": "Ether",
-//     "symbol": "ETH",
-//     "decimals": 18
-//   },
-//   "infoURL": "https://explorer.testnet.abs.xyz",
-//   "shortName": "abstract-testnet",
-//   "chainId": 11124,
-//   "networkId": 11124,
-//   "explorers": [
-//     {
-//       "name": "Abstract Explorer",
-//       "url": "https://explorer.testnet.abs.xyz",
-//       "standard": ""
-//     }
-//   ],
-//   "testnet": true,
-//   "slug": "abstract-testnet"
-// }
-
 export let WeaveEVMTestnet = {
   "name": "WeaveEVM Testnet",
   "chain": "WVM",
   "status": "active",
   "icon": {
-    "url": "ipfs://QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt",
+    "url": "ipfs/QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt", 
     "width": 100, 
     "height": 100,
     "format": "png"
@@ -138,3 +104,40 @@ export let WeaveEVMTestnet = {
   "slug": "wvm-testnet"
 }
 
+
+export let ApeChain = {
+  "name": "ApeChain",
+  "chain": "APE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmexB2NLdsFD5HytT5WRhgm5r75Qzr9DAzAuSvfkfojZDE",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://curtis.rpc.caldera.xyz/http"
+  ],
+  "rpcProxy": [
+    "https://curtis.rpc.caldera.xyz/http"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ape Token",
+    "symbol": "APE",
+    "decimals": 18
+  },
+  "infoURL": "https://curtis.explorer.caldera.xyz",
+  "shortName": "ape-chain",
+  "chainId": 33111,
+  "networkId": 33111,
+  "explorers": [
+    {
+      "name": "ApeChain Explorer",
+      "url": "https://curtis.explorer.caldera.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "ape-chain"
+}
