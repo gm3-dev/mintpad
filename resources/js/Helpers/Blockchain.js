@@ -5,7 +5,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, } from '@thirdweb-dev/chains'
 import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
-import {ApeChainCurtis} from '@/Helpers/CustomBlockchains'
+import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -78,7 +78,8 @@ export function getBlockchains() {
     ShardeumSphinx1X.testnet = true;
 // AbstractTestnet.testnet= true;
     Hychain.testnet = false;
-     ApechainCurtis.testnet= true;
+    ApechainCurtis.testnet = true;
+    
 
 
     //block explorer custom overwrite

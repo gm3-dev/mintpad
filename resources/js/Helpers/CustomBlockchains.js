@@ -105,8 +105,8 @@ export let WeaveEVMTestnet = {
 }
 
 
-export let ApechainCurtis  = {
-  "name": "Apechain Curtis",
+export let ApechainCurtis = {
+  "name": "ApeChain Curtis",
   "chain": "APE",
   "status": "active",
   "icon": {
