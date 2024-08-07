@@ -78,6 +78,7 @@ export function getBlockchains() {
     ShardeumSphinx1X.testnet = true;
 // AbstractTestnet.testnet= true;
     Hychain.testnet = false;
+     ApeChain.testnet= true;
 
 
     //block explorer custom overwrite
