@@ -72,7 +72,7 @@ export let WeaveEVMTestnet = {
   "chain": "WVM",
   "status": "active",
   "icon": {
-    "url": "ipfs/QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt", 
+    "url": "ipfs://QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt", 
     "width": 100, 
     "height": 100,
     "format": "png"
