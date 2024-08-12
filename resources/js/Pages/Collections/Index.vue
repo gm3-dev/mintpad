@@ -44,7 +44,7 @@ onMounted(async () => {
             <Box class="bg-waves dark:bg-waves-dark bg-cover p-12">
                 <h1>Welcome</h1>
                 <p class="mb-4">Launching a collection can seem complicated. That is why we have made tutorials which explain the entire process step by step. 
-                    You can find them in our detailed <Hyperlink element="a" class="text-sm" href="https://generator.mintpad.co" target="_blank">documentation</Hyperlink>.</p>
+                    You can find them in our detailed <Hyperlink element="a" class="text-sm" href="https://docs.mintpad.co" target="_blank">documentation</Hyperlink>.</p>
             </Box>
             <Box class="text-left md:text-center p-12">
                 <h1>Let’s get started</h1>
