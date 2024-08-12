@@ -123,7 +123,7 @@ const validateForm = () => {
     <Box class="mb-4" title="Add images to your open edition" documentation="https://docs.mintpad.co/written-tutorials/upload-your-artwork">
         <BoxContent>
             <div class="text-sm">
-                <p>In this step, you will upload the images that your community will mint, and the image they will receive when they burn your collection.</p>
+                <p>You will upload the images that your community will mint</p>
             </div> 
         </BoxContent>
     </Box>
