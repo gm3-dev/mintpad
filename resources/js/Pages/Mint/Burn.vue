@@ -301,7 +301,7 @@ const burnNFTs = async (e) => {
         </div>
 
         <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
-            <p>You have an NFT in your wallet! You can now trade this NFT on OpenSea and other marketplaces.</p>
+            <p>Congratulations. You have successfully minted.</p>
             <p class="!text-primary-600 mint-text-primary">Good luck with trading!</p>
         </Modal>
 
