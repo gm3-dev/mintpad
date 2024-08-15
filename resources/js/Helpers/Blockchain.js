@@ -3,7 +3,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb, Vanguard, NeonEvmDevnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet, SuperseedSepoliaTestnet,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, VictionTestnet, Viction } from '@thirdweb-dev/chains'
 import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
 import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
 
@@ -70,6 +70,7 @@ export function getBlockchains() {
     NeonEvmDevnet.coingecko = 'neon'
     Opbnb.coingecko = 'binancecoin'
     Taiko.coingecko = 'ethereum'
+    Viction.coingecko='tomochain'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -78,8 +79,6 @@ export function getBlockchains() {
     ShardeumSphinx1X.testnet = true;
 // AbstractTestnet.testnet= true;
     Hychain.testnet = false;
-    ApechainCurtis.testnet = true;
-    
 
 
     //block explorer custom overwrite
@@ -129,6 +128,7 @@ export function getBlockchains() {
         245022934: NeonEvm,
         204: Opbnb,
         167000: Taiko,
+        88: Viction
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -173,6 +173,7 @@ export function getBlockchains() {
         53302: SuperseedSepoliaTestnet,
         9496: WeaveEVMTestnet,
         33111: ApechainCurtis,
+        89:VictionTestnet,
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
