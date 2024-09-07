@@ -8,7 +8,7 @@ const test = runScript('test.js');
 cronjob.on('close', (code) => {
     console.log(`cronjob.js exited with code ${code}`);
 });
-
+// just testing redeployment from git commit
 profileupload.on('close', (code) => {
     console.log(`profileupload.js exited with code ${code}`);
 });
