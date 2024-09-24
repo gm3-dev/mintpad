@@ -141,3 +141,40 @@ export let ApechainCurtis = {
   "testnet": true,
   "slug": "ape-chain"
 }
+
+export let ApechainMainnet = {
+  "name": "ApeChain Mainnet",
+  "chain": "APE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmexB2NLdsFD5HytT5WRhgm5r75Qzr9DAzAuSvfkfojZDE",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://apechain.calderachain.xyz/http"
+  ],
+  "ws": [
+    "wss://apechain.calderachain.xyz/ws"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ape Token",
+    "symbol": "APE",
+    "decimals": 18
+  },
+  "infoURL": "https://apechain.calderaexplorer.xyz",
+  "shortName": "ape-mainnet",
+  "chainId": 33139,
+  "networkId": 33139,
+  "explorers": [
+    {
+      "name": "ApeChain Explorer",
+      "url": "https://apechain.calderaexplorer.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "apechain-mainnet"
+}
