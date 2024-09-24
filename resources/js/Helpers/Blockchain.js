@@ -6,6 +6,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, VictionTestnet, Viction } from '@thirdweb-dev/chains'
 import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
 import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
+import {ApechainMainnet} from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -71,6 +72,7 @@ export function getBlockchains() {
     Opbnb.coingecko = 'binancecoin'
     Taiko.coingecko = 'ethereum'
     Viction.coingecko='tomochain'
+    ApechainMainnet.coingecko='apecoin'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -128,7 +130,8 @@ export function getBlockchains() {
         245022934: NeonEvm,
         204: Opbnb,
         167000: Taiko,
-        88: Viction
+        88: Viction,
+        33139: ApechainMainnet
     }
     const testnets = {
         421613: ArbitrumGoerli,
