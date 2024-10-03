@@ -66,7 +66,6 @@ export let BlastL2 = {
   "slug": "blast-l2"
 }
 
-
 export let WeaveEVMTestnet = {
   "name": "WeaveEVM Testnet",
   "chain": "WVM",
@@ -103,7 +102,6 @@ export let WeaveEVMTestnet = {
   "testnet": true,
   "slug": "wvm-testnet"
 }
-
 
 export let ApechainCurtis = {
   "name": "ApeChain Curtis",
@@ -177,4 +175,74 @@ export let ApechainMainnet = {
   ],
   "testnet": false,
   "slug": "apechain-mainnet"
+}
+
+
+export let ShapeMainnet = {
+  "name": "Shape Mainnet",
+  "chain": "SHAPE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmPZuXti6F9eECFx7ca4DLTVychWukALm28vAHMRcDaptX",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://mainnet.shape.network"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://shapescan.xyz",
+  "shortName": "shape-mainnet",
+  "chainId": 360,
+  "networkId": 360,
+  "explorers": [
+    {
+      "name": "Shape Explorer",
+      "url": "https://shapescan.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "shape-mainnet"
+}
+
+
+export let ShapeSepoliaTestnet = {
+  "name": "Shape Sepolia",
+  "chain": "SHAPE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmPZuXti6F9eECFx7ca4DLTVychWukALm28vAHMRcDaptX", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://sepolia.shape.network"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer-sepolia.shape.network",
+  "shortName": "shape-sepolia",
+  "chainId": 11011,
+  "networkId": 11011,
+  "explorers": [
+    {
+      "name": "Sepolia Explorer",
+      "url": "https://explorer-sepolia.shape.network",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "shape-sepolia"
 }
