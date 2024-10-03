@@ -7,6 +7,8 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
 import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
 import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
 import {ApechainMainnet} from '@/Helpers/CustomBlockchains'
+import { ShapeMainnet } from '@/Helpers/CustomBlockchains'
+import { ShapeSepoliaTestnet } from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
@@ -73,6 +75,7 @@ export function getBlockchains() {
     Taiko.coingecko = 'ethereum'
     Viction.coingecko='tomochain'
     ApechainMainnet.coingecko='apecoin'
+    ShapeMainnet.coingecko='shape'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -81,6 +84,7 @@ export function getBlockchains() {
     ShardeumSphinx1X.testnet = true;
 // AbstractTestnet.testnet= true;
     Hychain.testnet = false;
+    ShapeSepoliaTestnet.testnet=false;
 
 
     //block explorer custom overwrite
@@ -131,7 +135,8 @@ export function getBlockchains() {
         204: Opbnb,
         167000: Taiko,
         88: Viction,
-        33139: ApechainMainnet
+        33139: ApechainMainnet,
+        360: ShapeMainnet
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -177,6 +182,7 @@ export function getBlockchains() {
         9496: WeaveEVMTestnet,
         33111: ApechainCurtis,
         89:VictionTestnet,
+        11011: ShapeSepoliaTestnet
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
