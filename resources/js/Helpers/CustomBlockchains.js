@@ -246,3 +246,41 @@ export let ShapeSepoliaTestnet = {
   "testnet": true,
   "slug": "shape-sepolia"
 }
+
+// export let AbstractTestnet = {
+//   "name": "Abstract Testnet",
+//   "chain": "ABS",
+//   "status": "active",
+//   "icon": {
+//     "url": "ipfs://QmWeBU36AH2DX9VA2GToMqtJzcdTtWprDK1urafxa8n61C", 
+//     "width": 100,
+//     "height": 100,
+//     "format": "png"
+//   },
+//   "rpc": [
+//     "https://api.testnet.abs.xyz"
+//   ],
+//   "ws": [
+//     "ws://api.testnet.abs.xyz/ws"
+//   ],
+//   "faucets": [],
+//   "nativeCurrency": {
+//     "name": "Ether",
+//     "symbol": "ETH",
+//     "decimals": 18
+//   },
+//   "infoURL": "https://explorer.testnet.abs.xyz",
+//   "shortName": "abs-testnet",
+//   "chainId": 11124,
+//   "networkId": 11124,
+//   "explorers": [
+//     {
+//       "name": "Abstract Explorer",
+//       "url": "https://explorer.testnet.abs.xyz",
+//       "standard": "EIP3091"
+//     }
+//   ],
+//   "verifyURL": "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
+//   "testnet": true,
+//   "slug": "abstract-testnet"
+// }
