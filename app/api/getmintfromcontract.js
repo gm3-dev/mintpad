@@ -27,9 +27,9 @@ requestQueue.process(async (job) => {
   // MySQL connection setup
   const connection = mysql.createConnection({
       host: 'localhost',
-      user: 'root',
-      password: 'Koireng@1',
-      database: 'mydatabase'
+    user: 'forge',
+    password: '67yBCxjyCaC3TcOf01JJ',
+    database: 'forge'
   });
   
   // API endpoint to get collection addresses
