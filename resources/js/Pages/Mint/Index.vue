@@ -376,12 +376,12 @@ const mintNFT = async () => {
         };
 
         // conditional polling trigger based on chainId
-        const chainId = 167000;
+        const chainId = 167009;
         console.log(props.collection.chain_id);
         if (chainId === props.collection.chain_id) {
          // trigger the polling
          // check for cors origin later
-            const response = await fetch('https://on.mintpad.co/startPolling', {
+            const response = await fetch('http://127.0.0.1:3030/startPolling', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
