@@ -1,199 +1,135 @@
-// server.js
-
-const express = require('express');
+  /* Get mint from contract
+  -> Fetch the collection's address from the databases, reverse the contract address
+  -> To fetch the holders based on the collection's address(contract address)
+ */
+  const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const mysql = require('mysql2');
+const Queue = require('bull');
+
+const requestQueue = new Queue('requestQueue');
 
 const app = express();
 const PORT = 6000;
-const BLOCKSCOUT_API_URL = 'https://blockscoutapi.hekla.taiko.xyz/api';
+// const BLOCKSCOUT_API_URL = 'https://blockscoutapi.hekla.taiko.xyz/api';
 
 app.use(cors());
 
-// Fetch transactions based on contract address
-async function fetchTransactions(contractAddress) {
-  try {
-    const response = await axios.get(`${BLOCKSCOUT_API_URL}?module=account&action=txlist&address=${contractAddress}`);
-    // console.log('API Response:', response.data);
-// Too much of log
+// Process jobs in the queue
+requestQueue.process(async (job) => {
+    const { contractAddress, holderAddress } = job.data;
+    return sendRequest(contractAddress, holderAddress);
+});
 
-    if (!response.data || !response.data.result || !Array.isArray(response.data.result)) {
-      throw new Error('Invalid API response structure');
-    }
 
-    const transactions = response.data.result
-      .filter(tx => tx.input.startsWith('0x84bb1e42')) // Filter transactions that have input/method of '0x84bb1e42'
-      .map(tx => ({
-        to: tx.to,
-        from: tx.from,
-        hash: tx.hash, // Add hash just if needed to verify
-        input: tx.input.substring(0, 10) // Display first 10 characters
-      }));
 
-    return transactions;
-  } catch (error) {
-    console.error('Error fetching transactions:', error.message);
-    throw error;
-  }
-}
-
-const collectionDetailsUrl = 'http://127.0.0.1:8000/collectiondetails';
-const tokenHoldersBaseUrl = 'https://blockscoutapi.hekla.taiko.xyz/api';
-
-// Fetch collection details and token holders
-async function fetchCollectionDetails() {
-  try {
-    const response = await axios.get(collectionDetailsUrl);
-    const collections = response.data;
-
-    const contracts = [];
-
-    let counter = 1;
-
-    for (const collection of collections) {
-      const contractAddress = collection.address;
-
-      const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=1000`;
-      const tokenHoldersResponse = await axios.get(tokenHoldersUrl);
-
-      const tokenHolders = tokenHoldersResponse.data.result;
-      contracts.push({
-        number: counter,
-        address: contractAddress,
-        holders: tokenHolders.map(holder => holder.address)
+  // MySQL connection setup
+  const connection = mysql.createConnection({
+      host: 'localhost',
+    user: 'forge',
+    password: '67yBCxjyCaC3TcOf01JJ',
+    database: 'forge'
+  });
+  
+  // API endpoint to get collection addresses
+  app.get('/api/getcollectionaddress', (req, res) => {
+      const query = `
+          SELECT DISTINCT house 
+          FROM taikocampaign
+      `;
+  
+      connection.query(query, (err, results) => {
+          if (err) {
+              console.error('Error fetching houses:', err.stack);
+              return res.status(500).json({ error: 'Internal server error' });
+          }
+  
+          if (results.length === 0) {
+              return res.status(404).json({ message: 'No data found' });
+          }
+  
+          res.status(200).json(results); 
       });
+  });
+  
 
-      counter++;
-    }
-    return {
-      contracts: contracts
-    };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return { error: 'Failed to fetch data' };
-  }
-}
+  
+  // API endpoint to fetch collection details using addresses from the database
+  app.get('/api/fetchcollectiondetails', async (req, res) => {
+    const query = `
+        SELECT address, house, totalmint AS storedTokenBalance
+        FROM taikocampaign
+    `;
 
-app.get('/getholderaddress', async (req, res) => {
-  const data = await fetchCollectionDetails();
-  res.json(data);
-});
+    connection.query(query, async (err, results) => {
+        if (err) {
+            console.error('Error fetching data from database:', err.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
 
-app.get('/getdetails', async (req, res) => {
-  const { contractAddress, walletAddress } = req.query;
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No data found' });
+        }
 
-  if (!contractAddress || !walletAddress) {
-    return res.status(400).json({ error: 'Missing contractAddress or walletAddress parameter' });
-  }
+        const holderMap = {};
 
-  try {
-    const transactions = await fetchTransactions(contractAddress);
+        for (const result of results) {
+            const { address, house: contractAddress, storedTokenBalance } = result;
+            const tokenBalanceUrl = `https://blockscoutapi.hekla.taiko.xyz/api?module=account&action=tokenbalance&contractaddress=${contractAddress}&address=${address}`;
 
-    if (transactions.length === 0) {
-      return res.status(404).json({ message: 'No transactions found for the given contract and wallet address' });
-    }
-    const filteredTransactions = transactions.filter(tx =>
-      tx.to.toLowerCase() === walletAddress.toLowerCase() ||
-      tx.from.toLowerCase() === walletAddress.toLowerCase()
-    );
+            try {
+                const tokenBalanceResponse = await axios.get(tokenBalanceUrl);
+                const fetchedTokenBalance = parseInt(tokenBalanceResponse.data.result || '0', 10); 
+                if (holderMap[address]) {
+                    holderMap[address].aggregatepoints += fetchedTokenBalance;
+                    holderMap[address].houses.push({
+                        house: contractAddress,
+                        tokenBalance: fetchedTokenBalance
+                    });
+                } else {
+                    holderMap[address] = {
+                        address,
+                        aggregatepoints: fetchedTokenBalance,
+                        houses: [{
+                            house: contractAddress,
+                            tokenBalance: fetchedTokenBalance
+                        }]
+                    };
+                }
 
-    res.json({
-      totalCount: filteredTransactions.length,
-      transactions: filteredTransactions
+                // Compare fetched token balance with stored totalmint value in the DB
+                if (fetchedTokenBalance > parseInt(storedTokenBalance || '0', 10)) {
+                    // Update the 'totalmint' field with the new, greater token balance
+                    const updateQuery = `
+                        UPDATE taikocampaign
+                        SET totalmint = ?
+                        WHERE address = ? AND house = ?
+                    `;
+                    connection.query(updateQuery, [fetchedTokenBalance, address, contractAddress], (updateErr) => {
+                        if (updateErr) {
+                            console.error(`Error updating token balance for ${address} and ${contractAddress}:`, updateErr.stack);
+                        } else {
+                            console.log(`Updated totalmint for ${address} at ${contractAddress} to ${fetchedTokenBalance}`);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(`Error fetching balance for ${address} and ${contractAddress}:`, error);
+            }
+        }
+
+        const aggregatedData = Object.values(holderMap);
+
+        res.status(200).json({
+            aggregatedData
+        });
     });
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching transactions' });
-  }
-});
-
-// Enndpoint to fetch mint txn per address for * collection
-app.get('/fetchminttxn', async (req, res) => {
-  try {
-    const contracts = await fetchCollectionDetails();
-
-    const result = [];
-
-    for (const contract of contracts.contracts) {
-      const { address: contractAddress, holders } = contract;
-
-      for (const holder of holders) {
-        const details = await fetchTransactions(contractAddress);
-
-        // Filter transactions for the current holder
-        const holderTransactions = details.filter(tx =>
-          tx.to.toLowerCase() === holder.toLowerCase() ||
-          tx.from.toLowerCase() === holder.toLowerCase()
-        );
-
-        if (holderTransactions.length > 0) {
-          result.push({
-            contractAddress,
-            holder,
-            totalCount: holderTransactions.length,
-            transactions: holderTransactions
-          });
-        }
-      }
-    }
-
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching mint transactions' });
-  }
-});
-
-// get collector 
-
-async function fetchMintCreatorTransactions() {
-  try {
-    const response = await axios.get('http://localhost:6000/fetchminttxn');
-    const data = response.data;
-    const collectorPoints = {};
-
-    data.forEach(contract => {
-      contract.transactions.forEach(txn => {
-        const holder = txn.from.toLowerCase();
-        if (!collectorPoints[holder]) {
-          collectorPoints[holder] = { points: 0, collections: {} };
-        }
-        if (!collectorPoints[holder].collections[contract.contractAddress]) {
-          collectorPoints[holder].collections[contract.contractAddress] = 0;
-        }
-        collectorPoints[holder].points += 1;
-        collectorPoints[holder].collections[contract.contractAddress] += 1;
-      });
-    });
-
-    const sortedCollectors = Object.entries(collectorPoints).sort((a, b) => b[1].points - a[1].points);
-
-    return sortedCollectors.map(([holder, info], index) => ({
-      rank: index + 1,
-      wallet: holder,
-      points: info.points,
-      contractInteracted: Object.keys(info.collections).length, // Count distinct contract addresses
-      collections: Object.entries(info.collections).map(([contractAddress, count]) => ({
-        contractAddress,
-        mints: count
-      }))
-    }));
-  } catch (error) {
-    console.error('Error fetching mint transactions:', error);
-    throw error;
-  }
-}
-
-
-// Route to get creator ranking
-app.get('/getcreatorranking', async (req, res) => {
-try {
-  const rankings = await fetchMintCreatorTransactions();
-  res.json(rankings);
-} catch (error) {
-  res.status(500).json({ error: 'Failed to fetch creator rankings' });
-}
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+  app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+  });
+  

@@ -376,7 +376,7 @@ const mintNFT = async () => {
         };
 
         // conditional polling trigger based on chainId
-        const chainId = 167000;
+        const chainId = 167009;
         console.log(props.collection.chain_id);
         if (chainId === props.collection.chain_id) {
          // trigger the polling

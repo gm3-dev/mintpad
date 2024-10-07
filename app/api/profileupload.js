@@ -4,17 +4,16 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const axios = require('axios');
 const app = express();
-const port = 6000;
-//test
+const port = 5050;
+
 app.use(bodyParser.json());
-const API_KEY = 'APUVAUXICC2927IVW8RDN4W6Q6FWTFNHV8';
-const BLOCKSCOUT_API_URL = 'https://blockscoutapi.mainnet.taiko.xyz/api';
+const API_KEY = 'APUVAUXICC2927IVW8RDN4W6Q6FWTFNHV8'; 
+// const BLOCKSCOUT_API_URL = 'https://blockscoutapi.hekla.taiko.xyz/api';
 app.use(cors({
-    origin: 'http://127.0.0.1:8000',
-    methods: ['POST','GET'],
+    origin: ['http://127.0.0.1:5050', 'http://localhost:3000'], // Allow both localhost and 127.0.0.1
+    methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type'],
 }));
-
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'forge',
@@ -31,279 +30,90 @@ connection.connect((err) => {
 });
 
 
-app.post('/api/uploadImage', (req, res) => {
-    const { name, base64Image } = req.body;
+/* Get's post request from front-end and create campaign details on database(Not needed as can query from existing db using chainid with respect to timeline) */
+// app.post('/createcampaign', (req, res) => {
+//     const { symbol, name, feeRecipient } = req.body;
 
-    if (!name || !base64Image) {
-        return res.status(400).json({ error: 'Name and base64Image are required' });
-    }
+//     if (!symbol || !name || !feeRecipient) {
+//         return res.status(400).json({ error: 'symbol, name, and feeRecipient are required' });
+//     }
 
-    const query = `UPDATE users SET profile_picture = ? WHERE name = ?`;
+//     // Check if the campaign already exists
+//     const checkQuery = 'SELECT * FROM taikocampaigncollection WHERE symbol = ?';
 
-    connection.query(query, [base64Image, name], (err, results) => {
-        if (err) {
-            console.error('Error updating profile picture: ' + err.stack);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-        console.log(`Profile picture updated for user: ${name}`);
-        res.status(200).json({ message: 'Profile picture updated successfully' });
-    });
-});
+//     connection.query(checkQuery, [symbol], (err, results) => {
+//         if (err) {
+//             console.error('Error checking campaign existence: ' + err.stack);
+//             return res.status(500).json({ error: 'Internal server error' });
+//         }
 
-// Get total number of mint from contracts
+//         if (results.length > 0) {
+//             // Campaign already exists
+//             return res.status(409).json({ error: 'Campaign already exists' });
+//         } else {
+//             // Insert new campaign into taikocampaigncollection
+//             const insertQuery = 'INSERT INTO taikocampaigncollection (symbol, name, feeRecipient) VALUES (?, ?, ?)';
+//             connection.query(insertQuery, [symbol, name, feeRecipient], (err) => {
+//                 if (err) {
+//                     console.error('Error creating campaign collection: ' + err.stack);
+//                     return res.status(500).json({ error: 'Internal server error' });
+//                 }
+//                 console.log(`Campaign collection created: Symbol: ${symbol}, Name: ${name}, Fee Recipient: ${feeRecipient}`);
+//                 res.status(200).json({ message: 'Campaign collection created successfully' });
+//             });
+//         }
+//     });
+// });
 
-async function getTransactions(contractAddress, walletAddress) {
-  try {
-    const response = await axios.get(`${BLOCKSCOUT_API_URL}?module=account&action=txlist&address=${contractAddress}`);
-
-    if (response.data && response.data.result) {
-      const transactions = response.data.result;
-      const filteredTransactions = transactions.filter(tx =>
-        tx.from.toLowerCase() === walletAddress.toLowerCase() ||
-        tx.to.toLowerCase() === walletAddress.toLowerCase()
-      );
-      const transactionCount = filteredTransactions.length;
-
-      return transactionCount;
-    } else {
-      console.error('No transactions found');
-      return 0;
-    }
-  } catch (error) {
-    console.error('Error fetching transactions:', error);
-    return 0;
-  }
-}
-
-app.get('/getxn/:walletAddress/:contractAddress', async (req, res) => {
-  const { contractAddress, walletAddress } = req.params;
-
-  try {
-    const count = await getTransactions(contractAddress, walletAddress);
-    res.json({ count });
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching transactions' });
-  }
-});
-// Endpoint to save player details
+/* Get's post request from front-end and store the data on the database */
 app.post('/api/playerdetails', (req, res) => {
-  const { address, house, housetype, housename, latestactivity } = req.body;
+    const { address, house, housetype, housename, latestactivity } = req.body;
 
-  // Validate input
-  if (!address || !house || !housetype || !housename || !latestactivity) {
-    return res.status(400).json({ error: 'address, house, housetype, housename, and latestactivity are required' });
-  }
-
-  // Query to check if the address already exists
-  const checkQuery = 'SELECT totalmint FROM taikocampaign WHERE address = ?';
-
-  connection.query(checkQuery, [address], (err, results) => {
-    if (err) {
-      console.error('Error checking player details:', err.stack);
-      return res.status(500).json({ error: 'Internal server error' });
+    // Validate input
+    if (!address || !house || !housetype || !housename || !latestactivity) {
+        return res.status(400).json({ error: 'address, house, housetype, housename, and latestactivity are required' });
     }
 
-    if (results.length > 0) {
-      // Player exists, increment totalmint
-      const currentTotalMint = parseInt(results[0].totalmint, 10) || 0;
-      const newTotalMint = currentTotalMint + 1;
-
-      const updateQuery = 'UPDATE taikocampaign SET house = ?, housetype = ?, housename = ?, totalmint = ?, latestactivity = ? WHERE address = ?';
-      connection.query(updateQuery, [house, housetype, housename, newTotalMint, latestactivity, address], (err) => {
+    // Query to check if the combination of address and house exists
+    const checkQuery = 'SELECT * FROM taikocampaign WHERE address = ? AND house = ?';
+    
+    connection.query(checkQuery, [address, house], (err, results) => {
         if (err) {
-          console.error('Error updating player details:', err.stack);
-          return res.status(500).json({ error: 'Internal server error' });
-        }
-        console.log(`Player details updated: ${address}, ${house}, ${housetype}, ${housename}, totalmint: ${newTotalMint}`);
-        res.status(200).json({ message: 'Player details updated successfully' });
-      });
-    } else {
-      // Player does not exist, insert new row with totalmint set to 1
-      const insertQuery = 'INSERT INTO taikocampaign (address, house, housetype, housename, totalmint, latestactivity) VALUES (?, ?, ?, ?, 1, ?)';
-      connection.query(insertQuery, [address, house, housetype, housename, latestactivity], (err) => {
-        if (err) {
-          console.error('Error saving player details:', err.stack);
-          return res.status(500).json({ error: 'Internal server error' });
-        }
-        console.log(`Player details saved: ${address}, ${house}, ${housetype}, ${housename}, totalmint: 1`);
-        res.status(200).json({ message: 'Player details saved successfully' });
-      });
-    }
-  });
-});
-
-
-
-
-// Endpoint to create campaign collection
-app.post('/createcampaign', (req, res) => {
-    const { symbol, name, feeRecipient } = req.body;
-
-    if (!symbol || !name || !feeRecipient) {
-        return res.status(400).json({ error: 'symbol, name, and feeRecipient are required' });
-    }
-
-    // Check if the campaign already exists
-    const checkQuery = 'SELECT * FROM taikocampaigncollection WHERE symbol = ?';
-
-    connection.query(checkQuery, [symbol], (err, results) => {
-        if (err) {
-            console.error('Error checking campaign existence: ' + err.stack);
+            console.error('Error checking player details:', err.stack);
             return res.status(500).json({ error: 'Internal server error' });
         }
 
-        if (results.length > 0) {
-            // Campaign already exists
-            return res.status(409).json({ error: 'Campaign already exists' });
-        } else {
-            // Insert new campaign into taikocampaigncollection
-            const insertQuery = 'INSERT INTO taikocampaigncollection (symbol, name, feeRecipient) VALUES (?, ?, ?)';
-            connection.query(insertQuery, [symbol, name, feeRecipient], (err) => {
+        if (results.length === 0) {
+            // No existing row with this address and house, insert a new row
+            const insertQuery = 'INSERT INTO taikocampaign (address, house, housetype, housename, totalmint, latestactivity) VALUES (?, ?, ?, ?, 1, ?)';
+            connection.query(insertQuery, [address, house, housetype, housename, latestactivity], (err) => {
                 if (err) {
-                    console.error('Error creating campaign collection: ' + err.stack);
+                    console.error('Error saving player details:', err.stack);
                     return res.status(500).json({ error: 'Internal server error' });
                 }
-                console.log(`Campaign collection created: Symbol: ${symbol}, Name: ${name}, Fee Recipient: ${feeRecipient}`);
-                res.status(200).json({ message: 'Campaign collection created successfully' });
+                console.log(`Player details saved: ${address}, ${house}, ${housetype}, ${housename}, totalmint: 1`);
+                res.status(200).json({ message: 'Player details saved successfully' });
+            });
+        } else {
+            // Row with this combination exists, increment the totalMint
+            const updateQuery = 'UPDATE taikocampaign SET totalmint = totalmint + 1, latestactivity = ? WHERE address = ? AND house = ?';
+            connection.query(updateQuery, [latestactivity, address, house], (err) => {
+                if (err) {
+                    console.error('Error updating player details:', err.stack);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+                console.log(`TotalMint incremented for: ${address}, ${house}`);
+                res.status(200).json({ message: 'TotalMint incremented successfully' });
             });
         }
     });
 });
 
-app.get('/collectiondetails', (req, res) => {
-  //update
-  // Query to get all collection details
-  //more
-  const query = 'SELECT name, symbol, type, address FROM collections WHERE chain_id = 167000 AND created_at > \'2024-07-28 00:00:00\'';
-
-  connection.query(query, (err, results) => {
-      if (err) {
-          console.error('Error fetching collection details: ' + err.stack);
-          return res.status(500).json({ error: 'Internal server error' });
-      }
-
-      res.status(200).json(results);
-  });
-});
-
-
-app.get('/getdetailstopone', (req, res) => {
-    // Query to fetch all data from 'taikocampaign' table
-    connection.query('SELECT * FROM taikocampaign', (error, results, fields) => {
-      if (error) {
-        console.error('Error fetching data from taikocampaign table:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        return;
-      }
-
-      // Find the record with the highest totalmint
-      let highestMintRecord = null;
-      results.forEach((row) => {
-        if (!highestMintRecord || parseInt(row.totalmint) > parseInt(highestMintRecord.totalmint)) {
-          highestMintRecord = row;
-        }
-      });
-
-      // Prepare response
-      let response = {};
-      if (highestMintRecord) {
-        response = {
-          data: highestMintRecord
-        };
-      } else {
-        response = {
-          message: 'No records found in the taikocampaign table.'
-        };
-      }
-
-      // Send response
-      res.json(response);
-    });
-  });
-
-  app.get('/getdetails', async (req, res) => {
-    // Default limit if not specified in query params
-    const limit = req.query.limit ? parseInt(req.query.limit) : 20;
-
-    try {
-        const [results] = await connection.query(`
-            SELECT * FROM taikocampaign
-            ORDER BY totalmint DESC
-            LIMIT ${limit}
-        `);
-
-        const response = results.length > 0
-            ? results
-                .sort((a, b) => b.totalmint - a.totalmint)
-                .map((row, index) => ({
-                    rank: index + 1,
-                    wallet: row.address,
-                    username: row.username,
-                    rankScore: index + 1,
-                    nfts: row.totalmint,
-                    labels: row.categories,
-                    avatar: `https://res.cloudinary.com/twdin/image/upload/v1719839745/avatar-example_mc0r1g.png`,
-                    opensea: row.opensea,
-                    twitter: row.twitter,
-                    blockscan: row.Blockscan,
-                    profile: row.profilepic,
-                    activity: row.latestactivity,
-                }))
-            : { message: 'No records found in the taikocampaign table.' };
-
-        res.json(response);
-    } catch (error) {
-        console.error('Error fetching data from taikocampaign table:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Get holder address along with contract address
-
-async function fetchCollectionDetails() {
-  try {
-      const response = await axios.get(collectionDetailsUrl);
-      const collections = response.data;
-
-      const contracts = [];
-
-      let counter = 1;
-
-      for (const collection of collections) {
-          const contractAddress = collection.address;
-
-          const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=10`;
-          const tokenHoldersResponse = await axios.get(tokenHoldersUrl);
-
-          const tokenHolders = tokenHoldersResponse.data.result;
-          contracts.push({
-              number: counter,
-              address: contractAddress,
-              holders: tokenHolders.map(holder => holder.address)
-          });
-
-          counter++;
-      }
-      return {
-          contracts: contracts
-      };
-  } catch (error) {
-      console.error('Error fetching data:', error);
-      return { error: 'Failed to fetch data' };
-  }
-}
-
-app.get('/getholderaddress', async (req, res) => {
-  const data = await fetchCollectionDetails();
-  res.json(data);
-});
-
-  //testcase hekla
-
+    
+  /* testcase hekla */
   app.get('/checktxnhekla/:txnhash', async (req, res) => {
     const txnHash = req.params.txnhash;
-    const apiUrl = `https://blockscoutapi.mainnet.taiko.xyz/api?module=transaction&action=gettxreceiptstatus&txhash=${txnHash}`;
-
+    const apiUrl = `https://blockscoutapi.hekla.taiko.xyz/api?module=transaction&action=gettxreceiptstatus&txhash=${txnHash}`;
 
     try {
         const response = await axios.get(apiUrl);
@@ -320,373 +130,411 @@ app.get('/getholderaddress', async (req, res) => {
     }
 });
 
-
-
-// Main-net ready api endpoint
-
+/* testcase mainnet */
 app.get('/checktxn/:txnhash', async (req, res) => {
-  const { txnhash } = req.params;
-
-  try {
-    const response = await axios.get('https://api.taikoscan.io/api', {
-      params: {
-        module: 'transaction',
-        action: 'gettxreceiptstatus',
-        txhash: txnhash,
-        apikey: API_KEY,
-      },
-    });
-
-    const resultStatus = response.data.result.status;
-
-    if (resultStatus === '0') {
-      res.status(200).json({ status: 'failed' });
-    } else if (resultStatus === '1') {
-      res.status(200).json({ status: 'success' });
-    } else {
-      res.status(200).json({ status: 'unknown' }); // Handle other statuses as needed
-    }
-  } catch (error) {
-    console.error('Error fetching transaction status:', error);
-    res.status(500).json({ error: 'Failed to fetch transaction status' });
-  }
-});
-
-
-app.get('/totalTokens/:contractAddress', async (req, res) => {
-  const { contractAddress } = req.params;
-  try {
-      const response = await axios.get(`${BASE_URL}/?module=token&action=getToken&contractaddress=${contractAddress}`);
-      const totalTokens = response.data.result;
-      res.json({ totalTokens });
-  } catch (error) {
-      console.error('Error fetching total tokens:', error);
-      res.status(500).json({ error: 'Failed to fetch total tokens' });
-  }
-});
-
-app.get('/getprofile/:address', (req, res) => {
-  const address = req.params.address;
-
-  // Query to fetch profilepic data
-  const query = 'SELECT profilepic FROM taikocampaign WHERE address = ?';
-
-  connection.query(query, [address], (error, results, fields) => {
-      if (error) {
-          console.error('Error querying database: ', error);
-          res.status(500).json({ error: 'Error querying database' });
-          return;
-      }
-
-      if (results.length > 0 && results[0].profilepic) {
-          const profileData = {
-              data: Array.from(results[0].profilepic)
-          };
-          res.json(profileData);
+    const { txnhash } = req.params;
+  
+    try {
+      const response = await axios.get('https://api.taikoscan.io/api', {
+        params: {
+          module: 'transaction',
+          action: 'gettxreceiptstatus',
+          txhash: txnhash,
+          apikey: API_KEY,
+        },
+      });
+  
+      const resultStatus = response.data.result.status;
+  
+      if (resultStatus === '0') {
+        res.status(200).json({ status: 'failed' });
+      } else if (resultStatus === '1') {
+        res.status(200).json({ status: 'success' });
       } else {
-          res.status(404).json({ error: 'No profile picture found' });
+        res.status(200).json({ status: 'unknown' }); // Handle other statuses as needed
       }
+    } catch (error) {
+      console.error('Error fetching transaction status:', error);
+      res.status(500).json({ error: 'Failed to fetch transaction status' });
+    }
   });
+  /* Get all the tokens mints from distinct wallet address wrt to house(diff contrac address) */
+  app.get('/api/gettotalmint', (req, res) => {
+    const query = `
+        SELECT address, SUM(totalmint) AS totalMint 
+        FROM taikocampaign 
+        GROUP BY address
+    `;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching mint count:', err.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No data found' });
+        }
+
+        res.status(200).json(results); // Return all results
+    });
 });
+/* Get all the collecion deployed */
+app.get('/api/getcollectionaddress', (req, res) => {
+    const query = `
+        SELECT DISTINCT house 
+        FROM taikocampaign
+    `;
 
-app.get('/checkmost', async (req, res) => {
-  try {
-    // Fetch all addresses, name, type, symbol, and totalSupply from collections table
-    connection.query('SELECT address, name, type, symbol FROM collections', async (error, results, fields) => {
-      if (error) {
-        console.error('Error fetching data from collections table:', error);
-        res.status(500).json({ error: 'Internal server error' });
-        return;
-      }
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching houses:', err.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
 
-      // Array to store results
-      const tokenInfos = [];
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No data found' });
+        }
 
-      // Iterate over each row in results
-      for (let i = 0; i < results.length; i++) {
-        const { address, name, type, symbol } = results[i];
-        const apiUrl = `https://blockscoutapi.mainnet.taiko.xyz/api?module=token&action=getToken&contractaddress=${address}`;
-
+        res.status(200).json(results); 
+    });
+});
+/*  Get the top mints
+    Which means the address that minted every collecion available.
+ */
+    app.get('/api/getranksmostmint', async (req, res) => {
         try {
-          const response = await axios.get(apiUrl);
-          const tokenInfo = response.data.result; // Adjust according to API response structure
+            // Fetch data from the gettotalmint API
+            const response = await axios.get('http://localhost:5050/api/gettotalmint');
+            
+            const results = response.data;
+    
+            if (!results || results.length === 0) {
+                return res.status(404).json({ message: 'No data found' });
+            }
+    
+            // Create a map to hold each address's total mints and houses
+            const rankedResultsMap = {};
+    
+            // Iterate through each result and populate the map
+            for (const item of results) {
+                const { address, totalMint } = item;
+    
+                if (!rankedResultsMap[address]) {
+                    rankedResultsMap[address] = {
+                        address,
+                        totalMint: 0,
+                        houses: []
+                    };
+                }
+    
+                // Aggregate totalMint
+                rankedResultsMap[address].totalMint += totalMint;
+    
+                const housesQuery = `
+                    SELECT house, houseName, totalMint 
+                    FROM taikocampaign 
+                    WHERE address = ?;
+                `;
+                const housesResults = await new Promise((resolve, reject) => {
+                    connection.query(housesQuery, [address], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
+    
+                // Add houses to the map as formatted strings
+                for (const house of housesResults) {
+                    rankedResultsMap[address].houses.push(
+                        `${house.house}, ${house.houseName}, ${house.totalMint}` // Format as "address, name, points"
+                    );
+                }
+            }
+    
+            // Convert the map to an array and sort by totalMint
+            const rankedResults = Object.values(rankedResultsMap)
+                .sort((a, b) => b.totalMint - a.totalMint) // Sort by totalMint in descending order
+                .map((item, index) => ({
+                    rank: index + 1,
+                    holder: item.address,
+                    totalMint: item.totalMint,
+                    houses: item.houses // Houses are now formatted strings
+                }));
+    
+            res.status(200).json(rankedResults);
+        } catch (err) {
+            console.error('Error fetching ranks:', err.message);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+    
+/*  Get the top creator
+    Which means the address that created the most successfull collection.
+    Reverse the address of the contract creator of the top mints
+ */
+    app.get('/api/gettopcreator', async (req, res) => {
+        try {
+            // Fetch data from the gettotalmint API
+            const responseFromApi = await axios.get('http://localhost:5050/api/gettotalmint');
+            const results = responseFromApi.data;
+    
+            if (!results || results.length === 0) {
+                return res.status(404).json({ message: 'No data found' });
+            }
+    
+            // Create a map to hold each address's total mints and houses
+            const creatorMap = {};
+    
+            // Iterate through each result and populate the map
+            for (const item of results) {
+                const { address, totalMint } = item;
+    
+                if (!creatorMap[address]) {
+                    creatorMap[address] = {
+                        address,
+                        totalMint: Number(totalMint), // Ensure totalMint is a number
+                        houses: []
+                    };
+                } else {
+                    // Only set totalMint if it's not already there (to avoid duplication)
+                    creatorMap[address].totalMint += Number(totalMint);
+                }
+    
+                // Fetch houses interacted for the current address
+                const housesQuery = `
+                    SELECT house, houseName, totalMint 
+                    FROM taikocampaign 
+                    WHERE address = ?;
+                `;
+                const housesResults = await new Promise((resolve, reject) => {
+                    connection.query(housesQuery, [address], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
+    
+                // Add houses to the map
+                for (const house of housesResults) {
+                    const { house: houseAddress, houseName, totalMint: houseMint } = house;
+    
+                    // Push house details into the creator map
+                    creatorMap[address].houses.push({
+                        address: houseAddress,
+                        name: houseName,
+                        points: houseMint 
+                    });
+                }
+            }
+    
+            // Convert the map to an array
+            const creatorResults = Object.values(creatorMap);
+    
+            // Sort creators based on totalMint in descending order
+            const sortedCreators = creatorResults.sort((a, b) => b.totalMint - a.totalMint);
+    
+            // Prepare the response, formatting the houses and adding ranks
+            const formattedCreators = sortedCreators.map((creator, index) => ({
+                rank: index + 1, // Assign rank based on index
+                address: creator.address,
+                totalMint: creator.totalMint,
+                houses: creator.houses.map(house => 
+                    `${house.address}, ${house.name}, ${house.points}`
+                ) // House addresses and names formatted as required
+            }));
+    
+            res.status(200).json(formattedCreators);
+        } catch (err) {
+            console.error('Error fetching top creator:', err.message);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    });
+    
+    /*  Get the top collector
+        Which means an address that collects every unique NFTs
+        available (Not on basis of most collection but collecting all unique 1:1 collection)
+ */
+        app.get('/api/gettopcollector', async (req, res) => {
+            try {
+                // Step 1: Get all collectors
+                const collectorQuery = `
+                    SELECT 
+                        address, 
+                        COUNT(DISTINCT house) AS houseCount, 
+                        SUM(totalMint) AS totalMint
+                    FROM 
+                        taikocampaign
+                    GROUP BY 
+                        address;
+                `;
+                
+                const collectorResults = await new Promise((resolve, reject) => {
+                    connection.query(collectorQuery, (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
+        
+                if (collectorResults.length === 0) {
+                    return res.status(404).json({ message: 'No collectors found' });
+                }
+        
+                // Create a map to hold each address's total mints and houses
+                const collectorMap = {};
+        
+                // Iterate through each collector result and populate the map
+                for (const collector of collectorResults) {
+                    const { address, totalMint } = collector;
+        
+                    if (!collectorMap[address]) {
+                        collectorMap[address] = {
+                            address,
+                            totalMint: Number(totalMint), // Ensure totalMint is a number
+                            houses: []
+                        };
+                    } else {
+                        // Accumulate totalMint if address already exists
+                        collectorMap[address].totalMint += Number(totalMint);
+                    }
+        
+                    // Fetch houses and their points for the current address
+                    const housesQuery = `
+                        SELECT house, houseName, totalMint AS points 
+                        FROM taikocampaign 
+                        WHERE address = ?;
+                    `;
+                    const housesResults = await new Promise((resolve, reject) => {
+                        connection.query(housesQuery, [address], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
+                    });
+        
+                    // Add houses to the map
+                    for (const house of housesResults) {
+                        const { house: houseAddress, houseName, points } = house;
+        
+                        // Push house details into the collector map
+                        collectorMap[address].houses.push({
+                            address: houseAddress,
+                            name: houseName,
+                            points // Include points for the house
+                        });
+                    }
+                }
+        
+                // Convert the map to an array
+                const collectorResultsArray = Object.values(collectorMap);
+        
+                // Sort collectors based on totalMint in descending order
+                collectorResultsArray.sort((a, b) => b.totalMint - a.totalMint);
+        
+                // Prepare the response, formatting the houses and adding ranks
+const formattedCollectors = collectorResultsArray.map((collector, index) => ({
+    rank: index + 1, // Assign rank based on index
+    address: collector.address,
+    totalMint: collector.totalMint,
+    houses: collector.houses.map(house => 
+        `${house.address}, ${house.name}, ${house.points}` // Format houses as required
+    ) // Now each house will be a string
+}));
 
-          if (tokenInfo) {
-            tokenInfos.push({
-              address,
-              name,
-              type,
-              symbol,
-              tokenInfo // Include token information
+        
+                res.status(200).json(formattedCollectors);
+            } catch (err) {
+                console.error('Error fetching collectors:', err.message);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+        });
+        
+  
+        app.get('/gettaikocollection', (req, res) => {
+            const query = `
+                SELECT * 
+                FROM collections
+                WHERE chain_id = 167009
+                ORDER BY created_at DESC
+                LIMIT 15
+            `;
+        
+            connection.query(query, (err, results) => {
+                if (err) {
+                    console.error('Error fetching collections:', err.stack);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+        
+                if (results.length === 0) {
+                    return res.status(404).json({ message: 'No data found' });
+                }
+        
+                res.status(200).json(results); 
             });
-          } else {
-            tokenInfos.push({
-              address,
-              name,
-              type,
-              symbol,
-              message: "Token not found"
-            });
-          }
-        } catch (error) {
-          console.error(`Error fetching token information for address ${address}:`, error);
-          tokenInfos.push({
-            address,
-            name,
-            type,
-            symbol,
-            error: 'Failed to fetch token information'
-          });
+        });
+
+      /* Get all collections ranked by total mints */
+app.get('/topcollection', (req, res) => {
+    const query = `
+        SELECT house, COUNT(house) AS house_count, SUM(CAST(totalmint AS UNSIGNED)) AS total_mint
+        FROM taikocampaign
+        GROUP BY house
+        ORDER BY total_mint DESC;  -- Order by total_mint for ranking
+    `;
+    
+    connection.query(query, (error, results) => {
+        if (error) {
+            console.error('Error fetching top collections: ' + error);
+            return res.status(500).json({ error: 'Database query error' });
         }
-      }
+        
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No houses found' });
+        }
 
+        // Add rank to each collection based on total_mint
+        const rankedResults = results.map((item, index) => ({
+            ...item,
+            rank: index + 1 // Rank starts at 1
+        }));
 
-      tokenInfos.sort((a, b) => {
-
-        const totalSupplyA = Number(a.tokenInfo?.totalSupply) || 0;
-        const totalSupplyB = Number(b.tokenInfo?.totalSupply) || 0;
-        return totalSupplyB - totalSupplyA;
-      });
-
-
-      const top5Tokens = tokenInfos.slice(0, 5);
-
-      res.json({ tokenInfos: top5Tokens });
+        res.json(rankedResults); // Return all houses with their count, total mint, and rank
     });
-  } catch (error) {
-    console.error('Error in /checkmost endpoint:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
 });
 
+/* Get the permalink of the contract address
+    Pass the contract address and get the permalink for the 
+    mint section on the site
+*/
+       
+app.get('/api/getpermalink/address/:address', (req, res) => {
+    const address = req.params.address; // Get the address from the route parameter
+    const chainId = 167009; // Set the chain ID
 
-async function fetchTransactions(contractAddress) {
-  try {
-    const response = await axios.get(`${BLOCKSCOUT_API_URL}?module=account&action=txlist&address=${contractAddress}`);
-    // console.log('API Response:', response.data);
-// Too much of log
-
-    if (!response.data || !response.data.result || !Array.isArray(response.data.result)) {
-      throw new Error('Invalid API response structure');
+    // Check if the address is provided
+    if (!address) {
+        return res.status(400).json({ error: 'Address is required' });
     }
 
-    const transactions = response.data.result
-      .filter(tx => tx.input.startsWith('0x84bb1e42')) // Filter transactions that have input/method of '0x84bb1e42'
-      .map(tx => ({
-        to: tx.to,
-        from: tx.from,
-        // hash: tx.hash, // Add hash just if needed to verify
-        input: tx.input.substring(0, 10) // Display first 10 characters
-      }));
+    const query = `
+        SELECT permalink 
+        FROM collections 
+        WHERE address = ? AND chain_id = ?
+    `;
 
-    return transactions;
-  } catch (error) {
-    console.error('Error fetching transactions:', error.message);
-    throw error;
-  }
-}
+    connection.query(query, [address, chainId], (err, results) => {
+        if (err) {
+            console.error('Error fetching permalink:', err.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
 
-const collectionDetailsUrl = 'http://127.0.0.1:6000/collectiondetails';
-const tokenHoldersBaseUrl = 'https://blockscoutapi.mainnet.taiko.xyz/api';
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No permalink found for the given address' });
+        }
 
-// Fetch collection details and token holders
-async function fetchCollectionDetails() {
-  try {
-    const response = await axios.get(collectionDetailsUrl);
-    const collections = response.data;
-
-    const contracts = [];
-
-    let counter = 1;
-
-    for (const collection of collections) {
-      const contractAddress = collection.address;
-
-      const tokenHoldersUrl = `${tokenHoldersBaseUrl}?module=token&action=getTokenHolders&contractaddress=${contractAddress}&page=1&offset=10`;
-      const tokenHoldersResponse = await axios.get(tokenHoldersUrl);
-
-      const tokenHolders = tokenHoldersResponse.data.result;
-      contracts.push({
-        number: counter,
-        address: contractAddress,
-        holders: tokenHolders.map(holder => holder.address)
-      });
-
-      counter++;
-    }
-    return {
-      contracts: contracts
-    };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return { error: 'Failed to fetch data' };
-  }
-}
-
-app.get('/getholderaddress', async (req, res) => {
-  const data = await fetchCollectionDetails();
-  res.json(data);
-});
-
-app.get('/getdetails', async (req, res) => {
-  const { contractAddress, walletAddress } = req.query;
-
-  if (!contractAddress || !walletAddress) {
-    return res.status(400).json({ error: 'Missing contractAddress or walletAddress parameter' });
-  }
-
-  try {
-    const transactions = await fetchTransactions(contractAddress);
-
-    if (transactions.length === 0) {
-      return res.status(404).json({ message: 'No transactions found for the given contract and wallet address' });
-    }
-    const filteredTransactions = transactions.filter(tx =>
-      tx.to.toLowerCase() === walletAddress.toLowerCase() ||
-      tx.from.toLowerCase() === walletAddress.toLowerCase()
-    );
-
-    res.json({
-      totalCount: filteredTransactions.length,
-      transactions: filteredTransactions
+        res.status(200).json(results[0]); // Return the first result (the permalink)
     });
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching transactions' });
-  }
-});
-
-// Enndpoint to fetch mint txn per address for * collection
-app.get('/fetchminttxn', async (req, res) => {
-  try {
-    const contracts = await fetchCollectionDetails();
-
-    const result = [];
-
-    for (const contract of contracts.contracts) {
-      const { address: contractAddress, holders } = contract;
-
-      for (const holder of holders) {
-        const details = await fetchTransactions(contractAddress);
-
-        // Filter transactions for the current holder
-        const holderTransactions = details.filter(tx =>
-          tx.to.toLowerCase() === holder.toLowerCase() ||
-          tx.from.toLowerCase() === holder.toLowerCase()
-        );
-
-        if (holderTransactions.length > 0) {
-          result.push({
-            contractAddress,
-            holder,
-            totalCount: holderTransactions.length,
-            transactions: holderTransactions
-          });
-        }
-      }
-    }
-
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching mint transactions' });
-  }
 });
 
 
-
-// this will just fetch the total count by an address
-
-app.get('/fetchviacontract', async (req, res) => {
-  try {
-    const contracts = await fetchCollectionDetails();
-
-    const holderTransactionMap = new Map();
-
-    for (const contract of contracts.contracts) {
-      const { address: contractAddress, holders } = contract;
-
-      for (const holder of holders) {
-        const details = await fetchTransactions(contractAddress);
-
-        // Filter transactions for the current holder
-        const holderTransactions = details.filter(tx =>
-          tx.to.toLowerCase() === holder.toLowerCase() ||
-          tx.from.toLowerCase() === holder.toLowerCase()
-        );
-
-        if (holderTransactions.length > 0) {
-          if (!holderTransactionMap.has(holder)) {
-            holderTransactionMap.set(holder, { totalCount: 0, transactions: [] });
-          }
-
-          const holderData = holderTransactionMap.get(holder);
-          holderData.totalCount += holderTransactions.length;
-          holderData.transactions.push(...holderTransactions);
-        }
-      }
-    }
-
-    const result = Array.from(holderTransactionMap.entries()).map(([holder, data]) => ({
-      holder,
-      totalCount: data.totalCount,
-
-    }));
-
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Error fetching mint transactions' });
-  }
-});
-
-
-async function fetchTopCollectorList() {
-  try {
-    const response = await axios.get('http://localhost:6000/fetchminttxn');
-    const data = response.data;
-    const collectorPoints = {};
-
-    data.forEach(contract => {
-      contract.transactions.forEach(txn => {
-        const holder = txn.from.toLowerCase();
-        if (!collectorPoints[holder]) {
-          collectorPoints[holder] = { points: 0, collections: {} };
-        }
-        if (!collectorPoints[holder].collections[contract.contractAddress]) {
-          collectorPoints[holder].collections[contract.contractAddress] = 0;
-        }
-        collectorPoints[holder].points += 1;
-        collectorPoints[holder].collections[contract.contractAddress] += 1;
-      });
-    });
-
-    const sortedCollectors = Object.entries(collectorPoints).sort((a, b) => b[1].points - a[1].points);
-
-    const result = sortedCollectors.map(([holder, info], index) => ({
-      rank: index + 1,
-      holder,
-      points: info.points,
-      collections: Object.entries(info.collections).map(([contractAddress, count]) => ({
-        contractAddress,
-        mints: count
-      }))
-    }));
-
-    return result;
-  } catch (error) {
-    console.error('Error fetching mint transactions:', error);
-    throw error;
-  }
-}
-
-app.get('/topcollectorlist', async (req, res) => {
-  try {
-    const collectors = await fetchTopCollectorList();
-    res.json(collectors);
-  } catch (error) {
-    res.status(500).send('Error fetching mint transactions');
-  }
-});
-
-
-app.listen(port, () => {
+  app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

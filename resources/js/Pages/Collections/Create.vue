@@ -142,7 +142,6 @@ const deployContract = async () => {
         ]
         // console log blockchain
 
-
         let contractAddress = false
         try {
             if (form.type == 'ERC721') {
@@ -162,31 +161,6 @@ const deployContract = async () => {
             } else {
                 reportError(error)
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
-            }
-        }
-// so this applies to only taiko for now, change as per taiko mainnet chainid
-        if (currentBlockchain.chainId === 167000) {
-            try {
-                // Make API call to create campaign
-                const { symbol, name, feeRecipient } = form;
-                const response = await fetch('https://app.mintpad.co/createcampaign', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ symbol: form.symbol, name: form.name, feeRecipient: form.feeRecipient }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Campaign created successfully:', data.message);
-                messages.value.push({ type: 'success', message: 'Campaign created successfully!' });
-            } catch (error) {
-                handleError(error);
-                messages.value.push({ type: 'error', message: 'An error occurred while creating the campaign.' });
             }
         }
 
