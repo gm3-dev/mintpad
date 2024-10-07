@@ -1,15 +1,15 @@
 # FORGE CONFIG (DO NOT REMOVE!)
-include forge-conf/semjjonline.xyz/before/*;
+include forge-conf/mintpad.co/before/*;
 
 server {
     listen 80;
     listen [::]:80;
-    server_name semjjonline.xyz;
+    server_name mintpad.co;
     server_tokens off;
-    root /home/forge/semjjonline.xyz/public;
-    
+    root /home/forge/mintpad.co/public;
+
     add_header Strict-Transport-Security "max-age=31536000" always;
-    add_header Content-Security-Policy upgrade-insecure-requests;
+    add_header Content-Security-Policy "upgrade-insecure-requests";
 
     # FORGE SSL (DO NOT REMOVE!)
     # ssl_certificate;
@@ -29,220 +29,90 @@ server {
     charset utf-8;
 
     # FORGE CONFIG (DO NOT REMOVE!)
-    include forge-conf/semjjonline.xyz/server/*;
+    include forge-conf/mintpad.co/server/*;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
-    location /createcampaign {
-        proxy_pass http://localhost:6000/createcampaign;
+    # Exposing the new API endpoints
+    location /api/getcollectionaddress {
+        proxy_pass http://localhost:6000/api/getcollectionaddress;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
-    
-     location /startPolling {
-        proxy_pass http://localhost:3030/startPolling;
+
+    location /api/fetchcollectiondetails {
+        proxy_pass http://localhost:6000/api/fetchcollectiondetails;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
 
-    location /api/mostmint {
-        proxy_pass http://localhost:5000/mostmint;
+    location /api/gettopcollector {
+        proxy_pass http://localhost:5050/api/gettopcollector;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
 
-    location /api/topcreator {
-        proxy_pass http://localhost:5000/topcreator;
+    location /api/gettopcreator {
+        proxy_pass http://localhost:5050/api/gettopcreator;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
 
-    location /api/topcollector {
-        proxy_pass http://localhost:5000/topcollector;
+    location /api/getranksmostmint {
+        proxy_pass http://localhost:5050/api/getranksmostmint;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
 
-    location /api/getcollection {
-        proxy_pass http://localhost:5000/getcollection;
+    location /api/gettaikocollection {
+        proxy_pass http://localhost:5050/api/gettaikocollection;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
 
-    location /api/fetchContractData {
-        proxy_pass http://localhost:5000/fetchContractData;
+    location /api/topcollection {
+        proxy_pass http://localhost:5050/api/topcollection;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
-    
-    
-     location /getholderaddress {
-        proxy_pass http://localhost:5000/getholderaddress;
+
+    location ~ ^/api/getpermalink/address/(.+)$ {
+        proxy_pass http://localhost:5050/api/getpermalink/address/$1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
         add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
     }
-    
-        location /gettopcollector {
-        proxy_pass http://localhost:5000/gettopcollector;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
-    }
-
- #This endpoint get all the txn from contract as well
-        location /fetchminttxn {
-        proxy_pass http://localhost:6000/fetchminttxn;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-
-        if ($request_method = 'OPTIONS') {
-            add_header 'Access-Control-Allow-Origin' 'https://trailblazercampaign.vercel.app';
-            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization';
-            return 204;
-        }
-    }
-
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location = /robots.txt  { access_log off; log_not_found off; }
 
     access_log off;
-    error_log  /var/log/nginx/semjjonline.xyz-error.log error;
+    error_log /var/log/nginx/mintpad.co-error.log error;
 
     error_page 404 /index.php;
 
@@ -259,4 +129,4 @@ server {
 }
 
 # FORGE CONFIG (DO NOT REMOVE!)
-include forge-conf/semjjonline.xyz/after/*;
+include forge-conf/mintpad.co/after/*;
