@@ -76,8 +76,8 @@ export function getBlockchains() {
     Taiko.coingecko = 'ethereum'
     Viction.coingecko='tomochain'
     ApechainMainnet.coingecko='apecoin'
-    ShapeMainnet.coingecko='shape'
- 
+    ShapeMainnet.coingecko='ethereum'
+
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
