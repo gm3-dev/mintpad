@@ -1,0 +1,196 @@
+
+$fa-font-path: "@fortawesome/fontawesome-pro/webfonts";
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import '@fortawesome/fontawesome-pro/scss/fontawesome.scss';
+@import '@fortawesome/fontawesome-pro/scss/solid.scss';
+@import '@fortawesome/fontawesome-pro/scss/regular.scss';
+
+@import 'tippy.js/dist/tippy.css';
+
+@font-face { 
+    font-family: Graphik-Bold; src: url('../fonts/Graphik-Bold.woff2');
+}
+@font-face { 
+    font-family: Graphik-Semibold; src: url('../fonts/Graphik-Semibold.woff2');
+}
+@font-face { 
+    font-family: Graphik-Medium; src: url('../fonts/Graphik-Medium.woff2');
+}
+@font-face { 
+    font-family: Graphik-Regular; src: url('../fonts/Graphik-Regular.woff2');
+}
+@font-face { 
+    font-family: JPEGDEVFONT-Black; src: url('../fonts/JPEGDEVFONT-Black.woff2');
+}
+@font-face { 
+    font-family: JPEGDEVFONT-Medium; src: url('../fonts/JPEGDEVFONT-Medium.woff2');
+}
+@font-face { 
+    font-family: JPEGDEVFONT-Bold; src: url('../fonts/JPEGDEVFONT-Bold.woff2');
+}
+
+@layer base {
+    html {
+        @apply text-mintpad-400 font-regular;
+
+        /* Input addon */
+        .addon-right {
+            @apply border-r-0 rounded-r-none flex-1;
+        }
+        .addon-left {
+            @apply border-l-0 rounded-l-none flex-1;
+        }
+
+        .header-logo {
+            img {
+                @apply hidden;
+            }
+            .darkmode-off {
+                @apply inline-block;
+            }
+        }
+        &.dark {
+			@apply text-gray-100;
+
+            .header-logo {
+                .darkmode-on {
+                    @apply inline-block;
+                }
+                .darkmode-off {
+                    @apply hidden;
+                }
+            }
+            
+            h1, h2, h3 {
+                @apply text-white;
+            }
+            p {
+                @apply text-gray-400;
+            }
+
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
+		}
+
+        #embed-mint-box {
+            .mint-text-dark {
+                @apply text-mintpad-500;
+            }
+            .mint-border-dark {
+                @apply border-mintpad-200;
+            }
+            .mint-active-button {
+                @apply border-green-600 bg-green-100 text-green-600;
+            }
+            &.dark {
+                p {
+                    @apply text-gray-100;
+                }
+                .mint-text-dark {
+                    @apply text-white;
+                }
+                .mint-border-dark {
+                    @apply border-mintpad-900;
+                }
+                .mint-active-button {
+                    @apply text-green-600 border-0 bg-[#0F391D];
+                }
+            }
+        }
+
+        /* Global elements */
+        h1 {
+            @apply text-mintpad-700 text-3xl mb-4 font-jpegdevmd;
+        }
+        h2 {
+            @apply text-mintpad-700 text-lg mb-4 font-jpegdevbold;
+        }
+        h3 {
+            @apply text-mintpad-700 text-lg mb-4 font-jpegdevmd;
+        }
+        p {
+            @apply text-mintpad-400 mb-1 text-sm font-regular;
+        }
+        label {
+            @apply font-jpegdevmd;
+        }
+
+        /* Warning */
+        span.warning input {
+            @apply border border-red-500;
+        }
+        span.warning::after {
+            content: '\f06a';
+            font: var(--fa-font-solid);
+            position: absolute;
+            right: 10px;
+            top: 0;
+            font-size: 18px;
+            line-height: 38px;
+            color: theme('colors.red.500');
+        }
+        .tinymce-html {
+            h1, h2, h3, p, ul, ol {
+                @apply mb-2;
+            }
+            h1 {
+                @apply text-xl;
+            }
+            h2 {
+                @apply text-lg;
+            }
+            p {
+                @apply font-regular;
+            }
+            a {
+                @apply font-sans underline;
+            }
+            ul, ol {
+                @apply pl-6 font-regular;
+            }
+            ul {
+                @apply list-disc;
+            }
+            ol {
+                @apply list-decimal;
+            }
+        }
+    }
+}
+
+/* TinyMCE */
+.tox-tinymce {
+    border: none !important;
+}
+
+/* Colorpicker */
+#color-picker-container {
+    .vc-chrome-toggle-btn,
+    .vc-input__label {
+        display: none;
+    }
+}
+
+/* Required marker */
+.is-required::after {
+    position: absolute;
+    top: 2px;
+    margin-left: 3px;
+    width: 5px;
+    height: 5px;
+    background: theme('colors.red.600');
+    border-radius: 4px;
+    content: "";
+    right: -7px;
+}
+
+/* Vue Tippy */
+.tippy-box .tippy-content {
+    text-align: left;
+    font-size: 13px;
+}
