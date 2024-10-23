@@ -1,23 +1,23 @@
 import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import fs from 'fs';
+
 const host = 'app.mintpad.test';
 
 export default ({ mode }) => {
     process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
 
-    let server = null;
+    let server = {
+        host,
+        hmr: { host },
+    };
+
+    // Optional: Check the environment and log a message if SSL is not required.
     if (process.env.APP_ENV == 'local') {
-        server = {
-            host,
-            hmr: { host },
-            https: {
-                key: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.key`),
-                cert: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.crt`),
-            },
-        };
+        console.log("Running in local environment, SSL is not required.");
     }
+
     return defineConfig({
         server: server,
         build: {
