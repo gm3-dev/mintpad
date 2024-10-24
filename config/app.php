@@ -54,9 +54,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://semjjonline.xyz'),
-    'mint_url' => env('MINT_URL', 'https://semjjonline.xyz'),
-    'embed_url' => env('EMBED_URL', 'https://semjjonline.xyz'),
+    'url' => env('APP_URL', 'http://localhost'),
+    'mint_url' => env('MINT_URL', 'http://localhost'),
+    'embed_url' => env('EMBED_URL', 'http://localhost'),
     'asset_url' => env('ASSET_URL', null),
     'generator_url' => env('GENERATOR_URL', null),
 
