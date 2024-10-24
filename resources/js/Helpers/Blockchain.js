@@ -1,12 +1,18 @@
 import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, BinanceTestnet, Cmp, CmpTestnet, Zksync, ZksyncSepoliaTestnet,
     Ethereum, Fantom, FantomTestnet, Sepolia, Mumbai, Optimism, OptimismGoerli, Polygon, Dogechain, DogechainTestnet, Hedera, HederaTestnet,
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb, Vanguard, NeonEvmDevnet,
-    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet,
+    ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet, SuperseedSepoliaTestnet,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, VictionTestnet, Viction } from '@thirdweb-dev/chains'
+import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
+import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
+import {ApechainMainnet} from '@/Helpers/CustomBlockchains'
+import { ShapeMainnet } from '@/Helpers/CustomBlockchains'
+import { ShapeSepoliaTestnet } from '@/Helpers/CustomBlockchains'
+// import { AbstractTestnet } from '@/Helpers/CustomBlockchains'
+
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
 // import {BlastL2} from "@/Helpers/CustomBlockchains";
-import { abstractTestnet } from "thirdweb/chains";
 
 export function checkCurrentBlockchain(blockchains, chainId, wallet) {
     const blockchain = blockchains.value[chainId]
@@ -68,16 +74,21 @@ export function getBlockchains() {
     NeonEvmDevnet.coingecko = 'neon'
     Opbnb.coingecko = 'binancecoin'
     Taiko.coingecko = 'ethereum'
-    abstractTestnet.coingecko = 'ethereum'
- 
+    Viction.coingecko='tomochain'
+    ApechainMainnet.coingecko='apecoin'
+    ShapeMainnet.coingecko='ethereum'
+
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
     TaikoKatlaL2.testnet = true;
     TaikoHeklaL2.testnet = true;
     ShardeumSphinx1X.testnet = true;
-
+// AbstractTestnet.testnet= false;
     Hychain.testnet = false;
+    ShapeSepoliaTestnet.testnet=true;
+    ShapeMainnet.testnet=true;
+
 
 
     //block explorer custom overwrite
@@ -127,6 +138,9 @@ export function getBlockchains() {
         245022934: NeonEvm,
         204: Opbnb,
         167000: Taiko,
+        88: Viction,
+        33139: ApechainMainnet,
+        360: ShapeMainnet
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -168,7 +182,12 @@ export function getBlockchains() {
         78600: Vanguard,
         245022926: NeonEvmDevnet,
         29112: HychainTestnet,
-        11124: abstractTestnet,
+        53302: SuperseedSepoliaTestnet,
+        9496: WeaveEVMTestnet,
+        33111: ApechainCurtis,
+        89:VictionTestnet,
+        11011: ShapeSepoliaTestnet,
+        // 11124:AbstractTestnet
     }
     // testnets[1337] = Ganache
     // testnets[1337].chainId = 1337
