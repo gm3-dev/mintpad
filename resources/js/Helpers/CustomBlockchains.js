@@ -66,21 +66,130 @@ export let BlastL2 = {
   "slug": "blast-l2"
 }
 
-export let AbstractTestnet = {
-  "name": "Abstract Testnet",
-  "chain": "ABS",
+export let WeaveEVMTestnet = {
+  "name": "WeaveEVM Testnet",
+  "chain": "WVM",
   "status": "active",
   "icon": {
-    "url": "ipfs://QmWeBU36AH2DX9VA2GToMqtJzcdTtWprDK1urafxa8n61C", 
+    "url": "ipfs://QmaRngSbmNJxeAU5dTWtfuwZ5UinezwR9QAu1cJB7SE5mt", 
+    "width": 100, 
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://testnet-rpc.wvm.dev"
+  ],
+  "rpcProxy": [
+    "https://testnet.wvm.dev"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Test WVM",
+    "symbol": "tWVM",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer.wvm.dev",
+  "shortName": "wvm-testnet",
+  "chainId": 9496,
+  "networkId": 9496,
+  "explorers": [
+    {
+      "name": "WVM Explorer",
+      "url": "https://explorer.wvm.dev",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "wvm-testnet"
+}
+
+export let ApechainCurtis = {
+  "name": "ApeChain Curtis",
+  "chain": "APE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmexB2NLdsFD5HytT5WRhgm5r75Qzr9DAzAuSvfkfojZDE",
     "width": 100,
     "height": 100,
     "format": "png"
   },
   "rpc": [
-    "https://api.testnet.abs.xyz"
+    "https://curtis.rpc.caldera.xyz/http"
+  ],
+  "rpcProxy": [
+    "https://curtis.rpc.caldera.xyz/http"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ape Token",
+    "symbol": "APE",
+    "decimals": 18
+  },
+  "infoURL": "https://curtis.explorer.caldera.xyz",
+  "shortName": "ape-chain",
+  "chainId": 33111,
+  "networkId": 33111,
+  "explorers": [
+    {
+      "name": "ApeChain Explorer",
+      "url": "https://curtis.explorer.caldera.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "ape-chain"
+}
+
+export let ApechainMainnet = {
+  "name": "ApeChain Mainnet",
+  "chain": "APE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmexB2NLdsFD5HytT5WRhgm5r75Qzr9DAzAuSvfkfojZDE",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://apechain.calderachain.xyz/http"
   ],
   "ws": [
-    "ws://api.testnet.abs.xyz/ws"
+    "wss://apechain.calderachain.xyz/ws"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ape Token",
+    "symbol": "APE",
+    "decimals": 18
+  },
+  "infoURL": "https://apechain.calderaexplorer.xyz",
+  "shortName": "ape-mainnet",
+  "chainId": 33139,
+  "networkId": 33139,
+  "explorers": [
+    {
+      "name": "ApeChain Explorer",
+      "url": "https://apechain.calderaexplorer.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "apechain-mainnet"
+}
+
+
+export let ShapeMainnet = {
+  "name": "Shape Mainnet",
+  "chain": "SHAPE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmPZuXti6F9eECFx7ca4DLTVychWukALm28vAHMRcDaptX",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://mainnet.shape.network"
   ],
   "faucets": [],
   "nativeCurrency": {
@@ -88,18 +197,90 @@ export let AbstractTestnet = {
     "symbol": "ETH",
     "decimals": 18
   },
-  "infoURL": "https://explorer.testnet.abs.xyz",
-  "shortName": "abs-testnet",
-  "chainId": 11124,
-  "networkId": 11124,
+  "infoURL": "https://shapescan.xyz",
+  "shortName": "shape-mainnet",
+  "chainId": 360,
+  "networkId": 360,
   "explorers": [
     {
-      "name": "Abstract Explorer",
-      "url": "https://explorer.testnet.abs.xyz",
+      "name": "Shape Explorer",
+      "url": "https://shapescan.xyz",
       "standard": "EIP3091"
     }
   ],
-  "verifyURL": "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
-  "testnet": true,
-  "slug": "abstract-testnet"
+  "testnet": false,
+  "slug": "shape-mainnet"
 }
+
+
+export let ShapeSepoliaTestnet = {
+  "name": "Shape Sepolia",
+  "chain": "SHAPE",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmPZuXti6F9eECFx7ca4DLTVychWukALm28vAHMRcDaptX", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://sepolia.shape.network"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer-sepolia.shape.network",
+  "shortName": "shape-sepolia",
+  "chainId": 11011,
+  "networkId": 11011,
+  "explorers": [
+    {
+      "name": "Sepolia Explorer",
+      "url": "https://explorer-sepolia.shape.network",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "shape-sepolia"
+}
+
+// export let AbstractTestnet = {
+//   "name": "Abstract Testnet",
+//   "chain": "ABS",
+//   "status": "active",
+//   "icon": {
+//     "url": "ipfs://QmWeBU36AH2DX9VA2GToMqtJzcdTtWprDK1urafxa8n61C", 
+//     "width": 100,
+//     "height": 100,
+//     "format": "png"
+//   },
+//   "rpc": [
+//     "https://api.testnet.abs.xyz"
+//   ],
+//   "ws": [
+//     "ws://api.testnet.abs.xyz/ws"
+//   ],
+//   "faucets": [],
+//   "nativeCurrency": {
+//     "name": "Ether",
+//     "symbol": "ETH",
+//     "decimals": 18
+//   },
+//   "infoURL": "https://explorer.testnet.abs.xyz",
+//   "shortName": "abs-testnet",
+//   "chainId": 11124,
+//   "networkId": 11124,
+//   "explorers": [
+//     {
+//       "name": "Abstract Explorer",
+//       "url": "https://explorer.testnet.abs.xyz",
+//       "standard": "EIP3091"
+//     }
+//   ],
+//   "verifyURL": "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
+//   "testnet": true,
+//   "slug": "abstract-testnet"
+// }
