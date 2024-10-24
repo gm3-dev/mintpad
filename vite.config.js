@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin';
 import fs from 'fs';
-const host = 'app.mintpad.test';
+const host = '127.0.0.1';
 
 export default ({ mode }) => {
     process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
