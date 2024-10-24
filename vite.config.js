@@ -1,20 +1,20 @@
 import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin';
 import fs from 'fs';
-const host = '0.0.0.0'; // Change to '0.0.0.0' to allow access from any IP address
+const host = 'app.mintpad.test';
 
 export default ({ mode }) => {
     process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ''));
 
     let server = null;
-    if (process.env.APP_ENV === 'local') {
+    if (process.env.APP_ENV == 'local') {
         server = {
-            host, // Use the new host
-            hmr: { host: '0.0.0.0' }, // Ensure HMR can also work
+            host,
+            hmr: { host },
             https: {
-                key: fs.readFileSync('./app/ssl/localhost.key'),
-                cert: fs.readFileSync('./app/ssl/localhost.crt'),
+                key: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.key`),
+                cert: fs.readFileSync(`/Applications/MAMP/Library/OpenSSL/certs/${host}.crt`),
             },
         };
     }
@@ -34,7 +34,7 @@ export default ({ mode }) => {
             }),
             laravel({
                 input: [
-                    'resources/sass/app.scss',
+                    'resources/sass/app.scss', 
                     'resources/js/app.js'
                 ],
                 refresh: true,
@@ -57,4 +57,4 @@ export default ({ mode }) => {
             },
         },
     });
-};
+}
