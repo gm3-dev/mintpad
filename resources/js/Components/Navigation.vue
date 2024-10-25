@@ -43,7 +43,7 @@ watch(wallet, () => {
                     </div>
                     <div v-else class="hidden space-x-2 lg:space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <NavLink :href="route('collections.index')" :active="route().current('collections.*')">Collections</NavLink>
-                        <NavLink :href="'https://discord.com/invite/sza2Kxbx'" element="a" target="_blank">Support</NavLink>
+                        <NavLink :href="'https://mintpad.co/support'" element="a" target="_blank">Support</NavLink>
                         <NavLink :href="'https://reflective-singer-7e2.notion.site/HashLips-Art-Creator-Studio-12aa5c250df48045a8b7ea88f54cd7a8'" element="a" target="_blank" class="relative">NFT generator</NavLink>
                     </div>
                 </div>
