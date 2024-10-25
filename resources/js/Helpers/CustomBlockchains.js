@@ -162,14 +162,14 @@ export let ApechainMainnet = {
     "symbol": "APE",
     "decimals": 18
   },
-  "infoURL": "https://apechain.calderaexplorer.xyz",
+  "infoURL": "https://apescan.io/",
   "shortName": "ape-mainnet",
   "chainId": 33139,
   "networkId": 33139,
   "explorers": [
     {
       "name": "ApeChain Explorer",
-      "url": "https://apechain.calderaexplorer.xyz",
+      "url": "https://apescan.io",
       "standard": "EIP3091"
     }
   ],
