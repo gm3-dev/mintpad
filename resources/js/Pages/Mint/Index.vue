@@ -376,12 +376,12 @@ const mintNFT = async () => {
         };
 
         // conditional polling trigger based on chainId
-        const chainId = 167000; // main-net chain id 
+        const chainId = 167000;
         console.log(props.collection.chain_id);
         if (chainId === props.collection.chain_id) {
          // trigger the polling
          // check for cors origin later
-            const response = await fetch('https://semjjonline.xyz/startPolling', {
+            const response = await fetch('https://on.mintpad.co/startPolling', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -589,13 +589,8 @@ const mintNFT = async () => {
             </div>
         </div>
 
-        <Modal :show="showModal" title="Transaction Initiated!" @close="showModal = false">
-            <p>Check your wallet!</p>
-            <p class="text-sm text-gray-500">
-                            <a :href="`https://blockscoutapi.hekla.taiko.xyz/tx/${testlink}`" target="_blank" class="text-blue-500 hover:underline">
-                                Check txn here
-                            </a>
-                            </p>
+        <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
+            <p>Congratulations. You have successfully minted.</p>
             <p class="!text-primary-600 mint-text-primary">Good luck with trading!</p>
         </Modal>
 
