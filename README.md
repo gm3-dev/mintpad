@@ -1,14 +1,1 @@
-##
-
-need this two api from app/api folder --> profileupload.js and test.js
-
-
-Run profileupload.js
-test.js
-
-
-and then, on the other side-> run this https://github.com/chimmykk/api-server (has cronjob) and showcollection.js
-
-
-
-#here is nginx conf for exposing the endpoints for rendering to campaign site,  https://github.com/gm3-dev/mintpad/blob/taikocampaign/nginx.txt
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fc48d7b11-3448-4907-80c6-557b7cf51970%3Fdate%3D1%26label%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com/servers/854474/sites/2509650)
