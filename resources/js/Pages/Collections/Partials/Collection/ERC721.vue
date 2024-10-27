@@ -285,6 +285,9 @@ const setPlaceholderImage = (e) => {
             <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://reflective-singer-7e2.notion.site/HashLips-Art-Creator-Studio-12aa5c250df48045a8b7ea88f54cd7a8" target="_blank">NFT generator</Hyperlink> to generate your collection.</p>
             <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
     <p>If your file is bigger than 500 MB, please upload your files in batches or it will fail. Example files 0-4999 uploaded, then files 5000-9999, If you want to upload video files into this contract please reach out and we will help you. Only images are supported</p>
+<p class="mb-4">
+  <a href="https://discord.gg/sza2Kxbx" target="_blank">Contact support here</a>
+</p>
 
             <label class="block text-mintpad-300 mb-4">
                 <span class="sr-only">Choose Files</span>
