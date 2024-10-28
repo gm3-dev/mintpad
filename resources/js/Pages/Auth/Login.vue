@@ -20,7 +20,13 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+// Method to open the forgot password page in a new tab
+const openForgotPassword = () => {
+    window.open("https://password.mintpad.co/forgot-password", "_blank");
+};
 </script>
+
 <template>
     <GuestLayout>
         <Head title="Sign in" />
@@ -42,18 +48,15 @@ const submit = () => {
                     <ValidationMessage :validation="form.errors.password" />
                 </div>
 
-<div class="my-5 flex">
-    <Hyperlink 
-        class="text-xs" 
-        href="https://password.mintpad.co/forgot-password" 
-        target="_blank" 
-        rel="noopener noreferrer"
-    >
-        Forgot your password?
-    </Hyperlink>
-</div>
-
-
+                <div class="my-5 flex">
+                    <Hyperlink 
+                        class="text-xs" 
+                        @click="openForgotPassword" 
+                        style="cursor: pointer;" <!-- Optional: change cursor to pointer -->
+                    >
+                        Forgot your password?
+                    </Hyperlink>
+                </div>
 
                 <Button class="w-full">Sign in</Button>
 
