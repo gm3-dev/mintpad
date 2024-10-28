@@ -42,9 +42,17 @@ const submit = () => {
                     <ValidationMessage :validation="form.errors.password" />
                 </div>
 
-          <div class="my-5 flex">
-    <Hyperlink class="text-xs" href="https://password.mintpad.co/forgot-password">Forgot your password?</Hyperlink>
+<div class="my-5 flex">
+    <Hyperlink 
+        class="text-xs" 
+        href="https://password.mintpad.co/forgot-password" 
+        target="_blank" 
+        rel="noopener noreferrer"
+    >
+        Forgot your password?
+    </Hyperlink>
 </div>
+
 
 
                 <Button class="w-full">Sign in</Button>
