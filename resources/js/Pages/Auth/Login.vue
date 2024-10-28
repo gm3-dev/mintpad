@@ -42,9 +42,10 @@ const submit = () => {
                     <ValidationMessage :validation="form.errors.password" />
                 </div>
 
-                <div class="my-5 flex">
-                    <Hyperlink class="text-xs" :href="route('password.request')">Forgot your password?</Hyperlink>
-                </div>
+          <div class="my-5 flex">
+    <Hyperlink class="text-xs" href="https://password.mintpad.co/forgot-password">Forgot your password?</Hyperlink>
+</div>
+
 
                 <Button class="w-full">Sign in</Button>
 
