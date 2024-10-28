@@ -49,13 +49,14 @@ const openForgotPassword = () => {
                 </div>
 
                 <div class="my-5 flex">
-                    <Hyperlink 
-                        class="text-xs" 
-                        @click="openForgotPassword" 
-                        style="cursor: pointer;" <!-- Optional: change cursor to pointer -->
-                    >
-                        Forgot your password?
-                    </Hyperlink>
+              <Hyperlink 
+    class="text-xs" 
+    @click="openForgotPassword" 
+    style="cursor: pointer;" 
+>
+    Forgot your password?
+</Hyperlink>
+
                 </div>
 
                 <Button class="w-full">Sign in</Button>
