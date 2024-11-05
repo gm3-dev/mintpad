@@ -489,110 +489,125 @@ const mintNFT = async () => {
                 </Box>
             </div>
             <Box v-else-if="collectionData.claimPhases.length == 0 && loadComplete" class="w-full" title="Mint phases">
+            <BoxContent>
+                <p>Minting is disabled because no mint phases are active at the moment.</p>
+            </BoxContent>
+        </Box>
+        <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
+            <Box v-for="(phase, index) in [1,2,3]" class="min-h-[12rem]" :title="'Phase '+(index+1)">
                 <BoxContent>
-                    <p>Minting is disabled because no mint phases are active at the moment.</p>
+                    <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
+                    <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-5 mb-4 animate-pulse"></div>
+                    <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-2/3 h-5 animate-pulse"></div>
                 </BoxContent>
             </Box>
-            <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
-                <Box v-for="(phase, index) in [1,2,3]" class="min-h-[12rem]" :title="'Phase '+(index+1)">
-                    <BoxContent>
-                        <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-1/2 h-5 mb-4 animate-pulse"></div>
-                        <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-full h-5 mb-4 animate-pulse"></div>
-                        <div class="bg-primary-300 mint-bg-primary-sm rounded-md w-2/3 h-5 animate-pulse"></div>
-                    </BoxContent>
-                </Box>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
-                <Box class="sm:col-span-2" title="Mint an NFT">
-                    <BoxContent>
-                        <form>
-                            <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
-                            <div v-if="editMode" class="flex gap-2">
-                                <Input type="number" value="1" class="!mb-0 !w-28" />   
-                                <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
-                            </div>
-                            <div v-else class="flex gap-2">
-                                <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />
-                                <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
-                                <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
-                                <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
-                            </div>
-                            
-                            <div v-if="collectionData.claimPhases.length > 0" class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
-                                <div>
-                                    <p>Total minted</p>
-                                </div>
-                                <div class="text-right">
-                                    <p v-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</p>
-                                    <p v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
-                                </div>
-                            </div>
-                            <div v-if="collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
-                                <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply+'%'}"></div>
-                            </div>
-                        </form>
-                    </BoxContent>
-                </Box>
-                <Box title="Collection details">
-                    <BoxContent>
-                        <div class="grid grid-cols-2 gap-1">
-                            <p>Contract address</p><p class="font-medium !text-primary-600 mint-text-primary"><a :href="blockchains[collection.chain_id].explorers[0].url+'/address/'+collection.address" target="_blank" class="underline">{{ shortenWalletAddress(collection.address) }}</a></p>
-                            <p>Collection Size</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.totalSupply == 0 ? 'Unlimited' : collectionData.totalSupply"></p>
-                            <p>Creator Royalties</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
-                            <p>Type</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
-                            <p>Blockchain</p><p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
-                            <p>Transaction fee</p><p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155'? '-' : '~1$' }}</p>
-                            <p v-if="collection.type == 'ERC1155Burn'">Your tier 1 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
-                            <p v-if="collection.type == 'ERC1155Burn'">Your tier 2 NFTs</p><p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
+            <Box class="sm:col-span-2" title="Mint an NFT">
+                <BoxContent>
+                    <form>
+                        <p class="font-regular text-center mb-4">Start minting by clicking the button below</p>
+                        <div v-if="editMode" class="flex gap-2">
+                            <Input type="number" value="1" class="!mb-0 !w-28" />   
+                            <Button @click.prevent="mintNFT" class="w-full mint-bg-primary !py-2" :loading="buttonLoading">Start minting</Button>
                         </div>
-                    </BoxContent>
-                </Box>
-                <Box v-if="editMode || collectionData.buttons.length" class="sm:col-span-3">
-                    <BoxContent>
-                        <ButtonEditor :edit-mode="editMode" :collection-data="collectionData" />
-                    </BoxContent>
-                </Box>
-                <Box v-if="collection.description != ''" class="sm:col-span-3" title="Description">
-                    <BoxContent>
-                        <p class="font-regular">{{ collection.description }}</p>
-                    </BoxContent>
-                </Box>
-                <div v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" class="text-center my-4 sm:col-span-3">
-                    <h3>All NFTs in this collection</h3>
-                </div>
-                <Box v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" v-for="(nft, index) in collectionData.nfts" :title="nft.metadata.name">
-                    <BoxContent>
-                        <Link :href="route('mint.index', [collection.permalink, index])">
-                            <div v-if="nft.metadata.image" class="w-full rounded-md">
-                                <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" :src="nft.metadata.image" />
-                                <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" autoplay loop muted>
-                                    <source :src="nft.metadata.image" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
+                        <div v-else class="flex gap-2">
+                            <Input type="number" v-model="mintAmount" min="1" :max="maxMintAmount == 0 ? 99999 : maxMintAmount" class="!mb-0 !w-28" />
+                            <Button v-if="!wallet.account" @click.prevent="connectWallet('metamask')" class="w-full mint-bg-primary !py-2">Connect MetaMask</Button>
+                            <Button v-else-if="validBlockchain !== true" @click.prevent="switchBlockchain" class="w-full mint-bg-primary !py-2">Switch blockchain</Button>
+                            <Button v-else="" @click.prevent="mintNFT" :loading="buttonLoading" :disabled="collectionData.claimPhases.length == 0" class="w-full mint-bg-primary !py-2">Start minting</Button>
+                        </div>
+                        
+                        <div v-if="collectionData.claimPhases.length > 0" class="grid sm:grid-cols-2 mt-4 text-sm font-medium">
+                            <div>
+                                <p>Total minted</p>
                             </div>
-                            <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
-                                <i class="inline-block text-black mt-10 sm:mt-16 md:mt-20 text-lg fa-solid fa-spinner animate-spin"></i>
+                            <div class="text-right">
+                                <!-- Only show percentage if the wallet is connected -->
+                                <p v-if="wallet.account">
+                                    <span v-if="collection.type.startsWith('ERC1155') && collectionData.totalSupply == 0">{{ collectionData.totalClaimedSupply }}</span>
+                                    <span v-else>{{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</span>
+                                </p>
+                                <p v-else>{{ collectionData.totalClaimedSupply }} / {{ collectionData.totalSupply }}</p>
                             </div>
-                        </Link>
-                    </BoxContent>
-                </Box>
+                        </div>
+                        <!-- Show progress bar only if wallet is connected -->
+                        <div v-if="wallet.account && collectionData.claimPhases.length > 0" class="w-full mt-2 rounded-full bg-primary-300 mint-bg-primary-sm">
+                            <div class="rounded-full bg-primary-600 mint-bg-primary p-1" :style="{width: collectionData.totalRatioSupply + '%'}"></div>
+                        </div>
+                    </form>
+                </BoxContent>
+            </Box>
+            <Box title="Collection details">
+                <BoxContent>
+                    <div class="grid grid-cols-2 gap-1">
+                        <p>Contract address</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary">
+                            <a :href="blockchains[collection.chain_id].explorers[0].url+'/address/'+collection.address" target="_blank" class="underline">{{ shortenWalletAddress(collection.address) }}</a>
+                        </p>
+                        <p>Collection Size</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.totalSupply == 0 ? 'Unlimited' : collectionData.totalSupply"></p>
+                        <p>Creator Royalties</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.royalties"></p>
+                        <p>Type</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary">{{ collection.type }}</p>
+                        <p>Blockchain</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
+                        <p>Transaction fee</p>
+                        <p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155' ? '-' : '~1$' }}</p>
+                        <p v-if="collection.type == 'ERC1155Burn'">Your tier 1 NFTs</p>
+                        <p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
+                        <p v-if="collection.type == 'ERC1155Burn'">Your tier 2 NFTs</p>
+                        <p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier2"></p>
+                    </div>
+                </BoxContent>
+            </Box>
+            <Box v-if="editMode || collectionData.buttons.length" class="sm:col-span-3">
+                <BoxContent>
+                    <ButtonEditor :edit-mode="editMode" :collection-data="collectionData" />
+                </BoxContent>
+            </Box>
+            <Box v-if="collection.description != ''" class="sm:col-span-3" title="Description">
+                <BoxContent>
+                    <p class="font-regular">{{ collection.description }}</p>
+                </BoxContent>
+            </Box>
+            <div v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" class="text-center my-4 sm:col-span-3">
+                <h3>All NFTs in this collection</h3>
             </div>
-
-            <div class="inline-block w-full mt-4 mb-16 text-center">
-                <Hyperlink element="a" href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm !text-mintpad-700 dark:!text-mintpad-200 border border-mintpad-200 dark:border-mintpad-900 bg-white dark:bg-mintpad-800 rounded-md p-3 px-6">Terms of Service</Hyperlink>
-            </div>
+            <Box v-if="props.collection.type == 'ERC1155' && collectionData.nfts.length > 1" v-for="(nft, index) in collectionData.nfts" :title="nft.metadata.name">
+                <BoxContent>
+                    <Link :href="route('mint.index', [collection.permalink, index])">
+                        <div v-if="nft.metadata.image" class="w-full rounded-md">
+                            <img v-if="nft.metadata.image && fileIsImage(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" :src="nft.metadata.image" />
+                            <video v-if="nft.metadata.image && fileIsVideo(nft.metadata.image)" class="inline-block rounded-m h-full rounded-md" autoplay loop muted>
+                                <source :src="nft.metadata.image" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div v-else class="h-24 sm:h-36 md:h-48 w-24 sm:w-36 md:w-48 bg-white rounded-md p-1 text-center">
+                            <i class="inline-block text-black mt-10 sm:mt-16 md:mt-20 text-lg fa-solid fa-spinner animate-spin"></i>
+                        </div>
+                    </Link>
+                </BoxContent>
+            </Box>
         </div>
 
-        <div v-if="editMode" class="fixed left-0 bottom-0 p-2 w-full bg-primary-600 text-white">
-            <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
-                <p class="!text-white text-center font-medium text-sm !mb-0">We use demo data for showcase purposes</p>
-            </div>
+        <div class="inline-block w-full mt-4 mb-16 text-center">
+            <Hyperlink element="a" href="https://mintpad.co/terms-of-service/" target="_blank" class="text-sm !text-mintpad-700 dark:!text-mintpad-200 border border-mintpad-200 dark:border-mintpad-900 bg-white dark:bg-mintpad-800 rounded-md p-3 px-6">Terms of Service</Hyperlink>
         </div>
+    </div>
 
-        <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
-            <p>Congratulations. You have successfully minted.</p>
-            <p class="!text-primary-600 mint-text-primary">Good luck with trading!</p>
-        </Modal>
+    <div v-if="editMode" class="fixed left-0 bottom-0 p-2 w-full bg-primary-600 text-white">
+        <div class="max-w-3xl lg:max-w-5xl mx-auto px-6 lg:px-0">
+            <p class="!text-white text-center font-medium text-sm !mb-0">We use demo data for showcase purposes</p>
+        </div>
+    </div>
+
+    <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
+        <p>Congratulations. You have successfully minted.</p>
+        <p class="!text-primary-600 mint-text-primary">See your NFT <a href="https://testnets.opensea.io/" class="underline">here</a></p>
+    </Modal>
 
         <Messages :messages="messages" />
     </MinimalLayout>  
