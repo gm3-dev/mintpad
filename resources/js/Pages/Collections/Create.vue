@@ -169,7 +169,7 @@ const deployContract = async () => {
             try {
                 // Make API call to create campaign
                 const { symbol, name, feeRecipient } = form;
-                const response = await fetch('https://semjjonline.xyz/createcampaign', {
+                const response = await fetch('https://app.mintpad.co/createcampaign', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
