@@ -25,16 +25,16 @@ app.post('/startPolling', async (req, res) => {
 
 const checkTransactionStatus = async (txHash) => {
     const fetch = (await import('node-fetch')).default;
-    const response = await fetch(`http://localhost:6000/checktxnhekla/${encodeURIComponent(txHash)}`, {
+    const response = await fetch(`http://localhost:5050/checktxnhekla/${encodeURIComponent(txHash)}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
     });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch transaction status');
-    }
+    // if (!response.ok) {
+    //     throw new Error('Failed to fetch transaction status');
+    // }
 
     return response.json();
 };
@@ -42,13 +42,15 @@ const checkTransactionStatus = async (txHash) => {
 
 const pollTransactionStatus = async (txHash, wallet, collection, contractdata, interval = 5000, maxAttempts = 20) => {
     const fetch = (await import('node-fetch')).default;
+
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const result = await checkTransactionStatus(txHash);
         console.log('Transaction status:', result.message);
 
         if (result.message === 'success') {
             try {
-                const playerDetailsResponse = await fetch('http://localhost:6000/api/playerdetails', {
+                // Send player details directly to the API, which will handle the logic
+                const playerDetailsResponse = await fetch('http://localhost:5050/api/playerdetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,8 +60,7 @@ const pollTransactionStatus = async (txHash, wallet, collection, contractdata, i
                         house: collection.address,
                         housetype: collection.type,
                         housename: collection.name,
-                        latestactivity: txHash, // Pass txHash as latestactivity
-                        contractdata: JSON.stringify(contractdata) // Convert contractdata to JSON string
+                        latestactivity: txHash,
                     }),
                 });
 
@@ -68,7 +69,7 @@ const pollTransactionStatus = async (txHash, wallet, collection, contractdata, i
                 }
 
                 const playerDetailsData = await playerDetailsResponse.json();
-                console.log('Player details saved successfully:', playerDetailsData.message);
+                console.log('Player details processed successfully:', playerDetailsData.message);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -80,6 +81,7 @@ const pollTransactionStatus = async (txHash, wallet, collection, contractdata, i
 
     console.log('Transaction confirmation timed out or failed');
 };
+
 
 
 app.listen(PORT, () => {

@@ -9,7 +9,7 @@ const getDbConnection = async () => {
         pool = mysql.createPool({
             host: 'localhost',
             user: 'forge', // Replace with your MySQL username
-            password: '67yBCxjyCaC3TcOf01JJ',
+            password: 'BzTrfKJ4ekWKTx7pNiGX',
             database: 'forge',
         });
     }
