@@ -87,20 +87,15 @@ const deployContract = async () => {
     }
 
     const currentBlockchain = blockchains.value[form.chain_id]
-    console.log("the chainid",currentBlockchain.chainId);
     let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
-    if (currentBlockchain.testnet == false) {
+    if (!currentBlockchain.testnet) {
         const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
             return response
         })
         if (coingeckoData.data[currentBlockchain.coingecko] !== undefined) {
             const tokenPrice = coingeckoData.data[currentBlockchain.coingecko].usd
-            // transactionFee = ((1 / tokenPrice) * 1000000000000000000).toString()
-            // transactionFee = ethers.utils.parseUnits((1 / tokenPrice).toFixed(18), 18)
             transactionFee = formatTransactionFee(1 / tokenPrice)
-        } else if (form.chain_id == 1890 || form.chain_id == 59144 || form.chain_id == 8453 || form.chain_id == 324) { // LightLink, Linea, Zksync and Base don't have token prices yet
-            // continue
-        } else {
+        } else if (![1890, 59144, 8453, 324].includes(form.chain_id)) {
             messages.value.push({type: 'error', message: 'Error while setting contract data'})
             return
         }
@@ -128,7 +123,6 @@ const deployContract = async () => {
 
     buttonLoading.value = 'Deploying contract'
     try {
-        // Deploy contract
         const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
 
         let parameters = [
@@ -140,16 +134,14 @@ const deployContract = async () => {
             form.feeRecipient, // _royaltyRecipient
             form.royalties * 100, // _royaltyBps
         ]
-        // console log blockchain
-
 
         let contractAddress = false
         try {
-            if (form.type == 'ERC721') {
+            if (form.type === 'ERC721') {
                 contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC721Drop', parameters)
-            } else if (form.type == 'ERC1155') {
+            } else if (form.type === 'ERC1155') {
                 contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Drop', parameters)
-            } else if (form.type == 'ERC1155Burn') {
+            } else if (form.type === 'ERC1155Burn') {
                 contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Evolve', parameters)
             } else {
                 throw new Error('Invalid contract type: ' + form.type)
@@ -164,31 +156,6 @@ const deployContract = async () => {
                 messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
             }
         }
-// so this applies to only taiko for now, change as per taiko mainnet chainid
-        if (currentBlockchain.chainId === 167009) {
-            try {
-                // Make API call to create campaign
-                const { symbol, name, feeRecipient } = form;
-                const response = await fetch('https://app.mintpad.co/createcampaign', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ symbol: form.symbol, name: form.name, feeRecipient: form.feeRecipient }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('Campaign created successfully:', data.message);
-                messages.value.push({ type: 'success', message: 'Campaign created successfully!' });
-            } catch (error) {
-                handleError(error);
-                messages.value.push({ type: 'error', message: 'An error occurred while creating the campaign.' });
-            }
-        }
 
         if (contractAddress) {
             // Update DB
@@ -201,6 +168,7 @@ const deployContract = async () => {
 
     buttonLoading.value = false
 }
+
 </script>
 
 <template>
