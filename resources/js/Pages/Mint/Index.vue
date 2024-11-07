@@ -606,7 +606,7 @@ const mintNFT = async () => {
 
     <Modal :show="showModal" title="Mint successful!" @close="showModal = false">
         <p>Congratulations. You have successfully minted.</p>
-        <p class="!text-primary-600 mint-text-primary">See your NFT <a href="https://testnets.opensea.io/" class="underline">here</a></p>
+    
     </Modal>
 
         <Messages :messages="messages" />
