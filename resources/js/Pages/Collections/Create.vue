@@ -72,105 +72,175 @@ const selectContractType = (type) => {
 }
 
 const deployContract = async () => {
-    const canDeploy = await axios.get(route('collections.can-deploy', form.chain_id)).then((response) => {
-        return response.data ?? true
-    })
+    messages.value = [] // Clear previous messages
+    
+    try {
+        // Initial checks
+        const canDeploy = await axios.get(route('collections.can-deploy', form.chain_id))
+            .then(response => response.data ?? true)
+            .catch(error => {
+                console.error('Rate limit check failed:', error)
+                throw new Error('Failed to check deployment limits')
+            })
 
-    // Check rate-limits
-    if (canDeploy === false) {
-        messages.value.push({type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.'})
-        return
-    }
-    if (validBlockchain.value !== true) {
-        messages.value.push({type: 'error', message: 'Please connect to the correct blockchain'})
-        return
-    }
-
-    const currentBlockchain = blockchains.value[form.chain_id]
-    let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
-    if (!currentBlockchain.testnet) {
-        const coingeckoData = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids='+currentBlockchain.coingecko+'&vs_currencies=usd').then((response) => {
-            return response
-        })
-        if (coingeckoData.data[currentBlockchain.coingecko] !== undefined) {
-            const tokenPrice = coingeckoData.data[currentBlockchain.coingecko].usd
-            transactionFee = formatTransactionFee(1 / tokenPrice)
-        } else if (![1890, 59144, 8453, 324].includes(form.chain_id)) {
-            messages.value.push({type: 'error', message: 'Error while setting contract data'})
+        if (!canDeploy) {
+            messages.value.push({type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.'})
             return
         }
-    }
 
-    // Validate form
-    let error = false
-    if (form.royalties.length < 1) {
-        error = 'Creator royalties must be a number'
-    } else if (form.royalties < 0 || form.royalties > 100) {
-        error = 'Creator royalties must be a number between 0 and 100'
-    } else if (form.symbol.length < 2) {
-        error = 'Symbol / ticker must be at least 2 characters long'
-    } else if (form.name.length < 3) {
-        error = 'Collection name must be at least 3 characters long'
-    } else if (form.salesRecipient.length < 10) {
-        error = 'Recipient address is not valid'
-    } else if (form.feeRecipient.length < 10) {
-        error = 'Recipient address is not valid'
-    }
-    if (error) {
-        messages.value.push({type: 'error', message: error})
-        return
-    }
+        if (!validBlockchain.value) {
+            messages.value.push({type: 'error', message: 'Please connect to the correct blockchain'})
+            return
+        }
 
-    buttonLoading.value = 'Deploying contract'
-    try {
+        // Form validation
+        const validationError = validateForm()
+        if (validationError) {
+            messages.value.push({type: 'error', message: validationError})
+            return
+        }
+
+        buttonLoading.value = 'Preparing deployment'
+        
+        // Get transaction fee
+        const transactionFee = await calculateTransactionFee()
+        if (!transactionFee) {
+            messages.value.push({type: 'error', message: 'Failed to calculate transaction fee'})
+            return
+        }
+
+        buttonLoading.value = 'Initializing contract'
+        
+        // Initialize SDK
         const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
+        if (!sdk) {
+            throw new Error('Failed to initialize SDK')
+        }
 
-        let parameters = [
-            wallet.value.account, // _defaultAdmin
-            form.name, // _name
-            form.symbol, // _symbol
-            form.salesRecipient, // _saleRecipient
-            transactionFee, // _transactionFee
-            form.feeRecipient, // _royaltyRecipient
-            form.royalties * 100, // _royaltyBps
+        // Prepare deployment parameters
+        const parameters = [
+            wallet.value.account,
+            form.name,
+            form.symbol,
+            form.salesRecipient,
+            transactionFee,
+            form.feeRecipient,
+            form.royalties * 100,
         ]
 
-        let contractAddress = false
-        try {
-            if (form.type === 'ERC721') {
-                contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC721Drop', parameters)
-            } else if (form.type === 'ERC1155') {
-                contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Drop', parameters)
-            } else if (form.type === 'ERC1155Burn') {
-                contractAddress = await sdk.deployer.deployPublishedContract('0x188E1087e5eF6904B7Bb91ce5424940012F843e1', 'MintpadERC1155Evolve', parameters)
-            } else {
+        console.log('Deploying with parameters:', parameters)
+        
+        buttonLoading.value = 'Deploying contract'
+
+        // Deploy based on contract type
+        let contractAddress
+        const deployerAddress = '0x188E1087e5eF6904B7Bb91ce5424940012F843e1'
+        
+        switch(form.type) {
+            case 'ERC721':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC721Drop',
+                    parameters
+                )
+                break
+            case 'ERC1155':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC1155Drop',
+                    parameters
+                )
+                break
+            case 'ERC1155Burn':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC1155Evolve',
+                    parameters
+                )
+                break
+            default:
                 throw new Error('Invalid contract type: ' + form.type)
-            }
-        } catch (error) {
-            console.log('error 1', error)
-            let metamaskError = getMetaMaskError(error)
-            if (metamaskError) {
-                messages.value.push({type: 'error', message: metamaskError})
-            } else {
-                reportError(error)
-                messages.value.push({type: 'error', message: 'Something went wrong, please try again.'})
-            }
         }
 
-        if (contractAddress) {
-            // Update DB
-            form.address = contractAddress
-            form.post(route('collections.store'), {})
+        if (!contractAddress) {
+            throw new Error('Contract deployment failed - no address returned')
         }
-    } catch(error) {
-        messages.value.push({type: 'error', message: handleError(error)})
+
+        buttonLoading.value = 'Saving collection'
+        console.log('Contract deployed at:', contractAddress)
+        
+        // Save the collection
+        form.address = contractAddress
+        await form.post(route('collections.store'))
+        
+        buttonLoading.value = false
+        messages.value.push({type: 'success', message: 'Contract deployed successfully!'})
+
+    } catch (error) {
+        console.error('Deployment failed:', error)
+        
+        const errorMessage = error.code === 4001 
+            ? 'Transaction was rejected by user'
+            : getMetaMaskError(error) || error.data?.message || 'Deployment failed. Please try again.'
+        
+        messages.value.push({type: 'error', message: errorMessage})
+        reportError(error)
+        buttonLoading.value = false
     }
-
-    buttonLoading.value = false
 }
 
-</script>
+// Helper function to validate form
+const validateForm = () => {
+    if (form.royalties.length < 1) {
+        return 'Creator royalties must be a number'
+    }
+    if (form.royalties < 0 || form.royalties > 100) {
+        return 'Creator royalties must be a number between 0 and 100'
+    }
+    if (form.symbol.length < 2) {
+        return 'Symbol / ticker must be at least 2 characters long'
+    }
+    if (form.name.length < 3) {
+        return 'Collection name must be at least 3 characters long'
+    }
+    if (form.salesRecipient.length < 10) {
+        return 'Sales recipient address is not valid'
+    }
+    if (form.feeRecipient.length < 10) {
+        return 'Fee recipient address is not valid'
+    }
+    return null
+}
 
+// Helper function to calculate transaction fee
+const calculateTransactionFee = async () => {
+    const currentBlockchain = blockchains.value[form.chain_id]
+    let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
+    
+    if (currentBlockchain.testnet === false) {
+        // Skip price check for certain chains
+        if ([1890, 59144, 8453, 324].includes(form.chain_id)) {
+            return transactionFee
+        }
+
+        try {
+            const response = await axios.get(
+                `https://api.coingecko.com/api/v3/simple/price?ids=${currentBlockchain.coingecko}&vs_currencies=usd`
+            )
+            
+            const tokenPrice = response.data[currentBlockchain.coingecko]?.usd
+            if (tokenPrice) {
+                return formatTransactionFee(1 / tokenPrice)
+            }
+        } catch (error) {
+            console.error('Failed to fetch token price:', error)
+            return null
+        }
+    }
+    
+    return transactionFee
+}
+</script>
 <template>
     <AuthenticatedLayout :loading="loading" :transaction="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
         <Head title="Create collection" />
@@ -210,7 +280,7 @@ const deployContract = async () => {
                             <Button class="!py-2" @click.prevent="selectContractType('ERC1155')">Create</Button>
                         </div>
                     </div>
-                    <div v-if="form.type !== 'ERC1155Burn'" class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
                         <div>
                             <img src="/images/create-3.png" class="rounded-t-md">
                         </div>
@@ -218,12 +288,12 @@ const deployContract = async () => {
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
                             <h2>Open Edition + Burn</h2>
                             <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
-                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')" :disabled="true">Not available at this time</Button>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')">Create</Button>
                         </div>
                     </div>
                 </div>
 
-                <Box v-else class="w-full mb-4" title="">
+                <Box v-else class="w-full mb-4" title="Smart contract settings">
                     <BoxContent>
                         <div class="w-full flex flex-wrap">
                             <div class="basis-full sm:basis-1/2">
