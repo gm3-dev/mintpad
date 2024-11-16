@@ -212,42 +212,59 @@ const prepareFiles = async (files) => {
     }
 }
 const createMetadata = async (images, json) => {
-    var imagesLength = Object.keys(images).length
-    var jsonLength = Object.keys(json).length
-    var firstImageKey = Object.keys(images)[0]
-    var firstJsonKey = Object.keys(json)[0]
-    var firstJsonFile = json[firstJsonKey]
-
-    // Parse single JSON file
+    const imagesLength = Object.keys(images).length
+    const jsonLength = Object.keys(json).length
+    const firstImageKey = Object.keys(images)[0]
+    const firstJsonKey = Object.keys(json)[0]
+    const firstJsonFile = json[firstJsonKey]
+    
+    let jsonList = {};
+    
+    // Parse JSON files
     if (jsonLength == 1) {
-        var jsonList = {};
-        var jsonData = await getJsonData(firstJsonFile)
-        var index = parseInt(firstImageKey)
-        Object.entries(jsonData).forEach((nft) => {
-            jsonList[index] = nft[1]
-            index++
-        })
-    // Parse multiple JSON files
+        // Single JSON file case
+        const jsonData = await getJsonData(firstJsonFile)
+        
+      
+        const formattedData = {
+            name: jsonData.name || `NFT #${firstImageKey}`, 
+            description: jsonData.description || "",
+            attributes: jsonData.attributes || [], // Add empty attributes array if missing
+            image: jsonData.image || "" 
+        }
+        
+        jsonList[firstImageKey] = formattedData
     } else {
-        var jsonList = {};
-        for (var i = parseInt(firstJsonKey); i < (jsonLength + parseInt(firstJsonKey)); i++) {
-            jsonList[i] = await getJsonData(json[i])
+        // Multiple JSON files case
+        for (let i = parseInt(firstJsonKey); i < (jsonLength + parseInt(firstJsonKey)); i++) {
+            const jsonData = await getJsonData(json[i])
+            jsonList[i] = {
+                name: jsonData.name || `NFT #${i}`,
+                description: jsonData.description || "",
+                attributes: jsonData.attributes || [],
+                image: jsonData.image || ""
+            }
         }
     }
-
+    
     // Create metadata array
-    var metadata = []
-    for (var i = parseInt(firstImageKey); i < (imagesLength + parseInt(firstImageKey)); i++) {
-        var image = images[i]
-        var json = jsonList[image.id]
+    const metadata = []
+    for (let i = parseInt(firstImageKey); i < (imagesLength + parseInt(firstImageKey)); i++) {
+        const image = images[i]
+        const jsonData = jsonList[image.id]
+        
+        if (!jsonData) {
+            throw new Error(`Missing JSON metadata for image ${image.id}`)
+        }
+        
         metadata.push({
-            name: json.name,
-            description: json.description != null && json.description != false ? json.description : '',
+            name: jsonData.name,
+            description: jsonData.description,
             image: image,
-            attributes: json.attributes
+            attributes: jsonData.attributes || []
         })
     }
-
+    
     return metadata
 }
 const validFileType = (file) => {
@@ -387,3 +404,4 @@ const setPlaceholderImage = (e) => {
         </BoxContent>
     </Box>
 </template>
+
