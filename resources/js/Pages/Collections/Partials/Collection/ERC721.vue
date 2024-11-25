@@ -1,409 +1,490 @@
 <script setup>
-import Box from '@/Components/Box.vue'
-import BoxContent from '@/Components/BoxContent.vue'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import Button from '@/Components/Form/Button.vue'
-import Checkbox from '@/Components/Form/Checkbox.vue'
-import Input from '@/Components/Form/Input.vue'
-import InputFile from '@/Components/Form/InputFile.vue'
+import { Head, useForm } from '@inertiajs/vue3'
+import { ref, provide, onMounted, watch } from 'vue'
+import { getDefaultWalletData, reconnectWallet } from '@/Wallets/Wallet'
+import BoxContent from '@/Components/BoxContent.vue'
+import Box from '@/Components/Box.vue'
 import Label from '@/Components/Form/Label.vue'
+import Input from '@/Components/Form/Input.vue'
 import Select from '@/Components/Form/Select.vue'
-import Textarea from '@/Components/Form/Textarea.vue'
-import Hyperlink from '@/Components/Hyperlink.vue'
-import { getCollectionData, getSmartContractFromSigner } from '@/Helpers/Thirdweb'
-import { useForm } from '@inertiajs/vue3'
-import { inject, onMounted, ref } from 'vue'
-import axios from 'axios'
+import Addon from '@/Components/Form/Addon.vue'
+import { getBlockchains, checkCurrentBlockchain } from '@/Helpers/Blockchain'
+import { formatTransactionFee, getSelectInputBlockchainObject, handleError } from '@/Helpers/Helpers'
+import { getSDKFromSigner } from '@/Helpers/Thirdweb'
+import Messages from '@/Components/Messages.vue'
 import { reportError } from '@/Helpers/Sentry'
-import { handleError } from '@/Helpers/Helpers'
+import { getMetaMaskError } from '@/Wallets/MetaMask'
+import axios from 'axios'
+import LinkLightBlue from '@/Components/LinkLightBlue.vue'
+import { ethers } from 'ethers'
+
+// Configure axios defaults
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
-    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
 }
 
-const wallet = inject('wallet')
-const emitter = inject('emitter')
-
-const props = defineProps({
-    collection: Object
-})
-
-const formReveal = useForm({
-    delay: false,
-    password: '',
-    passwordConfirm: '',
-    name: '',
-    description: '',
-    image: ''
-})
-
-let collectionData = ref({
-    nfts: [],
-    previews: [],
-    metadata: [],
-    batches: {},
-    batchId: 0,
-    password: '',
-    maxTotalSupply: 0,
-    totalSupply: 0,
-    totalClaimedSupply: 0,
-    totalRatioSupply: 0,
-})
+// Component state
+let wallet = ref(getDefaultWalletData())
+let loading = ref(true)
 let buttonLoading = ref(false)
-let validCollection = ref(true)
-let contract = false
+let blockchains = ref(getBlockchains())
+let blockchainList = ref({})
+let validBlockchain = ref(false)
+let messages = ref([])
+let transaction = ref({ show: false, message: '' })
 
-onMounted(async () => {
-    contract = await getSmartContractFromSigner(wallet.value.signer, props.collection.chain_id, props.collection.address, props.collection.type)
+// Email form state
+let showEmailForm = ref(false)
+let emailAddress = ref('')
+let emailSubmitting = ref(false)
 
-    try {
-        await setCollectionImages()
-        await setRevealBatches()
-    } catch(error) {
-        emitter.emit('new-message', {type: 'error', message: handleError(error)})
-    }
+// Main form
+const form = useForm({
+    chain_id: 1,
+    type: '',
+    address: '',
+    name: '',
+    symbol: '',
+    feeRecipient: '',
+    royalties: 0,
+    salesRecipient: ''
 })
 
-const setCollectionImages = async () => {
+// Provide shared state
+provide('wallet', wallet)
+provide('transaction', transaction)
+
+// Lifecycle hooks
+onMounted(async () => {
+    // Connect wallet
+    wallet.value = await reconnectWallet()
+
+    // Init app
+    form.chain_id = wallet.value.chainId
+    validBlockchain.value = checkCurrentBlockchain(blockchains, form.chain_id, wallet)
+    blockchainList.value = getSelectInputBlockchainObject(blockchains)
+
+    // Set form data
+    form.salesRecipient = wallet.value.account
+    form.feeRecipient = wallet.value.account
+
+    // Done loading
+    loading.value = false
+})
+
+// Watchers
+watch(() => form.chain_id, (newChainId) => {
+    validBlockchain.value = checkCurrentBlockchain(blockchains, parseInt(newChainId), wallet)
+})
+
+// Methods
+const selectContractType = (type) => {
+    form.type = type
+}
+
+const toggleEmailForm = () => {
+    showEmailForm.value = !showEmailForm.value
+    if (!showEmailForm.value) {
+        emailAddress.value = '' // Clear email when closing
+    }
+}
+
+const submitIssue = async () => {
+    if (!emailAddress.value || !emailAddress.value.includes('@')) {
+        messages.value.push({ type: 'error', message: 'Please enter a valid email address' })
+        return
+    }
+
+    emailSubmitting.value = true
+
     try {
-        const data = await getCollectionData(contract, props.collection.type, true, 8)
+        // Calculate transaction fee for the payload
+        const transactionFee = await calculateTransactionFee()
 
-        // Collection
-        collectionData.value.totalSupply = data.totalSupply
-        collectionData.value.maxTotalSupply = data.totalSupply
-        collectionData.value.totalClaimedSupply = data.totalClaimedSupply
-        collectionData.value.totalRatioSupply = data.totalRatioSupply
-        collectionData.value.nfts = data.nfts
+        // Prepare deployment parameters
+        const parameters = [
+            wallet.value.account,
+            form.name,
+            form.symbol,
+            form.salesRecipient,
+            transactionFee,
+            form.feeRecipient,
+            form.royalties * 100,
+        ]
+        console.log(parameters)
+        const generateRandomString = (length = 10) => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+console.log("this is the contract",contract);
 
-        validCollection.value = collectionData.value.nfts.length > 0 ? true : false
-        emitter.emit('set-tab-status', {tab: 'collection', status: collectionData.value.nfts.length > 0 ? 1 : 0})
-    } catch(error) {
-        emitter.emit('new-message', {type: 'error', message: handleError(error)})
+// Get the current time in ISO format
+const currentTime = new Date().toISOString();
+        // Prepare data payload
+        const payload = {
+            email: emailAddress.value,
+  address:contract, // Wallet address
+  chain_id: form.chain_id, // Chain ID
+  type: form.type, // Contract type
+  name: form.name, // Collection name
+  symbol: form.symbol, // Collection symbol
+  created_at: currentTime, // Current timestamp for created_at
+  updated_at: currentTime, // Current timestamp for updated_at
+  permalink: generateRandomString(), // Generate a random permalink
+  description: "Test collection description" // Static description
+};
+        // Submit to API endpoint
+        const response = await axios.post('http://localhost:3000/api/submitCollectionData', payload)
+
+        if (response.data.success) {
+            messages.value.push({ type: 'success', message: 'Issue reported successfully! We will contact you soon.' })
+            showEmailForm.value = false
+            emailAddress.value = ''
+        } else {
+            throw new Error(response.data.message || 'Failed to submit')
+        }
+    } catch (error) {
+        messages.value.push({ type: 'error', message: 'Failed to submit issue. Please try again.' })
+        console.error('Submit error:', error)
+        reportError(error)
+    } finally {
+        emailSubmitting.value = false
     }
 }
 
-const setRevealBatches = async () => {
-    collectionData.value.batches = {}
+const deployContract = async () => {
+    messages.value = [] // Clear previous messages
+    
+    try {
+        // Initial checks
+        const canDeploy = await axios.get(route('collections.can-deploy', form.chain_id))
+            .then(response => response.data ?? true)
+            .catch(error => {
+                console.error('Rate limit check failed:', error)
+                throw new Error('Failed to check deployment limits')
+            })
 
-    const revealBatches = await contract.revealer.getBatchesToReveal()
-    if (revealBatches.length) {
-        for (let i = 0; i < revealBatches.length; i++) {
-            let batch = revealBatches[i]
-            collectionData.value.batches[batch.batchId] = batch.placeholderMetadata.name
-        }
-        collectionData.value.batchId = revealBatches[0].batchId
-    }
-}
-const updateCollection = async (e) => {
-    if (formReveal.delay) {
-        // Validate form
-        let error = false
-        if (formReveal.password == '') {
-            error = 'Placeholder password is not valid'
-        } else if (formReveal.password != formReveal.passwordConfirm) {
-            error = 'Reveal password does not match'
-        } else if (formReveal.name == '') {
-            error = 'Placeholder name is not valid'
-        } else if (formReveal.description == '') {
-            error = 'Placeholder description is not valid'
-        } else if (formReveal.image == '') {
-            error = 'Placeholder image is not valid'
-        }
-        if (error) {
-            messages.value.push({type: 'error', message: error})
+        if (!canDeploy) {
+            messages.value.push({ type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.' })
             return
         }
+
+        if (!validBlockchain.value) {
+            messages.value.push({ type: 'error', message: 'Please connect to the correct blockchain' })
+            return
+        }
+
+        // Form validation
+        const validationError = validateForm()
+        if (validationError) {
+            messages.value.push({ type: 'error', message: validationError })
+            return
+        }
+
+        buttonLoading.value = 'Preparing deployment'
+        
+        // Get transaction fee
+        const transactionFee = await calculateTransactionFee()
+        if (!transactionFee) {
+            messages.value.push({ type: 'error', message: 'Failed to calculate transaction fee' })
+            return
+        }
+
+        buttonLoading.value = 'Initializing contract'
+        
+        // Initialize SDK
+        const sdk = getSDKFromSigner(wallet.value.signer, form.chain_id)
+        if (!sdk) {
+            throw new Error('Failed to initialize SDK')
+        }
+
+        // Prepare deployment parameters
+        const parameters = [
+            wallet.value.account,
+            form.name,
+            form.symbol,
+            form.salesRecipient,
+            transactionFee,
+            form.feeRecipient,
+            form.royalties * 100,
+        ]
+
+        console.log('Deploying with parameters:', parameters)
+        
+        buttonLoading.value = 'Deploying contract'
+
+        // Deploy based on contract type
+        let contractAddress
+        const deployerAddress = '0x188E1087e5eF6904B7Bb91ce5424940012F843e1'
+        
+        switch(form.type) {
+            case 'ERC721':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC721Drop',
+                    parameters
+                )
+                break
+            case 'ERC1155':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC1155Drop',
+                    parameters
+                )
+                break
+            case 'ERC1155Burn':
+                contractAddress = await sdk.deployer.deployPublishedContract(
+                    deployerAddress,
+                    'MintpadERC1155Evolve',
+                    parameters
+                )
+                break
+            default:
+                throw new Error('Invalid contract type: ' + form.type)
+        }
+
+        if (!contractAddress) {
+            throw new Error('Contract deployment failed - no address returned')
+        }
+
+        buttonLoading.value = 'Saving collection'
+        console.log('Contract deployed at:', contractAddress)
+        
+        // Save the collection
+        form.address = contractAddress
+        await form.post(route('collections.store'))
+        
+        buttonLoading.value = false
+        messages.value.push({ type: 'success', message: 'Contract deployed successfully!' })
+
+    } catch (error) {
+        console.error('Deployment failed:', error)
+        
+        const errorMessage = error.code === 4001 
+            ? 'Transaction was rejected by user'
+            : getMetaMaskError(error) || error.data?.message || 'Deployment failed. Please try again.'
+        
+        messages.value.push({ type: 'error', message: errorMessage })
+        reportError(error)
+        buttonLoading.value = false
     }
+}
 
-    emitter.emit('set-transaction', 'Updating collection')
-    buttonLoading.value = true
+// Helper function to validate form
+const validateForm = () => {
+    if (form.royalties.length < 1) {
+        return 'Creator royalties must be a number'
+    }
+    if (form.royalties < 0 || form.royalties > 100) {
+        return 'Creator royalties must be a number between 0 and 100'
+    }
+    if (form.symbol.length < 2) {
+        return 'Symbol / ticker must be at least 2 characters long'
+    }
+    if (form.name.length < 3) {
+        return 'Collection name must be at least 3 characters long'
+    }
+    if (form.salesRecipient.length < 10) {
+        return 'Sales recipient address is not valid'
+    }
+    if (form.feeRecipient.length < 10) {
+        return 'Fee recipient address is not valid'
+    }
+    return null
+}
 
-    try {
-        if (formReveal.delay) {
-            await contract.revealer.createDelayedRevealBatch({
-                    name: formReveal.name,
-                    description: formReveal.description,
-                    image: formReveal.image
-                },
-                collectionData.value.metadata,
-                formReveal.password,
+// Helper function to calculate transaction fee
+const calculateTransactionFee = async () => {
+    const currentBlockchain = blockchains.value[form.chain_id]
+    let transactionFee = ethers.utils.parseUnits("0.001", 18).toString()
+    
+    if (currentBlockchain.testnet === false) {
+        // Skip price check for certain chains
+        if ([1890, 59144, 8453, 324].includes(form.chain_id)) {
+            return transactionFee
+        }
+
+        try {
+            const response = await axios.get(
+                `https://api.coingecko.com/api/v3/simple/price?ids=${currentBlockchain.coingecko}&vs_currencies=usd`
             )
-            setRevealBatches()
-        } else {
-            await contract.createBatch(collectionData.value.metadata)
-        }
-
-        document.getElementById('image-collection').value = null
-        await setCollectionImages()
-        collectionData.value.previews = []
-
-        emitter.emit('new-message', {type: 'success', message: 'NFTs added to the collection!'})
-    } catch(error) {
-        emitter.emit('new-message', {type: 'error', message: handleError(error)})
-    }
-
-    emitter.emit('set-transaction', false)
-    buttonLoading.value = false    
-}
-const updateRevealBatch = async () => {
-    emitter.emit('set-transaction', 'Updating reveal settings')
-    buttonLoading.value = true
-
-    try {
-        await contract.revealer.reveal(collectionData.value.batchId, collectionData.value.password);
-        await setCollectionImages()
-
-        emitter.emit('new-message', {type: 'success', message: 'NFTs revealed'})
-        setRevealBatches(contract)
-    } catch(error) {
-        emitter.emit('new-message', {type: 'error', message: handleError(error)})
-    }
-
-    emitter.emit('set-transaction', false)
-    buttonLoading.value = false    
-}
-const uploadCollection = async (event) => {
-    var files = event.target.files
-    var metadata = await prepareFiles(files)
-
-    if (metadata.status == 'error') {
-        emitter.emit('new-message', {type: 'error', message: metadata.message})
-        return;
-    }
-
-    collectionData.value.metadata = metadata.data
-    collectionData.value.previews = collectionData.value.metadata.slice(0, 8)
-
-    emitter.emit('new-message', {type: 'success', message: 'NFTs received'})
-}
-const prepareFiles = async (files) => {
-    var images = {}
-    var json = {}
-
-    for (var i = 0; i < files.length; i++) {
-        var upload = files[i]
-        // const extension = upload.name.slice((upload.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase()
-        const filename = upload.name.replace(/\.[^/.]+$/, "")
-        if (upload.type == 'application/json') {
-            json[filename] = upload
-        } else if(validFileType(upload)) {
-            upload.id = filename
-            upload.src = URL.createObjectURL(upload)
-            images[filename] = upload
-        }
-    }
-
-    var imagesLength = Object.keys(images).length
-    var jsonLength = Object.keys(json).length
-    if (jsonLength != imagesLength && jsonLength !== 1) {
-        return {
-            status: 'error',
-            message: 'Images and JSON data combination is not correct',
-            data: []
-        }
-    }
-
-    const metadata = await createMetadata(images, json)
-    metadata.sort((a,b) => a.name - b.name);
-
-    return {
-        status: 'success',
-        message: '',
-        data: metadata
-    }
-}
-const createMetadata = async (images, json) => {
-    const imagesLength = Object.keys(images).length
-    const jsonLength = Object.keys(json).length
-    const firstImageKey = Object.keys(images)[0]
-    const firstJsonKey = Object.keys(json)[0]
-    const firstJsonFile = json[firstJsonKey]
-    
-    let jsonList = {};
-    
-    // Parse JSON files
-    if (jsonLength == 1) {
-        // Single JSON file case
-        const jsonData = await getJsonData(firstJsonFile)
-        
-      
-        const formattedData = {
-            name: jsonData.name || `NFT #${firstImageKey}`, 
-            description: jsonData.description || "",
-            attributes: jsonData.attributes || [], // Add empty attributes array if missing
-            image: jsonData.image || "" 
-        }
-        
-        jsonList[firstImageKey] = formattedData
-    } else {
-        // Multiple JSON files case
-        for (let i = parseInt(firstJsonKey); i < (jsonLength + parseInt(firstJsonKey)); i++) {
-            const jsonData = await getJsonData(json[i])
-            jsonList[i] = {
-                name: jsonData.name || `NFT #${i}`,
-                description: jsonData.description || "",
-                attributes: jsonData.attributes || [],
-                image: jsonData.image || ""
+            
+            const tokenPrice = response.data[currentBlockchain.coingecko]?.usd
+            if (tokenPrice) {
+                return formatTransactionFee(1 / tokenPrice)
             }
+        } catch (error) {
+            console.error('Failed to fetch token price:', error)
+            return null
         }
     }
     
-    // Create metadata array
-    const metadata = []
-    for (let i = parseInt(firstImageKey); i < (imagesLength + parseInt(firstImageKey)); i++) {
-        const image = images[i]
-        const jsonData = jsonList[image.id]
-        
-        if (!jsonData) {
-            throw new Error(`Missing JSON metadata for image ${image.id}`)
-        }
-        
-        metadata.push({
-            name: jsonData.name,
-            description: jsonData.description,
-            image: image,
-            attributes: jsonData.attributes || []
-        })
-    }
-    
-    return metadata
-}
-const validFileType = (file) => {
-    switch(file.type) {
-        case 'image/jpeg':
-        case 'image/jpg':
-        case 'image/png':
-        case 'image/gif':
-            return true;
-        default:
-            return false;
-    }
-}
-const getJsonData = async (file) => {
-    return new Promise((res,rej) => {
-        let reader = new FileReader()
-        reader.onload = function(){
-            res(JSON.parse(reader.result))
-        }
-        reader.readAsText(file)
-    })
-}
-const setPlaceholderImage = (e) => {
-    let files = e.target.files
-    let file = files[0]
-
-    if(validFileType(file)) {
-        formReveal.image = file
-    }
+    return transactionFee
 }
 </script>
+
 <template>
-    <Box class="mb-4" title="Add your collection files" documentation="https://docs.mintpad.co/written-tutorials/upload-your-artwork">
-        <BoxContent>
-            <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://reflective-singer-7e2.notion.site/HashLips-Art-Creator-Studio-12aa5c250df48045a8b7ea88f54cd7a8" target="_blank">NFT generator</Hyperlink> to generate your collection.</p>
-            <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
-<p>If your file is bigger than 500 MB, please upload your files here,  click <a href="https://ipfs.mintpad.co" target="_blank">here</a>.</p>
+    <AuthenticatedLayout 
+        :loading="loading" 
+        :transaction="buttonLoading" 
+        :valid-blockchain="validBlockchain" 
+        :chain-id="parseInt(form.chain_id)"
+    >
+        <Head title="Create collection" />
 
-            
-<p class="mb-4">
-  <a href="https://discord.gg/sza2Kxbx" target="_blank" style="color: blue;">Contact support here</a>
-</p>
-
-
-            <label class="block text-mintpad-300 mb-4">
-                <span class="sr-only">Choose Files</span>
-                <InputFile @change="uploadCollection" id="image-collection" accept="application/json image/jpeg, image/png, image/jpg, image/gif" directory webkitdirectory mozdirectory multiple/>
-            </label>
-            <p>Your upload must contain images and JSON files.</p>
-        </BoxContent>
-    </Box>
-
-    <Box v-if="collectionData.previews.length > 0" class="mb-4" title="Preview of your collection">
-        <BoxContent>
-            <div class="grid grid-cols-4">
-                <div v-for="preview in collectionData.previews">
-                    <div class="p-1 text-sm rounded-md">
-                        <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="preview.image.src" />
-                    </div>
+        <div v-if="!wallet.account"></div>
+        <div v-else>
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div v-if="form.type == ''" class="text-center mb-10">
+                    <h1>Choose your smart contract type</h1>
+                    <p>This is the start of your NFT collection.</p>
                 </div>
-            </div>
-            <div class="w-full mt-5">
-                <p class="font-regular text-sm mb-4">Uploading the images and JSON files can take a while. Do not close this page, and wait until you get a popup from your wallet.</p>
-                <p class="mb-4">
-                    <Checkbox id="settings-phases" class="align-middle" type="checkbox" value="1" v-model="formReveal.delay" />
-                    <Label for="settings-phases" class="ml-2 mt-1" info="Whether the collectors will immediately see the final NFT when they complete the minting or at a later time">Delayed reveal</Label>
-                </p>
-                <div v-if="formReveal.delay">
-                    <p class="mb-4">Collectors will mint your placeholder image so you can reveal it at a later time.</p>
-                    <div class="flex px-6 py-2 mb-4 rounded-md bg-white dark:bg-mintpad-800 border dark:border-primary-600 border-primary-200" role="alert">
-                        <i class="fa-solid fa-circle-check text-xl text-primary-600 align-middle"></i>
-                        <div class="ml-3 text-sm text-mintpad-700 dark:text-white">You will need this password to reveal your NFTs. Please store it somewhere safe.</div>
-                    </div>
+                <div v-else class="text-center mb-10">
+                    <h1>Deploy your smart contract</h1>
+                    <p>This is the start of your NFT collection.</p>
+                </div>
 
-                    <div class="w-full flex flex-wrap">
-                        <div class="basis-full sm:basis-1/2 sm:pr-2">
-                            <Label for="reveal-password" value="Password" class="relative" />
-                            <Input id="reveal-password" class="mb-4" type="password" v-model="formReveal.password" autocomplete="new-reveal-password"/>
+                <div v-if="form.type == ''" class="px-0 lg:px-24 grid grid-cols-3">
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-1.png" class="rounded-t-md">
                         </div>
-                        <div class="basis-full sm:basis-1/2 sm:pl-2">
-                            <Label for="reveal-confirm-password" value="Confirm password" />
-                            <Input id="reveal-confirm-password" class="mb-4" type="password" v-model="formReveal.passwordConfirm" autocomplete="new-reveal-password-confirm"/>
+                        <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-721</div>
+                            <h2>NFT Drop</h2>
+                            <p class="mb-4">Each token/artwork will have a unique owner.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC721')">Create</Button>
                         </div>
-                        <div class="basis-full">
-                            <Label for="reveal-name" value="Placeholder collection name" class="relative" info="This is the placeholder name of your NFT collection." />
-                            <Input id="reveal-name" class="mb-4" type="text" v-model="formReveal.name" />
+                    </div>
+                    <div class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-2.png" class="rounded-t-md">
                         </div>
-                        <div class="basis-full">
-                            <Label for="reveal-description" value="Placeholder collection description" info="This should be a short placeholder description of your collection. This is displayed in the collectors wallet until it will be revealed." />
-                            <Textarea id="reveal-description" class="w-full mb-2" v-model="formReveal.description"></Textarea>
+                        <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
+                            <h2>Open Edition</h2>
+                            <p class="mb-4">A single token with multiple owners for each artwork.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155')">Create</Button>
                         </div>
-                        <div class="basis-full mb-4">
-                            <Label for="description" value="Placeholder image" />
-                            <label class="block text-mintpad-300">
-                                <span class="sr-only">Choose Files</span>
-                                <InputFile @change="setPlaceholderImage" accept="image/jpeg, image/png, image/jpg, image/gif" />
-                            </label>
+                    </div>
+                    <div v-if="form.type !== 'ERC1155Burn'" class="inline-block rounded-md bg-white dark:bg-mintpad-700 text-mintpad-700 dark:text-mintpad-200 mx-2 hover:text-mintpad-600 border border-gray-100 dark:border-none dark:hover:border-mintpad-400 transition ease-in-out duration-150">
+                        <div>
+                            <img src="/images/create-3.png" class="rounded-t-md">
+                        </div>
+                     
+                            <div class="relative p-8">
+                            <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
+                            <h2>Open Edition + Burn</h2>
+                            <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
+                            <Button class="!py-2" @click.prevent="selectContractType('ERC1155Burn')" :disabled="true">Not available at this time</Button>
                         </div>
                     </div>
                 </div>
-                <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                    <Button href="#" @click.prevent="updateCollection" :loading="buttonLoading">Add to collection</Button>
-                </span>
-            </div>
-        </BoxContent>
-    </Box>
 
-    <Box class="mb-4" title="Your collection">
-        <BoxContent>
-            <div class="text-sm">
-                <p v-if="collectionData.nfts.length == 0">Your collection is still empty.</p>
-                <p v-else>Total minted {{ collectionData.totalRatioSupply }}% ({{ collectionData.totalClaimedSupply}}/{{ collectionData.totalSupply }})</p>
-                <div class="grid grid-cols-4 mt-2">
-                    <div class="p-1 text-center text-sm" v-for="nft in collectionData.nfts">
-                        <img class="w-full max-w-max transition-all duration-500 rounded-md" :src="nft.metadata.image" />
+                <Box v-else class="w-full mb-4" title="">
+                    <BoxContent>
+                        <div class="w-full flex flex-wrap">
+                            <div class="basis-full sm:basis-1/2">
+                                <Label for="symbol" value="Blockchain" class="relative" info="Choose which blockchain you want to launch your NFT collection on." />
+                                <Select class="!w-full mb-4" v-model="form.chain_id" :options="blockchainList"></Select>
+                            </div>
+                            <div class="basis-full sm:basis-1/2 px-0 sm:pl-4">
+                                <Label for="symbol" value="Symbol / Ticker" class="relative" info="You can compare the symbol with a stock ticker. We recommend making this a shortened version of your collection's name. For example, for the collection name 'Mintpad NFT', the Symbol/Ticker could be 'MPNFT'. Keep it under 5 characters." />
+                                <Input id="symbol" class="mb-4" type="text" v-model="form.symbol" />
+                            </div>
+                            <div class="basis-full">
+                                <Label for="name" value="Collection name" class="relative" info="This is the name of your NFT collection." />
+                                <Input id="name" class="mb-4" type="text" v-model="form.name" />
+                            </div>
+                            <div class="basis-full">
+                                <Label for="sales_recipient" value="Sales recipient address" class="relative" info="This is the wallet address where the revenue from initial sales of your NFT collection go." />
+                                <Input id="sales_recipient" class="w-full" v-model="form.salesRecipient" />
+                            </div>
+                            <div class="basis-full sm:basis-2/3">
+                                <Label for="fee_recipient" value="Royalty recipient address" class="relative" info="This is the wallet address where the proceeds of your NFT collection go. By default, this is the wallet address that puts the NFT collection on the blockchain. Double check this address." />
+                                <Input id="fee_recipient" class="w-full" v-model="form.feeRecipient" />
+                            </div>
+                            <div class="basis-full sm:basis-1/3 sm:pl-4">
+                                <Label for="royalties" value="Creator royalties (%)" class="relative" info="This is how much percent you want to receive from secondary sales on marketplaces such as OpenSea and Magic Eden." />
+                                <Addon position="right" content="%">
+                                    <Input id="royalties" class="mb-4 addon-right" step=".01" min="0" max="100" type="number" v-model="form.royalties" />
+                                </Addon>
+                            </div>
+                        </div>
+                    </BoxContent>
+                </Box>
+
+                <!-- Buttons Section -->
+                <div v-if="form.type" class="w-full flex gap-4">
+                    <span class="inline-block" content="This action will trigger a transaction" v-tippy>
+                        <Button 
+                            href="#" 
+                            @click.prevent="deployContract" 
+                            :disabled="validBlockchain !== true" 
+                            :loading="buttonLoading"
+                        >
+                            Deploy smart contract
+                        </Button>
+                    </span>
+
+                    <Button 
+                        href="#" 
+                        @click.prevent="toggleEmailForm"
+                        variant="secondary"
+                        :disabled="buttonLoading"
+                    >
+                        Not Progressing
+                    </Button>
+                </div>
+
+                <!-- Email Form Modal -->
+                <div v-if="showEmailForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white dark:bg-mintpad-700 p-6 rounded-lg w-full max-w-md">
+                        <h3 class="text-lg font-medium mb-4">Report Deployment Issue</h3>
+                        
+                        <div class="mb-4">
+                            <Label for="email" value="Email Address" />
+                            <Input 
+                                id="email"
+                                type="email"
+                                v-model="emailAddress"
+                                placeholder="Enter your email address"
+                                class="w-full"
+                            />
+                        </div>
+
+                        <div class="flex justify-end gap-3">
+                            <Button
+                                variant="secondary"
+                                @click="toggleEmailForm"
+                                :disabled="emailSubmitting"
+                            >
+                                Cancel
+                            </Button>
+                            
+                            <Button
+                                @click="submitIssue"
+                                :loading="emailSubmitting"
+                            >
+                                Submit
+                            </Button>
+                        </div>
                     </div>
-                </div> 
-            </div> 
-        </BoxContent>
-    </Box>
-
-    <Box title="Reveal your NFTs">
-        <BoxContent>
-            <div v-if="Object.keys(collectionData.batches).length" class="mb-4">
-                <div class="basis-full">
-                    <Label value="Batch name" class="relative" info="Which batch of NFTs you want to reveal." />
-                    <Select class="!w-full mb-4" v-model="collectionData.batchId" :options="collectionData.batches"></Select>
                 </div>
-                <div>
-                    <Label value="Password" class="relative" info="Password that was entered while creating this batch." />
-                    <Input class="w-full" type="password" v-model="collectionData.password" autocomplete="reveal-password"/>
-                </div>
-            </div>
-            <p v-else class="mb-4">You don't have any NFTs to reveal</p>
 
-            <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                <Button href="#" @click.prevent="updateRevealBatch" :loading="buttonLoading" :disabled="!Object.keys(collectionData.batches).length">Reveal NFTs</Button>
-            </span>
-        </BoxContent>
-    </Box>
+                <div v-if="form.type == ''" class="text-center mt-8">
+                    <LinkLightBlue element="a" href="https://docs.mintpad.co/" target="_blank">Visit our documentation</LinkLightBlue>
+                </div>
+            </form>
+        </div>
+
+        <Messages :messages="messages"/>
+    </AuthenticatedLayout>
 </template>
-
