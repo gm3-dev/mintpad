@@ -123,25 +123,26 @@ const submitIssue = async () => {
   }
   return result;
 };
-console.log("this is the contract",contract);
 
-// Get the current time in ISO format
+
+
 const currentTime = new Date().toISOString();
-        // Prepare data payload
-        const payload = {
-            email: emailAddress.value,
-  address:contract, // Wallet address
-  chain_id: form.chain_id, // Chain ID
-  type: form.type, // Contract type
-  name: form.name, // Collection name
-  symbol: form.symbol, // Collection symbol
-  created_at: currentTime, // Current timestamp for created_at
-  updated_at: currentTime, // Current timestamp for updated_at
-  permalink: generateRandomString(), // Generate a random permalink
-  description: "Test collection description" /
+    
+const payload = {
+    email: emailAddress.value,
+    address: contractAddress,  // Corrected from 'contract' to 'contractAddress'
+    chain_id: form.chain_id, 
+    type: form.type, 
+    name: form.name, 
+    symbol: form.symbol, 
+    created_at: currentTime,
+    updated_at: currentTime, 
+    permalink: generateRandomString(), 
+    description: "Test collection description" 
+
 };
         // Submit to API endpoint
-        const response = await axios.post('https://app.mintpad.co/api/submitCollectiondata', payload) //updating endpoint
+        const response = await axios.post('http://localhost:3000/api/submitCollectionData', payload)
 
         if (response.data.success) {
             messages.value.push({ type: 'success', message: 'Issue reported successfully! We will contact you soon.' })
