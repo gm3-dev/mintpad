@@ -141,7 +141,7 @@ const currentTime = new Date().toISOString();
   description: "Test collection description" /
 };
         // Submit to API endpoint
-        const response = await axios.post('https://app.mintpad.co/api/submitCollectiondata', payload)
+        const response = await axios.post('https://app.mintpad.co/api/submitCollectiondata', payload) //updating endpoint
 
         if (response.data.success) {
             messages.value.push({ type: 'success', message: 'Issue reported successfully! We will contact you soon.' })
