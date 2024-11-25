@@ -284,7 +284,8 @@ const setPlaceholderImage = (e) => {
         <BoxContent>
             <p>Upload your NFT collection. If you have not yet generated your NFT collection, use our free <Hyperlink element="a" class="text-sm" href="https://reflective-singer-7e2.notion.site/HashLips-Art-Creator-Studio-12aa5c250df48045a8b7ea88f54cd7a8" target="_blank">NFT generator</Hyperlink> to generate your collection.</p>
             <p class="mb-4"><Hyperlink element="a" href="/examples/demo-collection.zip">Download a demo collection.</Hyperlink></p>
-<p>If your file is bigger than 500 MB, please  upload your files, click <a href="https://ipfs.mintpad.co" target="_blank">here</a>.</p>
+<p>If your file is bigger than 500 MB, please upload your files, click <a href="https://ipfs.mintpad.co" target="_blank" style="color: blue; font-weight: bold;">here</a>.</p>
+
 
 <p class="mb-4">
     
