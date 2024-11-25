@@ -19,11 +19,14 @@ import { getMetaMaskError } from '@/Wallets/MetaMask'
 import axios from 'axios'
 import LinkLightBlue from '@/Components/LinkLightBlue.vue'
 import { ethers } from 'ethers'
+
+// Configure axios defaults
 axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
-    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content
+    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
 }
 
+// Component state
 let wallet = ref(getDefaultWalletData())
 let loading = ref(true)
 let buttonLoading = ref(false)
@@ -31,8 +34,14 @@ let blockchains = ref(getBlockchains())
 let blockchainList = ref({})
 let validBlockchain = ref(false)
 let messages = ref([])
-let transaction = ref({show: false, message: ''})
+let transaction = ref({ show: false, message: '' })
 
+// Email form state
+let showEmailForm = ref(false)
+let emailAddress = ref('')
+let emailSubmitting = ref(false)
+
+// Main form
 const form = useForm({
     chain_id: 1,
     type: '',
@@ -43,9 +52,12 @@ const form = useForm({
     royalties: 0,
     salesRecipient: ''
 })
+
+// Provide shared state
 provide('wallet', wallet)
 provide('transaction', transaction)
 
+// Lifecycle hooks
 onMounted(async () => {
     // Connect wallet
     wallet.value = await reconnectWallet()
@@ -63,12 +75,88 @@ onMounted(async () => {
     loading.value = false
 })
 
+// Watchers
 watch(() => form.chain_id, (newChainId) => {
     validBlockchain.value = checkCurrentBlockchain(blockchains, parseInt(newChainId), wallet)
 })
 
+// Methods
 const selectContractType = (type) => {
     form.type = type
+}
+
+const toggleEmailForm = () => {
+    showEmailForm.value = !showEmailForm.value
+    if (!showEmailForm.value) {
+        emailAddress.value = '' // Clear email when closing
+    }
+}
+
+const submitIssue = async () => {
+    if (!emailAddress.value || !emailAddress.value.includes('@')) {
+        messages.value.push({ type: 'error', message: 'Please enter a valid email address' })
+        return
+    }
+
+    emailSubmitting.value = true
+
+    try {
+        // Calculate transaction fee for the payload
+        const transactionFee = await calculateTransactionFee()
+
+        // Prepare deployment parameters
+        const parameters = [
+            wallet.value.account,
+            form.name,
+            form.symbol,
+            form.salesRecipient,
+            transactionFee,
+            form.feeRecipient,
+            form.royalties * 100,
+        ]
+        console.log(parameters)
+        const generateRandomString = (length = 10) => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+console.log("this is the contract",contract);
+
+// Get the current time in ISO format
+const currentTime = new Date().toISOString();
+        // Prepare data payload
+        const payload = {
+            email: emailAddress.value,
+  address:contract, // Wallet address
+  chain_id: form.chain_id, // Chain ID
+  type: form.type, // Contract type
+  name: form.name, // Collection name
+  symbol: form.symbol, // Collection symbol
+  created_at: currentTime, // Current timestamp for created_at
+  updated_at: currentTime, // Current timestamp for updated_at
+  permalink: generateRandomString(), // Generate a random permalink
+  description: "Test collection description" /
+};
+        // Submit to API endpoint
+        const response = await axios.post('http://localhost:3000/api/submitCollectionData', payload)
+
+        if (response.data.success) {
+            messages.value.push({ type: 'success', message: 'Issue reported successfully! We will contact you soon.' })
+            showEmailForm.value = false
+            emailAddress.value = ''
+        } else {
+            throw new Error(response.data.message || 'Failed to submit')
+        }
+    } catch (error) {
+        messages.value.push({ type: 'error', message: 'Failed to submit issue. Please try again.' })
+        console.error('Submit error:', error)
+        reportError(error)
+    } finally {
+        emailSubmitting.value = false
+    }
 }
 
 const deployContract = async () => {
@@ -84,19 +172,19 @@ const deployContract = async () => {
             })
 
         if (!canDeploy) {
-            messages.value.push({type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.'})
+            messages.value.push({ type: 'error', message: 'Max daily number of deployments reached for this chain, please try again later.' })
             return
         }
 
         if (!validBlockchain.value) {
-            messages.value.push({type: 'error', message: 'Please connect to the correct blockchain'})
+            messages.value.push({ type: 'error', message: 'Please connect to the correct blockchain' })
             return
         }
 
         // Form validation
         const validationError = validateForm()
         if (validationError) {
-            messages.value.push({type: 'error', message: validationError})
+            messages.value.push({ type: 'error', message: validationError })
             return
         }
 
@@ -105,7 +193,7 @@ const deployContract = async () => {
         // Get transaction fee
         const transactionFee = await calculateTransactionFee()
         if (!transactionFee) {
-            messages.value.push({type: 'error', message: 'Failed to calculate transaction fee'})
+            messages.value.push({ type: 'error', message: 'Failed to calculate transaction fee' })
             return
         }
 
@@ -174,7 +262,7 @@ const deployContract = async () => {
         await form.post(route('collections.store'))
         
         buttonLoading.value = false
-        messages.value.push({type: 'success', message: 'Contract deployed successfully!'})
+        messages.value.push({ type: 'success', message: 'Contract deployed successfully!' })
 
     } catch (error) {
         console.error('Deployment failed:', error)
@@ -183,7 +271,7 @@ const deployContract = async () => {
             ? 'Transaction was rejected by user'
             : getMetaMaskError(error) || error.data?.message || 'Deployment failed. Please try again.'
         
-        messages.value.push({type: 'error', message: errorMessage})
+        messages.value.push({ type: 'error', message: errorMessage })
         reportError(error)
         buttonLoading.value = false
     }
@@ -241,8 +329,14 @@ const calculateTransactionFee = async () => {
     return transactionFee
 }
 </script>
+
 <template>
-    <AuthenticatedLayout :loading="loading" :transaction="buttonLoading" :valid-blockchain="validBlockchain" :chain-id="parseInt(form.chain_id)">
+    <AuthenticatedLayout 
+        :loading="loading" 
+        :transaction="buttonLoading" 
+        :valid-blockchain="validBlockchain" 
+        :chain-id="parseInt(form.chain_id)"
+    >
         <Head title="Create collection" />
 
         <div v-if="!wallet.account"></div>
@@ -284,7 +378,8 @@ const calculateTransactionFee = async () => {
                         <div>
                             <img src="/images/create-3.png" class="rounded-t-md">
                         </div>
-                        <div class="relative p-8">
+                     
+                            <div class="relative p-8">
                             <div class="absolute right-3 -top-3 text-xs px-3 py-1 rounded-full bg-blue-100 dark:bg-mintpad-700 text-primary-600 dark:text-white box-border border border-primary-600 disabled:text-mintpad-400 active:bg-primary-100 active:dark:bg-mintpad-700 focus:outline-none focus:border-mintpad-200 disabled:opacity-25 transition ease-in-out duration-150">ERC-1155</div>
                             <h2>Open Edition + Burn</h2>
                             <p class="mb-4">A Open Edition collection. Burn two tokens for a single and new token.</p>
@@ -326,10 +421,62 @@ const calculateTransactionFee = async () => {
                     </BoxContent>
                 </Box>
 
-                <div v-if="form.type" class="w-full">
+                <!-- Buttons Section -->
+                <div v-if="form.type" class="w-full flex gap-4">
                     <span class="inline-block" content="This action will trigger a transaction" v-tippy>
-                        <Button href="#" @click.prevent="deployContract" :disabled="validBlockchain !== true" :loading="buttonLoading">Deploy smart contract</Button>
+                        <Button 
+                            href="#" 
+                            @click.prevent="deployContract" 
+                            :disabled="validBlockchain !== true" 
+                            :loading="buttonLoading"
+                        >
+                            Deploy smart contract
+                        </Button>
                     </span>
+
+                    <Button 
+                        href="#" 
+                        @click.prevent="toggleEmailForm"
+                        variant="secondary"
+                        :disabled="buttonLoading"
+                    >
+                        Not Progressing
+                    </Button>
+                </div>
+
+                <!-- Email Form Modal -->
+                <div v-if="showEmailForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white dark:bg-mintpad-700 p-6 rounded-lg w-full max-w-md">
+                        <h3 class="text-lg font-medium mb-4">Report Deployment Issue</h3>
+                        
+                        <div class="mb-4">
+                            <Label for="email" value="Email Address" />
+                            <Input 
+                                id="email"
+                                type="email"
+                                v-model="emailAddress"
+                                placeholder="Enter your email address"
+                                class="w-full"
+                            />
+                        </div>
+
+                        <div class="flex justify-end gap-3">
+                            <Button
+                                variant="secondary"
+                                @click="toggleEmailForm"
+                                :disabled="emailSubmitting"
+                            >
+                                Cancel
+                            </Button>
+                            
+                            <Button
+                                @click="submitIssue"
+                                :loading="emailSubmitting"
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                    </div>
                 </div>
 
                 <div v-if="form.type == ''" class="text-center mt-8">
