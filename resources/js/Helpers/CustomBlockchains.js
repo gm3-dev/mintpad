@@ -247,6 +247,112 @@ export let ShapeSepoliaTestnet = {
   "slug": "shape-sepolia"
 }
 
+export let SonicTestnet = {
+  "name": "Sonic Testnet",
+  "chain": "SONIC",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmZybUfLF1rZs8zpnY2yCU3MFPzJTP8pXRhBUS7TNUVqym", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://rpc.testnet.soniclabs.com/"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Sonic Token",
+    "symbol": "S",
+    "decimals": 18
+  },
+  "infoURL": "https://testnet.soniclabs.com/",
+  "shortName": "sonic-testnet",
+  "chainId": 64165,
+  "networkId": 64165,
+  "explorers": [
+    {
+      "name": "Sonic Explorer",
+      "url": "https://testnet.soniclabs.com/",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "sonic-testnet"
+};
+
+
+export let GravityAlphaMainnet = {
+  "name": "Gravity Alpha Mainnet",
+  "chain": "GRAVITY",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmUH4LvpNmA2UsVJQXdF49BvvGUDiQeA6ZLJ1LJYVkWB27", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://rpc.gravity.xyz"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Gravity Token",
+    "symbol": "G",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer.gravity.xyz",
+  "shortName": "gravity-mainnet",
+  "chainId": 1625,
+  "networkId": 1625,
+  "explorers": [
+    {
+      "name": "Gravity Explorer",
+      "url": "https://explorer.gravity.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "gravity-alpha-mainnet"
+};
+
+
+
+export let GravityAlphaTestnet = {
+  "name": "Gravity Alpha Testnet Sepolia",
+  "chain": "GRAVITY",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmUH4LvpNmA2UsVJQXdF49BvvGUDiQeA6ZLJ1LJYVkWB27", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://rpc-sepolia.gravity.xyz"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Gravity Token",
+    "symbol": "G",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer-sepolia.gravity.xyz",
+  "shortName": "gravity-testnet",
+  "chainId": 13505,
+  "networkId": 13505,
+  "explorers": [
+    {
+      "name": "Gravity Sepolia Explorer",
+      "url": "https://explorer-sepolia.gravity.xyz",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "gravity-alpha-testnet"
+};
+
+
 // export let AbstractTestnet = {
 //   "name": "Abstract Testnet",
 //   "chain": "ABS",
