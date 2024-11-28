@@ -9,6 +9,9 @@ import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
 import {ApechainMainnet} from '@/Helpers/CustomBlockchains'
 import { ShapeMainnet } from '@/Helpers/CustomBlockchains'
 import { ShapeSepoliaTestnet } from '@/Helpers/CustomBlockchains'
+import { SonicTestnet } from '@/Helpers/CustomBlockchains'
+import { GravityAlphaMainnet } from '@/Helpers/CustomBlockchains'
+import { GravityAlphaTestnet } from '@/Helpers/CustomBlockchains'
 // import { AbstractTestnet } from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
@@ -77,7 +80,9 @@ export function getBlockchains() {
     Viction.coingecko='tomochain'
     ApechainMainnet.coingecko='apecoin'
     ShapeMainnet.coingecko='ethereum'
-
+SonicTestnet.coingecko='ethereum'
+GravityAlphaMainnet.coingecko='ethereum'
+GravityAlphaTestnet.coingecko='ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -88,6 +93,8 @@ export function getBlockchains() {
     Hychain.testnet = false;
     ShapeSepoliaTestnet.testnet=true;
     ShapeMainnet.testnet=true;
+    SonicTestnet.testnet=true;
+    GravityAlphaTestnet.testnet=true;
 
 
 
@@ -140,7 +147,8 @@ export function getBlockchains() {
         167000: Taiko,
         88: Viction,
         33139: ApechainMainnet,
-        360: ShapeMainnet
+        360: ShapeMainnet,
+        1625:GravityAlphaMainnet,
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -187,6 +195,8 @@ export function getBlockchains() {
         33111: ApechainCurtis,
         89:VictionTestnet,
         11011: ShapeSepoliaTestnet,
+        64165: SonicTestnet,
+        13505: GravityAlphaTestnet,
         // 11124:AbstractTestnet
     }
     // testnets[1337] = Ganache
