@@ -353,6 +353,78 @@ export let GravityAlphaTestnet = {
 };
 
 
+export let FormMainnet = {
+  "name": "FORM Mainnet",
+  "chain": "FORM",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmYjPbg2d5V7SRhQrsc5mFcrJEeMYHtEy6kHt1ZoSKJdcD",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://rpc.form.network/http"
+  ],
+  "websocket": "wss://rpc.form.network/ws",
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://explorer.form.network",
+  "shortName": "form-mainnet",
+  "chainId": 478,
+  "networkId": 478,
+  "explorers": [
+    {
+      "name": "Form Network Explorer",
+      "url": "https://explorer.form.network",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": false,
+  "slug": "form-mainnet"
+};
+
+export let FormTestnet = {
+  "name": "FORM Testnet",
+  "chain": "FORM",
+  "status": "active",
+  "icon": {
+    "url": "ipfs://QmYjPbg2d5V7SRhQrsc5mFcrJEeMYHtEy6kHt1ZoSKJdcD",
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://sepolia-rpc.form.network/http"
+  ],
+  "websocket": "wss://rpc.form.network/ws",
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ethereum",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://sepolia-explorer.form.network",
+  "shortName": "form-testnet",
+  "chainId": 132902,
+  "networkId": 132902,
+  "explorers": [
+    {
+      "name": "Form Network Explorer",
+      "url": "https://sepolia-explorer.form.network",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "form-testnet"
+};
+
+
+
 // export let AbstractTestnet = {
 //   "name": "Abstract Testnet",
 //   "chain": "ABS",

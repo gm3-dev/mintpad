@@ -12,6 +12,8 @@ import { ShapeSepoliaTestnet } from '@/Helpers/CustomBlockchains'
 import { SonicTestnet } from '@/Helpers/CustomBlockchains'
 import { GravityAlphaMainnet } from '@/Helpers/CustomBlockchains'
 import { GravityAlphaTestnet } from '@/Helpers/CustomBlockchains'
+import { FormTestnet } from '@/Helpers/CustomBlockchains'
+import { FormMainnet } from '@/Helpers/CustomBlockchains'
 // import { AbstractTestnet } from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
@@ -83,6 +85,7 @@ export function getBlockchains() {
 SonicTestnet.coingecko='ethereum'
 GravityAlphaMainnet.coingecko='g-token'
 GravityAlphaTestnet.coingecko='g-token'
+ FormMainnet.coingecko='ethereum'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -95,6 +98,7 @@ GravityAlphaTestnet.coingecko='g-token'
     ShapeMainnet.testnet=true;
     SonicTestnet.testnet=true;
     GravityAlphaTestnet.testnet=true;
+    FormTestnet.testnet=true;
 
 
 
@@ -149,6 +153,8 @@ GravityAlphaTestnet.coingecko='g-token'
         33139: ApechainMainnet,
         360: ShapeMainnet,
         1625:GravityAlphaMainnet,
+        478: FormMainnet,
+        
     }
     const testnets = {
         421613: ArbitrumGoerli,
@@ -197,6 +203,7 @@ GravityAlphaTestnet.coingecko='g-token'
         11011: ShapeSepoliaTestnet,
         64165: SonicTestnet,
         13505: GravityAlphaTestnet,
+        132902: FormTestnet,
         // 11124:AbstractTestnet
     }
     // testnets[1337] = Ganache
