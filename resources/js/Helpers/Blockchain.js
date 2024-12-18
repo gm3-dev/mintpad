@@ -3,7 +3,7 @@ import { Ganache, Arbitrum, ArbitrumGoerli, Avalanche, AvalancheFuji, Binance, B
     LightlinkPhoenix, LightlinkPegasusTestnet, Mantle, MantleTestnet, Base, BaseGoerli, ArtheraTestnet, Arthera, MintTestnet, Mint, Vanar, NeonEvm, Opbnb, Vanguard, NeonEvmDevnet,
     ChilizChain, ChilizScovilleTestnet, BobaNetwork, BobaNetworkGoerliTestnet, Cronos, CronosTestnet, KlaytnCypress, KlaytnTestnetBaobab, Taiko, BerachainBartio, HychainTestnet, SuperseedSepoliaTestnet,
     TelosEvm, TelosEvmTestnet, MetalCChain, MetalTahoeCChain, Linea, LineaSepolia, Astar, ConfluxEspace, ConfluxEspaceTestnet, Zetachain, DegenChain, Hychain, Inevm, Shibarium, TaikoHeklaL2,
-    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, FormTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, VictionTestnet, Viction } from '@thirdweb-dev/chains'
+    ZetachainAthens3Testnet, ScrollSepoliaTestnet, Scroll, AstarZkevm, Zkatana, TaikoKatlaL2, Zora, ZoraSepoliaTestnet, BerachainArtio, BlastSepoliaTestnet, BlastBlastmainnet, ShardeumSphinx1X, Rari, RarichainTestnet, VictionTestnet, Viction } from '@thirdweb-dev/chains'
 import {WeaveEVMTestnet} from '@/Helpers/CustomBlockchains'
 import {ApechainCurtis} from '@/Helpers/CustomBlockchains'
 import {ApechainMainnet} from '@/Helpers/CustomBlockchains'
@@ -186,7 +186,6 @@ GravityAlphaTestnet.coingecko='g-token'
         167008: TaikoKatlaL2,
         167009: TaikoHeklaL2,
         999999999: ZoraSepoliaTestnet,
-        132902: FormTestnet,
         80085: BerachainArtio,
         80084: BerachainBartio,
         168587773: BlastSepoliaTestnet,
