@@ -81,8 +81,8 @@ export function getBlockchains() {
     ApechainMainnet.coingecko='apecoin'
     ShapeMainnet.coingecko='ethereum'
 SonicTestnet.coingecko='ethereum'
-GravityAlphaMainnet.coingecko='ethereum'
-GravityAlphaTestnet.coingecko='ethereum'
+GravityAlphaMainnet.coingecko='g-token'
+GravityAlphaTestnet.coingecko='g-token'
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
