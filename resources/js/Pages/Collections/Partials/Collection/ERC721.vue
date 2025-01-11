@@ -289,7 +289,7 @@ const setPlaceholderImage = (e) => {
 
 <p class="mb-4">
     
-  <a href="https://discord.gg/sza2Kxbx" target="_blank" style="color: blue;">Contact support here</a>
+  <a href="https://discord.gg/vYm8T39ZJr" target="_blank" style="color: blue;">Contact support here</a>
 </p>
 
 
