@@ -423,6 +423,39 @@ export let FormTestnet = {
   "slug": "form-testnet"
 };
 
+export let MonadTestnet = {
+  "name": "Monad Testnet",
+  "chain": "MONAD",
+  "status": "active",
+  "icon": {
+    "url": "", 
+    "width": 100,
+    "height": 100,
+    "format": "png"
+  },
+  "rpc": [
+    "https://testnet-rpc2.monad.xyz/52227f026fa8fac9e2014c58fbf5643369b3bfc6"
+  ],
+  "faucets": [],
+  "nativeCurrency": {
+    "name": "Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "infoURL": "https://testnet.monadexplorer.com",
+  "shortName": "monad-testnet",
+  "chainId": 10143,
+  "networkId": 10143,
+  "explorers": [
+    {
+      "name": "Monad Testnet Explorer",
+      "url": "https://testnet.monadexplorer.com",
+      "standard": "EIP3091"
+    }
+  ],
+  "testnet": true,
+  "slug": "monad-testnet"
+}
 
 
 // export let AbstractTestnet = {
