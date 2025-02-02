@@ -14,6 +14,7 @@ import { GravityAlphaMainnet } from '@/Helpers/CustomBlockchains'
 import { GravityAlphaTestnet } from '@/Helpers/CustomBlockchains'
 import { FormTestnet } from '@/Helpers/CustomBlockchains'
 import { FormMainnet } from '@/Helpers/CustomBlockchains'
+import { MonadTestnet } from '@/Helpers/CustomBlockchains'
 // import { AbstractTestnet } from '@/Helpers/CustomBlockchains'
 
 // import { TaikoJolnir } from '@/Helpers/CustomBlockchains'
@@ -86,6 +87,7 @@ SonicTestnet.coingecko='ethereum'
 GravityAlphaMainnet.coingecko='g-token'
 GravityAlphaTestnet.coingecko='g-token'
  FormMainnet.coingecko='ethereum'
+    MonadTestnet.coingecko='ethereum';
 
     // Testnet bug?
     MetalTahoeCChain.testnet = true;
@@ -99,6 +101,7 @@ GravityAlphaTestnet.coingecko='g-token'
     SonicTestnet.testnet=true;
     GravityAlphaTestnet.testnet=true;
     FormTestnet.testnet=true;
+      MonadTestnet.testnet=true;
 
 
 
@@ -203,6 +206,7 @@ GravityAlphaTestnet.coingecko='g-token'
         64165: SonicTestnet,
         13505: GravityAlphaTestnet,
         132902: FormTestnet,
+        10143:  MonadTestnet,
         // 11124:AbstractTestnet
     }
     // testnets[1337] = Ganache
