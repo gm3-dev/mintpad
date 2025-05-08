@@ -554,7 +554,8 @@ const mintNFT = async () => {
                         <p>Blockchain</p>
                         <p class="font-medium !text-primary-600 mint-text-primary" v-html="blockchains[collection.chain_id].name"></p>
                         <p>Transaction fee</p>
-                       /* <p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155' ? '-' : '~0.00$' }}</p> */
+                      <!-- <p class="font-medium !text-primary-600 mint-text-primary">{{ collectionData.contractType == 'DropERC721' || collectionData.contractType == 'DropERC1155' ? '-' : '~0.00$' }}</p> -->
+
                         <p v-if="collection.type == 'ERC1155Burn'">Your tier 1 NFTs</p>
                         <p v-if="collection.type == 'ERC1155Burn'" class="font-medium !text-primary-600 mint-text-primary" v-html="collectionData.balance.tier1"></p>
                         <p v-if="collection.type == 'ERC1155Burn'">Your tier 2 NFTs</p>
