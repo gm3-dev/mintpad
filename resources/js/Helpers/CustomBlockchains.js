@@ -438,8 +438,8 @@ export let MonadTestnet = {
   ],
   "faucets": [],
   "nativeCurrency": {
-    "name": "Ether",
-    "symbol": "ETH",
+    "name": "Testnet Monad",
+    "symbol": "tMON",
     "decimals": 18
   },
   "infoURL": "https://testnet.monadexplorer.com",
